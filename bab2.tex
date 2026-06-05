@@ -178,13 +178,13 @@ Hit@K merupakan metrik evaluasi yang mengukur apakah item relevan (ground truth)
 
 Rata-rata Hit@K dihitung sebagai:
 
-\[Avg\ Hit@K\  = \ (1/N)\  \times \ \Sigma\ Hit@Kᵢ\]
+\[Avg\ Hit@K\  = \ (1/N)\  \times \ \Sigma\ Hit@K_i\]
 
 \subsection{Normalized Discounted Cumulative Gain (nDCG@K)}\label{normalized-discounted-cumulative-gain-ndcgk}
 
 nDCG@K merupakan metrik evaluasi yang mengukur kualitas peringkat rekomendasi dengan memberikan bobot lebih besar pada item relevan yang muncul di posisi awal. Metrik ini memperhitungkan posisi item relevan dalam daftar peringkat menggunakan faktor diskon logaritmik.
 
-\[Rumus\ DDCG@K\  = \ \Sigma ᵢ₌₁ᴷ\ (\frac{relᵢ}{log₂}(i + 1))\]
+\[Rumus\ DCG@K\  = \ \sum_{i=1}^{K} \left(\frac{rel_i}{\log_2(i + 1)}\right)\]
 
 \[Rumus\ nDCG@K = \frac{DCG@K}{IDCG@K}\]
 
@@ -222,13 +222,13 @@ RR = \(\frac{1}{peringkat\ item\ relevan\ pertama}\)
 
 Rumus Mean Reciprocal Rank (MRR) adalah sebagai berikut:
 
-MRR = \((\frac{1}{N}\ ) \times \ \Sigma\ RRᵢ\)
+MRR = \((\frac{1}{N}\ ) \times \ \Sigma\ RR_i\)
 
 Dengan catatan sebagai berikut :
 
 N adalah jumlah total data uji
 
-RRᵢ adalah nilai reciprocal rank untuk data ke-i
+$RR_i$ adalah nilai reciprocal rank untuk data ke-i
 
 \subsection{Cosine Similarity Score}\label{cosine-similarity-score}
 
@@ -248,9 +248,9 @@ System Usability Scale (SUS) merupakan metode evaluasi usability berbasis kuesio
 
 Perhitungan skor SUS dilakukan dengan langkah-langkah sebagai berikut:
 
-Untuk pertanyaan bernomor ganjil, skor dihitung dengan rumus: skor = jawaban − 1
+Untuk pertanyaan bernomor ganjil, skor dihitung dengan rumus: skor = jawaban - 1
 
-Untuk pertanyaan bernomor genap, skor dihitung dengan rumus: skor = 5 − jawaban
+Untuk pertanyaan bernomor genap, skor dihitung dengan rumus: skor = 5 - jawaban
 
 Seluruh skor dijumlahkan dan dikalikan dengan 2,5 untuk mendapatkan skor akhir SUS.
 
