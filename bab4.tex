@@ -1,0 +1,218 @@
+%-----------------------------------------------------------------------------%
+\chapter{\babEmpat}
+%\begin{center}
+%	\textbf{BAB IV}
+%	\par \textbf{ANALISIS SIMULASI SISTEM}
+%\end{center}
+%-----------------------------------------------------------------------------%
+
+\section{Testing Environment}
+Dalam penelitian ini, penulis menggunakan bahasa pemrograman Python untuk membangun dan mengimplementasikan sistem rekomendasi Faculty Supervisor berbasis semantic similarity. Penulis juga menggunakan perangkat keras dan lunak tertentu untuk mengembangkan sistem tersebut. Berikut adalah daftar perangkat keras yang digunakan dalam penelitian ini.
+\begin{table}
+
+\centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{2cm}|>{\fontsize{11}{14}\selectfont}p{5cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
+    \hline
+    \textbf{Komponen} & \textbf{Spesifikasi} \\
+    \hline
+    Processor & Apple M4 Pro (12-core CPU) \\ 
+    \hline
+    RAM & 24 GB Unified Memory  \\
+    \hline
+    GPU & Apple M4 Pro Integrated GPU (20-core) + Apple Neural Engine (16-core)  \\
+    \hline
+    Disk Space & 1 TB SSD \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Spesifikasi Perangkat Keras}
+	\label{table:tab4.1}
+\end{table}
+
+Perangkat keras tersebut juga menggunakan beberapa perangkat lunak untuk proses pengembangan sistem rekomendasi Faculty Supervisor. Spesifikasi perangkat lunak yang digunakan adalah sebagai berikut. 
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{2cm}|>{\fontsize{11}{14}\selectfont}p{5cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
+    \hline
+    \textbf{Komponen} & \textbf{Spesifikasi} \\
+    \hline
+    Sistem Operasi & macOS Sequoia 15  \\ 
+    \hline
+    Bahasa Pemrograman  & Python 3.12   \\
+    \hline
+    Web Framework  & Flask 3.1.0   \\
+    \hline
+    ORM ; Database  & SQLAlchemy 2.0.49 + SQLite  \\
+    \hline
+    Embedding Library  & sentence-transformers   \\
+    \hline
+    Model Kandidat   & BAAI/bge-m3, Qwen/Qwen3-Embedding-0.6B, intfloat/multilingual-e5-large-instruct   \\
+    \hline
+    Data Processing    & pandas, numpy, openpyxl    \\
+    \hline
+   IDE    & Visual Studio Code   \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Spesifikasi Perangkat Lunak}
+	\label{table:tab4.2}
+\end{table}
+
+\section{Hasil}
+\subsection{Evaluasi Model}
+
+\subsection{Hasil Analisis Model dan Pemilihan Model Akhir}
+
+\subsection{Aplikasi Web}
+
+Sistem rekomendasi mahasiswa ini diimplementasikan dalam bentuk aplikasi berbasis web dengan antarmuka yang fungsional. Aplikasi ini dirancang untuk memfasilitasi Enrichment Program Coordinator dalam melakukan pemetaan (mapping) antara mahasiswa peserta program enrichment dengan faculty supervisor terkait.   
+
+\subsubsection{Login Page}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/login.png}
+    \end{center}
+\end{figure}
+        
+Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang menyediakan formulir terstruktur untuk memasukkan data kredensial. Antarmuka (interface) ini mencakup kolom (field) username dan kata sandi yang telah didaftarkan oleh pengguna sebelumnya. Juga bila pengguna belum memiliki akun bisa mendaftarkan akun dengan memilih tombol registrasi. 
+
+\subsubsection{Register Page}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/register.png}
+    \end{center}
+\end{figure}
+        
+Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields seperti nama lengkap, username, password dan konfirmasi password. Lalu proses dilanjutkan dengan memilih tombol registrasi setelah mengisi data dan akun akan otomatis dibuat. 
+
+\subsubsection{Dashboard}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/dashboard.png}
+    \end{center}
+\end{figure}
+        
+Halaman dashboard menyajikan ringkasan data statistik utama, meliputi total mahasiswa dan dosen yang telah terdaftar di dalam sistem. Selain itu, pengguna dapat memantau akumulasi proses eksekusi (total runs), tingkat akurasi pada eksekusi terakhir, serta rincian hasil evaluasi yang telah diproses. Fitur pada halaman ini juga memungkinkan pengguna untuk mengakses rincian run, dan inspect row, hingga melakukan ekspor data ke format Excel berdasarkan hasil eksekusi terbaru.  
+\subsubsection{Data Center}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/datacenter.png}
+    \end{center}
+\end{figure}
+        
+Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pengendali eksekusi awal (pipeline trigger) sistem. Peran utamanya adalah melakukan proses ETL (Extract, Transform, Load) guna memastikan kesiapan data mahasiswa dan dosen pembimbing sebelum diproses oleh model algoritma rekomendasi hibrida. 
+
+\subsubsection{Run History}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/runhistory.png}
+    \end{center}
+\end{figure}
+        
+Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah dilakukan oleh sistem. Informasi yang ditampilkan mencakup waktu eksekusi, jumlah mahasiswa dan dosen yang terlibat, model yang digunakan, serta hasil evaluasinya. Selain itu, pengguna dapat melakukan aksi lanjutan untuk meninjau rincian eksekusi detail run maupun mengekspor data ke dalam format Excel.   
+
+\subsubsection{Run Details}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/rundetails.png}
+    \end{center}
+\end{figure}
+        
+Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang telah dilakukan. Informasi yang disajikan mencakup data spesifik untuk setiap mahasiswa, meliputi NIM, Nama, Track, Partner, Topik, Current Supervisor, Recommended Supervisor, Final Score, dan Rule Match. Selain itu, pengguna dapat menggunakan fitur filter untuk mempermudah pencarian data berdasarkan parameter tertentu, seperti nama, topik, maupun dosen  supervisor tertentu. . 
+
+\subsubsection{Supervisor Studio}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/supervisorstudio.png}
+    \end{center}
+\end{figure}
+        
+Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
+
+\subsubsection{Rules Studio}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/rulestudio.png}
+    \end{center}
+\end{figure}
+        
+Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
+
+\section{Evaluasi}
+
+Pengujian Black Box dilakukan untuk memvalidasi fungsionalitas sistem dari sudut pandang pengguna tanpa melihat struktur kode internal. Fokus pengujian ini adalah memastikan bahwa setiap input memberikan output yang sesuai dengan spesifikasi kebutuhan sistem. Metode yang digunakan adalah Equivalence Partitioning, di mana data uji dibagi ke dalam beberapa kategori untuk menguji perilaku sistem terhadap input yang valid dan tidak valid. 
+
+\subsection{Login Page}
+
+Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika mengisi kredensial dengan benar. 
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|}
+    \hline
+\textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status}\\
+    \hline
+    Login dengan kredensial valid  & Email dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\ 
+    \hline
+    Login dengan kata sandi salah   & Email benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\ 
+    \hline
+    Login dengan email salah   &Email salah, kata sandi benar  &Sistem menampilkan message “Kredential Salah”  & Pass  \\ 
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Login Page}
+	\label{table:tab4.3.1}
+\end{table}
+
+\subsection{Register Page}
+
+Pada halaman ini pengguna dapat membuat akun dengan mengisi data email dan password sebagai kredensial.
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{1cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|}
+    \hline
+\textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status}\\
+    \hline
+    Mendaftarkan akun dengan email dan password   & Email dan kata sandi benar & Sistem menyimpan data email dan password pengguna & Pass  \\ 
+    \hline
+   Mendaftarkan akun dengan kata sandi salah    & Email benar, kata sandi salah  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\ 
+    \hline
+    Mendaftarkan akun email salah    &Email salah, kata sandi benar  &Sistem menampilkan message “Data tidak sesuai”  & Pass  \\ 
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Register Page}
+	\label{table:tab4.4}
+\end{table}
+
+\subsection{Dashboard}
+
+Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman Dashboard. Pengujian mencakup validasi tampilan data statistik, grafik tren, detail eksekusi terbaru, dan kontrol navigasi.
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+    \hline
+\textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status}\\
+    \hline
+    Mendaftarkan akun dengan email dan password   & Email dan kata sandi benar & Sistem menyimpan data email dan password pengguna & Pass  \\ 
+    \hline
+   Mendaftarkan akun dengan kata sandi salah    & Email benar, kata sandi salah  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\ 
+    \hline
+    Mendaftarkan akun email salah    &Email salah, kata sandi benar  &Sistem menampilkan message “Data tidak sesuai”  & Pass  \\ 
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Register Page}
+	\label{table:tab4.4}
+\end{table}

@@ -1,0 +1,201 @@
+% Tipe dokumen adalah report dengan satu kolom kertas A4 satu sisi.
+% Ukuran font 12pt
+\documentclass[12pt, a4paper, onecolumn, twoside, final]{report}
+
+% Load konfigurasi LaTeX untuk tipe laporan thesis
+\usepackage{ta}
+\usepackage{siunitx}
+\usepackage[indonesian]{babel}
+\addto\captionsindonesian{
+  \def\refname{Daftar Pustaka}% 
+  \def\contentsname{Daftar Isi}%
+}
+
+% --- TAMBAHAN UNTUK PENGATURAN NOMOR HALAMAN --- %
+% \usepackage{fancyhdr}
+% \usepackage{etoolbox}
+% \pagestyle{fancy}
+% \fancyhf{}
+
+% \fancyhead[RO]{\thepage}  % Halaman ganjil - kanan atas
+% \fancyhead[LE]{\thepage}  % Halaman genap - kiri atas
+
+% \fancypagestyle{chapterstart}{
+%   \fancyhf{}
+%   \fancyfoot[C]{\thepage}  % Nomor halaman di bawah tengah
+% }
+
+% \let\oldchapter\chapter
+% \renewcommand{\chapter}{%
+%   \clearpage
+%   \cleardoublepage
+%   \thispagestyle{chapterstart}
+%   \oldchapter
+% }
+% --- TAMBAHAN SELESAI --- %
+
+% --- TAMBAHAN UNTUK PENGATURAN NOMOR HALAMAN --- %
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+
+% 1. Definisikan style untuk bagian ROMAWI (semua nomor di KANAN ATAS)
+\fancypagestyle{romanstyle}{%
+  \fancyhf{}% Kosongkan semua header/footer
+  \fancyfoot[C]{\thepage}% Nomor halaman di Tengah Bawah (Center)
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% 1. Definisikan style untuk halaman utama (pojok atas)
+\fancypagestyle{mainstyle}{%
+  \fancyhf{}%
+  \fancyhead[RO]{\thepage}% Halaman ganjil - kanan atas
+  \fancyhead[LE]{\thepage}% Halaman genap - kiri atas
+  \renewcommand{\headrulewidth}{0pt}% Menghilangkan garis header
+}
+
+% 2. Definisikan style untuk halaman awal bab (tengah bawah)
+\fancypagestyle{chapterstart}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+}
+
+% 3. Atur agar setiap \chapter menggunakan style 'chapterstart'
+\let\oldchapter\chapter
+\renewcommand{\chapter}{%
+  \if@openright\cleardoublepage\else\clearpage\fi
+  \thispagestyle{chapterstart}%
+  \oldchapter
+}
+% --- TAMBAHAN SELESAI --- %
+
+
+% Load konfigurasi khusus untuk laporan yang sedang dibuat
+\input{Awal_konfigurasi}
+
+% Awal bagian penulisan laporan
+\begin{document}
+
+% Sampul Laporan
+\include{sampul}
+
+%comment dari sini%
+
+\pagenumbering{gobble}
+
+% Halaman pengesahan
+% \addChapter{LEMBAR PENGESAHAN}
+% \include{pengesahan}
+
+%comment disini%
+
+% Gunakan penomoran halaman romawi
+\pagenumbering{roman}
+\pagestyle{romanstyle}
+% setelah bagian ini, halaman dihitung sebagai halaman ke 2
+\setcounter{page}{2}
+
+%comment sini%
+
+% Sampul ke dua
+\include{sampul2}
+
+% Halaman pernyataan orisinalitas
+% \addChapter{LEMBAR PERNYATAAN ORISINALITAS}
+\include{orisinalitas}
+
+% PENGESAHAN
+\include{pengesahan}
+
+% PERNYATAAN
+\include{pernyataan}
+
+% Kata Pengantar
+% \addChapter{\kataPengantar}
+% \addcontentsline{toc}{section}{Kata Pengantar}
+\include{pengantar}
+
+% Abstrak Bahasa Indonesia dan Bahasa Iggris
+% \addChapter{ABSTRAK}
+\include{abstrak}
+
+% \include{abstract}
+
+
+
+% \addChapter{UCAPAN TERIMA KASIH}
+% \include{ucapan}
+
+% % Daftar isi, gambar, dan tabel
+\tableofcontents
+\addcontentsline{toc}{section}{Daftar Isi}
+\renewcommand\contentsname{Daftar Isi}
+\clearpage
+
+\listoffigures
+\addcontentsline{toc}{section}{Daftar Gambar}
+\renewcommand{\listfigurename}{Daftar Gambar}
+\clearpage
+
+\listoftables
+\addcontentsline{toc}{section}{Daftar Tabel}
+\renewcommand{\listtablename}{Daftar Tabel}
+\clearpage
+
+% \addChapter{DAFTAR SINGKATAN}
+% \include{singkatan}
+
+% \addChapter{DAFTAR SIMBOL}
+% \include{simbol}
+
+% \addChapter{DAFTAR ISTILAH}
+% \include{istilah}
+
+% % Daftar Lampiran
+% \addChapter{DAFTAR LAMPIRAN}
+% \include{listofappendix}
+
+%Comment disini%
+
+% Gunakan penomeran Arab (1, 2, 3, ...) setelah bagian ini.
+\pagenumbering{arabic}
+\pagestyle{mainstyle}  % <--- TAMBAHKAN BARIS INI
+% Bab 1 : Pendahuluan
+\include{bab1}
+
+
+% % Bab 2 : Dasar Teori
+\include{bab2}
+
+% % Bab 3 : Perancangan
+\include{bab3}
+
+% % Bab 4 : Pengujian
+\include{bab4}
+
+% % Bab 5 : Kesimpulan dan Saran
+\include{bab5}
+
+
+%
+% Daftar Pustaka
+\renewcommand\bibname{DAFTAR PUSTAKA}
+\bibliographystyle{apacite}
+\bibliography{ref}
+%\includepdf[page=-,pagecommand={},width=\textwidth]{loogbook4}
+
+% Dari sini
+% % Lampiran 
+% \begin{appendix}
+% 	\pagenumbering{gobble}
+% 	\include{markLampiran}
+% 	\setcounter{page}{2}
+% \end{appendix}
+
+\addChapter{LAMPIRAN}
+\addcontentsline{toc}{section}{Lampiran A: Hasil Eksperimen 1}
+% \include{pengantar}
+\include{lampiran}
+% Sampe sini buat lampiran
+
+\end{document}
