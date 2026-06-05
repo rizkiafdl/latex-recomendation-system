@@ -71,9 +71,8 @@ Sistem rekomendasi mahasiswa ini diimplementasikan dalam bentuk aplikasi berbasi
 \subsubsection{Login Page}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/login.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/login.png}
 \end{figure}
         
 Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang menyediakan formulir terstruktur untuk memasukkan data kredensial. Antarmuka (interface) ini mencakup kolom (field) username dan kata sandi yang telah didaftarkan oleh pengguna sebelumnya. Juga bila pengguna belum memiliki akun bisa mendaftarkan akun dengan memilih tombol registrasi. 
@@ -81,9 +80,8 @@ Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang meny
 \subsubsection{Register Page}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/register.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/register.png}
 \end{figure}
         
 Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields seperti nama lengkap, username, password dan konfirmasi password. Lalu proses dilanjutkan dengan memilih tombol registrasi setelah mengisi data dan akun akan otomatis dibuat. 
@@ -91,18 +89,16 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields sepe
 \subsubsection{Dashboard}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/dashboard.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/dashboard.png}
 \end{figure}
         
 Halaman dashboard menyajikan ringkasan data statistik utama, meliputi total mahasiswa dan dosen yang telah terdaftar di dalam sistem. Selain itu, pengguna dapat memantau akumulasi proses eksekusi (total runs), tingkat akurasi pada eksekusi terakhir, serta rincian hasil evaluasi yang telah diproses. Fitur pada halaman ini juga memungkinkan pengguna untuk mengakses rincian run, dan inspect row, hingga melakukan ekspor data ke format Excel berdasarkan hasil eksekusi terbaru.  
 \subsubsection{Data Center}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/datacenter.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/datacenter.png}
 \end{figure}
         
 Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pengendali eksekusi awal (pipeline trigger) sistem. Peran utamanya adalah melakukan proses ETL (Extract, Transform, Load) guna memastikan kesiapan data mahasiswa dan dosen pembimbing sebelum diproses oleh model algoritma rekomendasi hibrida. 
@@ -110,9 +106,8 @@ Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pen
 \subsubsection{Run History}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/runhistory.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/runhistory.png}
 \end{figure}
         
 Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah dilakukan oleh sistem. Informasi yang ditampilkan mencakup waktu eksekusi, jumlah mahasiswa dan dosen yang terlibat, model yang digunakan, serta hasil evaluasinya. Selain itu, pengguna dapat melakukan aksi lanjutan untuk meninjau rincian eksekusi detail run maupun mengekspor data ke dalam format Excel.   
@@ -120,9 +115,8 @@ Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah di
 \subsubsection{Run Details}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/rundetails.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/rundetails.png}
 \end{figure}
         
 Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang telah dilakukan. Informasi yang disajikan mencakup data spesifik untuk setiap mahasiswa, meliputi NIM, Nama, Track, Partner, Topik, Current Supervisor, Recommended Supervisor, Final Score, dan Rule Match. Selain itu, pengguna dapat menggunakan fitur filter untuk mempermudah pencarian data berdasarkan parameter tertentu, seperti nama, topik, maupun dosen  supervisor tertentu. . 
@@ -130,9 +124,8 @@ Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang tela
 \subsubsection{Supervisor Studio}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/supervisorstudio.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/supervisorstudio.png}
 \end{figure}
         
 Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
@@ -140,9 +133,8 @@ Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan se
 \subsubsection{Rules Studio}
 
 \begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/rulestudio.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.7\linewidth]{pic/rulestudio.png}
 \end{figure}
         
 Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 

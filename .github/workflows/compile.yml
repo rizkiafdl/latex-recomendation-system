@@ -20,6 +20,7 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: Skripsi.tex
+          args: -pdf -file-line-error -interaction=nonstopmode -f
 
       - name: Commit compiled PDF
         uses: stefanzweifel/git-auto-commit-action@v5
