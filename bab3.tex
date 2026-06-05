@@ -387,7 +387,7 @@ Stakeholder & EPC \\
 Pre-condition & Sistem dalam kondisi aktif, EPC belum memiliki akun \\
 Post-condition & Akun EPC tersimpan di database, EPC langsung login ke sistem \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2602}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2755}}@{}}
 \toprule\noalign{}
@@ -397,17 +397,15 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 EPC membuka halaman registrasi & Sistem menampilkan formulir registrasi (username, nama lengkap, password, konfirmasi password) \\
 EPC mengisi formulir dan menekan tombol Register & Sistem memvalidasi bahwa password dan konfirmasi password sesuai \\
 & Sistem memeriksa ketersediaan username \\
 & Sistem menyimpan akun baru dengan password ter-hash \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2618}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2739}}@{}}
 \toprule\noalign{}
@@ -417,14 +415,12 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Password dan konfirmasi password tidak sama & Sistem menampilkan pesan kesalahan dan meminta EPC mengulang \\
 Username sudah digunakan & Sistem menampilkan pesan kesalahan \\
 Username kurang dari 3 karakter & Sistem menolak registrasi \\
 Password kurang dari 6 karakter & Sistem menolak registrasi \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 \end{longtable}
 
@@ -460,7 +456,7 @@ Stakeholder & EPC \\
 Pre-condition & EPC telah memiliki akun terdaftar \\
 Post-condition & EPC berhasil login dan dapat mengakses seluruh fitur sistem \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2717}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2827}}@{}}
 \toprule\noalign{}
@@ -470,16 +466,14 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 EPC membuka halaman login & Sistem menampilkan formulir login (username, password) \\
 EPC mengisi username dan password, lalu menekan tombol Login & Sistem memvalidasi kredensial terhadap database \\
 & Sistem membuat session dan mengarahkan ke halaman Dashboard \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2552}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2993}}@{}}
 \toprule\noalign{}
@@ -489,12 +483,10 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Username atau password salah & Sistem menampilkan pesan "Username atau password salah" \\
 Username tidak ditemukan & Sistem menampilkan pesan kesalahan yang sama (tanpa membedakan username/password yang salah) \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 \end{longtable}
 
@@ -530,7 +522,7 @@ Stakeholder & EPC, Program Studi \\
 Pre-condition & EPC telah login; file Excel berformat .xlsx dengan kolom wajib: STUDENT ID, TRACK, PARTNER/LECTURER, POSITION/TOPIC, WORK SCHEMA, GPA \\
 Post-condition & Data mahasiswa tersimpan di database; data siap diproses oleh sistem rekomendasi \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2598}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2751}}@{}}
 \toprule\noalign{}
@@ -540,18 +532,16 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 EPC membuka halaman Data Center & Sistem menampilkan halaman Data Center dengan opsi import (default path atau upload) \\
 EPC memilih file Excel dan menekan tombol Import & Sistem membaca file Excel dan memvalidasi keberadaan kolom wajib \\
 & Sistem melakukan normalisasi data (pembersihan ID, konversi tipe data) \\
 & Sistem melakukan upsert data ke tabel students (insert baru atau update existing) \\
 & Sistem menampilkan notifikasi berisi jumlah inserted, updated, dan total \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2609}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2740}}@{}}
 \toprule\noalign{}
@@ -561,13 +551,11 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 File bukan format .xlsx & Sistem menolak file dan menampilkan pesan kesalahan \\
 Kolom wajib tidak ditemukan & Sistem menampilkan pesan kesalahan dengan daftar kolom yang hilang \\
 Gagal membaca file & Sistem menampilkan pesan kegagalan \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 \end{longtable}
 
@@ -603,7 +591,7 @@ Stakeholder & EPC, Faculty Supervisor \\
 Pre-condition & EPC telah login ke sistem \\
 Post-condition & Data faculty supervisor tersimpan dan diperbarui \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2757}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2726}}@{}}
 \toprule\noalign{}
@@ -613,17 +601,15 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 EPC membuka halaman Supervisor Studio & Sistem menampilkan daftar faculty supervisor aktif beserta keywords masing-masing \\
 EPC memilih faculty supervisor untuk diedit atau menambahkan faculty supervisor baru & Sistem menampilkan formulir detail (kode, nama, keywords) \\
 EPC memperbarui keywords dan menekan tombol Simpan & Sistem memvalidasi dan menyimpan perubahan \\
 EPC dapat mengekspor konfigurasi ke Excel & Sistem menghasilkan file Excel berisi daftar supervisor dan track reference \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2679}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2803}}@{}}
 \toprule\noalign{}
@@ -633,13 +619,11 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Kode dosen kurang dari 3 karakter & Sistem menolak penyimpanan \\
 Nama dosen sudah dipakai oleh kode lain & Sistem menampilkan pesan konflik \\
 Kode dosen atau nama kosong & Sistem menampilkan pesan validasi \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 \end{longtable}
 
@@ -675,7 +659,7 @@ Stakeholder & EPC \\
 Pre-condition & EPC telah login, data supervisor telah tersedia \\
 Post-condition & Konfigurasi label dan affinity matrix tersimpan dan digunakan pada run berikutnya \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2518}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2609}}@{}}
 \toprule\noalign{}
@@ -685,19 +669,17 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 EPC membuka halaman Rules Studio & Sistem menampilkan daftar label descriptions dan affinity matrix grid \\
 EPC mengedit deskripsi label, threshold, atau status niche & Sistem memvalidasi (threshold antara 0-1, deskripsi tidak kosong) \\
 EPC menekan simpan & Sistem menyimpan perubahan dan menginvalidasi cache embedding label \\
 EPC mengedit nilai boost pada affinity matrix & Sistem menyimpan perubahan sel-sel yang dimodifikasi \\
 EPC dapat preview skor label untuk mahasiswa tertentu & Sistem menghitung cosine similarity antara embedding mahasiswa dan label \\
 EPC dapat mereset ke konfigurasi default & Sistem mengembalikan label/affinity ke nilai seed awal \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2484}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2643}}@{}}
 \toprule\noalign{}
@@ -707,13 +689,11 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Threshold di luar range 0-1 & Sistem menolak penyimpanan \\
 Deskripsi label kosong & Sistem menampilkan pesan validasi \\
 Label tidak ada di default seed (untuk reset) & Sistem menampilkan pesan kesalahan \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 \end{longtable}
 
@@ -749,7 +729,7 @@ Stakeholder & EPC, Program Studi \\
 Pre-condition & Data mahasiswa telah diimpor; data faculty supervisor telah tersedia; EPC telah login \\
 Post-condition & Hasil rekomendasi (run) tersimpan di database dengan evaluasi metrik \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2613}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2514}}@{}}
 \toprule\noalign{}
@@ -759,9 +739,6 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 EPC memilih model embedding yang akan digunakan & Sistem menampilkan opsi konfigurasi (model, enable/disable rule boost, group bonus, extra docs, capacity parameters) \\
 EPC mengonfigurasi parameter dan menekan tombol Generate & Sistem memvalidasi ketersediaan data mahasiswa dan dosen \\
 & Sistem membentuk dokumen teks mahasiswa dan faculty supervisor \\
@@ -774,10 +751,11 @@ EPC mengonfigurasi parameter dan menekan tombol Generate & Sistem memvalidasi ke
 & Sistem menjalankan greedy solver untuk alokasi optimal \\
 & Sistem menghitung metrik evaluasi (content-based dan hybrid) \\
 & Sistem menyimpan hasil run dan mengarahkan ke halaman detail run \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
 \toprule\noalign{}
@@ -787,14 +765,12 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
 Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
 Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
 Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 \end{longtable}
 
@@ -830,7 +806,7 @@ Stakeholder & EPC, Program Studi \\
 Pre-condition & Minimal satu run rekomendasi telah berhasil dilakukan \\
 Post-condition & EPC memperoleh informasi detail hasil rekomendasi \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2592}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2534}}@{}}
 \toprule\noalign{}
@@ -840,16 +816,14 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 EPC membuka halaman detail run & Sistem menampilkan evaluasi metrik (content-based \& hybrid), distribusi kapasitas per supervisor, dan daftar mismatch \\
 EPC membuka halaman rekomendasi & Sistem menampilkan tabel seluruh pasangan mahasiswa-supervisor dengan skor, rule matches, dan filter pencarian \\
 EPC menggunakan filter (nama, supervisor, mismatch only) & Sistem memfilter dan menampilkan hasil sesuai kriteria \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{longtable}[]{@{}
+\begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
 \toprule\noalign{}
@@ -859,14 +833,12 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
 Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
 Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
 Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
-\end{longtable}
+\bottomrule\noalign{}
+\end{tabular}
 \end{minipage} \\
 \end{longtable}
 
