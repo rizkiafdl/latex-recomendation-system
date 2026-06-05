@@ -1,18 +1,984 @@
-%-----------------------------------------------------------------------------%
 \chapter{\babTiga}
-%\begin{center}
-%	\textbf{BAB III}
-%	\par \textbf{PERENCANAAN SISTEM}
-%\end{center}
-%-----------------------------------------------------------------------------%
-\textit{Satu paragraf menjelaskan isi bab tiga}. \lipsum[1]
 
-\section{Sub bab pertama}
-\lipsum[1]
 
-Membuat persamaan \ref{equation-bab-3}
 
-\begin{equation}\label{equation-bab-3}
-    \begin{gathered}b=\begin{cases}1,&I(\mathbf{p}^{\alpha }_{j} ,\sigma_{j} )>I(\mathbf{p}^{\alpha }_{i} ,\sigma_{i} )\\ 0,&\text{otherwise} \end{cases} \\ \forall (\mathbf{p}^{\alpha }_{j} ,\sigma_{j} )\in \zeta \end{gathered}  
-\end{equation}
+\section{Kerangka Berpikir}\label{kerangka-berpikir}
+
+\begin{figure}
+\centering
+\includegraphics[width=2.54722in,height=5.51875in]{pic/kerangka-berpikir}
+\caption{Alur Kerangka Berpikir}
+\label{fig:fig3.1}
+\end{figure}
+
+Proses penentuan faculty supervisor untuk mahasiswa saat ini dilakukan secara manual oleh pihak EPC. Namun, proses penentuan faculty supervisor tersebut memiliki beberapa keterbatasan antara lain waktu yang relatif lama, bergantung pada pengetahuan individu tertentu, serta tidak sepenuhnya mempertimbangkan kesesuaian antara keahlian faculty supervisor dan kepentingan atau posisi mahasiswa. Selain itu, proses manual ini kurang transparan karena tidak didukung mekanisme pencocokan yang terstruktur dan berbasis data.
+
+Dalam upaya mengatasi keterbatasan tersebut, pendekatan pencocokan berbasis teks sering digunakan sebagai solusi awal. Pendekatan pencocokan berbasis kata kunci merupakan metode umum dalam information retrieval tradisional yang mengukur kesamaan dokumen berdasarkan kemunculan kata atau frekuensi istilah tertentu. Pendekatan ini memiliki keterbatasan dalam menangkap kesamaan makna antara teks yang menggunakan istilah berbeda namun memiliki konteks yang serupa.
+
+Permasalahan tersebut menuntut adanya sebuah sistem yang dapat membantu proses pemetaan antara faculty supervisor dan mahasiswa secara lebih objektif dan efisien. Berdasarkan kebutuhan tersebut, penelitian ini mengusulkan pengembangan sistem rekomendasi yang memanfaatkan pendekatan hybrid scoring untuk mengotomatisasi proses pencocokan mahasiswa dengan faculty supervisor. Pendekatan hybrid scoring yang digunakan menggabungkan tiga komponen utama, yaitu semantic similarity berbasis text embedding untuk mengukur kesesuaian makna, rule-based boost berbasis label affinity untuk menerapkan aturan domain yang berlaku, serta company group bonus untuk mempertimbangkan pengelompokan mahasiswa berdasarkan perusahaan tempat kerja.
+
+Sistem yang dikembangkan memanfaatkan informasi tekstual yang bersumber dari profil faculty supervisor dan data mahasiswa. Informasi tersebut direpresentasikan dalam bentuk dokumen teks yang menggambarkan karakteristik akademik dan konteks profesional masing-masing entitas. Pendekatan semantic similarity dipilih sebagai komponen utama karena mampu memahami makna dan konteks teks secara lebih mendalam dibandingkan metode pencocokan berbasis kata kunci. Komponen rule-based boost digunakan untuk mengakomodasi aturan domain spesifik yang tidak dapat ditangkap oleh kemiripan teks semata, seperti afinitas khusus antara faculty supervisor tertentu dengan kategori mahasiswa tertentu. Sementara itu, company group bonus digunakan untuk mendorong konsistensi penempatan mahasiswa dari perusahaan yang sama pada faculty supervisor yang paling sesuai.
+
+Berdasarkan skor hybrid yang dihasilkan, sistem menggunakan greedy capacity-constrained solver untuk mengalokasikan setiap mahasiswa ke satu faculty supervisor secara optimal dengan mempertimbangkan batasan kapasitas bimbingan minimum dan maksimum per faculty supervisor. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang telah memenuhi seluruh constraint kapasitas.
+
+Pengembangan sistem dilakukan melalui beberapa tahapan yang saling berurutan, dimulai dari analisis permasalahan dan kebutuhan sistem, perencanaan proses pengembangan, perancangan model rekomendasi berbasis hybrid scoring, hingga implementasi sistem dalam bentuk aplikasi berbasis website. Kerangka berpikir penelitian ini digambarkan dalam bentuk diagram alur pada Gambar 3.1, yang menunjukkan hubungan antara permasalahan, metode yang digunakan, dan keluaran sistem berupa rekomendasi faculty supervisor untuk mahasiswa.
+
+\section{Metodologi Penelitian}\label{metodologi-penelitian}
+
+\subsection{Analisis}\label{analisis}
+
+\subsection{Analisis Permasalahan}\label{analisis-permasalahan}
+
+Penentuan faculty supervisor untuk mahasiswa saat ini masih dilakukan secara manual oleh pihak EPC. Proses tersebut bergantung pada pengetahuan dan pengalaman individu yang menjalankan peran EPC, tanpa adanya aturan pencocokan yang terstruktur dan berbasis data. Akibatnya, proses pemetaan antara mahasiswa dan faculty supervisor membutuhkan waktu yang relatif lama serta berpotensi menimbulkan subjektivitas dalam pengambilan keputusan.
+
+Selain itu, proses manual ini juga kurang transparan karena tidak didukung oleh mekanisme yang dapat menjelaskan alasan pemilihan faculty supervisor tertentu untuk seorang mahasiswa. Kondisi tersebut menyulitkan evaluasi terhadap hasil pemetaan yang telah dilakukan serta berpotensi menyebabkan distribusi beban bimbingan faculty supervisor yang tidak merata, terutama terkait keterbatasan slot bimbingan yang dimiliki oleh masing-masing faculty supervisor.
+
+Permasalahan-permasalahan tersebut menunjukkan perlunya suatu sistem yang mampu membantu proses pemetaan faculty supervisor dan mahasiswa secara lebih objektif, efisien, serta transparan dengan memanfaatkan data yang tersedia.
+
+Pada penelitian ini, sistem rekomendasi dikembangkan sebagai decision support system untuk membantu EPC dalam proses pemetaan faculty supervisor dan mahasiswa. Perancangan sistem, termasuk UML dan use case, digunakan sebagai media untuk memastikan integrasi metode semantic similarity berjalan sesuai dengan skenario penelitian. Fokus utama penelitian ini bukan pada kompleksitas implementasi sistem, melainkan pada evaluasi kualitas rekomendasi yang dihasilkan oleh pendekatan semantic similarity.
+
+\subsection{Analisis Permasalahan}\label{analisis-permasalahan-1}
+
+Dalam konteks penelitian ini, EPC berperan sebagai administrator sistem yang bertanggung jawab terhadap pengelolaan data mahasiswa, data faculty supervisor, serta informasi pendukung lainnya. EPC merupakan satu-satunya aktor yang berinteraksi langsung dengan sistem rekomendasi.
+
+Mahasiswa dan faculty supervisor tidak diposisikan sebagai aktor yang berinteraksi dengan sistem, melainkan sebagai entitas data yang diproses dalam mekanisme rekomendasi. Mahasiswa berperan sebagai objek rekomendasi yang akan dicocokkan dengan profil faculty supervisor berdasarkan kesesuaian informasi akademik dan posisi kerja, sedangkan faculty supervisor berperan sebagai kandidat yang akan direkomendasikan oleh sistem.
+
+Dengan pemisahan peran tersebut, sistem difokuskan sebagai decision support system yang bertujuan untuk membantu EPC dalam pengambilan keputusan pemetaan faculty supervisor dan mahasiswa secara sistematis dan berbasis data, tanpa menggantikan keputusan akhir yang tetap berada pada pihak EPC.
+
+\subsection{Analisis Kebutuhan Sistem}\label{analisis-kebutuhan-sistem}
+
+\subsection{Kebutuhan Fungsional}\label{kebutuhan-fungsional}
+
+Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang harus dipenuhi oleh sistem rekomendasi adalah sebagai berikut:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0893}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5325}}@{}}
+\caption{Tabel 3. Analisis Kebutuhan Fungsional}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+No
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Kebutuhan Fungsional
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+No
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Kebutuhan Fungsional
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & Sistem mampu mengelola data mahasiswa yang mencakup informasi posisi kerja dan perusahaan \\
+2 & Sistem mampu mengelola data profil faculty supervisor \\
+3 & Sistem mampu memproses data teks yang berasal dari mahasiswa dan faculty supervisor \\
+4 & Sistem mampu mengidentifikasi tingkat kesesuaian antara mahasiswa dan faculty supervisor berdasarkan informasi yang tersedia \\
+5 & Sistem mampu melakukan pengurutan (ranking) faculty supervisor berdasarkan tingkat kesesuaian \\
+6 & Sistem mampu mempertimbangkan ketersediaan slot bimbingan faculty supervisor dalam menghasilkan rekomendasi \\
+7 & Sistem mampu menampilkan hasil rekomendasi faculty supervisor untuk setiap mahasiswa \\
+\end{longtable}
+
+\subsection{Kebutuhan Non-Fungsional}\label{kebutuhan-non-fungsional}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2155}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4000}}@{}}
+\caption{Tabel 3. Analisis Kebutuhan Non-Fungsional}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+No
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Kebutuhan Non-Fungsional
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+No
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Kebutuhan Non-Fungsional
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & Sistem berbasis website sehingga dapat diakses dengan mudah oleh EPC \\
+2 & Sistem memiliki antarmuka yang sederhana dan mudah digunakan \\
+3 & Sistem mampu menampilkan hasil rekomendasi secara transparan dan konsisten \\
+4 & Sistem mendukung pengelolaan data secara terstruktur \\
+\end{longtable}
+
+\subsection{Analisis Data}\label{analisis-data}
+
+Data yang digunakan dalam sistem rekomendasi ini berupa data tekstual yang berasal dari dua entitas utama, yaitu mahasiswa dan faculty supervisor. Data mahasiswa mencakup informasi yang menggambarkan konteks posisi kerja, lingkungan perusahaan, serta deskripsi peran atau aktivitas yang dijalani mahasiswa. Informasi tersebut direpresentasikan dalam bentuk teks untuk mencerminkan karakteristik dan minat mahasiswa.
+
+Data faculty supervisor mencakup informasi tekstual yang merepresentasikan karakteristik akademik dan pengalaman pembimbingan faculty supervisor, yang bersumber dari data historis dan informasi pendukung yang tersedia. Data historis tersebut digunakan sebagai referensi untuk membentuk representasi kompetensi masing-masing faculty supervisor.
+
+Mengingat bentuk data yang digunakan bersifat dominan tekstual, pendekatan pencocokan berbasis kesesuaian makna melalui semantic similarity dinilai relevan untuk digunakan dalam sistem rekomendasi yang dikembangkan.
+
+\subsection{Perencanaan}\label{perencanaan}
+
+Tahap perencanaan dilakukan setelah proses analisis untuk menyusun arah dan tahapan pengembangan sistem rekomendasi secara terstruktur. Tahap ini bertujuan untuk memastikan ruang lingkup penelitian, jenis data yang digunakan, serta pendekatan yang diterapkan selaras dengan tujuan penelitian.
+
+Ruang lingkup penelitian dibatasi pada lingkungan XYZ dengan memanfaatkan data historis pasangan faculty supervisor dan mahasiswa pada tahun 2024. Selain data historis utama tersebut, tersedia data tambahan berupa informasi pendukung yang relevan, yang diperlakukan secara terpisah dan tidak menjadi acuan utama dalam proses evaluasi.
+
+Perencanaan difokuskan pada pemanfaatan data tekstual yang berasal dari dua entitas utama, yaitu mahasiswa dan faculty supervisor, yang direpresentasikan dalam bentuk teks untuk mendukung proses pencocokan berbasis kesesuaian makna. Pendekatan yang direncanakan berfokus pada pengukuran semantic similarity antara profil mahasiswa dan dokumen faculty supervisor, yang selanjutnya digunakan sebagai dasar dalam proses perangkingan kandidat faculty supervisor.
+
+Sistem dirancang sebagai decision support system yang digunakan oleh EPC sebagai administrator untuk membantu proses pengambilan keputusan pemetaan faculty supervisor dan mahasiswa, tanpa menggantikan keputusan akhir. Aplikasi berbasis website dikembangkan sebagai media implementasi metode yang diteliti.
+
+Selain itu, tahap perencanaan mencakup rencana evaluasi terhadap hasil rekomendasi yang dihasilkan oleh sistem untuk menilai tingkat kesesuaian rekomendasi berdasarkan kriteria yang telah ditentukan. Apabila hasil evaluasi belum memenuhi kriteria yang diharapkan, dilakukan penyempurnaan terhadap representasi data atau parameter sistem tanpa melibatkan proses pelatihan atau fine-tuning model baru.
+
+Sebagai batasan penelitian, sistem tidak dirancang sebagai layanan mandiri yang dapat diakses langsung oleh mahasiswa dan hanya memanfaatkan data yang tersedia pada periode penelitian yang telah ditetapkan.
+
+\subsection{Perancangan Model Rekomendasi Berbasis Semantic Similarity}\label{perancangan-model-rekomendasi-berbasis-semantic-similarity}
+
+Perancangan model rekomendasi pada penelitian ini bertujuan untuk menentukan mekanisme pencocokan antara mahasiswa dan faculty supervisor berdasarkan kesesuaian informasi tekstual. Model yang digunakan dalam sistem ini tidak melibatkan proses pelatihan training dari awal, melainkan memanfaatkan model text embedding open-source yang telah tersedia. Pendekatan ini dipilih untuk menghasilkan sistem rekomendasi yang efisien dan mudah diimplementasikan dalam konteks sistem informasi berbasis website.
+
+\subsection{Konsep Dasar Model Rekomendasi}\label{konsep-dasar-model-rekomendasi}
+
+Model rekomendasi dirancang menggunakan pendekatan semantic similarity, yaitu metode untuk mengukur tingkat kemiripan makna antara dua teks. Dalam penelitian ini, semantic similarity digunakan untuk membandingkan informasi tekstual mahasiswa dengan dokumen faculty supervisor sehingga sistem dapat menghasilkan rekomendasi dosen dengan tingkat kesesuaian tertinggi.
+
+Informasi tekstual mahasiswa meliputi deskripsi posisi kerja, peran, nama perusahaan, serta kategori perusahaan. Sementara itu, informasi faculty supervisor direpresentasikan dalam beberapa dokumen teks yang menggambarkan karakteristik dan keahlian dosen berdasarkan data historis bimbingan serta informasi topik yang tersedia. Dokumen-dokumen tersebut dikelompokkan berdasarkan jenis sumber, sedangkan rincian sumber dan format penyusunan dokumen dijelaskan pada Subbab 3.2.3.2.
+
+Hasil akhir dari proses rekomendasi adalah pasangan mahasiswa dan faculty supervisor yang dipilih berdasarkan peringkat kemiripan tertinggi dengan mempertimbangkan ketersediaan slot bimbingan dosen.
+
+\subsection{Pembentukan Representasi Data Faculty Supervisor}\label{pembentukan-representasi-data-faculty-supervisor}
+
+Setiap faculty supervisor direpresentasikan dalam bentuk satu atau lebih dokumen teks yang bersifat unik. Dokumen teks tersebut dibentuk dengan menggabungkan field-field tekstual dari masing-masing sumber data. Pada penelitian ini terdapat dua sumber utama, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
+
+Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model text embedding. Hasil transformasi berupa vektor embedding disimpan ke dalam basis data, dengan satu baris data merepresentasikan satu dokumen milik faculty supervisor. Kumpulan embedding ini berfungsi sebagai knowledge base yang digunakan sebagai referensi utama dalam proses perhitungan kemiripan dan perangkingan rekomendasi.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1739}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2436}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2069}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3755}}@{}}
+\caption{Tabel 3. Representasi Data Faculty Supervisor}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Entitas
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Atribut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Sumber
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi Singkat
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Entitas
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Atribut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Sumber
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi Singkat
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Faculty supervisor & Informasi posisi magang & Data historis Enrichment & Informasi posisi magang mahasiswa yang pernah dibimbing \\
+Faculty supervisor & Perusahaan & Data historis Enrichment & Informasi perusahaan mahasiswa yang pernah dibimbing \\
+Faculty supervisor & Deskripsi pekerjaan mahasiswa & Data historis Enrichment & Deskripsi bagian pekerjaan mahasiswa yang pernah dibimbing \\
+Faculty supervisor & Topik skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Judul dan topik skripsi yang direkomendasi \\
+Faculty supervisor & Deskripsi skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Ringkasan deskripsi dan ruang lingkup penelitian \\
+Faculty supervisor & Rumusan masalah & Data Rekomendasi Skripsi Dari Faculty Supervisor & Fokus permasalahan penelitian \\
+Faculty supervisor & Luaran yang diharapkan & Data Rekomendasi Skripsi Dari Faculty Supervisor & Output akademik atau implementasi yang ditargetkan \\
+Faculty supervisor & Jenis skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Klasifikasi jenis skripsi \\
+\end{longtable}
+
+Dalam implementasinya, apabila seorang faculty supervisor tidak memiliki data pada salah satu sumber, maka dokumen dari sumber tersebut tidak dibentuk. Dengan demikian, faculty supervisor tersebut tetap dapat direpresentasikan menggunakan dokumen yang tersedia, sehingga jumlah dokumen per faculty supervisor dapat berbeda-beda tergantung kelengkapan data.
+
+\subsection{Pemrosesan Data Mahasiswa}\label{pemrosesan-data-mahasiswa}
+
+Data mahasiswa yang dimasukkan oleh EPC melalui sistem mencakup informasi posisi kerja, peran, dan nama perusahaan. Seluruh informasi tersebut digabungkan menjadi satu teks input dengan pemisah berupa whitespace untuk merepresentasikan karakteristik mahasiswa secara menyeluruh. Urutan penggabungan field ditetapkan secara konsisten, yaitu posisi kerja, peran, kemudian perusahaan. Apabila terdapat field yang tidak tersedia, field tersebut tidak disertakan tanpa mengubah urutan penggabungan.
+
+Teks input mahasiswa selanjutnya diproses menggunakan model text embedding yang sama dengan yang digunakan pada data faculty supervisor, sehingga dihasilkan vektor embedding mahasiswa yang berada pada ruang representasi yang sama. Kondisi ini memungkinkan sistem melakukan perhitungan kemiripan secara langsung antara vektor embedding mahasiswa dan vektor embedding dokumen faculty supervisor. Selain itu, atribut status eligible digunakan sebagai filter kelayakan mahasiswa sebelum proses rekomendasi dan alokasi dosen dilakukan.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2490}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2497}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2474}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2538}}@{}}
+\caption{Tabel 3. Pemrosesan Data Mahasiswa}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Entitas
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Atribut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Digunakan sebagai Teks
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Entitas
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Atribut
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Digunakan sebagai Teks
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mahasiswa & Identitas mahasiswa & Tidak & Digunakan sebagai identifikasi data \\
+Mahasiswa & Posisi mahasiswa & Ya & Posisi atau peran magang yang diminati \\
+Mahasiswa & Perusahaan & Ya & Nama perusahaan tujuan atau pengalaman \\
+Mahasiswa & Kategori perusahaan & Ya & Klasifikasi bidang industri perusahaan \\
+Mahasiswa & Status eligible & Tidak & Digunakan sebagai filter kelayakan mahasiswa \\
+\end{longtable}
+
+\subsection{Kandidat Model Text Embedding}\label{kandidat-model-text-embedding}
+
+Pada penelitian ini, vektor embedding dibentuk menggunakan model text embedding open-source tanpa proses pelatihan ulang fine-tuning. Pemilihan kandidat model mempertimbangkan kebutuhan sistem yang menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, serta karakteristik data yang berpotensi memuat istilah campuran Bahasa Indonesia--Inggris. Seluruh kandidat model akan digunakan dengan mekanisme yang konsisten: teks mahasiswa dan dokumen faculty supervisor diubah menjadi embedding menggunakan model yang sama, kemudian dihitung kemiripannya menggunakan cosine similarity. Embedding yang dihasilkan digunakan apa adanya sesuai keluaran model tanpa normalisasi manual tambahan pada tahap pra-pemrosesan, dan sistem menghasilkan rekomendasi top-5 dosen sebelum tahap alokasi slot bimbingan.
+
+\subsection{Qwen3-Embedding-0.6B}\label{qwen3-embedding-0.6b-1}
+
+Qwen3-Embedding-0.6B merupakan model embedding berukuran sekitar 0,6B parameter yang dirancang untuk tugas representasi teks dan retrieval. Model ini mendukung panjang konteks hingga 32K token, sehingga relevan untuk dokumen dosen yang berpotensi panjang, terutama ketika dokumen historis bimbingan dan dokumen rekomendasi skripsi memiliki konten yang kaya.
+
+Selain itu, seri Qwen3 Embedding mendukung Matryoshka Representation Learning (MRL) yang memungkinkan penggunaan dimensi embedding yang fleksibel misalnya rentang 32--1024 untuk menyeimbangkan kualitas dan efisiensi penyimpanan/komputasi.
+
+\subsection{EmbeddingGemma 300M}\label{embeddinggemma-300m}
+
+EmbeddingGemma merupakan model embedding dari Google dengan ukuran sekitar 300M parameter, dibangun dari Gemma 3, dan ditujukan untuk kebutuhan seperti semantic similarity search, retrieval, klasifikasi, dan klastering.
+
+Model ini dilaporkan dilatih dengan data dalam 100+ bahasa, sehingga sesuai untuk konteks data penelitian yang dapat memuat istilah industri dan akademik lintas bahasa.
+
+EmbeddingGemma juga mengadopsi MRL, sehingga embedding dapat menggunakan dimensi penuh 768 dimensi atau dipotong menjadi dimensi lebih kecil misalnya 512/256/128 untuk efisiensi.
+
+Dari sisi kapasitas input, EmbeddingGemma memiliki batas konteks sekitar 2K token, sehingga pada implementasi multi-dokumen per sumber, pemisahan dokumen berdasarkan sumber menjadi relevan untuk menjaga panjang input tetap sesuai batas model
+
+\subsection{jina-embeddings-v3}\label{jina-embeddings-v3}
+
+Jina-embeddings-v3 merupakan model embedding multibahasa yang dirancang untuk berbagai kebutuhan, terutama query--document retrieval, klastering, dan klasifikasi. Model ini mendukung panjang konteks hingga 8.192 token dan menghasilkan embedding dengan dimensi default 1024, sehingga memadai untuk dokumen yang relatif panjang.
+
+Model ini menyediakan task-specific adapters misalnya untuk retrieval atau klasifikasi serta mendukung MRL untuk memungkinkan reduksi dimensi embedding dengan tetap menjaga performa pada banyak skenario evaluasi yang dilaporkan.
+
+\subsection{Keterkaitan Kandidat Model dengan Mekanisme Rekomendasi}\label{keterkaitan-kandidat-model-dengan-mekanisme-rekomendasi}
+
+Ketiga kandidat model dipilih untuk dibandingkan pada pipeline yang sama, sehingga perbedaan kinerja dapat dikaitkan dengan karakteristik model (misalnya dukungan konteks panjang dan kemampuan multibahasa), bukan karena perbedaan perlakuan data. Mengingat sistem menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, pemilihan model dengan kapasitas konteks yang memadai menjadi relevan, sementara model yang lebih ringan tetap dipertimbangkan dari sisi efisiensi implementasi pada aplikasi berbasis web.
+
+Sebagai transisi ke Subbab 3.2.3.7, penentuan model terbaik dilakukan melalui strategi evaluasi yang mengukur kualitas rekomendasi top-5 serta mempertimbangkan aspek efisiensi komputasi pada saat inferensi embedding.
+
+\subsection{Mekanisme Perhitungan dan Perangkingan Rekomendasi}\label{mekanisme-perhitungan-dan-perangkingan-rekomendasi}
+
+Setelah vektor embedding mahasiswa dan dokumen faculty supervisor tersedia, sistem melakukan perhitungan tingkat kemiripan antara embedding mahasiswa dan seluruh embedding dokumen faculty supervisor yang tersimpan dalam knowledge base. Perhitungan kemiripan dilakukan menggunakan cosine similarity, yang mengukur kedekatan arah antara dua vektor pada ruang embedding.
+
+Karena setiap faculty supervisor direpresentasikan oleh beberapa dokumen teks yang berasal dari jenis sumber yang berbeda, perhitungan kemiripan dilakukan pada tingkat dokumen. Selanjutnya, nilai kemiripan pada tingkat dokumen diagregasi menjadi skor pada tingkat faculty supervisor. Agregasi dilakukan dengan mengambil nilai kemiripan maksimum dari seluruh dokumen yang dimiliki oleh faculty supervisor tersebut. Pendekatan ini dipilih karena setiap dokumen merepresentasikan aspek kompetensi yang berbeda, sehingga kecocokan tinggi pada salah satu aspek dianggap cukup untuk menunjukkan relevansi awal antara mahasiswa dan faculty supervisor.
+
+Berdasarkan skor akhir tersebut, sistem melakukan pengurutan faculty supervisor dari tingkat kesesuaian tertinggi hingga terendah untuk setiap mahasiswa. Hasil dari proses ini berupa daftar rekomendasi top-5 faculty supervisor yang selanjutnya digunakan sebagai input pada tahap validasi dan alokasi slot bimbingan yang dijelaskan pada Subbab 3.2.3.6.
+
+Struktur data knowledge base yang digunakan dalam proses perhitungan kemiripan dan perangkingan ditunjukkan pada Tabel berikut.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3318}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2644}}@{}}
+\caption{Tabel 3. Struktur Data Knowledge Base}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Kolom
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Kolom
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+faculty supervisor\_id & Identitas unik faculty supervisor \\
+document\_id & Identitas dokumen \\
+document\_source\_type & Jenis sumber dokumen (Data Historis Mahasiswa / Topik Skripsi) \\
+document\_text & Hasil penggabungan seluruh atribut tekstual \\
+vector\_embedding & Representasi vektor dari dokumen teks \\
+\end{longtable}
+
+\subsection{Validasi Slot Bimbingan faculty supervisor}\label{validasi-slot-bimbingan-faculty-supervisor}
+
+Selain mempertimbangkan tingkat kesesuaian berdasarkan semantic similarity, sistem juga melakukan validasi terhadap ketersediaan slot bimbingan faculty supervisor. Proses validasi ini dilakukan setelah tahap perangkingan selesai dan bertujuan untuk memastikan bahwa rekomendasi yang dihasilkan dapat direalisasikan sesuai dengan kapasitas bimbingan yang tersedia.
+
+Validasi slot dilakukan secara batch terhadap seluruh mahasiswa yang memenuhi kriteria eligible. Pada tahap ini, mahasiswa diproses secara berurutan berdasarkan skor kemiripan tertinggi yang diperoleh dari hasil perangkingan. Untuk setiap mahasiswa, sistem akan memeriksa daftar rekomendasi top-5 faculty supervisor dan memilih faculty supervisor dengan peringkat tertinggi yang masih memiliki slot bimbingan tersedia. Apabila faculty supervisor pada peringkat teratas telah mencapai batas kapasitas bimbingan, sistem akan melanjutkan pemeriksaan ke peringkat berikutnya hingga ditemukan faculty supervisor dengan slot yang masih tersedia.
+
+Faculty supervisor yang memenuhi kriteria tersebut kemudian dipasangkan dengan mahasiswa sebagai hasil rekomendasi akhir. Apabila seluruh faculty supervisor dalam daftar rekomendasi top-5 tidak memiliki slot bimbingan yang tersedia, maka mahasiswa tersebut tidak dialokasikan secara otomatis dan dapat ditindaklanjuti melalui proses peninjauan lebih lanjut oleh pihak EPC.
+
+\subsection{Strategi evaluasi}\label{strategi-evaluasi}
+
+Strategi evaluasi pada penelitian ini dirancang untuk menilai efektivitas model rekomendasi berbasis semantic similarity dalam menghasilkan pasangan mahasiswa dan faculty supervisor yang relevan. Evaluasi difokuskan pada dua aspek utama, yaitu kualitas hasil perangkingan rekomendasi dan dampak penerapan validasi slot bimbingan terhadap hasil akhir alokasi.
+
+Evaluasi kualitas perangkingan dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan sistem terhadap data ground truth yang tersedia, berupa pasangan mahasiswa--faculty supervisor dari data historis atau hasil penilaian pihak EPC. Mengingat sistem menghasilkan daftar rekomendasi top-5, metrik evaluasi yang digunakan adalah metrik berbasis top-K, yaitu Recall@5 dan nDCG@5. Recall@5 digunakan untuk mengukur kemampuan sistem dalam memasukkan faculty supervisor yang relevan ke dalam lima rekomendasi teratas, sedangkan nDCG@5 digunakan untuk menilai kualitas urutan peringkat rekomendasi dengan mempertimbangkan posisi faculty supervisor yang relevan pada daftar hasil.
+
+Evaluasi dilakukan secara konsisten untuk seluruh kandidat model text embedding yang digunakan dalam penelitian ini, dengan menerapkan pipeline yang sama, meliputi pembentukan dokumen faculty supervisor, pemrosesan teks mahasiswa, perhitungan cosine similarity, agregasi skor pada tingkat faculty supervisor menggunakan nilai maksimum, serta pembentukan daftar rekomendasi top-5. Dengan demikian, perbandingan kinerja antar model mencerminkan perbedaan karakteristik model embedding, bukan perbedaan perlakuan data atau mekanisme perhitungan.
+
+Selain evaluasi kualitas perangkingan, penelitian ini juga mengevaluasi dampak penerapan validasi slot bimbingan terhadap hasil rekomendasi. Evaluasi ini dilakukan dengan mengamati proporsi mahasiswa yang berhasil dialokasikan faculty supervisor setelah proses validasi slot berbasis batch rule, serta distribusi peringkat faculty supervisor terpilih (misalnya peringkat pertama, kedua, dan seterusnya). Evaluasi ini bertujuan untuk memahami sejauh mana keterbatasan kapasitas bimbingan memengaruhi hasil akhir sistem rekomendasi.
+
+Berdasarkan hasil evaluasi tersebut, model text embedding yang memberikan kinerja terbaik dalam menghasilkan rekomendasi top-5 yang relevan dan stabil terhadap keterbatasan slot bimbingan dipilih sebagai model yang digunakan pada sistem rekomendasi yang diusulkan.
+
+\subsection{Perancangan UML}\label{perancangan-uml}
+
+Perancangan UML dan use case pada penelitian ini bertujuan untuk memodelkan alur interaksi sistem sebagai decision support system bagi EPC. Diagram yang disusun tidak dimaksudkan untuk menggambarkan sistem produksi secara menyeluruh, melainkan untuk memastikan bahwa proses pengolahan data dan pemanggilan metode semantic similarity berjalan sesuai dengan kebutuhan penelitian dan skenario evaluasi.
+
+\subsection{Use Case Diagram}\label{use-case-diagram}
+
+Use case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dalam sistem klasifikasi dan prediksi topik yang dikembangkan. Diagram ini juga menjelaskan aktor-aktor yang terlibat dalam sistem tersebut. Dalam sistem klasifikasi dan prediksi topik skripsi ini, aktor utama yang berperan adalah user dan admin.
+
+\begin{figure}
+\centering
+\includegraphics[width=4.30537in,height=2.05108in]{pic/usecase-diagram}
+\caption{Use Case Diagram}
+\label{fig:fig3.2}
+\end{figure}
+
+\subsection{Use Case Narative}\label{use-case-narative}
+
+Use case narrative disusun untuk memberikan penjelasan rinci mengenai alur interaksi antara aktor dan sistem rekomendasi yang diusulkan. Narasi ini melengkapi use case diagram dengan mendeskripsikan setiap skenario penggunaan sistem secara lebih detail, termasuk tujuan use case, aktor yang terlibat, prasyarat, alur utama, serta kondisi pengecualian yang mungkin terjadi.
+
+Perancangan use case narrative mengacu pada proses bisnis dan alur fungsional sistem yang telah dijelaskan pada Subbab 3.2.3, khususnya terkait penginputan data mahasiswa oleh EPC, proses pembentukan embedding, perhitungan kemiripan, perangkingan faculty supervisor, serta validasi slot bimbingan. Dengan demikian, use case narrative berfungsi sebagai penghubung antara perancangan konseptual sistem dan kebutuhan fungsional yang harus dipenuhi oleh sistem pada tahap implementasi.
+
+Melalui use case narrative, setiap fungsi utama sistem dijabarkan secara sistematis sehingga dapat memberikan pemahaman yang jelas mengenai bagaimana sistem merespons aksi pengguna dalam berbagai kondisi. Narasi ini juga membantu memastikan bahwa seluruh kebutuhan fungsional yang telah dirancang dapat ditelusuri secara konsisten dari tahap analisis kebutuhan hingga perancangan dan implementasi sistem.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4629}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5371}}@{}}
+\caption{Tabel 3. 6 Use Case Register}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Register \\
+Scenario & EPC membuat akun baru untuk mengakses sistem rekomendasi \\
+Triggering Events & EPC membuka halaman registrasi \\
+Brief Description & Use case ini menggambarkan proses pembuatan akun baru oleh EPC yang mencakup pengisian username, nama lengkap, dan password \\
+Actor & EPC \\
+Related Use Case & Login \\
+Stakeholder & EPC \\
+Pre-condition & Sistem dalam kondisi aktif, EPC belum memiliki akun \\
+Post-condition & Akun EPC tersimpan di database, EPC langsung login ke sistem \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2602}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2755}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+EPC membuka halaman registrasi & Sistem menampilkan formulir registrasi (username, nama lengkap, password, konfirmasi password) \\
+EPC mengisi formulir dan menekan tombol Register & Sistem memvalidasi bahwa password dan konfirmasi password sesuai \\
+& Sistem memeriksa ketersediaan username \\
+& Sistem menyimpan akun baru dengan password ter-hash \\
+\end{longtable}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2618}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2739}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Password dan konfirmasi password tidak sama & Sistem menampilkan pesan kesalahan dan meminta EPC mengulang \\
+Username sudah digunakan & Sistem menampilkan pesan kesalahan \\
+Username kurang dari 3 karakter & Sistem menolak registrasi \\
+Password kurang dari 6 karakter & Sistem menolak registrasi \\
+\end{longtable}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4442}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5558}}@{}}
+\caption{Tabel 3. 7 Use Case Login}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Login \\
+Scenario & EPC melakukan autentikasi untuk mengakses sistem \\
+Triggering Events & EPC membuka halaman login \\
+Brief Description & Use case ini menggambarkan proses autentikasi EPC menggunakan username dan password \\
+Actor & EPC \\
+Related Use Case & Register, seluruh use case yang memerlukan login \\
+Stakeholder & EPC \\
+Pre-condition & EPC telah memiliki akun terdaftar \\
+Post-condition & EPC berhasil login dan dapat mengakses seluruh fitur sistem \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2717}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2827}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+EPC membuka halaman login & Sistem menampilkan formulir login (username, password) \\
+EPC mengisi username dan password, lalu menekan tombol Login & Sistem memvalidasi kredensial terhadap database \\
+& Sistem membuat session dan mengarahkan ke halaman Dashboard \\
+\end{longtable}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2552}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2993}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Username atau password salah & Sistem menampilkan pesan "Username atau password salah" \\
+Username tidak ditemukan & Sistem menampilkan pesan kesalahan yang sama (tanpa membedakan username/password yang salah) \\
+\end{longtable}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4637}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5363}}@{}}
+\caption{Tabel 3. 8 Use Case Import Data Mahasiswa}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Import Data Mahasiswa \\
+Scenario & EPC mengimpor data mahasiswa dari file Excel ke dalam sistem \\
+Triggering Events & EPC membuka menu Data Center dan memilih opsi import \\
+Brief Description & Use case ini menggambarkan proses pengunggahan file Excel yang berisi data mahasiswa, termasuk validasi format dan penyimpanan ke database \\
+Actor & EPC \\
+Related Use Case & Trigger Proses Rekomendasi \\
+Stakeholder & EPC, Program Studi \\
+Pre-condition & EPC telah login; file Excel berformat .xlsx dengan kolom wajib: STUDENT ID, TRACK, PARTNER/LECTURER, POSITION/TOPIC, WORK SCHEMA, GPA \\
+Post-condition & Data mahasiswa tersimpan di database; data siap diproses oleh sistem rekomendasi \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2598}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2751}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+EPC membuka halaman Data Center & Sistem menampilkan halaman Data Center dengan opsi import (default path atau upload) \\
+EPC memilih file Excel dan menekan tombol Import & Sistem membaca file Excel dan memvalidasi keberadaan kolom wajib \\
+& Sistem melakukan normalisasi data (pembersihan ID, konversi tipe data) \\
+& Sistem melakukan upsert data ke tabel students (insert baru atau update existing) \\
+& Sistem menampilkan notifikasi berisi jumlah inserted, updated, dan total \\
+\end{longtable}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2609}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2740}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+File bukan format .xlsx & Sistem menolak file dan menampilkan pesan kesalahan \\
+Kolom wajib tidak ditemukan & Sistem menampilkan pesan kesalahan dengan daftar kolom yang hilang \\
+Gagal membaca file & Sistem menampilkan pesan kegagalan \\
+\end{longtable}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4504}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5496}}@{}}
+\caption{Tabel 3. 9 Use Case Kelola Data Faculty Supervisor}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Kelola Data Faculty Supervisor \\
+Scenario & EPC mengelola data faculty supervisor termasuk profil dan keywords \\
+Triggering Events & EPC membuka menu Supervisor Studio \\
+Brief Description & Use case ini menjelaskan proses pengelolaan data profil faculty supervisor melalui Supervisor Studio, termasuk penambahan dosen baru, pembaruan keywords, serta ekspor konfigurasi \\
+Actor & EPC \\
+Related Use Case & Trigger Proses Rekomendasi \\
+Stakeholder & EPC, Faculty Supervisor \\
+Pre-condition & EPC telah login ke sistem \\
+Post-condition & Data faculty supervisor tersimpan dan diperbarui \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2757}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2726}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+EPC membuka halaman Supervisor Studio & Sistem menampilkan daftar faculty supervisor aktif beserta keywords masing-masing \\
+EPC memilih faculty supervisor untuk diedit atau menambahkan faculty supervisor baru & Sistem menampilkan formulir detail (kode, nama, keywords) \\
+EPC memperbarui keywords dan menekan tombol Simpan & Sistem memvalidasi dan menyimpan perubahan \\
+EPC dapat mengekspor konfigurasi ke Excel & Sistem menghasilkan file Excel berisi daftar supervisor dan track reference \\
+\end{longtable}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2679}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2803}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Kode dosen kurang dari 3 karakter & Sistem menolak penyimpanan \\
+Nama dosen sudah dipakai oleh kode lain & Sistem menampilkan pesan konflik \\
+Kode dosen atau nama kosong & Sistem menampilkan pesan validasi \\
+\end{longtable}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
+\caption{Tabel 3. 10 Use Case Kelola Label \& Affinity Rules}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Kelola Label \& Affinity Rules \\
+Scenario & EPC mengonfigurasi label semantik dan affinity matrix melalui Rules Studio \\
+Triggering Events & EPC membuka menu Rules Studio \\
+Brief Description & Use case ini menjelaskan proses konfigurasi label descriptions (deskripsi, threshold, status niche) dan affinity matrix (nilai boost per pasangan supervisor-label) \\
+Actor & EPC \\
+Related Use Case & Trigger Proses Rekomendasi \\
+Stakeholder & EPC \\
+Pre-condition & EPC telah login, data supervisor telah tersedia \\
+Post-condition & Konfigurasi label dan affinity matrix tersimpan dan digunakan pada run berikutnya \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2518}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2609}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+EPC membuka halaman Rules Studio & Sistem menampilkan daftar label descriptions dan affinity matrix grid \\
+EPC mengedit deskripsi label, threshold, atau status niche & Sistem memvalidasi (threshold antara 0-1, deskripsi tidak kosong) \\
+EPC menekan simpan & Sistem menyimpan perubahan dan menginvalidasi cache embedding label \\
+EPC mengedit nilai boost pada affinity matrix & Sistem menyimpan perubahan sel-sel yang dimodifikasi \\
+EPC dapat preview skor label untuk mahasiswa tertentu & Sistem menghitung cosine similarity antara embedding mahasiswa dan label \\
+EPC dapat mereset ke konfigurasi default & Sistem mengembalikan label/affinity ke nilai seed awal \\
+\end{longtable}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2484}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2643}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Threshold di luar range 0-1 & Sistem menolak penyimpanan \\
+Deskripsi label kosong & Sistem menampilkan pesan validasi \\
+Label tidak ada di default seed (untuk reset) & Sistem menampilkan pesan kesalahan \\
+\end{longtable}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
+\caption{Tabel 3. 11 Use Case Trigger Proses Rekomendasi}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Trigger Proses Rekomendasi \\
+Scenario & EPC menjalankan proses rekomendasi untuk mengalokasikan mahasiswa ke faculty supervisor \\
+Triggering Events & EPC menekan tombol Generate Recommendation \\
+Brief Description & Use case ini menggambarkan proses inisiasi pipeline rekomendasi lengkap: embedding → similarity → rule boost → group bonus → capacity planning → greedy solver → evaluasi \\
+Actor & EPC \\
+Related Use Case & Import Data Mahasiswa, Kelola Data Faculty Supervisor, Kelola Label \& Affinity Rules \\
+Stakeholder & EPC, Program Studi \\
+Pre-condition & Data mahasiswa telah diimpor; data faculty supervisor telah tersedia; EPC telah login \\
+Post-condition & Hasil rekomendasi (run) tersimpan di database dengan evaluasi metrik \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2613}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2514}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+EPC memilih model embedding yang akan digunakan & Sistem menampilkan opsi konfigurasi (model, enable/disable rule boost, group bonus, extra docs, capacity parameters) \\
+EPC mengonfigurasi parameter dan menekan tombol Generate & Sistem memvalidasi ketersediaan data mahasiswa dan dosen \\
+& Sistem membentuk dokumen teks mahasiswa dan faculty supervisor \\
+& Sistem mengencode dokumen menggunakan model embedding yang dipilih \\
+& Sistem menghitung cosine similarity matrix \\
+& Sistem mendeteksi label semantik per mahasiswa \\
+& Sistem menghitung rule boost berdasarkan affinity matrix \\
+& Sistem menghitung company group bonus \\
+& Sistem menghitung capacity plan (min/max per supervisor) \\
+& Sistem menjalankan greedy solver untuk alokasi optimal \\
+& Sistem menghitung metrik evaluasi (content-based dan hybrid) \\
+& Sistem menyimpan hasil run dan mengarahkan ke halaman detail run \\
+\end{longtable}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
+Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
+Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
+Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
+\end{longtable}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
+\caption{Tabel 3. 12 Use Case Lihat Hasil Rekomendasi}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Lihat Hasil Rekomendasi \\
+Scenario & EPC melihat detail hasil rekomendasi suatu run \\
+Triggering Events & EPC membuka halaman detail run atau halaman rekomendasi \\
+Brief Description & Use case ini menggambarkan proses penelusuran hasil rekomendasi termasuk evaluasi metrik, distribusi kapasitas, daftar mismatch, dan detail per mahasiswa \\
+Actor & EPC \\
+Related Use Case & Trigger Proses Rekomendasi, Export Hasil ke Excel \\
+Stakeholder & EPC, Program Studi \\
+Pre-condition & Minimal satu run rekomendasi telah berhasil dilakukan \\
+Post-condition & EPC memperoleh informasi detail hasil rekomendasi \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2592}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2534}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+EPC membuka halaman detail run & Sistem menampilkan evaluasi metrik (content-based \& hybrid), distribusi kapasitas per supervisor, dan daftar mismatch \\
+EPC membuka halaman rekomendasi & Sistem menampilkan tabel seluruh pasangan mahasiswa-supervisor dengan skor, rule matches, dan filter pencarian \\
+EPC menggunakan filter (nama, supervisor, mismatch only) & Sistem memfilter dan menampilkan hasil sesuai kriteria \\
+\end{longtable}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
+Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
+Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
+Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
+\end{longtable}
+\end{minipage} \\
+\end{longtable}
+
+\subsection{Class diagram}\label{class-diagram-1}
+
+Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar komponen utama dalam sistem rekomendasi. Diagram ini menggambarkan bagaimana setiap entitas pada sistem direpresentasikan, beserta atribut dan operasi yang mendukung proses pembentukan embedding, perhitungan hybrid scoring, alokasi menggunakan greedy solver, serta evaluasi hasil rekomendasi.
+
+\begin{figure}
+\centering
+\includegraphics[width=5.18324in,height=1.82627in]{pic/image9}
+\caption{Class Diagram}
+\label{fig:fig3.3}
+\end{figure}
+
+\subsection{Entity Relationship Diagram}\label{entity-relationship-diagram-1}
+
+Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan hubungan antar entitas yang disimpan dalam basis data SQLite. ERD ini merepresentasikan tujuh entitas utama yang diperlukan dalam proses hybrid scoring, alokasi greedy, dan evaluasi hasil rekomendasi.
+
+\begin{figure}
+\centering
+\includegraphics[width=5.23273in,height=3.54888in]{pic/image10}
+\caption{Entity Relationship Diagram}
+\label{fig:fig3.4}
+\end{figure}
+
+\subsection{Tahapan Implementasi}\label{tahapan-implementasi}
+
+Tahapan implementasi merupakan tahap realisasi dari hasil analisis dan perancangan sistem yang telah dijelaskan pada sub-bab sebelumnya. Pada tahap ini, seluruh rancangan sistem yang telah dibuat diimplementasikan ke dalam bentuk sistem yang dapat dijalankan dan diuji secara fungsional. Proses implementasi dilakukan dengan mengacu pada metodologi waterfall, di mana setiap tahap dilaksanakan secara berurutan dan sistematis.
+
+Implementasi pada penelitian ini mencakup implementasi pengolahan data, penerapan metode semantic similarity dan aturan pendukung yang berlaku, serta pengembangan dan deployment prototipe sistem rekomendasi faculty supervisor Program Enrichment.
+
+\subsection{Implementasi Pengolahan Data}\label{implementasi-pengolahan-data}
+
+Tahap awal implementasi sistem adalah pengolahan data. Data yang digunakan dalam penelitian ini berupa data tekstual yang berasal dari profil mahasiswa Program Enrichment dan data bidang keahlian faculty supervisor. Data tersebut dikumpulkan dari sumber institusional dan dokumen pemetaan historis yang telah digunakan sebelumnya.
+
+Sebelum digunakan dalam sistem rekomendasi, data terlebih dahulu dipersiapkan agar memiliki format yang konsisten dan dapat diproses secara komputasional. Proses pengolahan data ini bertujuan untuk memastikan bahwa data yang digunakan memiliki kualitas yang baik dan sesuai dengan kebutuhan sistem.
+
+\subsection{Implementasi Praproses Data}\label{implementasi-praproses-data}
+
+Setelah data terkumpul, tahap selanjutnya adalah implementasi praproses data. Praproses data dilakukan untuk membersihkan dan menormalkan data tekstual sebelum dilakukan perhitungan kemiripan semantik.
+
+Tahapan praproses data yang diimplementasikan meliputi:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Data cleansing, yaitu penghapusan data yang tidak relevan atau tidak diperlukan.
+\item
+  Case folding, untuk mengubah seluruh teks menjadi huruf kecil agar konsisten.
+\item
+  Tokenisasi, yaitu memecah teks menjadi unit kata.
+\item
+  Penghapusan stopwords, untuk menghilangkan kata-kata umum yang tidak memiliki kontribusi makna yang signifikan.
+\end{enumerate}
+
+Normalisasi teks, agar data siap digunakan pada tahap representasi teks.
+
+Tahapan ini bertujuan untuk mengurangi noise pada data dan meningkatkan akurasi sistem rekomendasi.
+
+\subsection{Implementasi Representasi Teks}\label{implementasi-representasi-teks}
+
+Pada tahap ini, data tekstual yang telah melalui proses praproses diubah ke dalam bentuk representasi numerik. Representasi teks merupakan langkah penting karena sistem rekomendasi membutuhkan data dalam bentuk numerik untuk melakukan perhitungan kemiripan.
+
+Representasi teks dilakukan dengan pendekatan semantic similarity, di mana teks profil mahasiswa dan bidang keahlian dosen direpresentasikan dalam bentuk vektor. Representasi ini memungkinkan sistem untuk memahami konteks dan makna teks secara lebih mendalam dibandingkan pendekatan berbasis pencocokan kata kunci.
+
+Hasil dari tahap ini berupa vektor teks yang digunakan sebagai input utama pada proses perhitungan kemiripan semantik.
+
+\subsection{Implementasi Perhitungan Semantic Similarity}\label{implementasi-perhitungan-semantic-similarity}
+
+Setelah representasi teks diperoleh, tahap selanjutnya adalah implementasi perhitungan semantic similarity. Perhitungan dilakukan dengan membandingkan vektor representasi teks mahasiswa dengan vektor representasi teks faculty supervisor.
+
+Nilai similarity yang dihasilkan menunjukkan tingkat kesesuaian antara topik atau minat mahasiswa dengan bidang keahlian dosen pembimbing. Nilai ini berada dalam rentang tertentu, di mana nilai yang lebih tinggi menunjukkan tingkat kesesuaian yang lebih baik.
+
+Proses perhitungan similarity dilakukan untuk setiap pasangan mahasiswa dan faculty supervisor, sehingga sistem mampu menghasilkan daftar faculty supervisor yang diurutkan berdasarkan tingkat kecocokan. Hasil perhitungan ini kemudian disimpan dan digunakan pada tahap rekomendasi.
+
+\subsection{Implementasi Sistem Rekomendasi}\label{implementasi-sistem-rekomendasi}
+
+Pada tahap ini, seluruh komponen sistem yang telah diimplementasikan sebelumnya diintegrasikan menjadi satu sistem rekomendasi yang utuh. Sistem rekomendasi dirancang untuk menghasilkan daftar rekomendasi faculty supervisor bagi setiap mahasiswa berdasarkan hasil perhitungan similarity dan penerapan aturan yang berlaku.
+
+Hasil rekomendasi ditampilkan dalam bentuk peringkat (ranking), di mana faculty supervisor dengan tingkat kesesuaian tertinggi berada pada urutan teratas. Sistem ini berfungsi sebagai decision support system, sehingga rekomendasi yang dihasilkan digunakan sebagai bahan pertimbangan oleh Enrichment Program Coordinator (EPC) dalam menentukan dosen pembimbing yang paling sesuai.
+
+\subsection{Implementasi dan Deployment Sistem}\label{implementasi-dan-deployment-sistem}
+
+Tahap akhir dalam implementasi adalah pengembangan dan deployment prototipe sistem. Prototipe sistem dikembangkan dalam bentuk aplikasi berbasis web yang terdiri dari antarmuka pengguna dan backend untuk memproses data dan menghasilkan rekomendasi.
+
+Prototipe ini memungkinkan pengguna untuk:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Mengakses data mahasiswa dan faculty supervisor.
+\item
+  Menjalankan proses rekomendasi secara otomatis.
+\item
+  Melihat hasil rekomendasi faculty supervisor berdasarkan tingkat kesesuaian.
+\item
+  Menggunakan sistem sebagai alat bantu dalam proses pemetaan faculty supervisor.
+\end{enumerate}
+
+Deployment dilakukan untuk memastikan bahwa sistem dapat berjalan secara operasional dan siap digunakan sebagai pendukung proses pemetaan faculty supervisor Program Enrichment di Universitas XYZ
 

@@ -1,5 +1,7 @@
 build/*
 !build/Skripsi.pdf
+extracted-images/
+raw_output.tex
 *.aux
 *.bbl
 *.blg
