@@ -71,8 +71,9 @@ Sistem rekomendasi mahasiswa ini diimplementasikan dalam bentuk aplikasi berbasi
 \subsubsection{Login Page}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/login.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/login.png}
+    \end{center}
 \end{figure}
         
 Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang menyediakan formulir terstruktur untuk memasukkan data kredensial. Antarmuka (interface) ini mencakup kolom (field) username dan kata sandi yang telah didaftarkan oleh pengguna sebelumnya. Juga bila pengguna belum memiliki akun bisa mendaftarkan akun dengan memilih tombol registrasi. 
@@ -80,8 +81,9 @@ Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang meny
 \subsubsection{Register Page}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/register.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/register.png}
+    \end{center}
 \end{figure}
         
 Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields seperti nama lengkap, username, password dan konfirmasi password. Lalu proses dilanjutkan dengan memilih tombol registrasi setelah mengisi data dan akun akan otomatis dibuat. 
@@ -89,16 +91,18 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields sepe
 \subsubsection{Dashboard}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/dashboard.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/dashboard.png}
+    \end{center}
 \end{figure}
         
 Halaman dashboard menyajikan ringkasan data statistik utama, meliputi total mahasiswa dan dosen yang telah terdaftar di dalam sistem. Selain itu, pengguna dapat memantau akumulasi proses eksekusi (total runs), tingkat akurasi pada eksekusi terakhir, serta rincian hasil evaluasi yang telah diproses. Fitur pada halaman ini juga memungkinkan pengguna untuk mengakses rincian run, dan inspect row, hingga melakukan ekspor data ke format Excel berdasarkan hasil eksekusi terbaru.  
 \subsubsection{Data Center}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/datacenter.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/datacenter.png}
+    \end{center}
 \end{figure}
         
 Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pengendali eksekusi awal (pipeline trigger) sistem. Peran utamanya adalah melakukan proses ETL (Extract, Transform, Load) guna memastikan kesiapan data mahasiswa dan dosen pembimbing sebelum diproses oleh model algoritma rekomendasi hibrida. 
@@ -106,8 +110,9 @@ Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pen
 \subsubsection{Run History}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/runhistory.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/runhistory.png}
+    \end{center}
 \end{figure}
         
 Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah dilakukan oleh sistem. Informasi yang ditampilkan mencakup waktu eksekusi, jumlah mahasiswa dan dosen yang terlibat, model yang digunakan, serta hasil evaluasinya. Selain itu, pengguna dapat melakukan aksi lanjutan untuk meninjau rincian eksekusi detail run maupun mengekspor data ke dalam format Excel.   
@@ -115,8 +120,9 @@ Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah di
 \subsubsection{Run Details}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/rundetails.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/rundetails.png}
+    \end{center}
 \end{figure}
         
 Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang telah dilakukan. Informasi yang disajikan mencakup data spesifik untuk setiap mahasiswa, meliputi NIM, Nama, Track, Partner, Topik, Current Supervisor, Recommended Supervisor, Final Score, dan Rule Match. Selain itu, pengguna dapat menggunakan fitur filter untuk mempermudah pencarian data berdasarkan parameter tertentu, seperti nama, topik, maupun dosen  supervisor tertentu. . 
@@ -124,8 +130,9 @@ Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang tela
 \subsubsection{Supervisor Studio}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/supervisorstudio.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/supervisorstudio.png}
+    \end{center}
 \end{figure}
         
 Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
@@ -133,8 +140,9 @@ Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan se
 \subsubsection{Rules Studio}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{pic/rulestudio.png}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/rulestudio.png}
+    \end{center}
 \end{figure}
         
 Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
@@ -149,15 +157,15 @@ Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika
 
 \begin{table}
  \centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|}
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
     \hline
-\textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status}\\
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    Login dengan kredensial valid  & Email dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\ 
+    1 & Login dengan kredensial valid  & Email dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\ 
     \hline
-    Login dengan kata sandi salah   & Email benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\ 
+    2 & Login dengan kata sandi salah   & Email benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\ 
     \hline
-    Login dengan email salah   &Email salah, kata sandi benar  &Sistem menampilkan message “Kredential Salah”  & Pass  \\ 
+    3 & Login dengan email salah   &Email salah, kata sandi benar  &Sistem menampilkan message “Kredential Salah”  & Pass  \\ 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -171,15 +179,15 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi data email dan passw
 
 \begin{table}
  \centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{1cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|}
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
     \hline
-\textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status}\\
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    Mendaftarkan akun dengan email dan password   & Email dan kata sandi benar & Sistem menyimpan data email dan password pengguna & Pass  \\ 
+    1 & Mendaftarkan akun dengan email dan password   & Email dan kata sandi benar & Sistem menyimpan data email dan password pengguna & Pass  \\ 
     \hline
-   Mendaftarkan akun dengan kata sandi salah    & Email benar, kata sandi salah  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\ 
+   2 & Mendaftarkan akun dengan kata sandi salah    & Email benar, kata sandi salah  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\ 
     \hline
-    Mendaftarkan akun email salah    &Email salah, kata sandi benar  &Sistem menampilkan message “Data tidak sesuai”  & Pass  \\ 
+    3 & Mendaftarkan akun email salah    &Email salah, kata sandi benar  &Sistem menampilkan message “Data tidak sesuai”  & Pass  \\ 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -193,18 +201,174 @@ Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman
 
 \begin{table}
  \centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
     \hline
-\textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status}\\
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    Mendaftarkan akun dengan email dan password   & Email dan kata sandi benar & Sistem menyimpan data email dan password pengguna & Pass  \\
+    1 & Klik Menu "Dashboard"   & - & Sistem mengarahkan pengguna ke halaman Data Center  & Pass  \\ 
     \hline
-   Mendaftarkan akun dengan kata sandi salah    & Email benar, kata sandi salah  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\
+   2 & Klik menu “Run History”  & -  & Sistem mengarahkan pengguna ke halaman Run History  & Pass  \\ 
     \hline
-    Mendaftarkan akun email salah    &Email salah, kata sandi benar  &Sistem menampilkan message “Data tidak sesuai”  & Pass  \\
+    3 &Klik menu “Supervisor Studio”     & -  & Sistem mengarahkan pengguna ke halaman Supervisor Studio   & Pass  \\ 
+    \hline
+     4 &Klik menu “Rules Studio”      & -  & Sistem mengarahkan pengguna ke halaman Rules Studio    & Pass  \\ 
+    \hline
+     5 & Klik tombol “Generate New Run”      & -  & Sistem akan mengarahkan pengguna ke tampilan untuk melakukan run baru    & Pass  \\ 
+    \hline
+     6 & Klik tombol “Open Detail”      & -  & Sistem mengarahkan pengguna ke halaman detail dari run terakhir   & Pass  \\ 
+    \hline
+     7 & Klik tombol “Inspect Rows”       & -  & Sistem akan mengarahkan pengguna melihat data pada Run History   & Pass  \\ 
+    \hline
+     8 & Klik tombol “Export Excel”      & -  & Sistem akan melakukan export pada data run terakhir.    & Pass  \\ 
+    \hline
+    9 & Sistem menampilkan data pada Summary Cards       & -  & Data yang ditampilkan sesuai dengan database   & Pass  \\ 
+    \hline
+    10 & Sistem menampikan data pada Quality Trend      & -  & Sistem menampikan tooltop detail nilai Match Rate, Hybrid MRR, dan Content MRR    & Pass  \\ 
+    \hline
+    11 & Sistem menampikan Informasi Snapshot      & -  & Sistem menampilkan data dari run paling baru     & Pass  \\ 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-	\caption{Skenario Dashboard Page}
-	\label{table:tab4.5}
+	\caption{Skenario Dashboard}
+	\label{table:tab4.4}
+\end{table}
+
+\subsection{Data Center}
+
+Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import data serta interaksi pipeline trigger. Halaman ini krusial karena bertindak sebagai penyedia data utama sebelum sistem menjalankan algoritma rekomendasi. 
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+    \hline
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+    \hline
+    1 & Upload Data Kosong   & - & Sistem menolak proses import dan menampikan error message  & Pass  \\ 
+    \hline
+   2 & Upload Data dengan Format Salah  & -  & Sistem menolak proses import dan menampilkan  error message   & Pass  \\ 
+    \hline
+    3 & Upload Valid     & -  & File berhasil disimpan, dan sistem akan menampilkan data pada sumarry cards.    & Pass  \\ 
+    \hline
+     4 & Data pada Summary Cards sesuai      & -  & Data yang ditampilkan sesuai dengan data upload     & Pass  \\ 
+    \hline
+     5 & Klik tombol “Generate New Run”      & -  & Sistem akan mengarahkan pengguna ke tampilan untuk melakukan run baru    & Pass  \\ 
+    \hline
+    
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Data Center}
+	\label{table:tab4.4}
+\end{table}
+
+\subsection{Generate New Run}
+
+Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna ingin melakukan run baru dengan memilih model dan rules boost yang akan diterapkan pada run tersebut. 
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+    \hline
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+    \hline
+    1 & Memilih Model   & - & Model yang dipilih akan terlihat dengan ditandai berwarna oren  & Pass  \\ 
+    \hline
+   2 & Memilih Rule Boost  & -  & Rule yang dipilih akan menunjukan perubahan warna pada toggle yang tersedia menjadi warna oren   & Pass  \\ 
+    \hline
+    3 & Memilih lebih dari 1 Rule Boost     & -  & Rule yang dipilih akan menunjukan perubahan warna pada toggle yang tersedia menjadi warna oren pada beberapa rules boost yang dipilih  & Pass  \\ 
+    \hline
+     4 & Cancel Run     & -  & Sistem akan menutup pop-up new run  \\ 
+    \hline
+     5 & Eksekusi Run Baru     & -  & Sistem akan menjalankan rekomendasi dengan model dan rules yang dipilih    & Pass  \\ 
+    \hline
+    
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Generate New Run}
+	\label{table:tab4.4}
+\end{table}
+
+\subsection{Run History}
+
+Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwayat  run algoritma secara kronologis dan akurat. Fokus utama meliputi kebenaran metadata yang ditampilkan serta fungsionalitas button. 
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+    \hline
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+    \hline
+    1 & Sistem menampikan tabel riwayat run yang sudah dijalankan  & - & Sistem menampilkan kolom Run ID, Created, Students, Supervisor, Model, Solver, Objective, Match Rate, dan Hybrid MRR   & Pass  \\ 
+    \hline
+   2 & Tabel Riwayat di Tampilkan Berdasarkan Urutan Terakhir Dijalankan  & -  & Data ditampilkan secara urut (Descending)    & Pass  \\ 
+    \hline
+    3 & Klik tombol “Details Row” pada salah satu ID Run      & -  & Sistem berpindah ke halaman detail page dari run yang dipilih     & Pass  \\ 
+    \hline
+     4 & Klik tombol “Export Data’ pada salah satu ID Run      & -  & Sistem melakukan export data sesuai ID Run yang dipilih    & Pass  \\ 
+    \hline
+     5 & Klik tombol “ Generate New Run pada page Run History       & -  & Sistem mengarahkan pengguna ke halaman pembuatan run baru     & Pass  \\ 
+    \hline
+    
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Run History}
+	\label{table:tab4.4}
+\end{table}
+
+\subsection{Supervisor Studio}
+
+Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan data dosen pembimbing beserta kata kunci semantik.
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+    \hline
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+    \hline
+    1 & Membuka menu dropdown dan mencari berdasarkan nama atau kode dosen   & - & Sistem menyaring data secara dinamis berdasarkan data dosen yang dicari    & Pass  \\ 
+    \hline
+   2 & Memilih salah satu nama dosen kemudian menekan tombol “Load Supervisor”   & -  & Sistem menampilkan profil dosen dan keyword yang sesuai dengan dosen tersebut     & Pass  \\ 
+    \hline
+    3 & Menekan tombol “Export Config”       & -  & Sistem akan mengunduh berkas excel berisikan data dosen dan profilnya.      & Pass  \\ 
+    \hline
+     4 & Mengetikkan keyword baru pada kolom “Add Keyword”    & -  & Keyword di daftarkan di dalam daftar keyword     & Pass  \\ 
+    \hline
+     5 & Menekan tombol (X) pada salah satu komponen chip       & -  & Chip keyword akan dihapuskan       & Pass  \\ 
+    \hline
+     6 & Menekan tombol “Save Keywords” setelah melakukan perubahan chip       & -  & Sistem memperbarui daftar keyword semantik pada dosen di database        & Pass  \\ 
+    \hline
+    
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Supervisor Studio}
+	\label{table:tab4.4}
+\end{table}
+
+
+\subsection{Rules Studio}
+
+Pada halaman ini testing bertujuan untuk memvalidasi fleksibilitas pengaturan rules. Halaman ini mengontrol cosine similarity threshold dan deskripsi label semantik yang menentukan bagaimana profil minat mahasiswa dipetakan ke dalam kategori penugasan tertentu (seperti apple_mobile atau binus_bandung).  
+
+\begin{table}
+ \centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+    \hline
+\textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+    \hline
+    1 & Membuka menu dropdown dan mencari berdasarkan nama atau kode dosen   & - & Sistem menyaring data secara dinamis berdasarkan data dosen yang dicari    & Pass  \\ 
+    \hline
+   2 & Memilih salah satu nama dosen kemudian menekan tombol “Load Supervisor”   & -  & Sistem menampilkan profil dosen dan keyword yang sesuai dengan dosen tersebut     & Pass  \\ 
+    \hline
+    3 & Menekan tombol “Export Config”       & -  & Sistem akan mengunduh berkas excel berisikan data dosen dan profilnya.      & Pass  \\ 
+    \hline
+     4 & Mengetikkan keyword baru pada kolom “Add Keyword”    & -  & Keyword di daftarkan di dalam daftar keyword     & Pass  \\ 
+    \hline
+     5 & Menekan tombol (X) pada salah satu komponen chip       & -  & Chip keyword akan dihapuskan       & Pass  \\ 
+    \hline
+     6 & Menekan tombol “Save Keywords” setelah melakukan perubahan chip       & -  & Sistem memperbarui daftar keyword semantik pada dosen di database        & Pass  \\ 
+    \hline
+    
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+	\caption{Skenario Supervisor Studio}
+	\label{table:tab4.4}
 \end{table}
