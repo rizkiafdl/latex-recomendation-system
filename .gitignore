@@ -13,3 +13,4 @@ raw_output.tex
 *.toc
 *.lof
 *.lot
+.context/raw
