@@ -163,6 +163,110 @@ These files are part of the BINUS thesis template and should not be changed unle
 
 ---
 
+## 14. Never add `\DocumentMetadata{...}` to Skripsi.tex — CRITICAL
+
+Do **not** add `\DocumentMetadata{tagging=off}` (or any `\DocumentMetadata{}`) before `\documentclass` in `Skripsi.tex`.
+
+**Why this breaks CI:** `\DocumentMetadata` loads ALL `latex-lab-testphase-*` modules, including `latex-lab-testphase-bib.sty`. That module tries to add a hook to `\@lbibitem/before`, but `apacite`'s version of `\@lbibitem` uses `#1`/`#2` parameters. This causes:
+```
+Illegal parameter number in definition of hook 'cmd/@lbibitem/before'.
+Offending label: 'latex-lab-testphase-bib'.
+```
+pdflatex exits with code 1 → CI fails even if a PDF is produced.
+
+This `\DocumentMetadata` was previously added as a workaround for nested `longtable` errors, but that issue is now fixed structurally (inner tables converted to `tabular`). The workaround is never needed again.
+
+---
+
+## 15. Never nest `longtable` inside a `minipage` inside another `longtable` — CRITICAL
+
+In TeX Live 2026, using `longtable` inside a `minipage` cell of an outer `longtable` causes a fatal error:
+```
+! Forbidden control sequence found while scanning use of \LT@nofcols.
+<recently read> \par
+```
+
+**Wrong:**
+```latex
+SomeColumn & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{longtable}{@{}ll@{}}   % <-- nested longtable: FATAL in TeX Live 2026
+...
+\end{longtable}
+\end{minipage} \\
+```
+
+**Correct:** Use `tabular` for any table that lives inside a `minipage` cell:
+```latex
+SomeColumn & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{tabular}{@{}ll@{}}
+\toprule\noalign{}
+...
+\bottomrule\noalign{}
+\end{tabular}
+\end{minipage} \\
+```
+
+**Key differences when converting `longtable` → `tabular` inside minipage:**
+- Drop `[]` from `\begin{longtable}[]` → `\begin{tabular}`
+- Remove `\endhead`, `\endlastfoot` lines (not valid in tabular)
+- Remove `\bottomrule\noalign{}` that precedes `\endlastfoot` (add it before `\end{tabular}` instead)
+- Replace `\end{longtable}` → `\end{tabular}`
+
+**Root cause:** TeX Live 2026's `longtable` injects `\UseTagging` calls (PDF tagging hooks) via `\LT@bchunk`. When scanning the inner longtable's column spec, the outer table's L3 hook fires and injects `\par`, which `\LT@nofcols` (column-spec scanner) rejects as a forbidden control sequence.
+
+---
+
+## 16. No Unicode characters in LaTeX math mode — CRITICAL
+
+When adding or editing equations in `.tex` files, **never paste Unicode subscript, superscript, or special math characters** into `\[...\]` or `$...$` math environments. pdflatex cannot typeset them.
+
+**Forbidden Unicode characters (common pandoc/Word artifacts):**
+
+| Character | Unicode | Wrong | Correct LaTeX |
+|-----------|---------|-------|---------------|
+| Latin subscript i | U+1D62 `ᵢ` | `Hit@Kᵢ` | `Hit@K_i` |
+| Superscript K | U+1D37 `ᴷ` | `^ᴷ` | `^{K}` |
+| Subscript equals | U+208C `₌` | `₌₁` | `_{i=1}` |
+| Subscript 1 | U+2081 `₁` | `₌₁` | `_{i=1}` |
+| Subscript 2 | U+2082 `₂` | `log₂` | `\log_2` |
+| Unicode minus | U+2212 `−` | `5 − 1` | `5 - 1` |
+| Right arrow | U+2192 `→` | `A → B` (in text or table) | `$\rightarrow$` |
+
+**How to detect before committing:**
+```bash
+python3 -c "
+import sys, unicodedata
+text = open(sys.argv[1]).read()
+for i,ch in enumerate(text):
+    if ord(ch) > 127 and unicodedata.category(ch).startswith('L') or ord(ch) in range(0x2000,0x2200):
+        print(f'pos {i}: U+{ord(ch):04X} {repr(ch)} — {unicodedata.name(ch,\"?\")}')" bab2.tex
+```
+
+**Why this happens:** pandoc converts `.docx` Word files preserving Unicode characters from Word's equation editor. Always audit `.tex` files produced by pandoc before committing.
+
+---
+
+## 17. No blank line between `\raggedright` and `\begin{longtable}` inside minipage
+
+Even if the outer/inner longtable nesting issue is resolved structurally, as a defensive rule: never leave a blank line between `\begin{minipage}[t]{...}\raggedright` and `\begin{longtable}`.
+
+**Wrong:**
+```latex
+\begin{minipage}[t]{\linewidth}\raggedright
+
+\begin{longtable}{...}
+```
+
+**Correct:**
+```latex
+\begin{minipage}[t]{\linewidth}\raggedright
+\begin{longtable}{...}
+```
+
+**Why:** A blank line generates `\par`. Inside TeX Live 2026's longtable column-spec scanner, `\par` is a forbidden control sequence that causes a fatal error.
+
+---
+
 ## 13. Gitignore rules
 
 `build/*` is gitignored **except** `build/Skripsi.pdf` (via `!build/Skripsi.pdf`).
