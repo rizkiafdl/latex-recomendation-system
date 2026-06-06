@@ -14,5 +14,3 @@ raw_output.tex
 *.lof
 *.lot
 .context/raw
-build/
-Skripsi.pdf
