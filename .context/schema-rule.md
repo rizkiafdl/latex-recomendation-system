@@ -267,6 +267,43 @@ Even if the outer/inner longtable nesting issue is resolved structurally, as a d
 
 ---
 
+## 18. Escape special characters in regular text — CRITICAL
+
+LaTeX reserves several characters that **must be escaped** when used in normal prose (outside math mode or `\verb`/`lstlisting`):
+
+| Character | Wrong | Correct |
+|-----------|-------|---------|
+| Underscore `_` | `apple_mobile` | `apple\_mobile` |
+| Percent `%` | `50% accuracy` | `50\% accuracy` |
+| Ampersand `&` | `R&D` | `R\&D` |
+| Hash `#` | `#1 result` | `\#1 result` |
+| Dollar `$` | `$100` | `\$100` |
+| Caret `^` | `10^6` (in text) | `10\^{}6` or `$10^6$` |
+| Tilde `~` | `file~name` | `file\~{}name` |
+| Curly braces `{ }` | `{value}` (in text) | `\{value\}` |
+| Backslash `\` | `path\file` | `path\textbackslash{}file` |
+
+**Most common real-world offender:** underscores in identifiers, file names, variable names, or URLs pasted into prose (e.g. `user_id`, `apple_mobile`, `binus_bandung`, `my_function`).
+
+**Symptom when broken:**
+```
+! Missing $ inserted.
+<inserted text>
+                $
+l.349 ...tegori penugasan tertentu (seperti apple_
+                                                  mobile ...
+```
+pdflatex exits code 1 → latexmk exits code 12 → CI fails.
+
+**Quick audit before committing:**
+```bash
+grep -n '[^\\]_' bab4.tex | grep -v '\\begin\|\\end\|label\|caption\|ref{\|cite{\|includegraphics\|hline\|cline'
+```
+
+**Exception:** inside `$...$`, `\[...\]`, `\verb|...|`, or `lstlisting` environments, `_` is valid and must NOT be escaped.
+
+---
+
 ## 13. Gitignore rules
 
 `build/*` is gitignored **except** `build/Skripsi.pdf` (via `!build/Skripsi.pdf`).
