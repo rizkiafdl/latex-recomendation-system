@@ -769,7 +769,7 @@ Handling
 Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
 Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
 Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
-Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
+Model embedding tidak tersedia & Sistem menggunakan fallback ke TF-IDF \\
 \bottomrule\noalign{}
 \end{tabular}
 \end{minipage} \\
@@ -834,10 +834,219 @@ Condition
 Handling
 \end{minipage} \\
 \midrule\noalign{}
-Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
-Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
-Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
-Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
+Run ID tidak ditemukan di database & Sistem menampilkan pesan kesalahan "Run \{run\_id\} tidak ditemukan" \\
+Tidak ada data rekomendasi pada run yang dipilih & Sistem menampilkan halaman detail run dengan tabel rekomendasi kosong \\
+Filter pencarian tidak menghasilkan kecocokan & Sistem menampilkan tabel kosong dengan informasi jumlah hasil 0 dari total keseluruhan \\
+EPC belum login (session expired) & Sistem mengarahkan EPC ke halaman login secara otomatis \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
+\caption{Tabel 3. 13 Use Case Export Hasil ke Excel}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Export Hasil ke Excel \\
+Scenario & EPC mengunduh hasil rekomendasi dalam format Excel \\
+Triggering Events & EPC menekan tombol export pada halaman detail run \\
+Brief Description & Sistem menghasilkan file Excel berisi 3 sheet: recommendations, summary kapasitas, dan evaluation metrics \\
+Actor & EPC \\
+Related Use Case & Lihat Hasil Rekomendasi \\
+Stakeholder & EPC, Program Studi \\
+Pre-condition & EPC telah login, run rekomendasi telah tersedia \\
+Post-condition & File Excel berhasil diunduh oleh EPC \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2592}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2534}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+EPC membuka halaman detail run & Sistem menampilkan halaman detail run beserta tombol Export Excel \\
+EPC menekan tombol Export Excel & Sistem mengambil seluruh data rekomendasi dari run yang dipilih (pasangan mahasiswa-supervisor beserta skor similarity, rule boost, group boost, final score, rule matches, dan company group key) \\
+& Sistem mengambil data summary kapasitas per supervisor (jumlah mahasiswa yang dialokasikan, batas min/max kapasitas, dan status within capacity) \\
+& Sistem mengambil data evaluasi metrik dari run (content-based metrics dan hybrid score metrics) dan mengonversinya menjadi format tabel (section, metric, value) \\
+& Sistem membentuk file Excel (.xlsx) menggunakan engine openpyxl dengan 3 sheet: recommendations (daftar lengkap alokasi mahasiswa-supervisor), summary (ringkasan kapasitas per supervisor), dan evaluation (metrik evaluasi) \\
+& Sistem mengirim file Excel ke browser EPC sebagai attachment dengan nama file rekomendasi\_dosen\_run\_\{run\_id\}.xlsx dan MIME type application/vnd.openxmlformats-officedocument.spreadsheetml.sheet \\
+EPC menerima dan menyimpan file Excel & \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+Run ID tidak ditemukan di database & Sistem menampilkan pesan kesalahan "Run \{run\_id\} tidak ditemukan" dan mengarahkan kembali ke halaman detail run \\
+Terjadi kegagalan saat pembuatan file Excel (misalnya data corrupt atau error engine openpyxl) & Sistem menampilkan flash message "Gagal export Excel: \{pesan error\}" dan mengarahkan kembali ke halaman detail run \\
+EPC belum login (session expired) & Sistem mengarahkan EPC ke halaman login secara otomatis \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
+\caption{Tabel 3. 14 Use Case Logout}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Logout \\
+Scenario & EPC mengakhiri sesi aktif pada sistem \\
+Triggering Events & EPC menekan tombol Logout pada navigasi sistem \\
+Brief Description & Use case ini menggambarkan proses penghapusan sesi autentikasi sehingga EPC tidak lagi dapat mengakses fitur-fitur sistem yang memerlukan login \\
+Actor & EPC \\
+Related Use Case & Login \\
+Stakeholder & EPC \\
+Pre-condition & EPC dalam kondisi telah login (memiliki sesi aktif) \\
+Post-condition & Sesi EPC dihapus dari server, EPC diarahkan ke halaman login \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2592}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2534}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+EPC menekan tombol Logout pada navigasi & Sistem menerima request POST ke endpoint logout \\
+& Sistem menghapus user\_id dari session server \\
+& Sistem menampilkan flash message "Logout berhasil" \\
+& Sistem mengarahkan EPC ke halaman login \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+EPC mengakses fitur sistem setelah logout & Sistem mengarahkan EPC ke halaman login secara otomatis melalui mekanisme login\_required \\
+Session sudah expired sebelum logout & Sistem tetap mengarahkan ke halaman login tanpa error \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{minipage} \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
+\caption{Tabel 3. 15 Use Case Lihat Dashboard}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Elemen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deskripsi
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Use Case Name & Lihat Dashboard \\
+Scenario & EPC melihat ringkasan kondisi sistem dan metrik kualitas rekomendasi \\
+Triggering Events & EPC berhasil login atau membuka halaman Dashboard \\
+Brief Description & Use case ini menggambarkan proses penampilan halaman utama (Command Center) yang menyajikan statistik ringkasan data, highlight metrik evaluasi dari run terakhir, konfigurasi pipeline aktif, serta daftar riwayat run terbaru \\
+Actor & EPC \\
+Related Use Case & Login, Trigger Proses Rekomendasi, Lihat Hasil Rekomendasi \\
+Stakeholder & EPC, Program Studi \\
+Pre-condition & EPC telah login ke sistem \\
+Post-condition & EPC memperoleh gambaran umum kondisi terkini sistem rekomendasi \\
+Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2592}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2534}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actor
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} \\
+\midrule\noalign{}
+EPC membuka halaman Dashboard (atau diarahkan otomatis setelah login) & Sistem mengambil data run terakhir dari database \\
+& Sistem mengambil daftar 12 run terbaru beserta metrik per run \\
+& Sistem menghitung statistik ringkasan: total mahasiswa, jumlah faculty supervisor aktif, dan total run yang pernah dilakukan \\
+& Sistem mengekstrak highlight metrics dari run terakhir: Assignment Match Rate, Hybrid MRR, dan Content-Based MRR \\
+& Sistem mengekstrak konfigurasi pipeline dari run terakhir (model embedding, status rule boost, group bonus, extra docs) \\
+& Sistem menampilkan seluruh informasi dalam halaman Dashboard (Command Center) \\
+EPC menelusuri informasi ringkasan dan metrik yang ditampilkan & \\
+EPC dapat memilih run dari daftar riwayat untuk melihat detail & Sistem mengarahkan ke halaman detail run yang dipilih \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{minipage} \\
+Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Handling
+\end{minipage} \\
+\midrule\noalign{}
+Belum ada run rekomendasi yang pernah dilakukan & Sistem tetap menampilkan Dashboard dengan statistik data (total mahasiswa, supervisor aktif) namun bagian metrik dan riwayat run ditampilkan kosong \\
+EPC belum login & Sistem mengarahkan EPC ke halaman login \\
 \bottomrule\noalign{}
 \end{tabular}
 \end{minipage} \\
