@@ -8,7 +8,7 @@
 
 | Chapter | Status Konten | Gap Kritis |
 |---|---|---|
-| BAB 1 | ⚠️ Written | Figure 1.1 missing (growth chart) |
+| BAB 1 | ✅ Written | — |
 | BAB 2 | ⚠️ Mostly written | 3 studi hallucinated, ref.bib kosong |
 | BAB 3 | ✅ Written & consistent | — |
 | BAB 4 | ✅ Written & updated | — |
@@ -164,15 +164,11 @@ Sistem autentikasi menggunakan username (bukan email). Tabel skenario Login dan 
 
 ---
 
-## GAP 16 — BAB 1 Figure 1.1 Missing ❌ OPEN
-**Severity: RENDAH**
-
-`bab1.tex` line 15: `% TODO: tambahkan gambar 1.1 (grafik pertumbuhan mahasiswa) — tidak tersedia di docx`
-
-Figure block di-comment karena data/grafik belum ada.
-
-- [ ] Buat atau cari grafik pertumbuhan jumlah mahasiswa program enrichment
-- [ ] Uncomment dan tambahkan figure block
+## GAP 16 — BAB 1 Figure 1.1 Missing ✅ RESOLVED (2026-06-07)
+Grafik "Data Mahasiswa 2021--2025" ditambahkan:
+- Image: `pic/pertumbuhan-mahasiswa.png`
+- Label: `fig:fig1.1`
+- \ref{} ditambahkan pada prose di §1.1 ("sebagaimana terlihat pada Gambar~\ref{fig:fig1.1}")
 
 ---
 
@@ -196,4 +192,4 @@ Figure block di-comment karena data/grafik belum ada.
 - [ ] GAP 7 — "XYZ University" (keputusan pembimbing diperlukan)
 - [ ] GAP 9 — Lampiran (cek panduan BINUS)
 - [ ] GAP 10 — ref.bib kosong + 0 `\cite{}` command ← **prioritas tertinggi**
-- [ ] GAP 16 — BAB 1 Figure 1.1 (grafik pertumbuhan mahasiswa)
+- [x] GAP 16 — BAB 1 Figure 1.1 (grafik pertumbuhan mahasiswa) ✅

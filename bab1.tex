@@ -12,15 +12,14 @@ Namun, Berdasarkan hasil observasi dan wawancara terstruktur yang dilakukan kepa
 
 Hasil survei menunjukkan bahwa proses pemetaan manual ini menimbulkan berbagai permasalahan, antara lain beban pembimbing antar dosen yang belum merata, mahasiswa mendapatkan Faculty Supervisor di luar bidang minat atau keahliannya, serta lamanya waktu yang dibutuhkan untuk menyelesaikan proses pemetaan satu batch mahasiswa yang dapat mencapai satu hingga tiga minggu. Selain itu, kesalahan dan revisi pemetaan masih sering terjadi, sehingga EPC perlu melakukan perbaikan data secara berulang melalui pengeditan manual. Kondisi tersebut meningkatkan beban kerja EPC dan berpotensi menurunkan efisiensi serta transparansi proses penentuan Faculty Supervisor.
 
-% TODO: tambahkan gambar 1.1 (grafik pertumbuhan mahasiswa) — tidak tersedia di docx
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.8\linewidth]{pic/NAMA-GAMBAR}
-% \caption{Pertumbuhan jumlah mahasiswa dari tahun ke tahun di XYZ University}
-% \label{fig:fig1.1}
-% \end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{pic/pertumbuhan-mahasiswa}
+\caption{Pertumbuhan Jumlah Mahasiswa XYZ University Tahun 2021--2024}
+\label{fig:fig1.1}
+\end{figure}
 
-Seiring dengan meningkatnya jumlah mahasiswa di XYZ University dari tahun ke tahun serta meningkatnya jumlah mahasiswa yang mengikuti Program Enrichment dan kompleksitas data yang harus dipertimbangkan, pendekatan manual menjadi semakin tidak efektif. Oleh karena itu, diperlukan suatu sistem yang dapat membantu proses pemetaan Faculty Supervisor secara lebih efisien, objektif, dan terukur. Salah satu pendekatan yang dapat digunakan adalah sistem rekomendasi berbasis semantic similarity, yang memungkinkan pengukuran tingkat kesesuaian antara profil mahasiswa dan bidang keahlian dosen berdasarkan kemiripan makna dari data tekstual yang dimiliki.
+Seiring dengan meningkatnya jumlah mahasiswa di XYZ University dari tahun ke tahun sebagaimana terlihat pada Gambar~\ref{fig:fig1.1}, serta meningkatnya jumlah mahasiswa yang mengikuti Program Enrichment dan kompleksitas data yang harus dipertimbangkan, pendekatan manual menjadi semakin tidak efektif. Oleh karena itu, diperlukan suatu sistem yang dapat membantu proses pemetaan Faculty Supervisor secara lebih efisien, objektif, dan terukur. Salah satu pendekatan yang dapat digunakan adalah sistem rekomendasi berbasis semantic similarity, yang memungkinkan pengukuran tingkat kesesuaian antara profil mahasiswa dan bidang keahlian dosen berdasarkan kemiripan makna dari data tekstual yang dimiliki.
 
 Beberapa penelitian sebelumnya telah mengeksplorasi otomasi proses alokasi pembimbing akademik. Fan et al. (2021) menunjukkan bahwa pendekatan otomatis berbasis machine learning memiliki potensi signifikan dalam mengatasi keterbatasan proses manual, khususnya pada institusi dengan jumlah mahasiswa yang besar. Dalam konteks yang lebih dekat, Rismanto et al. (2020) mengembangkan sistem rekomendasi dosen pembimbing tugas akhir berbasis pembobotan TF-IDF dan cosine similarity yang mencapai akurasi rata-rata 75\% dibandingkan data aktual. Namun, pendekatan berbasis TF-IDF masih bergantung pada pencocokan kata kunci secara leksikal, sehingga belum mampu menangkap kemiripan makna secara kontekstual apabila mahasiswa dan dosen menggunakan terminologi yang berbeda untuk topik yang serupa. Oleh karena itu, penelitian ini mengusulkan pendekatan berbasis semantic similarity menggunakan model embedding, yang memungkinkan pengukuran kesesuaian antara profil mahasiswa dan bidang keahlian Faculty Supervisor berdasarkan makna teks secara lebih mendalam.
 
