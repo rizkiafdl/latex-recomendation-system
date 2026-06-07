@@ -62,7 +62,7 @@ Perangkat keras tersebut juga menggunakan beberapa perangkat lunak untuk proses 
 \section{Hasil}
 \subsection{Evaluasi Model}
 
-Pada tahap ini dilakukan evaluasi terhadap tiga model \textit{embedding} yang menjadi kandidat untuk komponen perhitungan kemiripan semantik. Seluruh model dievaluasi menggunakan \textit{pipeline}, dataset, serta konfigurasi kapasitas yang identik agar perbandingan bersifat adil; satu-satunya variabel yang diubah adalah model \textit{embedding} yang digunakan. Untuk memastikan keterulangan (\textit{reproducibility}), seluruh proses dibuat deterministik sehingga eksekusi berulang menghasilkan keluaran yang identik.
+Pada tahap ini dilakukan evaluasi terhadap tiga model \textit{embedding} yang menjadi kandidat untuk komponen perhitungan kemiripan semantik. Secara keseluruhan, evaluasi mencakup \textbf{18 eksperimen} yang merupakan kombinasi dari 3 model, 3 konfigurasi \textit{toggle} (\texttt{extra\_docs} dan \texttt{group\_bonus}), dan 2 varian kapasitas. Untuk perbandingan model yang adil, Tabel~\ref{table:tab4.2.1} menyajikan hasil pada konfigurasi yang identik (\texttt{extra\_docs=True}, \texttt{group\_bonus=False}) sehingga satu-satunya variabel yang berbeda adalah model \textit{embedding}. Analisis pengaruh parameter konfigurasi disajikan pada subbab berikutnya. Untuk memastikan keterulangan (\textit{reproducibility}), seluruh proses dibuat deterministik sehingga eksekusi berulang menghasilkan keluaran yang identik.
 
 Evaluasi dilakukan terhadap \textbf{168 dari 171 mahasiswa}. Sebanyak 3 mahasiswa dikecualikan karena tidak memiliki nilai \texttt{current\_supervisor\_code} yang valid sebagai \textit{ground truth}.
 
@@ -81,11 +81,11 @@ Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
     \hline
     \textbf{Model} & \textbf{MRR} & \textbf{Hit@1} & \textbf{Hit@5} & \textbf{NDCG@5} & \textbf{NDCG@10} & \textbf{Avg Rank} & \textbf{Match Rate} \\
     \hline
-    \textbf{BAAI/bge-m3} (Run 5) & 0,585 & 0,417 & 0,804 & 0,622 & 0,668 & 3,32 & 0,357 \\
+    \textbf{BAAI/bge-m3} (Run 8) & 0,585 & 0,417 & 0,798 & 0,620 & 0,668 & 3,33 & 0,357 \\
     \hline
-    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 6) & 0,474 & 0,298 & 0,708 & 0,505 & 0,576 & 4,20 & 0,357 \\
+    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 14) & 0,478 & 0,298 & 0,750 & 0,523 & 0,580 & 4,14 & 0,423 \\
     \hline
-    \textbf{intfloat/multilingual-e5-large-instruct} (Run 9) & 0,469 & 0,304 & 0,649 & 0,483 & 0,563 & 4,60 & 0,381 \\
+    \textbf{intfloat/multilingual-e5-large-instruct} (Run 20) & 0,469 & 0,304 & 0,649 & 0,483 & 0,563 & 4,60 & 0,399 \\
     \hline
     \textit{Random baseline} & $\sim$0,23 & $\sim$0,07 & $\sim$0,36 & $\sim$0,21 & --- & $\sim$7,5 & --- \\
     \hline
@@ -95,7 +95,7 @@ Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
     \label{table:tab4.2.1}
 \end{table}
 
-Secara deskriptif, \textbf{BAAI/bge-m3} memperoleh MRR sebesar 0,585 dengan dosen pembimbing sebenarnya berada pada peringkat rata-rata 3,32. \textbf{Qwen/Qwen3-Embedding-0.6B} memperoleh MRR 0,474 dengan rata-rata peringkat 4,20. \textbf{intfloat/multilingual-e5-large-instruct} memperoleh MRR 0,469 dengan rata-rata peringkat 4,60, namun memiliki \textit{Assignment Match Rate} tertinggi sebesar 0,381. Seluruh model berada jauh di atas \textit{random baseline}, yang menunjukkan bahwa pendekatan kemiripan semantik memberikan sinyal pencocokan yang nyata.
+Secara deskriptif, \textbf{BAAI/bge-m3} memperoleh MRR tertinggi sebesar 0,585 dengan dosen pembimbing sebenarnya berada pada peringkat rata-rata 3,33. \textbf{Qwen/Qwen3-Embedding-0.6B} memperoleh MRR 0,478 dengan rata-rata peringkat 4,14, namun memiliki \textit{Assignment Match Rate} tertinggi sebesar 0,423. \textbf{intfloat/multilingual-e5-large-instruct} memperoleh MRR 0,469 dengan rata-rata peringkat 4,60 dan \textit{match rate} 0,399. Seluruh model berada jauh di atas \textit{random baseline}, yang menunjukkan bahwa pendekatan kemiripan semantik memberikan sinyal pencocokan yang nyata.
 
 Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan pada Tabel~\ref{table:tab4.2.2}.
 
@@ -105,11 +105,11 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
     \hline
     \textbf{Model} & \textbf{Avg Similarity @1} & \textbf{Avg True Similarity} & \textbf{Selisih (sebaran)} \\
     \hline
-    \textbf{BAAI/bge-m3} (Run 5) & 0,619 & 0,596 & 0,023 \\
+    \textbf{BAAI/bge-m3} (Run 8) & 0,617 & 0,585 & 0,032 \\
     \hline
-    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 6) & 0,692 & 0,624 & 0,068 \\
+    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 14) & 0,689 & 0,621 & 0,068 \\
     \hline
-    \textbf{intfloat/multilingual-e5-large-instruct} (Run 9) & 0,871 & 0,857 & 0,014 \\
+    \textbf{intfloat/multilingual-e5-large-instruct} (Run 20) & 0,870 & 0,853 & 0,017 \\
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -119,13 +119,161 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
 
 \subsection{Hasil Analisis Model dan Pemilihan Model Akhir}
 
-Berdasarkan hasil pada Tabel~\ref{table:tab4.2.1}, \textbf{BAAI/bge-m3} unggul pada seluruh metrik \textit{retrieval}: MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, dan rata-rata peringkat terbaik (3,32). Keunggulan ini konsisten di setiap metrik, bukan hanya pada satu indikator, sehingga menunjukkan kualitas pemeringkatan yang lebih baik secara menyeluruh.
+Berdasarkan hasil pada Tabel~\ref{table:tab4.2.1}, \textbf{BAAI/bge-m3} unggul pada seluruh metrik \textit{retrieval}: MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, dan rata-rata peringkat terbaik (3,33). Keunggulan ini konsisten di setiap metrik, bukan hanya pada satu indikator, sehingga menunjukkan kualitas pemeringkatan yang lebih baik secara menyeluruh.
 
-Temuan yang menarik muncul pada \textbf{intfloat/multilingual-e5-large-instruct}. Model ini memiliki \textit{Assignment Match Rate} tertinggi (0,381), namun justru memperoleh metrik \textit{retrieval} terburuk di antara seluruh kandidat. Anomali ini dapat dijelaskan melalui Tabel~\ref{table:tab4.2.2}: \textbf{intfloat/multilingual-e5-large-instruct} menghasilkan skor kemiripan yang sangat tinggi namun nyaris seragam (rata-rata skor peringkat-1 sebesar 0,871 dan skor dosen sebenarnya 0,857, dengan sebaran hanya 0,014). Artinya, model ini menilai hampir seluruh pasangan mahasiswa--dosen sebagai ``sangat mirip'' sehingga kehilangan kemampuan untuk membedakan satu dosen dari dosen lainnya. Tingginya \textit{match rate} pada model ini bukan berasal dari kualitas pemeringkatan, melainkan merupakan efek dari proses alokasi berbasis kapasitas yang kebetulan sejalan dengan beberapa penugasan historis pada skor yang nyaris datar.
+Temuan yang menarik muncul pada \textbf{Qwen/Qwen3-Embedding-0.6B}. Model ini memiliki \textit{Assignment Match Rate} tertinggi (0,423), meskipun metrik \textit{retrieval}-nya berada di bawah \textbf{BAAI/bge-m3}. Inversi ini mengindikasikan bahwa distribusi skor qwen3 secara kebetulan lebih selaras dengan ketersediaan slot kapasitas aktual, sehingga alokasi akhir lebih sering cocok dengan penugasan historis. Sebaliknya, \textbf{BAAI/bge-m3} yang unggul pada \textit{retrieval} justru memperoleh \textit{match rate} terendah (0,357) karena model tersebut meranking supervisor yang ``paling tepat'' secara semantik, yang belum tentu identik dengan pilihan historis admin.
 
-Temuan ini menegaskan prinsip penting dalam pemilihan model: \textbf{sebuah sistem rekomendasi dinilai dari kualitas pemeringkatannya} --- yaitu kemampuan menempatkan dosen yang tepat pada posisi teratas --- sehingga metrik \textit{retrieval} menjadi acuan utama. \textit{Assignment Match Rate} merupakan metrik hasil akhir yang bersifat melengkapi, namun apabila digunakan sendirian dapat menyesatkan, sebagaimana ditunjukkan oleh kasus \textbf{intfloat/multilingual-e5-large-instruct}.
+Temuan lain dapat diamati pada \textbf{intfloat/multilingual-e5-large-instruct} melalui Tabel~\ref{table:tab4.2.2}: model ini menghasilkan skor kemiripan yang sangat tinggi namun nyaris seragam (rata-rata skor peringkat-1 sebesar 0,870 dan skor dosen sebenarnya 0,853, dengan sebaran hanya 0,017). Artinya, model ini menilai hampir seluruh pasangan mahasiswa--dosen sebagai ``sangat mirip'' sehingga kehilangan kemampuan untuk membedakan satu dosen dari dosen lainnya secara tajam.
+
+Temuan-temuan ini menegaskan prinsip penting dalam pemilihan model: \textbf{sebuah sistem rekomendasi dinilai dari kualitas pemeringkatannya} --- yaitu kemampuan menempatkan dosen yang tepat pada posisi teratas --- sehingga metrik \textit{retrieval} menjadi acuan utama. \textit{Assignment Match Rate} merupakan metrik hasil akhir yang bersifat melengkapi, namun apabila digunakan sendirian dapat menyesatkan.
 
 Dengan pertimbangan tersebut, \textbf{BAAI/bge-m3} dipilih sebagai model akhir yang digunakan dalam sistem. Pemilihan ini didasarkan pada keunggulan menyeluruh pada metrik \textit{retrieval}, yang merupakan indikator paling representatif terhadap tujuan utama sistem, yaitu memberikan rekomendasi dosen pembimbing yang relevan. Selain itu, hasil model ini telah diverifikasi bersifat deterministik dan dapat direproduksi secara identik pada eksekusi berulang, sehingga angka yang dilaporkan dapat dipertanggungjawabkan.
+
+\subsection{Analisis Pengaruh Parameter Konfigurasi}
+
+Selain membandingkan ketiga model pada konfigurasi yang sama, penelitian ini mengevaluasi pengaruh dua parameter konfigurasi terhadap kualitas rekomendasi, yaitu \texttt{extra\_docs} dan \texttt{group\_bonus}, melalui 18 eksperimen yang mencakup seluruh kombinasi model, nilai parameter, dan pengaturan kapasitas.
+
+\subsubsection{Pengaruh Parameter \texttt{extra\_docs}}
+
+Parameter \texttt{extra\_docs} menentukan apakah teks tambahan dari profil dosen (deskripsi laboratorium, proyek aktif) diikutsertakan dalam representasi vektor supervisor. Tabel~\ref{table:tab4.2.3} menunjukkan pengaruhnya terhadap persentase mahasiswa yang mendapatkan supervisor rekomendasi pertama (\textit{\%Rank-1}).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|}
+    \hline
+    \textbf{Model} & \textbf{extra\_docs= True} & \textbf{extra\_docs= False} & \textbf{$\Delta$\%Rank-1} & \textbf{Rekomendasi} \\
+    \hline
+    BAAI/bge-m3 & 61,4\% & 53,8\% & \textbf{+7,6pp} & Aktifkan \\
+    \hline
+    Qwen3-Embedding-0.6B & 31,6\% & 33,9\% & -2,3pp & Nonaktifkan \\
+    \hline
+    mE5-large-instruct & 35,5\% & 52,0\% & \textbf{-16,5pp} & Nonaktifkan \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+    \caption{Pengaruh Parameter \texttt{extra\_docs} terhadap \%Rank-1}
+    \label{table:tab4.2.3}
+\end{table}
+
+Pengaruh \texttt{extra\_docs} bersifat \textit{model-dependent}. Pada \textbf{BAAI/bge-m3}, dokumen tambahan memperkaya profil supervisor yang sebelumnya tipis sehingga meningkatkan kemampuan diskriminasi model sebesar 7,6 poin persentase. Sebaliknya, pada \textbf{mE5-large-instruct}, dokumen tambahan justru merusak ruang \textit{embedding} yang telah terkalibrasi, menyebabkan penurunan tajam sebesar 16,5 poin persentase karena skor antar supervisor menjadi semakin seragam.
+
+\subsubsection{Pengaruh Parameter \texttt{group\_bonus}}
+
+Parameter \texttt{group\_bonus} menambahkan skor tambahan bagi pasangan mahasiswa yang berada dalam grup yang sama dan dialokasikan kepada supervisor yang sama. Tabel~\ref{table:tab4.2.4} menunjukkan pengaruhnya terhadap \%Rank-1.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|}
+    \hline
+    \textbf{Model} & \textbf{group\_bonus= False} & \textbf{group\_bonus= True} & \textbf{$\Delta$\%Rank-1} \\
+    \hline
+    BAAI/bge-m3 & 61,4\% & 53,8\% & \textbf{-7,6pp} \\
+    \hline
+    Qwen3-Embedding-0.6B & 31,6\% & 33,9\% & +2,3pp \\
+    \hline
+    mE5-large-instruct & 35,5\% & tidak aktif & tidak berlaku \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+    \caption{Pengaruh Parameter \texttt{group\_bonus} terhadap \%Rank-1}
+    \label{table:tab4.2.4}
+\end{table}
+
+Secara keseluruhan, \texttt{group\_bonus} bersifat netral hingga merugikan. Pada \textbf{BAAI/bge-m3}, parameter ini menurunkan \%Rank-1 sebesar 7,6 poin persentase. Pada \textbf{mE5-large-instruct}, kondisi grup \textit{overflow} tidak pernah terpenuhi dalam data ini sehingga parameter tidak memberikan efek apapun. Hanya pada \textbf{Qwen3-Embedding-0.6B} yang menunjukkan sedikit peningkatan, namun diikuti dengan peningkatan nilai \textit{delta\_mean} yang mengindikasikan \textit{displacement} lebih besar dari peringkat optimal.
+
+\subsubsection{Konfigurasi Terbaik}
+
+Berdasarkan hasil evaluasi terhadap 18 eksperimen, konfigurasi terbaik yang dipilih adalah \textbf{BAAI/bge-m3} dengan \texttt{extra\_docs=True} dan \texttt{group\_bonus=False} (Run 8). Konfigurasi ini menghasilkan MRR tertinggi (0,585), Hit@5 tertinggi (0,798), dan persentase mahasiswa yang mendapat peringkat pertama tertinggi (61,4\%). Tabel~\ref{table:tab4.2.5} merangkum metrik konfigurasi terbaik ini.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{5cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
+    \hline
+    \textbf{Metrik} & \textbf{Nilai} \\
+    \hline
+    MRR & 0,585 \\
+    \hline
+    Hit@1 & 0,417 \\
+    \hline
+    Hit@5 & 0,798 \\
+    \hline
+    nDCG@10 & 0,668 \\
+    \hline
+    \%Rank-1 & 61,4\% \\
+    \hline
+    \%Top-3 & 74,9\% \\
+    \hline
+    Rata-rata Peringkat & 3,22 \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+    \caption{Metrik Konfigurasi Terbaik (Run 8: bge-m3, extra\_docs=True, group\_bonus=False)}
+    \label{table:tab4.2.5}
+\end{table}
+
+\subsection{Distribusi Beban Pembimbing}
+
+Sistem rekomendasi ini menggunakan \textit{greedy solver} untuk mengalokasikan mahasiswa ke dosen pembimbing dengan mempertimbangkan kapasitas maksimal tiap dosen. Untuk memastikan bahwa proses alokasi menghasilkan distribusi beban yang merata, dilakukan analisis terhadap distribusi penugasan pada seluruh 18 konfigurasi eksperimen.
+
+Hasil analisis menunjukkan bahwa seluruh 18 konfigurasi menghasilkan distribusi yang \textbf{identik}, sebagaimana disajikan pada Tabel~\ref{table:tab4.2.6}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{7cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
+    \hline
+    \textbf{Statistik} & \textbf{Nilai} \\
+    \hline
+    Minimum penugasan per pembimbing & 12 \\
+    \hline
+    Maksimum penugasan per pembimbing & 13 \\
+    \hline
+    Rata-rata penugasan & 12,21 \\
+    \hline
+    Standar deviasi & 0,426 \\
+    \hline
+    \textit{Gini Coefficient} & 0,0138 \\
+    \hline
+    Pembimbing dengan 13 mahasiswa & 3 \\
+    \hline
+    Pembimbing dengan 12 mahasiswa & 11 \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+    \caption{Distribusi Beban Penugasan Pembimbing (identik pada seluruh 18 konfigurasi)}
+    \label{table:tab4.2.6}
+\end{table}
+
+Nilai \textit{Gini Coefficient} sebesar 0,0138 mendekati nol, menandakan distribusi yang hampir sempurna merata. Seluruh dosen mendapatkan antara 12 hingga 13 mahasiswa, dengan hanya 3 dari 14 dosen yang menerima satu mahasiswa tambahan. Temuan ini menunjukkan bahwa mekanisme penegakan kapasitas (\textit{capacity enforcement}) mendominasi hasil alokasi, sehingga variasi model \textit{embedding} dan parameter konfigurasi tidak berpengaruh terhadap keseimbangan beban. Parameter \texttt{capacity\_priority\_codes} hanya menentukan dosen mana yang mendapat alokasi ekstra, namun tidak mengubah tingkat keseimbangan secara keseluruhan.
+
+\subsection{Distribusi Peringkat Penugasan}
+
+Untuk memahami kualitas alokasi dari perspektif kepuasan mahasiswa, dilakukan analisis terhadap distribusi peringkat supervisor yang ditetapkan (\textit{assigned rank}) secara terkumpul (\textit{pooled}) dari seluruh 3.078 slot penugasan pada 18 konfigurasi. Tabel~\ref{table:tab4.2.7} menyajikan distribusi tersebut.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
+    \hline
+    \textbf{Peringkat Ditetapkan} & \textbf{Jumlah} & \textbf{Persentase} \\
+    \hline
+    1 & 1.397 & 45,4\% \\
+    \hline
+    2 & 342 & 11,1\% \\
+    \hline
+    3 & 211 & 6,9\% \\
+    \hline
+    4 & 291 & 9,5\% \\
+    \hline
+    5 & 90 & 2,9\% \\
+    \hline
+    6 ke atas & 747 & 24,3\% \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+    \caption{Distribusi Peringkat Penugasan (\textit{Pooled}, 3.078 slot dari 18 konfigurasi)}
+    \label{table:tab4.2.7}
+\end{table}
+
+Distribusi ini memperlihatkan pola bimodal: puncak kuat pada peringkat 1 (45,4\%), penurunan pada peringkat 2--3, dan peningkatan kembali pada peringkat 4. Pola ini mencerminkan dinamika saturasi kapasitas --- ketika supervisor pilihan pertama seorang mahasiswa sudah penuh, mahasiswa tersebut cenderung jatuh ke peringkat 4--6 alih-alih peringkat 2--3. Hal ini terjadi karena supervisor-supervisor dengan kemiripan semantik tertinggi sering kali memiliki kapasitas yang terisi bersamaan, sehingga pilihan alternatif terdekat sudah tidak tersedia.
 
 \subsection{Aplikasi Web}
 
@@ -240,11 +388,11 @@ Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika
     \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    1 & Login dengan kredensial valid  & Email dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\ 
+    1 & Login dengan kredensial valid  & Username dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\
     \hline
-    2 & Login dengan kata sandi salah   & Email benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\ 
+    2 & Login dengan kata sandi salah   & Username benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\
     \hline
-    3 & Login dengan email salah   &Email salah, kata sandi benar  &Sistem menampilkan message “Kredential Salah”  & Pass  \\ 
+    3 & Login dengan username salah   & Username salah, kata sandi benar  & Sistem menampilkan message “Kredential Salah”  & Pass  \\ 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -262,11 +410,11 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi data email dan passw
     \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    1 & Mendaftarkan akun dengan email dan password   & Email dan kata sandi benar & Sistem menyimpan data email dan password pengguna & Pass  \\ 
+    1 & Mendaftarkan akun dengan data valid   & Username, nama lengkap, password, dan konfirmasi password benar & Sistem menyimpan akun dan mengarahkan pengguna ke dashboard & Pass  \\
     \hline
-   2 & Mendaftarkan akun dengan kata sandi salah    & Email benar, kata sandi salah  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\ 
+   2 & Mendaftarkan akun dengan password tidak cocok    & Password dan konfirmasi password berbeda  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\
     \hline
-    3 & Mendaftarkan akun email salah    &Email salah, kata sandi benar  &Sistem menampilkan message “Data tidak sesuai”  & Pass  \\ 
+    3 & Mendaftarkan akun dengan username yang sudah terdaftar    & Username yang sudah digunakan akun lain  & Sistem menampilkan message “Data tidak sesuai”  & Pass  \\ 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -355,7 +503,7 @@ Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna 
     \hline
     3 & Menonaktifkan Group Bonus     & -  & Toggle group bonus kembali ke kondisi nonaktif  & Pass  \\ 
     \hline
-     4 & Cancel Run     & -  & Sistem akan menutup pop-up new run  \\ 
+     4 & Cancel Run     & -  & Sistem akan menutup pop-up new run  & Pass  \\
     \hline
      5 & Eksekusi Run Baru     & -  & Sistem akan menjalankan rekomendasi dengan model dan rules yang dipilih    & Pass  \\ 
     \hline
@@ -433,21 +581,21 @@ Pada halaman ini testing bertujuan untuk memvalidasi fleksibilitas pengaturan ru
     \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    1 & Membuka menu dropdown dan mencari berdasarkan nama atau kode dosen   & - & Sistem menyaring data secara dinamis berdasarkan data dosen yang dicari    & Pass  \\ 
+    1 & Mengubah nilai \textit{threshold cosine similarity} pada salah satu label semantik   & Nilai \textit{threshold} yang valid (0--1) & Nilai \textit{threshold} tersimpan dan akan diterapkan pada run berikutnya    & Pass  \\
     \hline
-   2 & Memilih salah satu nama dosen kemudian menekan tombol “Load Supervisor”   & -  & Sistem menampilkan profil dosen dan keyword yang sesuai dengan dosen tersebut     & Pass  \\ 
+   2 & Memasukkan nilai \textit{threshold} yang tidak valid   & Nilai negatif atau lebih dari 1  & Sistem menampilkan pesan \textit{error} dan menolak perubahan     & Pass  \\
     \hline
-    3 & Menekan tombol “Export Config”       & -  & Sistem akan mengunduh berkas excel berisikan data dosen dan profilnya.      & Pass  \\ 
+    3 & Memperbarui deskripsi label semantik       & Deskripsi label baru yang valid  & Deskripsi label berhasil diperbarui di database      & Pass  \\
     \hline
-     4 & Mengetikkan keyword baru pada kolom “Add Keyword”    & -  & Keyword di daftarkan di dalam daftar keyword     & Pass  \\ 
+     4 & Menekan tombol ``Preview Score'' untuk profil mahasiswa tertentu    & -  & Sistem menampilkan skor per label untuk profil yang dipilih     & Pass  \\
     \hline
-     5 & Menekan tombol (X) pada salah satu komponen chip       & -  & Chip keyword akan dihapuskan       & Pass  \\ 
+     5 & Menyimpan perubahan konfigurasi \textit{rules}       & -  & Sistem memperbarui konfigurasi dan menampilkan konfirmasi keberhasilan       & Pass  \\
     \hline
-     6 & Menekan tombol “Save Keywords” setelah melakukan perubahan chip       & -  & Sistem memperbarui daftar keyword semantik pada dosen di database        & Pass  \\ 
+     6 & Navigasi kembali ke halaman Dashboard       & -  & Sistem mengarahkan pengguna ke halaman Dashboard        & Pass  \\
     \hline
-    
+
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-	\caption{Skenario Supervisor Studio}
+	\caption{Skenario Rules Studio}
 	\label{table:tab4.10}
 \end{table}

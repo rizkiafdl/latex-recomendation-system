@@ -216,14 +216,15 @@ SomeColumn & \begin{minipage}[t]{\linewidth}\raggedright
 
 ---
 
-## 16. No Unicode characters in LaTeX math mode — CRITICAL
+## 16. No Unicode characters in text or math mode — CRITICAL
 
-When adding or editing equations in `.tex` files, **never paste Unicode subscript, superscript, or special math characters** into `\[...\]` or `$...$` math environments. pdflatex cannot typeset them.
+When adding or editing any `.tex` file, **never paste Unicode special characters** — whether in prose, table cells, `\textbf{}`, or math environments (`$...$`, `\[...\]`). pdflatex cannot typeset them and will exit with code 1, preventing latexmk from completing its second pass and causing all cross-references to appear undefined.
 
-**Forbidden Unicode characters (common pandoc/Word artifacts):**
+**Forbidden Unicode characters (common pandoc/Word/copy-paste artifacts):**
 
 | Character | Unicode | Wrong | Correct LaTeX |
 |-----------|---------|-------|---------------|
+| Greek delta (uppercase) | U+0394 `Δ` | `Δ\%Rank-1` (in table cell) | `$\Delta$\%Rank-1` |
 | Latin subscript i | U+1D62 `ᵢ` | `Hit@Kᵢ` | `Hit@K_i` |
 | Superscript K | U+1D37 `ᴷ` | `^ᴷ` | `^{K}` |
 | Subscript equals | U+208C `₌` | `₌₁` | `_{i=1}` |
@@ -231,6 +232,12 @@ When adding or editing equations in `.tex` files, **never paste Unicode subscrip
 | Subscript 2 | U+2082 `₂` | `log₂` | `\log_2` |
 | Unicode minus | U+2212 `−` | `5 − 1` | `5 - 1` |
 | Right arrow | U+2192 `→` | `A → B` (in text or table) | `$\rightarrow$` |
+
+**Common symptom for text-mode Unicode (e.g. Δ in table header):**
+```
+./bab4.tex:144: LaTeX Error: Unicode character Δ (U+0394) not set up for use with LaTeX.
+```
+pdflatex returns code 1 → latexmk aborts → second pass never runs → **all `\ref{}` labels appear undefined** even though they are actually defined. The cascade of "undefined reference" warnings is a red herring caused by the Unicode crash.
 
 **How to detect before committing:**
 ```bash
