@@ -168,7 +168,7 @@ Menurut Wang et al. (2024), model E5 yang dilengkapi instruction tuning menunjuk
 
 \textbf{Menurut Shani dan Gunawardana (2011), evaluasi sistem rekomendasi dapat dilakukan menggunakan metrik berbasis relevansi dan peringkat. Evaluasi yang baik harus mencerminkan kondisi penggunaan sistem secara nyata.}
 
-\textbf{Dalam penelitian ini, evaluasi sistem rekomendasi dilakukan menggunakan dua pendekatan, yaitu evaluasi otomatis (Metrik Kuantitatif), Sistem yang menghitung metrik evaluasi secara otomatis dengan membandingkan rekomendasi terhadap ground truth (mapping dosen pembimbing aktual dari data EPC). Metrik yang digunakan meliputi Mean Reciprocal Rank (MRR), Hit@1 dan Hit@5, nDCG@5 dan nDCG@10, Precision@5, Average Rank , dan Assignment Match Rate. Evaluasi ini dilakukan pada tiga tingkat skor, yaitu Content-Based, Hybrid Score, Assignment Match. Yang kedua adalah Evaluasi Usability (SUS), System Usability Scale (SUS) digunakan untuk mengukur tingkat kemudahan penggunaan sistem dari sudut pandang pengguna akhir.}
+\textbf{Dalam penelitian ini, evaluasi sistem rekomendasi dilakukan menggunakan evaluasi otomatis berbasis metrik kuantitatif, yaitu dengan membandingkan rekomendasi terhadap \textit{ground truth} (mapping dosen pembimbing aktual dari data EPC). Metrik yang digunakan meliputi Mean Reciprocal Rank (MRR), Hit@1 dan Hit@5, nDCG@5 dan nDCG@10, Precision@5, Average Rank, dan Assignment Match Rate. Evaluasi ini dilakukan pada tiga tingkat skor, yaitu Content-Based, Hybrid Score, dan Assignment Match.}
 
 \subsection{Hit@K}\label{hitk}
 
@@ -241,24 +241,6 @@ Menurut Manning et al. (2008), cosine similarity banyak digunakan dalam model ru
 Assignment match rate merupakan metrik spesifik untuk evaluasi sistem assignment yang mengukur proporsi penugasan akhir yang cocok dengan ground truth (mapping dosen aktual).
 
 Match Rate = jumlah assignment cocok / total assignment yang memiliki ground truth
-
-\subsection{System Usability Scale (SUS)}\label{system-usability-scale-sus}
-
-System Usability Scale (SUS) merupakan metode evaluasi usability berbasis kuesioner yang terdiri dari 10 pertanyaan. Brooke (1996) menjelaskan bahwa SUS memberikan ukuran cepat dan andal terhadap tingkat kemudahan penggunaan suatu sistem. Dalam penelitian ini, SUS digunakan untuk mengukur tingkat usability sistem rekomendasi faculty supervisor dari sudut pandang pengguna.
-
-Perhitungan skor SUS dilakukan dengan langkah-langkah sebagai berikut:
-
-Untuk pertanyaan bernomor ganjil, skor dihitung dengan rumus: skor = jawaban - 1
-
-Untuk pertanyaan bernomor genap, skor dihitung dengan rumus: skor = 5 - jawaban
-
-Seluruh skor dijumlahkan dan dikalikan dengan 2,5 untuk mendapatkan skor akhir SUS.
-
-Rumus skor akhir SUS adalah sebagai berikut:
-
-SUS = \(total\ skor\  \times \ 2,5\)
-
-Nilai SUS berada pada rentang 0 hingga 100, di mana nilai yang lebih tinggi menunjukkan tingkat usability yang lebih baik.
 
 \subsection{Teknologi Pendukung Sistem}\label{teknologi-pendukung-sistem}
 
@@ -413,5 +395,5 @@ Li et al. (2022) & Semantic Search-Based Supervisor Recommendation System & Mene
 
 Berdasarkan kajian terhadap penelitian-penelitian terkait, dapat disimpulkan bahwa sistem rekomendasi faculty supervisor umumnya dikembangkan menggunakan pendekatan Natural Language Processing untuk mengukur kesesuaian antara profil mahasiswa dan bidang keahlian dosen. Perkembangan metode menunjukkan pergeseran dari representasi teks tradisional seperti TF-IDF menuju penggunaan word embedding dan transformer-based embedding, yang terbukti mampu meningkatkan kualitas rekomendasi berdasarkan berbagai metrik evaluasi, seperti akurasi, Recall@K, dan Mean Reciprocal Rank (MRR).
 
-Meskipun demikian, sebagian besar penelitian terdahulu masih memiliki keterbatasan, antara lain belum mengintegrasikan sistem rekomendasi ke dalam decision support system berbasis web yang siap digunakan secara operasional, serta belum mempertimbangkan kebutuhan institusional seperti pembatasan kuota dan pemerataan beban faculty supervisor. Oleh karena itu, penelitian ini mengusulkan sistem rekomendasi faculty supervisor Program Enrichment yang mengombinasikan transformer-based text embedding dengan aturan pendukung yang berlaku, serta melakukan evaluasi komparatif menggunakan Recall@K, MRR, dan System Usability Scale (SUS) untuk memastikan kualitas rekomendasi dan kelayakan penggunaan sistem .
+Meskipun demikian, sebagian besar penelitian terdahulu masih memiliki keterbatasan, antara lain belum mengintegrasikan sistem rekomendasi ke dalam decision support system berbasis web yang siap digunakan secara operasional, serta belum mempertimbangkan kebutuhan institusional seperti pembatasan kuota dan pemerataan beban faculty supervisor. Oleh karena itu, penelitian ini mengusulkan sistem rekomendasi faculty supervisor Program Enrichment yang mengombinasikan transformer-based text embedding dengan aturan pendukung yang berlaku, serta melakukan evaluasi komparatif menggunakan Recall@K dan MRR untuk memastikan kualitas rekomendasi yang dihasilkan.
 

@@ -6,7 +6,33 @@
 %\end{center}
 
 \section{Simpulan}
-\lipsum[1]
+
+Penelitian ini bertujuan untuk mengembangkan sistem rekomendasi \textit{Faculty Supervisor} berbasis \textit{semantic similarity} sebagai pendukung keputusan dalam proses pemetaan mahasiswa peserta Program Enrichment di XYZ University. Berdasarkan hasil analisis, perancangan, implementasi, dan evaluasi yang telah dilakukan, dapat ditarik simpulan sebagai berikut.
+
+\begin{enumerate}
+    \item Proses pemetaan \textit{Faculty Supervisor} yang berjalan saat ini masih dilakukan secara manual oleh \textit{Enrichment Program Coordinator} (EPC) menggunakan \textit{spreadsheet}, memerlukan waktu satu hingga tiga minggu per periode, dan rentan terhadap inkonsistensi karena bergantung pada pengetahuan individual EPC. Tidak terdapat mekanisme yang terstruktur untuk mencocokkan minat mahasiswa dengan bidang keahlian dosen pembimbing, sehingga beban bimbingan cenderung tidak merata dan relevansi penugasan tidak dapat dijamin.
+
+    \item Sistem rekomendasi yang dikembangkan menggunakan pendekatan \textit{scoring} yang menggabungkan dua komponen: (a) kemiripan semantik berbasis \textit{text embedding} untuk merepresentasikan profil mahasiswa dan dosen secara numerik, dan (b) \textit{company group bonus} untuk mendorong konsistensi penugasan mahasiswa dari perusahaan yang sama. Hasil \textit{scoring} kemudian dialokasikan menggunakan \textit{greedy solver} dengan mempertimbangkan batasan kapasitas dosen. Sistem diimplementasikan sebagai aplikasi berbasis web yang mencakup delapan halaman fungsional dan diuji menggunakan metode \textit{black box} dengan pendekatan \textit{equivalence partitioning} --- seluruh skenario pengujian menghasilkan status \textit{Pass}.
+
+    \item Evaluasi dilakukan terhadap 168 dari 171 mahasiswa menggunakan tiga model \textit{embedding} kandidat. Model terbaik, yaitu \textbf{BAAI/bge-m3}, mencapai nilai MRR sebesar 0,585, Hit@5 sebesar 0,804, dan rata-rata peringkat (\textit{avg\_rank}) 3,32 --- jauh di atas \textit{random baseline} (MRR $\sim$0,23). Hasil ini menunjukkan bahwa sistem mampu menempatkan dosen pembimbing yang relevan pada posisi peringkat atas secara konsisten. \textit{Assignment Match Rate} sebesar 0,357 mengindikasikan tingkat keselarasan yang memadai antara rekomendasi sistem dengan data pemetaan historis yang dijadikan \textit{ground truth}.
+
+    \item Sistem yang dikembangkan berpotensi meningkatkan efisiensi proses pemetaan melalui otomasi perhitungan kemiripan dan pembangkitan rekomendasi yang sebelumnya dilakukan secara manual. Dengan antarmuka yang dapat dioperasikan langsung oleh EPC, sistem ini mendukung transparansi dan konsistensi proses pemetaan tanpa menghilangkan otoritas keputusan akhir dari koordinator program.
+\end{enumerate}
 
 \section{Saran}
-\lipsum[1]
+
+Berdasarkan hasil penelitian yang telah dilakukan, terdapat beberapa saran untuk pengembangan lebih lanjut:
+
+\begin{enumerate}
+    \item \textbf{Perluasan cakupan data supervisor.} Representasi dosen pembimbing saat ini bergantung pada data historis bimbingan dan rekomendasi topik skripsi yang tersedia. Penambahan sumber data seperti publikasi ilmiah, profil penelitian, atau portofolio proyek dosen dapat memperkaya representasi semantik dan meningkatkan kualitas rekomendasi.
+
+    \item \textbf{Perluasan cakupan program enrichment.} Sistem yang dikembangkan saat ini difokuskan pada jalur magang (\textit{internship}). Pengembangan selanjutnya dapat mencakup jalur lain dalam Program Enrichment, seperti penelitian (\textit{research}), kewirausahaan (\textit{entrepreneurship}), dan pengembangan profesional, dengan penyesuaian pada skema representasi data mahasiswa.
+
+    \item \textbf{\textit{Fine-tuning} model \textit{embedding} pada domain akademik Indonesia.} Model \textit{embedding} yang digunakan merupakan model \textit{pre-trained} bersifat umum. Melakukan \textit{fine-tuning} pada korpus akademik berbahasa Indonesia atau data spesifik domain Program Enrichment berpotensi meningkatkan akurasi pencocokan semantik secara signifikan.
+
+    \item \textbf{Evaluasi usabilitas dengan pengguna nyata.} Pengujian yang dilakukan dalam penelitian ini terbatas pada \textit{black box testing} fungsional. Evaluasi lanjutan menggunakan \textit{System Usability Scale} (SUS) dengan melibatkan EPC sebagai pengguna nyata perlu dilakukan untuk mengukur tingkat penerimaan dan kemudahan penggunaan sistem secara empiris.
+
+    \item \textbf{Integrasi dengan sistem informasi akademik institusi.} Saat ini sistem memerlukan unggah data manual dalam format Excel. Integrasi langsung dengan sistem informasi akademik XYZ University akan mengurangi potensi kesalahan input data dan mempersingkat alur kerja EPC secara keseluruhan.
+
+    \item \textbf{Studi longitudinal terhadap kualitas rekomendasi.} Evaluasi dalam penelitian ini menggunakan data historis satu tahun sebagai \textit{ground truth}. Studi lanjutan yang mengikuti keluaran rekomendasi selama beberapa periode pemetaan akan memberikan gambaran yang lebih representatif terhadap kualitas sistem dalam kondisi operasional nyata.
+\end{enumerate}
