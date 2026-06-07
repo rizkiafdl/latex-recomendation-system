@@ -312,9 +312,17 @@ vector\_embedding & Representasi vektor dari dokumen teks \\
 
 Selain mempertimbangkan tingkat kesesuaian berdasarkan semantic similarity, sistem juga melakukan validasi terhadap ketersediaan slot bimbingan faculty supervisor. Proses validasi ini dilakukan setelah tahap perangkingan selesai dan bertujuan untuk memastikan bahwa rekomendasi yang dihasilkan dapat direalisasikan sesuai dengan kapasitas bimbingan yang tersedia.
 
-Validasi slot dilakukan secara batch terhadap seluruh mahasiswa yang memenuhi kriteria eligible. Pada tahap ini, mahasiswa diproses secara berurutan berdasarkan skor kemiripan tertinggi yang diperoleh dari hasil perangkingan. Untuk setiap mahasiswa, sistem akan memeriksa daftar rekomendasi top-5 faculty supervisor dan memilih faculty supervisor dengan peringkat tertinggi yang masih memiliki slot bimbingan tersedia. Apabila faculty supervisor pada peringkat teratas telah mencapai batas kapasitas bimbingan, sistem akan melanjutkan pemeriksaan ke peringkat berikutnya hingga ditemukan faculty supervisor dengan slot yang masih tersedia.
+Alokasi dilakukan secara batch terhadap seluruh mahasiswa yang memenuhi kriteria \textit{eligible} menggunakan algoritma \textit{greedy} dua fase. Sebelum fase alokasi dijalankan, sistem menyusun rencana kapasitas (\textit{capacity plan}) yang menentukan batas minimum dan maksimum jumlah mahasiswa per faculty supervisor berdasarkan total mahasiswa dan jumlah supervisor aktif. Parameter \texttt{target\_min} dan \texttt{target\_max} menjadi acuan awal, dengan penyesuaian otomatis apabila total mahasiswa melebihi atau di bawah kapasitas kolektif (\textit{overflow}/\textit{underflow}).
 
-Faculty supervisor yang memenuhi kriteria tersebut kemudian dipasangkan dengan mahasiswa sebagai hasil rekomendasi akhir. Apabila seluruh faculty supervisor dalam daftar rekomendasi top-5 tidak memiliki slot bimbingan yang tersedia, maka mahasiswa tersebut tidak dialokasikan secara otomatis dan dapat ditindaklanjuti melalui proses peninjauan lebih lanjut oleh pihak EPC.
+Algoritma \textit{greedy} dua fase bekerja sebagai berikut:
+
+\begin{enumerate}
+    \item \textbf{Inisialisasi:} Setiap mahasiswa dialokasikan ke faculty supervisor dengan skor tertinggi (\textit{argmax}) tanpa mempertimbangkan kapasitas.
+    \item \textbf{Fase 1 — Pengurangan \textit{Overfull}:} Sistem secara iteratif memindahkan mahasiswa dari supervisor yang melebihi batas maksimum ke supervisor lain yang masih tersedia, dengan memilih pemindahan yang menghasilkan \textit{penalty} skor terkecil.
+    \item \textbf{Fase 2 — Pengisian \textit{Underfull}:} Sistem secara iteratif memindahkan mahasiswa dari supervisor yang berada di atas batas minimum (\textit{donor}) ke supervisor yang berada di bawah batas minimum, kembali dengan memilih pemindahan dengan \textit{penalty} terkecil.
+\end{enumerate}
+
+Setelah kedua fase selesai, sistem melakukan validasi akhir untuk memastikan seluruh constraint kapasitas terpenuhi. Apabila validasi gagal, sistem menghentikan proses dan menampilkan pesan kesalahan kepada EPC. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang memenuhi seluruh batasan kapasitas secara optimal.
 
 \subsection{Strategi evaluasi}\label{strategi-evaluasi}
 
