@@ -6,7 +6,33 @@
 %\end{center}
 
 \section{Simpulan}
-\lipsum[1]
+Berdasarkan hasil analisis, perancangan, implementasi, dan pengujian yang telah dilakukan pada sistem rekomendasi Faculty Supervisor untuk mahasiswa Program Enrichment di Universitas XYZ, dapat ditarik beberapa simpulan untuk menjawab rumusan masalah pada penelitian ini, yaitu:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Evaluasi Proses Pemetaan Manual: Proses pemetaan Faculty Supervisor yang selama ini dilakukan secara manual menggunakan spreadsheet terbukti kurang efisien, rentan terhadap subjektivitas, dan membutuhkan waktu yang lama (satu hingga tiga minggu). Pendekatan manual ini juga sering kali menghasilkan ketidaksesuaian bidang keahlian dan tidak meratanya beban bimbingan antar dosen.
+\item
+  Pengembangan Sistem Rekomendasi: Telah berhasil dikembangkan sebuah prototipe Sistem Pendukung Keputusan (DSS) berbasis website menggunakan framework Flask. Sistem ini menggunakan pendekatan hybrid scoring yang mengkombinasikan semantic similarity dari representasi teks (menggunakan model Transformer-based embedding) dengan rule-based logic (batas kuota dosen dan aturan afinitas) untuk merekomendasikan dosen secara objektif dan sistematis. Pengalokasian dosen dilakukan menggunakan greedy capacity-constrained solver untuk memastikan tidak ada dosen yang melebihi beban maksimal bimbingannya.
+\item
+  Kesesuaian Rekomendasi dengan Ground Truth: Berdasarkan pengujian yang dilakukan terhadap data historis (ground truth), sistem yang dikembangkan mampu menghasilkan tingkat kesesuaian yang baik. Penggunaan model text embedding [Model nanti disini] berhasil mencapai nilai Match Rate sebesar [Angka Match Ratenya nanti disini]%, Mean Reciprocal Rank (MRR) sebesar [Nilai MRR], dan Recall@5 sebesar [nilai Recall]%. Hasil ini menunjukkan bahwa sistem mampu meniru dan bahkan mengoptimalkan pola pencocokan yang dilakukan oleh EPC secara rasional.
+\item
+  Peningkatan Efisiensi Proses: Pengujian usability dan Black Box menunjukkan bahwa sistem berjalan fungsional dan dapat menjadi alat bantu yang signifikan bagi Enrichment Program Coordinator (EPC). Kehadiran Dashboard, fitur Rule Studio, dan eksekusi otomatis pada sistem ini mampu menekan waktu pemetaan yang sebelumnya memakan waktu berminggu-minggu menjadi hanya dalam hitungan menit, mengurangi potensi revisi human-error, serta menghadirkan transparansi yang lebih baik dalam penentuan dosen pembimbing.
+\end{enumerate}
+
 
 \section{Saran}
-\lipsum[1]
+
+Penelitian dan pengembangan sistem rekomendasi ini tentu masih memiliki ruang untuk penyempurnaan. Adapun saran yang dapat diberikan untuk pengembangan lebih lanjut di masa mendatang adalah sebagai berikut:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+    Eksplorasi Algoritma Optimasi : Sistem saat ini menggunakan Greedy Capacity-Constrained Solver untuk pembagian slot dosen. Ke depannya, dapat dicoba algoritma penugasan global (Global Optimization Assignment) seperti Hungarian Algorithm atau Min-Cost Max-Flow agar pembagian supervisor bisa mencapai akurasi atau skor kepuasan kolektif yang paling optimal secara keseluruhan (bukan sekadar optimal lokal).
+\item
+    Pelatihan Lanjutan (Fine-Tuning) pada Model Text Embedding: Untuk meningkatkan sensitivitas pencocokan makna kontekstual, disarankan melakukan proses fine-tuning atau pelatihan lanjutan pada model transformer-based embedding yang digunakan. Pelatihan dapat memanfaatkan korpus data internal institusi, seperti kumpulan abstrak skripsi terdahulu, silabus mata kuliah, atau laporan magang, sehingga model mampu menangkap istilah-istilah teknis industri khusus serta gaya bahasa campuran (Indonesia-Inggris) yang khas digunakan oleh mahasiswa di lingkungan Universitas XYZ secara lebih akurat.
+\item
+    Pengembangan Fitur Notifikasi Otomatis via Email : Sistem saat ini baru berfokus pada proses perhitungan kemiripan semantik dan pengalokasikan slot bimbingan dosen. Untuk meningkatkan fungsionalitas operasional, disarankan untuk menambahkan fitur notifikasi otomatis berbasis email pada portal Enrichment Program Coordinator (EPC). Melalui fitur ini, segera setelah EPC selesai melakukan finalisasi dan konfirmasi hasil pemetaan (mapping), sistem dapat secara otomatis mengirimkan email pemberitahuan ke masing-masing mahasiswa mengenai informasi Faculty Supervisor mereka, sekaligus mengirimkan daftar mahasiswa bimbingan baru ke email dosen yang bersangkutan. Hal ini akan memotong jalur komunikasi manual dan mempercepat distribusi informasi penugasan.
+\item
+  Integrasi Infrastruktur dengan Sistem dan Server Utama Universitas XYZ: Aplikasi prototipe ini masih berjalan secara mandiri dengan penyimpanan data lokal. Ke depannya, sangat disarankan agar sistem ini diintegrasikan langsung dengan ekosistem sistem informasi akademik internal Universitas XYZ (seperti portal XYZ Maya atau basis data sentral Program Enrichment) menggunakan arsitektur RESTful API. Integrasi langsung ke server XYZ ini akan mempermudah sinkronisasi data master mahasiswa, profil kompetensi dosen, serta memastikan hasil akhir pemetaan dari sistem ini dapat langsung tersimpan dan tercatat secara otomatis di server pusat institusi tanpa memerlukan proses ekspor-impor dokumen Excel secara manual.
+\end{enumerate}

@@ -356,60 +356,41 @@ Class diagram adalah salah satu jenis diagram pada UML yang merupakan model stat
 
 Entity Relationship Diagram (ERD) adalah representasi visual yang digunakan dalam analisis sistem untuk memodelkan informasi yang diciptakan, disimpan, dan digunakan oleh suatu sistem bisnis. Diagram ini membantu analis memahami berbagai komponen informasi serta hubungan antar komponen dalam sistem tersebut. Dalam ERD, data yang serupa dikelompokkan menjadi entities, yang direpresentasikan dengan kotak-kotak. Hubungan antar entities ditunjukkan dengan garis, dan simbol-simbol digunakan untuk menggambarkan aturan bisnis tingkat tinggi. Setiap entity memiliki atribut yang menjelaskan informasi spesifik terkait dengannya, dan hubungan antar entities digambarkan untuk menunjukkan bagaimana mereka saling berinteraksi atau saling tergantung satu sama lain. ERD sangat penting dalam mengorganisir data sistem tanpa menunjukkan urutan atau alur spesifik antara entities.
 
-\subsection{\texorpdfstring{\hfill\break
-}{ }}\label{section-1}
+
 
 \section{Penelitian Terkait}\label{penelitian-terkait}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1935}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2110}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1408}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1503}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1935}}@{}}
-\caption{Table 2. Penelitian Terkait}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Peneliti
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Judul
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Tujuan
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Dataset
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Hasil
-\end{minipage} \\
-\midrule\noalign{}
+\begingroup
+\small 
+\begin{longtable}[c]{|p{1.5cm}|p{2.2cm}|p{2.5cm}|p{1.8cm}|p{2cm}|p{3.2cm}|}
+
+\hline
+\textbf{Peneliti} & \textbf{Judul} & \textbf{Tujuan} & \textbf{Dataset} & \textbf{Model} & \textbf{Hasil} \\ \hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Peneliti
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Judul
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Tujuan
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Dataset
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Hasil
-\end{minipage} \\
-\midrule\noalign{}
+
+\hline
+\textbf{Peneliti} & \textbf{Judul} & \textbf{Tujuan} & \textbf{Dataset} & \textbf{Model} & \textbf{Hasil} \\ \hline
 \endhead
-\bottomrule\noalign{}
+
+\hline
+\caption{Tabel Penelitian Terkait} \label{table:tab2.1} \\
 \endlastfoot
-(Tang et Al., 2016) & A Research Topic Prediction and Supervisor Recommendation System & Mengembangkan sistem untuk memprediksi topik skripsi dan merekomendasikan supervisor secara otomatis & Judul dan abstrak skripsi mahasiswa & Naive Bayes, TF-IDF, Cosine Similarity & Naïve Bayes tanpa TF-IDF menghasilkan akurasi 88.69\%, presisi 89.76\%, dan sensitivitas 90.49\%. Naïve Bayes dengan TF-IDF menghasilkan akurasi 81.74\%, presisi 86.10\%, dan sensitivitas 80.15\%. Penulis menyimpulkan bahwa pendekatan tanpa pembobotan TF-IDF lebih baik untuk klasifikasi topik skripsi.. \\
-(Huang et al., 2019) & Supervisor Recommendation Based on Semantic Similarity & Meningkatkan kesesuaian rekomendasi supervisor berdasarkan kemiripan semantik & Profil mahasiswa dan publikasi dosen & Word2Vec, Cosine Similarity & Penggunaan word embedding meningkatkan tingkat kesesuaian rekomendasi supervisor secara signifikan dibandingkan pencocokan berbasis kata kunci, dengan peningkatan relevansi rekomendasi lebih dari 15\%. \\
-Aljohani \& Davis (2020) & Matching Students to Supervisors Using Text Mining Techniques & Mengotomatisasi proses pencocokan mahasiswa dengan supervisor & Proposal penelitian mahasiswa & Text Mining, Vector Space Model & Sistem mampu mengurangi waktu proses pencocokan supervisor hingga lebih dari 40\% dibandingkan proses manual, dengan tingkat kecocokan yang dinilai relevan oleh evaluator akademik. \\
-(Rahman et al. (2023)) & Supervisor Recommendation System Using Contextual Text Embeddings & Mengembangkan sistem rekomendasi supervisor berbasis embedding kontekstual & Data dari perlibraryan Universitas & Contextual Embedding, Cosine Similarity, Ranking Metrics & Supervisor Recommendation System Using Contextual Text Embeddings \\
-Li et al. (2022) & Semantic Search-Based Supervisor Recommendation System & Menerapkan semantic search untuk rekomendasi supervisor & Universitas Hasyim & Transformer-based Embedding, Semantic Search & Semantic Search-Based Supervisor Recommendation System \\
-(Zhang et al. (2021)) & Academic Advisor Recommendation Using Deep Learning & Mengembangkan sistem rekomendasi academic advisor berbasis deep learning & Data dari perlibraryan & BERT Embedding, Deep Learning Classifier & Academic Advisor Recommendation Using Deep Learning \\
+
+
+Tang et al., 2016 & A Research Topic Prediction and Supervisor Recommendation System & Mengembangkan sistem untuk memprediksi topik skripsi dan merekomendasikan supervisor secara otomatis & Judul dan abstrak skripsi mahasiswa & Naive Bayes, TF-IDF, Cosine Similarity & Naive Bayes tanpa TF-IDF menghasilkan akurasi 88.69 persen, presisi 89.76 persen, dan sensitivitas 90.49 persen. Penulis menyimpulkan bahwa pendekatan tanpa pembobotan TF-IDF lebih baik untuk klasifikasi topik skripsi. \\ \hline
+
+Huang et al., 2019 & Supervisor Recommendation Based on Semantic Similarity & Meningkatkan kesesuaian rekomendasi supervisor berdasarkan kemiripan semantik & Profil mahasiswa dan publikasi dosen & Word2Vec, Cosine Similarity & Penggunaan word embedding meningkatkan tingkat kesesuaian rekomendasi supervisor secara signifikan dibandingkan pencocokan berbasis kata kunci, dengan peningkatan relevansi rekomendasi lebih dari 15 persen. \\ \hline
+
+Aljohani \& Davis, 2020 & Matching Students to Supervisors Using Text Mining Techniques & Mengotomatisasi proses pencocokan mahasiswa dengan supervisor & Proposal penelitian mahasiswa & Text Mining, Vector Space Model & Sistem mampu mengurangi waktu proses pencocokan supervisor hingga lebih dari 40\% dibandingkan proses manual dengan tingkat kecocokan yang dinilai relevan oleh evaluator akademik. \\ \hline
+
+Rahman et al., 2023 & Supervisor Recommendation System Using Contextual Text Embeddings & Mengembangkan sistem rekomendasi supervisor berbasis embedding kontekstual & Data dari perlibraryan Universitas & Contextual Embedding, Cosine Similarity, Ranking Metrics & Supervisor Recommendation System Using Contextual Text Embeddings \\ \hline
+
+Li et al., 2022 & Semantic Search-Based Supervisor Recommendation System & Menerapkan semantic search untuk rekomendasi supervisor & Universitas Hasyim & Transformer based Embedding, Semantic Search & -Semantic Search-Based Supervisor Recommendation System Academic Advisor \\ \hline
+
+Zhang et al., 2021 & Academic Advisor Recommendation Using Deep Learning & Mengembangkan sistem rekomendasi academic advisor berbasis deep learning & Data dari perlibraryan & BERT Embedding, Deep Learning Classifier & Academic Advisor Recommendation Using Deep Learning \\ \hline
+
 \end{longtable}
+\endgroup
 
 Berdasarkan kajian terhadap penelitian-penelitian terkait, dapat disimpulkan bahwa sistem rekomendasi faculty supervisor umumnya dikembangkan menggunakan pendekatan Natural Language Processing untuk mengukur kesesuaian antara profil mahasiswa dan bidang keahlian dosen. Perkembangan metode menunjukkan pergeseran dari representasi teks tradisional seperti TF-IDF menuju penggunaan word embedding dan transformer-based embedding, yang terbukti mampu meningkatkan kualitas rekomendasi berdasarkan berbagai metrik evaluasi, seperti akurasi, Recall@K, dan Mean Reciprocal Rank (MRR).
 
