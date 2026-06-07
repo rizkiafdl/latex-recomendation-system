@@ -6,33 +6,33 @@
 %\end{center}
 
 \section{Simpulan}
-Berdasarkan hasil analisis, perancangan, implementasi, dan pengujian yang telah dilakukan pada sistem rekomendasi Faculty Supervisor untuk mahasiswa Program Enrichment di Universitas XYZ, dapat ditarik beberapa simpulan untuk menjawab rumusan masalah pada penelitian ini, yaitu:
+
+Penelitian ini bertujuan untuk mengembangkan sistem rekomendasi \textit{Faculty Supervisor} berbasis \textit{semantic similarity} sebagai pendukung keputusan dalam proses pemetaan mahasiswa peserta Program Enrichment di XYZ University. Berdasarkan hasil analisis, perancangan, implementasi, dan evaluasi yang telah dilakukan, dapat ditarik simpulan sebagai berikut.
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  Evaluasi Proses Pemetaan Manual: Proses pemetaan Faculty Supervisor yang selama ini dilakukan secara manual menggunakan spreadsheet terbukti kurang efisien, rentan terhadap subjektivitas, dan membutuhkan waktu yang lama (satu hingga tiga minggu). Pendekatan manual ini juga sering kali menghasilkan ketidaksesuaian bidang keahlian dan tidak meratanya beban bimbingan antar dosen.
-\item
-  Pengembangan Sistem Rekomendasi: Telah berhasil dikembangkan sebuah prototipe Sistem Pendukung Keputusan (DSS) berbasis website menggunakan framework Flask. Sistem ini menggunakan pendekatan hybrid scoring yang mengkombinasikan semantic similarity dari representasi teks (menggunakan model Transformer-based embedding) dengan rule-based logic (batas kuota dosen dan aturan afinitas) untuk merekomendasikan dosen secara objektif dan sistematis. Pengalokasian dosen dilakukan menggunakan greedy capacity-constrained solver untuk memastikan tidak ada dosen yang melebihi beban maksimal bimbingannya.
-\item
-  Kesesuaian Rekomendasi dengan Ground Truth: Berdasarkan pengujian yang dilakukan terhadap data historis (ground truth), sistem yang dikembangkan mampu menghasilkan tingkat kesesuaian yang baik. Penggunaan model text embedding [Model nanti disini] berhasil mencapai nilai Match Rate sebesar [Angka Match Ratenya nanti disini]%, Mean Reciprocal Rank (MRR) sebesar [Nilai MRR], dan Recall@5 sebesar [nilai Recall]%. Hasil ini menunjukkan bahwa sistem mampu meniru dan bahkan mengoptimalkan pola pencocokan yang dilakukan oleh EPC secara rasional.
-\item
-  Peningkatan Efisiensi Proses: Pengujian usability dan Black Box menunjukkan bahwa sistem berjalan fungsional dan dapat menjadi alat bantu yang signifikan bagi Enrichment Program Coordinator (EPC). Kehadiran Dashboard, fitur Rule Studio, dan eksekusi otomatis pada sistem ini mampu menekan waktu pemetaan yang sebelumnya memakan waktu berminggu-minggu menjadi hanya dalam hitungan menit, mengurangi potensi revisi human-error, serta menghadirkan transparansi yang lebih baik dalam penentuan dosen pembimbing.
-\end{enumerate}
+    \item Proses pemetaan \textit{Faculty Supervisor} yang berjalan saat ini masih dilakukan secara manual oleh \textit{Enrichment Program Coordinator} (EPC) menggunakan \textit{spreadsheet}, memerlukan waktu satu hingga tiga minggu per periode, dan rentan terhadap inkonsistensi karena bergantung pada pengetahuan individual EPC. Tidak terdapat mekanisme yang terstruktur untuk mencocokkan minat mahasiswa dengan bidang keahlian dosen pembimbing, sehingga beban bimbingan cenderung tidak merata dan relevansi penugasan tidak dapat dijamin.
 
+    \item Sistem rekomendasi yang dikembangkan menggunakan pendekatan \textit{scoring} yang menggabungkan dua komponen: (a) kemiripan semantik berbasis \textit{text embedding} untuk merepresentasikan profil mahasiswa dan dosen secara numerik, dan (b) \textit{company group bonus} untuk mendorong konsistensi penugasan mahasiswa dari perusahaan yang sama. Hasil \textit{scoring} kemudian dialokasikan menggunakan \textit{greedy solver} dengan mempertimbangkan batasan kapasitas dosen. Sistem diimplementasikan sebagai aplikasi berbasis web yang mencakup delapan halaman fungsional dan diuji menggunakan metode \textit{black box} dengan pendekatan \textit{equivalence partitioning} --- seluruh skenario pengujian menghasilkan status \textit{Pass}.
+
+    \item Evaluasi dilakukan terhadap 168 dari 171 mahasiswa menggunakan tiga model \textit{embedding} kandidat. Model terbaik, yaitu \textbf{BAAI/bge-m3}, mencapai nilai MRR sebesar 0,585, Hit@5 sebesar 0,804, dan rata-rata peringkat (\textit{avg\_rank}) 3,32 --- jauh di atas \textit{random baseline} (MRR $\sim$0,23). Hasil ini menunjukkan bahwa sistem mampu menempatkan dosen pembimbing yang relevan pada posisi peringkat atas secara konsisten. \textit{Assignment Match Rate} sebesar 0,357 mengindikasikan tingkat keselarasan yang memadai antara rekomendasi sistem dengan data pemetaan historis yang dijadikan \textit{ground truth}.
+
+    \item Sistem yang dikembangkan berpotensi meningkatkan efisiensi proses pemetaan melalui otomasi perhitungan kemiripan dan pembangkitan rekomendasi yang sebelumnya dilakukan secara manual. Dengan antarmuka yang dapat dioperasikan langsung oleh EPC, sistem ini mendukung transparansi dan konsistensi proses pemetaan tanpa menghilangkan otoritas keputusan akhir dari koordinator program.
+\end{enumerate}
 
 \section{Saran}
 
-Penelitian dan pengembangan sistem rekomendasi ini tentu masih memiliki ruang untuk penyempurnaan. Adapun saran yang dapat diberikan untuk pengembangan lebih lanjut di masa mendatang adalah sebagai berikut:
+Berdasarkan hasil penelitian yang telah dilakukan, terdapat beberapa saran untuk pengembangan lebih lanjut:
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-    Eksplorasi Algoritma Optimasi : Sistem saat ini menggunakan Greedy Capacity-Constrained Solver untuk pembagian slot dosen. Ke depannya, dapat dicoba algoritma penugasan global (Global Optimization Assignment) seperti Hungarian Algorithm atau Min-Cost Max-Flow agar pembagian supervisor bisa mencapai akurasi atau skor kepuasan kolektif yang paling optimal secara keseluruhan (bukan sekadar optimal lokal).
-\item
-    Pelatihan Lanjutan (Fine-Tuning) pada Model Text Embedding: Untuk meningkatkan sensitivitas pencocokan makna kontekstual, disarankan melakukan proses fine-tuning atau pelatihan lanjutan pada model transformer-based embedding yang digunakan. Pelatihan dapat memanfaatkan korpus data internal institusi, seperti kumpulan abstrak skripsi terdahulu, silabus mata kuliah, atau laporan magang, sehingga model mampu menangkap istilah-istilah teknis industri khusus serta gaya bahasa campuran (Indonesia-Inggris) yang khas digunakan oleh mahasiswa di lingkungan Universitas XYZ secara lebih akurat.
-\item
-    Pengembangan Fitur Notifikasi Otomatis via Email : Sistem saat ini baru berfokus pada proses perhitungan kemiripan semantik dan pengalokasikan slot bimbingan dosen. Untuk meningkatkan fungsionalitas operasional, disarankan untuk menambahkan fitur notifikasi otomatis berbasis email pada portal Enrichment Program Coordinator (EPC). Melalui fitur ini, segera setelah EPC selesai melakukan finalisasi dan konfirmasi hasil pemetaan (mapping), sistem dapat secara otomatis mengirimkan email pemberitahuan ke masing-masing mahasiswa mengenai informasi Faculty Supervisor mereka, sekaligus mengirimkan daftar mahasiswa bimbingan baru ke email dosen yang bersangkutan. Hal ini akan memotong jalur komunikasi manual dan mempercepat distribusi informasi penugasan.
-\item
-  Integrasi Infrastruktur dengan Sistem dan Server Utama Universitas XYZ: Aplikasi prototipe ini masih berjalan secara mandiri dengan penyimpanan data lokal. Ke depannya, sangat disarankan agar sistem ini diintegrasikan langsung dengan ekosistem sistem informasi akademik internal Universitas XYZ (seperti portal XYZ Maya atau basis data sentral Program Enrichment) menggunakan arsitektur RESTful API. Integrasi langsung ke server XYZ ini akan mempermudah sinkronisasi data master mahasiswa, profil kompetensi dosen, serta memastikan hasil akhir pemetaan dari sistem ini dapat langsung tersimpan dan tercatat secara otomatis di server pusat institusi tanpa memerlukan proses ekspor-impor dokumen Excel secara manual.
+    \item \textbf{Perluasan cakupan data supervisor.} Representasi dosen pembimbing saat ini bergantung pada data historis bimbingan dan rekomendasi topik skripsi yang tersedia. Penambahan sumber data seperti publikasi ilmiah, profil penelitian, atau portofolio proyek dosen dapat memperkaya representasi semantik dan meningkatkan kualitas rekomendasi.
+
+    \item \textbf{Perluasan cakupan program enrichment.} Sistem yang dikembangkan saat ini difokuskan pada jalur magang (\textit{internship}). Pengembangan selanjutnya dapat mencakup jalur lain dalam Program Enrichment, seperti penelitian (\textit{research}), kewirausahaan (\textit{entrepreneurship}), dan pengembangan profesional, dengan penyesuaian pada skema representasi data mahasiswa.
+
+    \item \textbf{\textit{Fine-tuning} model \textit{embedding} pada domain akademik Indonesia.} Model \textit{embedding} yang digunakan merupakan model \textit{pre-trained} bersifat umum. Melakukan \textit{fine-tuning} pada korpus akademik berbahasa Indonesia atau data spesifik domain Program Enrichment berpotensi meningkatkan akurasi pencocokan semantik secara signifikan.
+
+    \item \textbf{Evaluasi usabilitas dengan pengguna nyata.} Pengujian yang dilakukan dalam penelitian ini terbatas pada \textit{black box testing} fungsional. Evaluasi lanjutan menggunakan \textit{System Usability Scale} (SUS) dengan melibatkan EPC sebagai pengguna nyata perlu dilakukan untuk mengukur tingkat penerimaan dan kemudahan penggunaan sistem secara empiris.
+
+    \item \textbf{Integrasi dengan sistem informasi akademik institusi.} Saat ini sistem memerlukan unggah data manual dalam format Excel. Integrasi langsung dengan sistem informasi akademik XYZ University akan mengurangi potensi kesalahan input data dan mempersingkat alur kerja EPC secara keseluruhan.
+
+    \item \textbf{Studi longitudinal terhadap kualitas rekomendasi.} Evaluasi dalam penelitian ini menggunakan data historis satu tahun sebagai \textit{ground truth}. Studi lanjutan yang mengikuti keluaran rekomendasi selama beberapa periode pemetaan akan memberikan gambaran yang lebih representatif terhadap kualitas sistem dalam kondisi operasional nyata.
 \end{enumerate}

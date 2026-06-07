@@ -15,13 +15,13 @@ Proses penentuan faculty supervisor untuk mahasiswa saat ini dilakukan secara ma
 
 Dalam upaya mengatasi keterbatasan tersebut, pendekatan pencocokan berbasis teks sering digunakan sebagai solusi awal. Pendekatan pencocokan berbasis kata kunci merupakan metode umum dalam information retrieval tradisional yang mengukur kesamaan dokumen berdasarkan kemunculan kata atau frekuensi istilah tertentu. Pendekatan ini memiliki keterbatasan dalam menangkap kesamaan makna antara teks yang menggunakan istilah berbeda namun memiliki konteks yang serupa.
 
-Permasalahan tersebut menuntut adanya sebuah sistem yang dapat membantu proses pemetaan antara faculty supervisor dan mahasiswa secara lebih objektif dan efisien. Berdasarkan kebutuhan tersebut, penelitian ini mengusulkan pengembangan sistem rekomendasi yang memanfaatkan pendekatan hybrid scoring untuk mengotomatisasi proses pencocokan mahasiswa dengan faculty supervisor. Pendekatan hybrid scoring yang digunakan menggabungkan tiga komponen utama, yaitu semantic similarity berbasis text embedding untuk mengukur kesesuaian makna, rule-based boost berbasis label affinity untuk menerapkan aturan domain yang berlaku, serta company group bonus untuk mempertimbangkan pengelompokan mahasiswa berdasarkan perusahaan tempat kerja.
+Permasalahan tersebut menuntut adanya sebuah sistem yang dapat membantu proses pemetaan antara faculty supervisor dan mahasiswa secara lebih objektif dan efisien. Berdasarkan kebutuhan tersebut, penelitian ini mengusulkan pengembangan sistem rekomendasi untuk mengotomatisasi proses pencocokan mahasiswa dengan faculty supervisor. Pendekatan scoring yang digunakan menggabungkan dua komponen utama, yaitu semantic similarity berbasis text embedding untuk mengukur kesesuaian makna antara profil mahasiswa dan dosen, serta company group bonus untuk mempertimbangkan pengelompokan mahasiswa berdasarkan perusahaan tempat kerja.
 
-Sistem yang dikembangkan memanfaatkan informasi tekstual yang bersumber dari profil faculty supervisor dan data mahasiswa. Informasi tersebut direpresentasikan dalam bentuk dokumen teks yang menggambarkan karakteristik akademik dan konteks profesional masing-masing entitas. Pendekatan semantic similarity dipilih sebagai komponen utama karena mampu memahami makna dan konteks teks secara lebih mendalam dibandingkan metode pencocokan berbasis kata kunci. Komponen rule-based boost digunakan untuk mengakomodasi aturan domain spesifik yang tidak dapat ditangkap oleh kemiripan teks semata, seperti afinitas khusus antara faculty supervisor tertentu dengan kategori mahasiswa tertentu. Sementara itu, company group bonus digunakan untuk mendorong konsistensi penempatan mahasiswa dari perusahaan yang sama pada faculty supervisor yang paling sesuai.
+Sistem yang dikembangkan memanfaatkan informasi tekstual yang bersumber dari profil faculty supervisor dan data mahasiswa. Informasi tersebut direpresentasikan dalam bentuk dokumen teks yang menggambarkan karakteristik akademik dan konteks profesional masing-masing entitas. Pendekatan semantic similarity dipilih sebagai komponen utama karena mampu memahami makna dan konteks teks secara lebih mendalam dibandingkan metode pencocokan berbasis kata kunci. Company group bonus digunakan untuk mendorong konsistensi penempatan mahasiswa dari perusahaan yang sama pada faculty supervisor yang paling sesuai.
 
 Berdasarkan skor hybrid yang dihasilkan, sistem menggunakan greedy capacity-constrained solver untuk mengalokasikan setiap mahasiswa ke satu faculty supervisor secara optimal dengan mempertimbangkan batasan kapasitas bimbingan minimum dan maksimum per faculty supervisor. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang telah memenuhi seluruh constraint kapasitas.
 
-Pengembangan sistem dilakukan melalui beberapa tahapan yang saling berurutan, dimulai dari analisis permasalahan dan kebutuhan sistem, perencanaan proses pengembangan, perancangan model rekomendasi berbasis hybrid scoring, hingga implementasi sistem dalam bentuk aplikasi berbasis website. Kerangka berpikir penelitian ini digambarkan dalam bentuk diagram alur pada Gambar 3.1, yang menunjukkan hubungan antara permasalahan, metode yang digunakan, dan keluaran sistem berupa rekomendasi faculty supervisor untuk mahasiswa.
+Pengembangan sistem dilakukan melalui beberapa tahapan yang saling berurutan, dimulai dari analisis permasalahan dan kebutuhan sistem, perencanaan proses pengembangan, perancangan model rekomendasi, hingga implementasi sistem dalam bentuk aplikasi berbasis website. Kerangka berpikir penelitian ini digambarkan dalam bentuk diagram alur pada Gambar 3.1, yang menunjukkan hubungan antara permasalahan, metode yang digunakan, dan keluaran sistem berupa rekomendasi faculty supervisor untuk mahasiswa.
 
 \section{Metodologi Penelitian}\label{metodologi-penelitian}
 
@@ -251,25 +251,21 @@ Qwen3-Embedding-0.6B merupakan model embedding berukuran sekitar 0,6B parameter 
 
 Selain itu, seri Qwen3 Embedding mendukung Matryoshka Representation Learning (MRL) yang memungkinkan penggunaan dimensi embedding yang fleksibel misalnya rentang 32--1024 untuk menyeimbangkan kualitas dan efisiensi penyimpanan/komputasi.
 
-\subsection{EmbeddingGemma 300M}\label{embeddinggemma-300m}
+\subsection{BAAI/bge-m3}\label{baai-bge-m3}
 
-EmbeddingGemma merupakan model embedding dari Google dengan ukuran sekitar 300M parameter, dibangun dari Gemma 3, dan ditujukan untuk kebutuhan seperti semantic similarity search, retrieval, klasifikasi, dan klastering.
+BAAI/bge-m3 merupakan model embedding multibahasa dari Beijing Academy of Artificial Intelligence (BAAI) yang dirancang untuk mendukung tiga mekanisme \textit{retrieval} sekaligus: \textit{dense retrieval}, \textit{sparse retrieval}, dan \textit{multi-vector retrieval}. Model ini mendukung lebih dari 100 bahasa dan memiliki kapasitas konteks hingga 8.192 token, sehingga relevan untuk dokumen dosen yang berpotensi panjang.
 
-Model ini dilaporkan dilatih dengan data dalam 100+ bahasa, sehingga sesuai untuk konteks data penelitian yang dapat memuat istilah industri dan akademik lintas bahasa.
+Pada penelitian ini, BAAI/bge-m3 digunakan dalam mode \textit{dense retrieval}, yaitu menghasilkan satu vektor embedding per dokumen yang kemudian dihitung kemiripannya menggunakan \textit{cosine similarity}. Model ini dipilih sebagai kandidat karena kemampuan multilingual dan kapasitas konteks yang memadai untuk merepresentasikan dokumen profil dosen dengan konten campuran Bahasa Indonesia--Inggris.
 
-EmbeddingGemma juga mengadopsi MRL, sehingga embedding dapat menggunakan dimensi penuh 768 dimensi atau dipotong menjadi dimensi lebih kecil misalnya 512/256/128 untuk efisiensi.
+\subsection{intfloat/multilingual-e5-large-instruct}\label{multilingual-e5-large-instruct}
 
-Dari sisi kapasitas input, EmbeddingGemma memiliki batas konteks sekitar 2K token, sehingga pada implementasi multi-dokumen per sumber, pemisahan dokumen berdasarkan sumber menjadi relevan untuk menjaga panjang input tetap sesuai batas model
+intfloat/multilingual-e5-large-instruct merupakan model embedding multibahasa berbasis arsitektur XLM-RoBERTa yang dikembangkan oleh Microsoft sebagai bagian dari seri E5 (\textit{Embeddings from bidirectional Encoder representations}). Model ini mendukung lebih dari 100 bahasa dengan dimensi embedding 1.024 dan kapasitas konteks hingga 512 token.
 
-\subsection{jina-embeddings-v3}\label{jina-embeddings-v3}
-
-Jina-embeddings-v3 merupakan model embedding multibahasa yang dirancang untuk berbagai kebutuhan, terutama query--document retrieval, klastering, dan klasifikasi. Model ini mendukung panjang konteks hingga 8.192 token dan menghasilkan embedding dengan dimensi default 1024, sehingga memadai untuk dokumen yang relatif panjang.
-
-Model ini menyediakan task-specific adapters misalnya untuk retrieval atau klasifikasi serta mendukung MRL untuk memungkinkan reduksi dimensi embedding dengan tetap menjaga performa pada banyak skenario evaluasi yang dilaporkan.
+Keunggulan utama model ini terletak pada kemampuan \textit{instruction-following}, di mana teks \textit{query} dan \textit{passage} direpresentasikan dengan awalan instruksi yang berbeda untuk memisahkan konteks pencarian dari dokumen yang diindeks. Model ini ditetapkan sebagai model \textit{default} dalam sistem karena keseimbangan antara kualitas \textit{retrieval} multibahasa dan efisiensi komputasi pada perangkat tanpa GPU khusus.
 
 \subsection{Keterkaitan Kandidat Model dengan Mekanisme Rekomendasi}\label{keterkaitan-kandidat-model-dengan-mekanisme-rekomendasi}
 
-Ketiga kandidat model dipilih untuk dibandingkan pada pipeline yang sama, sehingga perbedaan kinerja dapat dikaitkan dengan karakteristik model (misalnya dukungan konteks panjang dan kemampuan multibahasa), bukan karena perbedaan perlakuan data. Mengingat sistem menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, pemilihan model dengan kapasitas konteks yang memadai menjadi relevan, sementara model yang lebih ringan tetap dipertimbangkan dari sisi efisiensi implementasi pada aplikasi berbasis web.
+Ketiga kandidat model dipilih untuk dibandingkan pada \textit{pipeline} yang sama, sehingga perbedaan kinerja dapat dikaitkan dengan karakteristik masing-masing model, bukan perbedaan perlakuan data. Qwen3-Embedding-0.6B menawarkan kapasitas konteks terpanjang (32K token) dengan ukuran parameter paling ringan, BAAI/bge-m3 menyediakan kapasitas konteks menengah (8K token) dengan arsitektur multi-retrieval, sedangkan intfloat/multilingual-e5-large-instruct memiliki kapasitas konteks lebih terbatas (512 token) namun dioptimalkan untuk tugas \textit{instruction-following retrieval}. Perbandingan ketiga model ini memungkinkan analisis terhadap pengaruh kapasitas konteks dan pendekatan \textit{fine-tuning} terhadap kualitas rekomendasi dalam konteks data campuran Bahasa Indonesia--Inggris.
 
 Sebagai transisi ke Subbab 3.2.3.7, penentuan model terbaik dilakukan melalui strategi evaluasi yang mengukur kualitas rekomendasi top-5 serta mempertimbangkan aspek efisiensi komputasi pada saat inferensi embedding.
 
@@ -324,13 +320,20 @@ Faculty supervisor yang memenuhi kriteria tersebut kemudian dipasangkan dengan m
 
 Strategi evaluasi pada penelitian ini dirancang untuk menilai efektivitas model rekomendasi berbasis semantic similarity dalam menghasilkan pasangan mahasiswa dan faculty supervisor yang relevan. Evaluasi difokuskan pada dua aspek utama, yaitu kualitas hasil perangkingan rekomendasi dan dampak penerapan validasi slot bimbingan terhadap hasil akhir alokasi.
 
-Evaluasi kualitas perangkingan dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan sistem terhadap data ground truth yang tersedia, berupa pasangan mahasiswa--faculty supervisor dari data historis atau hasil penilaian pihak EPC. Mengingat sistem menghasilkan daftar rekomendasi top-5, metrik evaluasi yang digunakan adalah metrik berbasis top-K, yaitu Recall@5 dan nDCG@5. Recall@5 digunakan untuk mengukur kemampuan sistem dalam memasukkan faculty supervisor yang relevan ke dalam lima rekomendasi teratas, sedangkan nDCG@5 digunakan untuk menilai kualitas urutan peringkat rekomendasi dengan mempertimbangkan posisi faculty supervisor yang relevan pada daftar hasil.
+Evaluasi kualitas perangkingan dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan sistem terhadap data \textit{ground truth} yang tersedia, berupa pasangan mahasiswa--\textit{faculty supervisor} dari data historis penugasan. Metrik evaluasi yang digunakan adalah metrik \textit{information retrieval} berbasis peringkat, yaitu:
 
-Evaluasi dilakukan secara konsisten untuk seluruh kandidat model text embedding yang digunakan dalam penelitian ini, dengan menerapkan pipeline yang sama, meliputi pembentukan dokumen faculty supervisor, pemrosesan teks mahasiswa, perhitungan cosine similarity, agregasi skor pada tingkat faculty supervisor menggunakan nilai maksimum, serta pembentukan daftar rekomendasi top-5. Dengan demikian, perbandingan kinerja antar model mencerminkan perbedaan karakteristik model embedding, bukan perbedaan perlakuan data atau mekanisme perhitungan.
+\begin{itemize}
+    \item \textbf{MRR} (\textit{Mean Reciprocal Rank}): rata-rata nilai kebalikan posisi \textit{faculty supervisor ground truth} dalam daftar rekomendasi, mengukur seberapa tinggi posisi rekomendasi yang relevan secara keseluruhan.
+    \item \textbf{Hit@1} dan \textbf{Hit@5}: proporsi mahasiswa yang \textit{faculty supervisor ground truth}-nya muncul pada posisi pertama atau dalam lima rekomendasi teratas.
+    \item \textbf{NDCG@5} dan \textbf{NDCG@10}: \textit{Normalized Discounted Cumulative Gain} dengan cutoff 5 dan 10, mengukur kualitas urutan rekomendasi dengan pembobotan logaritmik berdasarkan posisi.
+    \item \textbf{Avg Rank}: rata-rata posisi \textit{faculty supervisor ground truth} dalam daftar rekomendasi yang dihasilkan.
+\end{itemize}
 
-Selain evaluasi kualitas perangkingan, penelitian ini juga mengevaluasi dampak penerapan validasi slot bimbingan terhadap hasil rekomendasi. Evaluasi ini dilakukan dengan mengamati proporsi mahasiswa yang berhasil dialokasikan faculty supervisor setelah proses validasi slot berbasis batch rule, serta distribusi peringkat faculty supervisor terpilih (misalnya peringkat pertama, kedua, dan seterusnya). Evaluasi ini bertujuan untuk memahami sejauh mana keterbatasan kapasitas bimbingan memengaruhi hasil akhir sistem rekomendasi.
+Evaluasi dilakukan secara konsisten untuk seluruh kandidat model \textit{text embedding} dengan menerapkan \textit{pipeline} yang sama, meliputi pembentukan dokumen \textit{faculty supervisor}, pemrosesan teks mahasiswa, perhitungan \textit{cosine similarity}, serta pembentukan daftar rekomendasi. Dengan demikian, perbandingan kinerja antar model mencerminkan perbedaan karakteristik model \textit{embedding}, bukan perbedaan perlakuan data.
 
-Berdasarkan hasil evaluasi tersebut, model text embedding yang memberikan kinerja terbaik dalam menghasilkan rekomendasi top-5 yang relevan dan stabil terhadap keterbatasan slot bimbingan dipilih sebagai model yang digunakan pada sistem rekomendasi yang diusulkan.
+Selain evaluasi perangkingan, penelitian ini juga mengevaluasi hasil alokasi akhir yang dihasilkan oleh \textit{greedy solver}. Metrik yang digunakan adalah \textbf{Assignment Match Rate}, yaitu proporsi mahasiswa yang \textit{faculty supervisor} hasil alokasi sistem sesuai dengan data penugasan historis. Metrik ini mengukur keselarasan antara keluaran sistem secara \textit{end-to-end} (termasuk batasan kapasitas) dengan praktik pemetaan yang telah berjalan.
+
+Berdasarkan hasil evaluasi tersebut, model \textit{text embedding} yang memberikan kinerja terbaik dalam menghasilkan rekomendasi yang relevan dipilih sebagai model yang digunakan pada sistem rekomendasi yang diusulkan.
 
 \subsection{Perancangan UML}\label{perancangan-uml}
 
@@ -630,7 +633,7 @@ Kode dosen atau nama kosong & Sistem menampilkan pesan validasi \\
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
-\caption{Tabel 3. 10 Use Case Kelola Label \& Affinity Rules}\tabularnewline
+\caption{Tabel 3. 10 Use Case Kelola Rules Studio}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Elemen
@@ -649,15 +652,15 @@ Deskripsi
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Use Case Name & Kelola Label \& Affinity Rules \\
-Scenario & EPC mengonfigurasi label semantik dan affinity matrix melalui Rules Studio \\
+Use Case Name & Kelola Rules Studio \\
+Scenario & EPC mengonfigurasi label semantik melalui Rules Studio \\
 Triggering Events & EPC membuka menu Rules Studio \\
-Brief Description & Use case ini menjelaskan proses konfigurasi label descriptions (deskripsi, threshold, status niche) dan affinity matrix (nilai boost per pasangan supervisor-label) \\
+Brief Description & Use case ini menjelaskan proses konfigurasi label descriptions (deskripsi, threshold, status niche) dan nilai boost per pasangan supervisor-label \\
 Actor & EPC \\
 Related Use Case & Trigger Proses Rekomendasi \\
 Stakeholder & EPC \\
 Pre-condition & EPC telah login, data supervisor telah tersedia \\
-Post-condition & Konfigurasi label dan affinity matrix tersimpan dan digunakan pada run berikutnya \\
+Post-condition & Konfigurasi label tersimpan dan digunakan pada run berikutnya \\
 Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
 \begin{tabular}{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2518}}
@@ -669,12 +672,12 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-EPC membuka halaman Rules Studio & Sistem menampilkan daftar label descriptions dan affinity matrix grid \\
+EPC membuka halaman Rules Studio & Sistem menampilkan daftar label descriptions dan konfigurasi boost \\
 EPC mengedit deskripsi label, threshold, atau status niche & Sistem memvalidasi (threshold antara 0-1, deskripsi tidak kosong) \\
 EPC menekan simpan & Sistem menyimpan perubahan dan menginvalidasi cache embedding label \\
-EPC mengedit nilai boost pada affinity matrix & Sistem menyimpan perubahan sel-sel yang dimodifikasi \\
+EPC mengedit nilai boost per pasangan supervisor-label & Sistem menyimpan perubahan yang dimodifikasi \\
 EPC dapat preview skor label untuk mahasiswa tertentu & Sistem menghitung cosine similarity antara embedding mahasiswa dan label \\
-EPC dapat mereset ke konfigurasi default & Sistem mengembalikan label/affinity ke nilai seed awal \\
+EPC dapat mereset ke konfigurasi default & Sistem mengembalikan konfigurasi label ke nilai awal \\
 \bottomrule\noalign{}
 \end{tabular}
 \end{minipage} \\
@@ -722,9 +725,9 @@ Deskripsi
 Use Case Name & Trigger Proses Rekomendasi \\
 Scenario & EPC menjalankan proses rekomendasi untuk mengalokasikan mahasiswa ke faculty supervisor \\
 Triggering Events & EPC menekan tombol Generate Recommendation \\
-Brief Description & Use case ini menggambarkan proses inisiasi pipeline rekomendasi lengkap: embedding $\rightarrow$ similarity $\rightarrow$ rule boost $\rightarrow$ group bonus $\rightarrow$ capacity planning $\rightarrow$ greedy solver $\rightarrow$ evaluasi \\
+Brief Description & Use case ini menggambarkan proses inisiasi pipeline rekomendasi lengkap: embedding $\rightarrow$ similarity $\rightarrow$ group bonus $\rightarrow$ capacity planning $\rightarrow$ greedy solver $\rightarrow$ evaluasi \\
 Actor & EPC \\
-Related Use Case & Import Data Mahasiswa, Kelola Data Faculty Supervisor, Kelola Label \& Affinity Rules \\
+Related Use Case & Import Data Mahasiswa, Kelola Data Faculty Supervisor, Kelola Rules Studio \\
 Stakeholder & EPC, Program Studi \\
 Pre-condition & Data mahasiswa telah diimpor; data faculty supervisor telah tersedia; EPC telah login \\
 Post-condition & Hasil rekomendasi (run) tersimpan di database dengan evaluasi metrik \\
@@ -739,13 +742,11 @@ Actor
 System
 \end{minipage} \\
 \midrule\noalign{}
-EPC memilih model embedding yang akan digunakan & Sistem menampilkan opsi konfigurasi (model, enable/disable rule boost, group bonus, extra docs, capacity parameters) \\
+EPC memilih model embedding yang akan digunakan & Sistem menampilkan opsi konfigurasi (model, enable/disable group bonus, capacity parameters) \\
 EPC mengonfigurasi parameter dan menekan tombol Generate & Sistem memvalidasi ketersediaan data mahasiswa dan dosen \\
 & Sistem membentuk dokumen teks mahasiswa dan faculty supervisor \\
 & Sistem mengencode dokumen menggunakan model embedding yang dipilih \\
 & Sistem menghitung cosine similarity matrix \\
-& Sistem mendeteksi label semantik per mahasiswa \\
-& Sistem menghitung rule boost berdasarkan affinity matrix \\
 & Sistem menghitung company group bonus \\
 & Sistem menghitung capacity plan (min/max per supervisor) \\
 & Sistem menjalankan greedy solver untuk alokasi optimal \\
@@ -844,7 +845,7 @@ Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
 
 \subsection{Class diagram}\label{class-diagram-1}
 
-Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar komponen utama dalam sistem rekomendasi. Diagram ini menggambarkan bagaimana setiap entitas pada sistem direpresentasikan, beserta atribut dan operasi yang mendukung proses pembentukan embedding, perhitungan hybrid scoring, alokasi menggunakan greedy solver, serta evaluasi hasil rekomendasi.
+Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar komponen utama dalam sistem rekomendasi. Diagram ini menggambarkan bagaimana setiap entitas pada sistem direpresentasikan, beserta atribut dan operasi yang mendukung proses pembentukan embedding, perhitungan scoring, alokasi menggunakan greedy solver, serta evaluasi hasil rekomendasi.
 
 \begin{figure}
 \centering
@@ -855,7 +856,7 @@ Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar 
 
 \subsection{Entity Relationship Diagram}\label{entity-relationship-diagram-1}
 
-Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan hubungan antar entitas yang disimpan dalam basis data SQLite. ERD ini merepresentasikan tujuh entitas utama yang diperlukan dalam proses hybrid scoring, alokasi greedy, dan evaluasi hasil rekomendasi.
+Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan hubungan antar entitas yang disimpan dalam basis data SQLite. ERD ini merepresentasikan tujuh entitas utama yang diperlukan dalam proses scoring, alokasi greedy, dan evaluasi hasil rekomendasi.
 
 \begin{figure}
 \centering
