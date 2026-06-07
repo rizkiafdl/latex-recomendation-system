@@ -51,65 +51,51 @@ Dengan pemisahan peran tersebut, sistem difokuskan sebagai decision support syst
 
 Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang harus dipenuhi oleh sistem rekomendasi adalah sebagai berikut:
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0893}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5325}}@{}}
-\caption{Tabel 3. Analisis Kebutuhan Fungsional}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-No
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Kebutuhan Fungsional
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}[c]{|p{0.5cm}|p{12.5cm}|}
+
+\hline
+\textbf{No} & \textbf{Kebutuhan Fungsional} \\ \hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-No
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Kebutuhan Fungsional
-\end{minipage} \\
-\midrule\noalign{}
+
+\hline
+\textbf{No} & \textbf{Kebutuhan Fungsional} \\ \hline
 \endhead
-\bottomrule\noalign{}
+
+\hline
+\caption{Analisis Kebutuhan Fungsional} \label{table:kebutuhan_fungsional} \\
 \endlastfoot
-1 & Sistem mampu mengelola data mahasiswa yang mencakup informasi posisi kerja dan perusahaan \\
-2 & Sistem mampu mengelola data profil faculty supervisor \\
-3 & Sistem mampu memproses data teks yang berasal dari mahasiswa dan faculty supervisor \\
-4 & Sistem mampu mengidentifikasi tingkat kesesuaian antara mahasiswa dan faculty supervisor berdasarkan informasi yang tersedia \\
-5 & Sistem mampu melakukan pengurutan (ranking) faculty supervisor berdasarkan tingkat kesesuaian \\
-6 & Sistem mampu mempertimbangkan ketersediaan slot bimbingan faculty supervisor dalam menghasilkan rekomendasi \\
-7 & Sistem mampu menampilkan hasil rekomendasi faculty supervisor untuk setiap mahasiswa \\
+
+1 & Sistem mampu mengelola data mahasiswa yang mencakup informasi posisi kerja dan perusahaan. \\ \hline
+2 & Sistem mampu mengelola data profil \textit{faculty supervisor}. \\ \hline
+3 & Sistem mampu memproses data teks yang berasal dari mahasiswa dan \textit{faculty supervisor}. \\ \hline
+4 & Sistem mampu mengidentifikasi tingkat kesesuaian antara mahasiswa dan \textit{faculty supervisor} berdasarkan informasi yang tersedia. \\ \hline
+5 & Sistem mampu melakukan pengurutan (\textit{ranking}) \textit{faculty supervisor} berdasarkan tingkat kesesuaian. \\ \hline
+6 & Sistem mampu mempertimbangkan ketersediaan slot bimbingan \textit{faculty supervisor} dalam menghasilkan rekomendasi. \\ \hline
+7 & Sistem mampu menampilkan hasil rekomendasi \textit{faculty supervisor} untuk setiap mahasiswa. \\ \hline
+
 \end{longtable}
 
 \subsection{Kebutuhan Non-Fungsional}\label{kebutuhan-non-fungsional}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2155}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4000}}@{}}
-\caption{Tabel 3. Analisis Kebutuhan Non-Fungsional}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-No
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Kebutuhan Non-Fungsional
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}[c]{|p{0.5cm}|p{12.5cm}|}
+
+\hline
+\textbf{No} & \textbf{Kebutuhan Non - Fungsional} \\ \hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-No
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Kebutuhan Non-Fungsional
-\end{minipage} \\
-\midrule\noalign{}
+
+\hline
+\textbf{No} & \textbf{Kebutuhan Non - Fungsional} \\ \hline
 \endhead
-\bottomrule\noalign{}
+
+\hline
+\caption{Analisis Kebutuhan Non-Fungsional} \label{table:kebutuhan_non_fungsional} \\
 \endlastfoot
-1 & Sistem berbasis website sehingga dapat diakses dengan mudah oleh EPC \\
-2 & Sistem memiliki antarmuka yang sederhana dan mudah digunakan \\
-3 & Sistem mampu menampilkan hasil rekomendasi secara transparan dan konsisten \\
-4 & Sistem mendukung pengelolaan data secara terstruktur \\
+
+1 & Sistem berbasis website sehingga dapat diakses dengan mudah oleh EPC \\ \hline
+2 & Sistem memiliki antarmuka yang sederhana dan mudah digunakan \\ \hline
+3 & Sistem mampu menampilkan hasil rekomendasi secara transparan dan konsisten \\ \hline
+4 & Sistem mendukung pengelolaan data secara terstruktur \\ \hline
+
 \end{longtable}
 
 \subsection{Analisis Data}\label{analisis-data}
@@ -152,46 +138,29 @@ Setiap faculty supervisor direpresentasikan dalam bentuk satu atau lebih dokumen
 
 Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model text embedding. Hasil transformasi berupa vektor embedding disimpan ke dalam basis data, dengan satu baris data merepresentasikan satu dokumen milik faculty supervisor. Kumpulan embedding ini berfungsi sebagai knowledge base yang digunakan sebagai referensi utama dalam proses perhitungan kemiripan dan perangkingan rekomendasi.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1739}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2436}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2069}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3755}}@{}}
-\caption{Tabel 3. Representasi Data Faculty Supervisor}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Entitas
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Atribut
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Sumber
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi Singkat
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}[c]{|p{2.5cm}|p{2.5cm}|p{3.5cm}|p{5.5cm}|}
+
+\hline
+\textbf{Entitas} & \textbf{Atribut} & \textbf{Sumber} & \text{Deskripsi} \\ \hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Entitas
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Atribut
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Sumber
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi Singkat
-\end{minipage} \\
-\midrule\noalign{}
+
+\hline
+\textbf{Entitas} & \textbf{Atribut} & \textbf{Sumber} & \text{Deskripsi} \\ \hline
 \endhead
-\bottomrule\noalign{}
+
+\hline
+\caption{Representasi Data Faculty Supervisor} \label{table:representasi_data_faculty_supervisor} \\
 \endlastfoot
-Faculty supervisor & Informasi posisi magang & Data historis Enrichment & Informasi posisi magang mahasiswa yang pernah dibimbing \\
-Faculty supervisor & Perusahaan & Data historis Enrichment & Informasi perusahaan mahasiswa yang pernah dibimbing \\
-Faculty supervisor & Deskripsi pekerjaan mahasiswa & Data historis Enrichment & Deskripsi bagian pekerjaan mahasiswa yang pernah dibimbing \\
-Faculty supervisor & Topik skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Judul dan topik skripsi yang direkomendasi \\
-Faculty supervisor & Deskripsi skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Ringkasan deskripsi dan ruang lingkup penelitian \\
-Faculty supervisor & Rumusan masalah & Data Rekomendasi Skripsi Dari Faculty Supervisor & Fokus permasalahan penelitian \\
-Faculty supervisor & Luaran yang diharapkan & Data Rekomendasi Skripsi Dari Faculty Supervisor & Output akademik atau implementasi yang ditargetkan \\
-Faculty supervisor & Jenis skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Klasifikasi jenis skripsi \\
+
+Faculty supervisor & Informasi posisi magang & Data historis Enrichment & Informasi posisi magang mahasiswa yang pernah dibimbing \\ \hline
+Faculty supervisor & Perusahaan & Data historis Enrichment & Informasi perusahaan mahasiswa yang pernah dibimbing \\ \hline
+Faculty supervisor & Deskripsi pekerjaan mahasiswa & Data historis Enrichment & Deskripsi bagian pekerjaan mahasiswa yang pernah dibimbing \\ \hline
+Faculty supervisor & Topik skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Judul dan topik skripsi yang direkomendasi \\ \hline
+Faculty supervisor & Deskripsi skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Ringkasan deskripsi dan ruang lingkup penelitian \\ \hline
+Faculty supervisor & Rumusan masalah & Data Rekomendasi Skripsi Dari Faculty Supervisor & Fokus permasalahan penelitian \\ \hline
+Faculty supervisor & Luaran yang diharapkan & Data Rekomendasi Skripsi Dari Faculty Supervisor & Output akademik atau implementasi yang ditargetkan \\ \hline
+Faculty supervisor & Jenis skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Klasifikasi jenis skripsi \\ \hline
+
 \end{longtable}
 
 Dalam implementasinya, apabila seorang faculty supervisor tidak memiliki data pada salah satu sumber, maka dokumen dari sumber tersebut tidak dibentuk. Dengan demikian, faculty supervisor tersebut tetap dapat direpresentasikan menggunakan dokumen yang tersedia, sehingga jumlah dokumen per faculty supervisor dapat berbeda-beda tergantung kelengkapan data.
@@ -202,43 +171,26 @@ Data mahasiswa yang dimasukkan oleh EPC melalui sistem mencakup informasi posisi
 
 Teks input mahasiswa selanjutnya diproses menggunakan model text embedding yang sama dengan yang digunakan pada data faculty supervisor, sehingga dihasilkan vektor embedding mahasiswa yang berada pada ruang representasi yang sama. Kondisi ini memungkinkan sistem melakukan perhitungan kemiripan secara langsung antara vektor embedding mahasiswa dan vektor embedding dokumen faculty supervisor. Selain itu, atribut status eligible digunakan sebagai filter kelayakan mahasiswa sebelum proses rekomendasi dan alokasi dosen dilakukan.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2490}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2497}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2474}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2538}}@{}}
-\caption{Tabel 3. Pemrosesan Data Mahasiswa}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Entitas
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Atribut
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Digunakan sebagai Teks
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}[c]{|p{2cm}|p{3cm}|p{2.5cm}|p{5.5cm}|}
+
+\hline
+\textbf{Entitas} & \textbf{Atribut} & \textbf{Digunakan sebagai Teks} & \textbf{Deskripsi} \\ \hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Entitas
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Atribut
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Digunakan sebagai Teks
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+
+\hline
+\textbf{Entitas} & \textbf{Atribut} & \textbf{Digunakan sebagai Teks} & \textbf{Deskripsi} \\ \hline
 \endhead
-\bottomrule\noalign{}
+
+\hline
+\caption{Pemrosesan Data Mahasiswa} \label{table:pemrosesan_data_mahasiswa} \\
 \endlastfoot
-Mahasiswa & Identitas mahasiswa & Tidak & Digunakan sebagai identifikasi data \\
-Mahasiswa & Posisi mahasiswa & Ya & Posisi atau peran magang yang diminati \\
-Mahasiswa & Perusahaan & Ya & Nama perusahaan tujuan atau pengalaman \\
-Mahasiswa & Kategori perusahaan & Ya & Klasifikasi bidang industri perusahaan \\
-Mahasiswa & Status eligible & Tidak & Digunakan sebagai filter kelayakan mahasiswa \\
+
+Mahasiswa & Identitas mahasiswa & Tidak & Digunakan sebagai identifikasi data. \\ \hline
+Mahasiswa & Posisi mahasiswa & Ya & Posisi atau peran magang yang diminati. \\ \hline
+Mahasiswa & Perusahaan & Ya & Nama perusahaan tujuan atau pengalaman. \\ \hline
+Mahasiswa & Kategori perusahaan & Ya & Klasifikasi bidang industri perusahaan. \\ \hline
+Mahasiswa & Status eligible & Tidak & Digunakan sebagai filter kelayakan mahasiswa. \\ \hline
+
 \end{longtable}
 
 \subsection{Kandidat Model Text Embedding}\label{kandidat-model-text-embedding}
@@ -279,33 +231,26 @@ Berdasarkan skor akhir tersebut, sistem melakukan pengurutan faculty supervisor 
 
 Struktur data knowledge base yang digunakan dalam proses perhitungan kemiripan dan perangkingan ditunjukkan pada Tabel berikut.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3318}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2644}}@{}}
-\caption{Tabel 3. Struktur Data Knowledge Base}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Kolom
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}[c]{|p{4.5cm}|p{9.5cm}|}
+
+\hline
+\textbf{Kolom} & \textbf{Deskripsi} \\ \hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Kolom
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+
+\hline
+\textbf{Kolom} & \textbf{Deskripsi} \\ \hline
 \endhead
-\bottomrule\noalign{}
+
+\hline
+\caption{Struktur Data Knowledge Base} \label{table:struktur_data_knowledge_base} \\
 \endlastfoot
-faculty supervisor\_id & Identitas unik faculty supervisor \\
-document\_id & Identitas dokumen \\
-document\_source\_type & Jenis sumber dokumen (Data Historis Mahasiswa / Topik Skripsi) \\
-document\_text & Hasil penggabungan seluruh atribut tekstual \\
-vector\_embedding & Representasi vektor dari dokumen teks \\
+
+\texttt{faculty\_supervisor\_id} & Identitas unik \textit{faculty supervisor}. \\ \hline
+\texttt{document\_id} & Identitas dokumen. \\ \hline
+\texttt{document\_source\_type} & Jenis sumber dokumen (Data Historis Mahasiswa / Topik Skripsi). \\ \hline
+\texttt{document\_text} & Hasil penggabungan seluruh atribut tekstual. \\ \hline
+\texttt{vector\_embedding} & Representasi vektor dari dokumen teks. \\ \hline
+
 \end{longtable}
 
 \subsection{Validasi Slot Bimbingan faculty supervisor}\label{validasi-slot-bimbingan-faculty-supervisor}
