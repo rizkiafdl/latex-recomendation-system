@@ -62,7 +62,70 @@ Perangkat keras tersebut juga menggunakan beberapa perangkat lunak untuk proses 
 \section{Hasil}
 \subsection{Evaluasi Model}
 
+Pada tahap ini dilakukan evaluasi terhadap tiga model \textit{embedding} yang menjadi kandidat untuk komponen perhitungan kemiripan semantik. Seluruh model dievaluasi menggunakan \textit{pipeline}, dataset, serta konfigurasi kapasitas yang identik agar perbandingan bersifat adil; satu-satunya variabel yang diubah adalah model \textit{embedding} yang digunakan. Untuk memastikan keterulangan (\textit{reproducibility}), seluruh proses dibuat deterministik sehingga eksekusi berulang menghasilkan keluaran yang identik.
+
+Evaluasi dilakukan terhadap \textbf{168 dari 171 mahasiswa}. Sebanyak 3 mahasiswa dikecualikan karena tidak memiliki nilai \texttt{current\_supervisor\_code} yang valid sebagai \textit{ground truth}.
+
+Pengukuran dilakukan pada dua tingkat yang saling melengkapi:
+
+\begin{itemize}
+    \item \textbf{Metrik \textit{retrieval} (sebelum \textit{solver}):} MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, dan rata-rata peringkat (\textit{avg\_rank}). Metrik ini mengukur kualitas pemeringkatan dosen pembimbing sebelum proses alokasi kapasitas dijalankan.
+    \item \textbf{Metrik \textit{assignment} (setelah \textit{solver}):} \textit{Assignment Match Rate}. Metrik ini mengukur kesesuaian hasil penugasan akhir terhadap penugasan historis admin.
+\end{itemize}
+
+Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|>{\fontsize{9}{12}\selectfont}p{3.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|}
+    \hline
+    \textbf{Model} & \textbf{MRR} & \textbf{Hit@1} & \textbf{Hit@5} & \textbf{NDCG@5} & \textbf{NDCG@10} & \textbf{Avg Rank} & \textbf{Match Rate} \\
+    \hline
+    \textbf{BAAI/bge-m3} (Run 5) & 0,585 & 0,417 & 0,804 & 0,622 & 0,668 & 3,32 & 0,357 \\
+    \hline
+    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 6) & 0,474 & 0,298 & 0,708 & 0,505 & 0,576 & 4,20 & 0,357 \\
+    \hline
+    \textbf{intfloat/multilingual-e5-large-instruct} (Run 9) & 0,469 & 0,304 & 0,649 & 0,483 & 0,563 & 4,60 & 0,381 \\
+    \hline
+    \textit{Random baseline} & $\sim$0,23 & $\sim$0,07 & $\sim$0,36 & $\sim$0,21 & --- & $\sim$7,5 & --- \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+    \caption{Perbandingan Metrik Evaluasi Antar Model}
+    \label{table:tab4.2.1}
+\end{table}
+
+Secara deskriptif, \textbf{BAAI/bge-m3} memperoleh MRR sebesar 0,585 dengan dosen pembimbing sebenarnya berada pada peringkat rata-rata 3,32. \textbf{Qwen/Qwen3-Embedding-0.6B} memperoleh MRR 0,474 dengan rata-rata peringkat 4,20. \textbf{intfloat/multilingual-e5-large-instruct} memperoleh MRR 0,469 dengan rata-rata peringkat 4,60, namun memiliki \textit{Assignment Match Rate} tertinggi sebesar 0,381. Seluruh model berada jauh di atas \textit{random baseline}, yang menunjukkan bahwa pendekatan kemiripan semantik memberikan sinyal pencocokan yang nyata.
+
+Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan pada Tabel~\ref{table:tab4.2.2}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{3.5cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|}
+    \hline
+    \textbf{Model} & \textbf{Avg Similarity @1} & \textbf{Avg True Similarity} & \textbf{Selisih (sebaran)} \\
+    \hline
+    \textbf{BAAI/bge-m3} (Run 5) & 0,619 & 0,596 & 0,023 \\
+    \hline
+    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 6) & 0,692 & 0,624 & 0,068 \\
+    \hline
+    \textbf{intfloat/multilingual-e5-large-instruct} (Run 9) & 0,871 & 0,857 & 0,014 \\
+    \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+    \caption{Rata-rata Skor Kemiripan Antar Model}
+    \label{table:tab4.2.2}
+\end{table}
+
 \subsection{Hasil Analisis Model dan Pemilihan Model Akhir}
+
+Berdasarkan hasil pada Tabel~\ref{table:tab4.2.1}, \textbf{BAAI/bge-m3} unggul pada seluruh metrik \textit{retrieval}: MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, dan rata-rata peringkat terbaik (3,32). Keunggulan ini konsisten di setiap metrik, bukan hanya pada satu indikator, sehingga menunjukkan kualitas pemeringkatan yang lebih baik secara menyeluruh.
+
+Temuan yang menarik muncul pada \textbf{intfloat/multilingual-e5-large-instruct}. Model ini memiliki \textit{Assignment Match Rate} tertinggi (0,381), namun justru memperoleh metrik \textit{retrieval} terburuk di antara seluruh kandidat. Anomali ini dapat dijelaskan melalui Tabel~\ref{table:tab4.2.2}: \textbf{intfloat/multilingual-e5-large-instruct} menghasilkan skor kemiripan yang sangat tinggi namun nyaris seragam (rata-rata skor peringkat-1 sebesar 0,871 dan skor dosen sebenarnya 0,857, dengan sebaran hanya 0,014). Artinya, model ini menilai hampir seluruh pasangan mahasiswa--dosen sebagai ``sangat mirip'' sehingga kehilangan kemampuan untuk membedakan satu dosen dari dosen lainnya. Tingginya \textit{match rate} pada model ini bukan berasal dari kualitas pemeringkatan, melainkan merupakan efek dari proses alokasi berbasis kapasitas yang kebetulan sejalan dengan beberapa penugasan historis pada skor yang nyaris datar.
+
+Temuan ini menegaskan prinsip penting dalam pemilihan model: \textbf{sebuah sistem rekomendasi dinilai dari kualitas pemeringkatannya} --- yaitu kemampuan menempatkan dosen yang tepat pada posisi teratas --- sehingga metrik \textit{retrieval} menjadi acuan utama. \textit{Assignment Match Rate} merupakan metrik hasil akhir yang bersifat melengkapi, namun apabila digunakan sendirian dapat menyesatkan, sebagaimana ditunjukkan oleh kasus \textbf{intfloat/multilingual-e5-large-instruct}.
+
+Dengan pertimbangan tersebut, \textbf{BAAI/bge-m3} dipilih sebagai model akhir yang digunakan dalam sistem. Pemilihan ini didasarkan pada keunggulan menyeluruh pada metrik \textit{retrieval}, yang merupakan indikator paling representatif terhadap tujuan utama sistem, yaitu memberikan rekomendasi dosen pembimbing yang relevan. Selain itu, hasil model ini telah diverifikasi bersifat deterministik dan dapat direproduksi secara identik pada eksekusi berulang, sehingga angka yang dilaporkan dapat dipertanggungjawabkan.
 
 \subsection{Aplikasi Web}
 
@@ -74,6 +137,8 @@ Sistem rekomendasi mahasiswa ini diimplementasikan dalam bentuk aplikasi berbasi
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/login.png}
     \end{center}
+    \caption{Tampilan Halaman Login}
+    \label{fig:login}
 \end{figure}
         
 Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang menyediakan formulir terstruktur untuk memasukkan data kredensial. Antarmuka (interface) ini mencakup kolom (field) username dan kata sandi yang telah didaftarkan oleh pengguna sebelumnya. Juga bila pengguna belum memiliki akun bisa mendaftarkan akun dengan memilih tombol registrasi. 
@@ -84,6 +149,8 @@ Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang meny
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/register.png}
     \end{center}
+    \caption{Tampilan Halaman Register}
+    \label{fig:register}
 \end{figure}
         
 Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields seperti nama lengkap, username, password dan konfirmasi password. Lalu proses dilanjutkan dengan memilih tombol registrasi setelah mengisi data dan akun akan otomatis dibuat. 
@@ -94,6 +161,8 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields sepe
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/dashboard.png}
     \end{center}
+    \caption{Tampilan Halaman Dashboard}
+    \label{fig:dashboard}
 \end{figure}
         
 Halaman dashboard menyajikan ringkasan data statistik utama, meliputi total mahasiswa dan dosen yang telah terdaftar di dalam sistem. Selain itu, pengguna dapat memantau akumulasi proses eksekusi (total runs), tingkat akurasi pada eksekusi terakhir, serta rincian hasil evaluasi yang telah diproses. Fitur pada halaman ini juga memungkinkan pengguna untuk mengakses rincian run, dan inspect row, hingga melakukan ekspor data ke format Excel berdasarkan hasil eksekusi terbaru.  
@@ -103,9 +172,11 @@ Halaman dashboard menyajikan ringkasan data statistik utama, meliputi total maha
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/datacenter.png}
     \end{center}
+    \caption{Tampilan Halaman Data Center}
+    \label{fig:datacenter}
 \end{figure}
         
-Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pengendali eksekusi awal (pipeline trigger) sistem. Peran utamanya adalah melakukan proses ETL (Extract, Transform, Load) guna memastikan kesiapan data mahasiswa dan dosen pembimbing sebelum diproses oleh model algoritma rekomendasi hibrida. 
+Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pengendali eksekusi awal (pipeline trigger) sistem. Peran utamanya adalah melakukan proses ETL (Extract, Transform, Load) guna memastikan kesiapan data mahasiswa dan dosen pembimbing sebelum diproses oleh algoritma rekomendasi. 
 
 \subsubsection{Run History}
 
@@ -113,6 +184,8 @@ Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pen
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/runhistory.png}
     \end{center}
+    \caption{Tampilan Halaman Run History}
+    \label{fig:runhistory}
 \end{figure}
         
 Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah dilakukan oleh sistem. Informasi yang ditampilkan mencakup waktu eksekusi, jumlah mahasiswa dan dosen yang terlibat, model yang digunakan, serta hasil evaluasinya. Selain itu, pengguna dapat melakukan aksi lanjutan untuk meninjau rincian eksekusi detail run maupun mengekspor data ke dalam format Excel.   
@@ -123,6 +196,8 @@ Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah di
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/rundetails.png}
     \end{center}
+    \caption{Tampilan Halaman Run Details}
+    \label{fig:rundetails}
 \end{figure}
         
 Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang telah dilakukan. Informasi yang disajikan mencakup data spesifik untuk setiap mahasiswa, meliputi NIM, Nama, Track, Partner, Topik, Current Supervisor, Recommended Supervisor, Final Score, dan Rule Match. Selain itu, pengguna dapat menggunakan fitur filter untuk mempermudah pencarian data berdasarkan parameter tertentu, seperti nama, topik, maupun dosen  supervisor tertentu. . 
@@ -133,6 +208,8 @@ Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang tela
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/supervisorstudio.png}
     \end{center}
+    \caption{Tampilan Halaman Supervisor Studio}
+    \label{fig:supervisorstudio}
 \end{figure}
         
 Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
@@ -143,9 +220,11 @@ Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan se
     \begin{center}
         \includegraphics[width=0.7\linewidth]{pic/rulestudio.png}
     \end{center}
+    \caption{Tampilan Halaman Rules Studio}
+    \label{fig:rulestudio}
 \end{figure}
-        
-Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
+
+Halaman Rules Studio berfungsi mengonfigurasi parameter klasifikasi label semantik yang digunakan dalam proses rekomendasi. Fitur utama meliputi pengaturan \textit{cosine similarity threshold} per label semantik, pengelolaan deskripsi label yang menentukan pemetaan profil mahasiswa ke kategori penugasan tertentu (seperti \texttt{apple\_mobile} atau \texttt{binus\_bandung}), serta pratinjau skor label untuk profil mahasiswa tertentu. Perubahan konfigurasi pada halaman ini akan berpengaruh pada proses deteksi label pada \textit{pipeline} run berikutnya.
 
 \section{Evaluasi}
 
@@ -272,9 +351,9 @@ Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna 
     \hline
     1 & Memilih Model   & - & Model yang dipilih akan terlihat dengan ditandai berwarna oren  & Pass  \\ 
     \hline
-   2 & Memilih Rule Boost  & -  & Rule yang dipilih akan menunjukan perubahan warna pada toggle yang tersedia menjadi warna oren   & Pass  \\ 
+   2 & Mengaktifkan Group Bonus  & -  & Toggle group bonus yang dipilih akan berubah warna menjadi oren   & Pass  \\
     \hline
-    3 & Memilih lebih dari 1 Rule Boost     & -  & Rule yang dipilih akan menunjukan perubahan warna pada toggle yang tersedia menjadi warna oren pada beberapa rules boost yang dipilih  & Pass  \\ 
+    3 & Menonaktifkan Group Bonus     & -  & Toggle group bonus kembali ke kondisi nonaktif  & Pass  \\ 
     \hline
      4 & Cancel Run     & -  & Sistem akan menutup pop-up new run  \\ 
     \hline
