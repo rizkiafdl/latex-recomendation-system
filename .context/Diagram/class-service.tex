@@ -1,0 +1,139 @@
+% Service Architecture — TikZ Class Diagram
+% Groups: Orchestrator · Pipeline · Data Access · IO
+% To use in thesis: copy the figure block into bab3.tex
+
+\begin{figure}[H]
+\centering
+\scalebox{0.72}{%
+\begin{tikzpicture}[
+  font=\tiny,
+  class/.style={rectangle, inner sep=0pt},
+  darr/.style={->, >=stealth, dashed},
+  lab/.style={font=\tiny\bfseries, fill=white, inner sep=1pt}
+]
+
+%% ── RecommenderService (central hub, top-center) ──────────────────
+\node (svc) [class] at (6.5, 0) {%
+  \begin{tabular}{|p{4.8cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«service»}} \\
+  \multicolumn{1}{|c|}{\textbf{RecommenderService}} \\ \hline
+  +init\_db() \\
+  +register\_user(session, username, password, full\_name) \\
+  +authenticate\_user(session, username, password) \\
+  +import\_students\_from\_path(session, path, sheet) \\
+  +import\_students\_from\_bytes(session, content, fname, sheet) \\
+  +add\_or\_update\_supervisor(session, code, name, keywords) \\
+  +update\_supervisor\_keywords(session, code, keywords) \\
+  +list\_supervisor\_profiles\_for\_web(session) \\
+  +generate\_and\_store\_recommendations(session, overrides, src) \\
+  +list\_recommendations(session, run\_id) \\
+  +summary\_by\_supervisor(session, run\_id) \\
+  +evaluation\_by\_run(session, run\_id) \\
+  +export\_recommendations\_excel(session, run\_id) \\
+  +export\_recommendations\_excel\_detailed(session, run\_id) \\
+  +export\_supervisor\_configuration\_excel(session) \\ \hline
+  \end{tabular}%
+};
+
+%% ── RecommendationEngine (left column, level 2) ───────────────────
+\node (engine) [class] at (1.5, -8) {%
+  \begin{tabular}{|p{3.2cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{RecommendationEngine}} \\ \hline
+  +generate\_recommendations(...) \\
+  -\_build\_capacity\_plan(...) \\
+  -\_solve\_assignment(...) \\
+  -\_apply\_company\_group\_bonus(...) \\ \hline
+  \end{tabular}%
+};
+
+%% ── ExcelIO (left-center, level 2) ───────────────────────────────
+\node (excel) [class] at (5, -8) {%
+  \begin{tabular}{|p{3cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{ExcelIO}} \\ \hline
+  +read\_students\_from\_excel\_path(path, sheet) \\
+  +read\_students\_from\_excel\_bytes(content, sheet) \\ \hline
+  \end{tabular}%
+};
+
+%% ── QueryRepository (right-center, level 2) ──────────────────────
+\node (repo) [class] at (8.5, -8) {%
+  \begin{tabular}{|p{3.2cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«repository»}} \\
+  \multicolumn{1}{|c|}{\textbf{QueryRepository}} \\ \hline
+  +get\_user\_by\_id(session, user\_id) \\
+  +get\_user\_by\_username(session, name) \\
+  +get\_active\_supervisors\_ordered(session) \\
+  +get\_supervisor\_by\_code(session, code) \\
+  +get\_active\_supervisor\_map(session) \\
+  +get\_all\_students(session) \\
+  +get\_students\_by\_supervisor\_codes(...) \\
+  +get\_latest\_run(session) \\
+  +list\_runs(session, limit) \\
+  +get\_run\_by\_id(session, run\_id) \\
+  +get\_recommendations\_with\_entities(...) \\
+  +get\_supervisor\_recommendation\_counts(...) \\ \hline
+  \end{tabular}%
+};
+
+%% ── Evaluator (right column, level 2) ────────────────────────────
+\node (eval) [class] at (12, -8) {%
+  \begin{tabular}{|p{3cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{Evaluator}} \\ \hline
+  +evaluate\_retrieval\_metrics(...) \\
+  +evaluate\_assignment\_match\_rate(items) \\
+  +build\_evaluation\_payload(...) \\ \hline
+  \end{tabular}%
+};
+
+%% ── EmbeddingProvider (level 3, under engine) ────────────────────
+\node (embprov) [class] at (0.2, -14.5) {%
+  \begin{tabular}{|p{2.8cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«singleton»}} \\
+  \multicolumn{1}{|c|}{\textbf{EmbeddingProvider}} \\ \hline
+  -\_model\_name \\
+  -\_lock \\
+  -\_loaded \\ \hline
+  +encode\_batch(texts, task) \\
+  +similarity\_matrix(src, tgt, task) \\ \hline
+  \end{tabular}%
+};
+
+%% ── DocumentBuilder (level 3, under engine) ──────────────────────
+\node (docbld) [class] at (3.8, -14.5) {%
+  \begin{tabular}{|p{2.8cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{DocumentBuilder}} \\ \hline
+  +normalize\_text(value) \\
+  +detect\_labels(text) \\
+  +student\_document(student) \\
+  +profile\_document(profile) \\
+  +student\_labels(student) \\ \hline
+  \end{tabular}%
+};
+
+%% ── Arrows: RecommenderService → level-2 modules ─────────────────
+%% Elbow routing: south → down-1cm → horizontal → target.north
+\draw[darr] (svc.south) -- ++(0,-1) -| node[lab, near end, right]{uses} (engine.north);
+\draw[darr] (svc.south) -- ++(0,-1) -| node[lab, near end, right]{uses} (excel.north);
+\draw[darr] (svc.south) -- ++(0,-1) -| node[lab, near end, right]{uses} (repo.north);
+\draw[darr] (svc.south) -- ++(0,-1) -| node[lab, near end, right]{uses} (eval.north);
+
+%% ── Arrows: RecommendationEngine → level-3 modules ──────────────
+\draw[darr] (engine.south) -- ++(0,-0.8) -| node[lab, near end, right]{uses} (embprov.north);
+\draw[darr] (engine.south) -- ++(0,-0.8) -| node[lab, near end, right]{uses} (docbld.north);
+
+\end{tikzpicture}%
+}
+\caption{Service Architecture: RecommenderService sebagai orchestrator}
+\label{fig:fig3.3b}
+\end{figure}

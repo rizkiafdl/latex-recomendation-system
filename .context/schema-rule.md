@@ -311,6 +311,72 @@ grep -n '[^\\]_' bab4.tex | grep -v '\\begin\|\\end\|label\|caption\|ref{\|cite{
 
 ---
 
+## 19. TikZ flowchart diagrams
+
+Use TikZ (not image files) for flowcharts and diagrams where possible. TikZ is already loaded via `ta.sty`.
+
+### Required libraries
+
+Add to `ta.sty` after `\usepackage{tikz}` (already done):
+```latex
+\usetikzlibrary{shapes.geometric,shapes.misc,positioning}
+```
+
+- `shapes.geometric` — provides `diamond` (decision) and `trapezium` (I/O) shapes
+- `shapes.misc` — provides `rounded rectangle` (terminal/start/end shapes)
+- `positioning` — enables `below=of <node>` relative placement syntax
+
+### Standard flowchart node styles
+
+```latex
+terminal/.style={draw, rounded rectangle, text width=2cm, align=center,
+  minimum height=0.55cm, font=\footnotesize}   % Mulai / Selesai
+
+process/.style={draw, rectangle, text width=5.5cm, align=center,
+  minimum height=0.7cm, inner sep=4pt, font=\footnotesize}   % algorithm steps
+
+io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
+  text width=4.8cm, align=center,
+  minimum height=0.7cm, inner sep=4pt, font=\footnotesize}   % input/output steps
+
+decision/.style={draw, diamond, aspect=2.5, text width=1.6cm, align=center,
+  inner sep=2pt, font=\footnotesize}   % decision diamond
+```
+
+For the parallelogram (I/O) shape: `trapezium left angle=75, trapezium right angle=105` makes both sides slant in the same direction (75 + 105 = 180 → parallel sides → true parallelogram).
+
+### Keeping diagrams within page bounds
+
+Tall flowcharts (10+ nodes) overflow the page. Always wrap in `\scalebox`:
+
+```latex
+\begin{figure}[H]
+\centering
+\scalebox{0.75}{%
+\begin{tikzpicture}[node distance=0.3cm, ...]
+  ...
+\end{tikzpicture}%
+}
+\caption{...}
+\end{figure}
+```
+
+Use `\scalebox{0.75}` as the default starting point. Drop to `0.70` if still overflowing.
+
+### Feedback/loop arrows
+
+For a "Tidak" branch that loops back to an earlier node:
+
+```latex
+\draw [arrow] (decide.east)
+  -- node[above, font=\footnotesize] {Tidak} ++(2.8,0)
+  |- (input2.east);
+```
+
+The `-- ++(2.8,0)` goes right, then `|-` means vertical-then-horizontal, routing back up the right side to the target node's east anchor.
+
+---
+
 ## 13. Gitignore rules
 
 `build/*` is gitignored **except** `build/Skripsi.pdf` (via `!build/Skripsi.pdf`).
@@ -318,3 +384,216 @@ grep -n '[^\\]_' bab4.tex | grep -v '\\begin\|\\end\|label\|caption\|ref{\|cite{
 - Never commit `.aux`, `.log`, `.toc`, `.lof`, `.lot`, `.bbl`, `.blg`, `.synctex.gz` files
 - The CI commits `build/Skripsi.pdf` automatically — do not manually add it to commits
 - Do not change the gitignore pattern without also updating the CI workflow `paths-ignore`
+
+---
+
+## 20. Use Case Narrative table pattern
+
+Use case narrative tables use a **3-column longtable** with full `\hline` borders (Word style). Most rows merge cols 2+3 via `\multicolumn`; Flow Of Events and Exception Condition rows use all 3 columns directly — no nested tabulars, no minipage wrappers.
+
+### Column spec
+
+```latex
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+```
+
+- Col 1 (3.5cm): field names (Elemen)
+- Col 2 (4.5cm): Actor / Condition sub-column
+- Col 3 (5.0cm): System / Handling sub-column
+
+### Multicolumn width fix — CRITICAL
+
+`\multicolumn{2}{p{9.5cm}|}` is slightly narrower than cols 2+3 combined because it misses the internal `|` (0.4pt) and its surrounding `\tabcolsep` pads (2×6pt). Always define the corrected length before the table:
+
+```latex
+\newlength{\ucdeskcol}
+\setlength{\ucdeskcol}{\dimexpr 9.5cm + 2\tabcolsep + \arrayrulewidth\relax}
+```
+
+Then use `\multicolumn{2}{p{\ucdeskcol}|}` for all merged-column rows.
+
+### Header: first page only
+
+```latex
+\caption{Tabel X.Y Use Case <Name>} \label{table:tabX.Y} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
+\endfirsthead
+\endhead          % empty — no repeated header on continuation pages
+\hline
+\endfoot
+```
+
+### Full skeleton
+
+```latex
+\newlength{\ucdeskcol}
+\setlength{\ucdeskcol}{\dimexpr 9.5cm + 2\tabcolsep + \arrayrulewidth\relax}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel X.Y Use Case <Name>} \label{table:tabX.Y} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+Use Case Name   & \multicolumn{2}{p{\ucdeskcol}|}{<name>} \\
+\hline
+Scenario        & \multicolumn{2}{p{\ucdeskcol}|}{<scenario>} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{<trigger>} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{<description>} \\
+\hline
+Actor           & \multicolumn{2}{p{\ucdeskcol}|}{<actor>} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{<related>} \\
+\hline
+Stakeholder     & \multicolumn{2}{p{\ucdeskcol}|}{<stakeholder>} \\
+\hline
+Pre-condition   & \multicolumn{2}{p{\ucdeskcol}|}{<pre>} \\
+\hline
+Post-condition  & \multicolumn{2}{p{\ucdeskcol}|}{<post>} \\
+\hline
+Flow Of Events  & \textbf{Actor} & \textbf{System} \\
+\hline
+ & <actor action 1> & <system response 1> \\
+\hline
+ & <actor action 2> & <system response 2> \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & <condition 1> & <handling 1> \\
+\hline
+\end{longtable}
+```
+
+### Rules
+- `\newlength{\ucdeskcol}` must appear **before** the longtable, not inside it. `\newlength` errors if the name is already defined — declare it exactly once per file (before the first use case table). For safety when copy-pasting across files use a guard: `\ifdefined\ucdeskcol\else\newlength{\ucdeskcol}\fi`.
+- Never use nested `tabular` or `minipage` inside the cells — use the 3-column flat structure.
+- Flow Of Events and Exception Condition sub-rows leave col 1 empty (`& ...`).
+- Labels follow the convention `table:tabX.Y` (e.g. `table:tab3.6`).
+
+---
+
+## 21. TikZ Use Case diagrams
+
+Use TikZ for UML Use Case diagrams. TikZ and the required libraries are already loaded in `ta.sty`.
+
+### Required node styles
+
+```latex
+\begin{tikzpicture}[
+  font=\footnotesize,
+  actor/.style={text centered, font=\footnotesize},
+  usecase/.style={draw, ellipse, text width=2.5cm, align=center,
+    minimum height=1cm, font=\footnotesize},
+  assoc/.style={-},
+  incl/.style={->, >=stealth, dashed},
+  arr/.style={->, >=stealth}
+]
+```
+
+- `actor` — plain text label (no shape); place outside the system boundary box
+- `usecase` — ellipse node; place inside the system boundary box
+- `assoc` — solid line, actor ↔ use case association
+- `incl` — dashed arrow for `«include»` and `«extend»` relationships
+
+### Actor (stick figure)
+
+Draw the stick figure manually above the actor label node:
+
+```latex
+% Stick figure at absolute (x, y)
+\draw (x, y+0.55) circle (0.18cm);                        % head
+\draw (x, y+0.37) -- (x, y-0.1);                          % body
+\draw (x-0.22, y+0.18) -- (x, y+0.28) -- (x+0.22, y+0.18); % arms
+\draw (x, y-0.1) -- (x-0.18, y-0.45);                     % left leg
+\draw (x, y-0.1) -- (x+0.18, y-0.45);                     % right leg
+\node [actor] at (x, y-0.65) {Actor Name};
+```
+
+### System boundary
+
+Draw the boundary as an explicit rectangle, with a label anchored to its north-west corner:
+
+```latex
+\draw[thick] (0.5, 0.3) rectangle (10.5, -8.5);
+\node[anchor=north west, font=\small\bfseries] at (0.5, 0.3) {System Name};
+```
+
+All `usecase` nodes must be placed **inside** this rectangle's coordinate range.
+
+### Include / Extend relationships
+
+```latex
+% «include»
+\draw[incl] (uc1) -- node[above, font=\tiny]{«include»} (uc2);
+
+% «extend»
+\draw[incl] (uc3) -- node[above, font=\tiny]{«extend»} (uc4);
+```
+
+Arrow points **from** the base use case **to** the included/extended one (UML convention).
+
+### Full skeleton
+
+```latex
+\begin{figure}[H]
+\centering
+\scalebox{0.80}{%
+\begin{tikzpicture}[
+  font=\footnotesize,
+  actor/.style={text centered, font=\footnotesize},
+  usecase/.style={draw, ellipse, text width=2.5cm, align=center,
+    minimum height=1cm, font=\footnotesize},
+  assoc/.style={-},
+  incl/.style={->, >=stealth, dashed}
+]
+
+%% System boundary
+\draw[thick] (0.5, 0.3) rectangle (10.5, -8.5);
+\node[anchor=north west, font=\small\bfseries] at (0.5, 0.3) {Sistem Rekomendasi};
+
+%% Actors (left side, outside boundary)
+\draw (-1.5, 0.35) circle (0.18cm);
+\draw (-1.5, 0.17) -- (-1.5, -0.28);
+\draw (-1.72, -0.02) -- (-1.5, 0.08) -- (-1.28, -0.02);
+\draw (-1.5, -0.28) -- (-1.68, -0.63);
+\draw (-1.5, -0.28) -- (-1.32, -0.63);
+\node [actor] at (-1.5, -0.85) {EPC};
+
+%% Use cases (inside boundary)
+\node (uc1) [usecase] at (5.5, -1.5) {Login};
+\node (uc2) [usecase] at (5.5, -4.0) {Generate Rekomendasi};
+\node (uc3) [usecase] at (5.5, -6.5) {Export Excel};
+
+%% Associations
+\draw[assoc] (-1.5, -0.65) -- (uc1);
+\draw[assoc] (-1.5, -0.65) -- (uc2);
+\draw[assoc] (-1.5, -0.65) -- (uc3);
+
+%% Include / Extend
+\draw[incl] (uc2) -- node[right, font=\tiny]{«include»} (uc1);
+
+\end{tikzpicture}%
+}
+\caption{Use Case Diagram}
+\label{fig:figX.Y}
+\end{figure}
+```
+
+### Sizing rules
+
+| Diagram size | Recommended scale |
+|---|---|
+| ≤ 8 use cases | `\scalebox{0.80}` |
+| 9–15 use cases | `\scalebox{0.70}` |
+| 16+ use cases | Split into sub-diagrams per subsystem |
+
+- Keep all actor nodes outside (left/right of) the system boundary rectangle
+- Keep all use case ellipses inside the boundary
+- Use elbow routing (`-- ++(dx,0) |-`) for association lines that would otherwise cross
+- Do **not** use `\begin{center}` inside `\begin{figure}` — use `\centering` (Rule 2)
