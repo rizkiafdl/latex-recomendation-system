@@ -1,0 +1,99 @@
+---
+title: "Service Architecture — Orchestration & Utility Modules"
+---
+classDiagram
+    direction TB
+
+    namespace Orchestrator {
+        class RecommenderService {
+            <<service>>
+            +init_db() None
+            +register_user(session, username, password, full_name) AppUser
+            +authenticate_user(session, username, password) AppUser
+            +import_students_from_path(session, path, sheet) dict
+            +import_students_from_bytes(session, content, filename, sheet) dict
+            +add_or_update_supervisor(session, code, name, keywords) Supervisor
+            +update_supervisor_keywords(session, code, keywords) None
+            +list_supervisor_profiles_for_web(session) list
+            +generate_and_store_recommendations(session, overrides, source) RecommendationRun
+            +list_recommendations(session, run_id) tuple
+            +summary_by_supervisor(session, run_id) tuple
+            +evaluation_by_run(session, run_id) tuple
+            +export_recommendations_excel(session, run_id) bytes
+            +export_recommendations_excel_detailed(session, run_id) bytes
+            +export_supervisor_configuration_excel(session) bytes
+        }
+    }
+
+    namespace Pipeline_Modules {
+        class RecommendationEngine {
+            <<utility>>
+            +generate_recommendations(students, profiles, overrides, extra_docs) RecommendationOutput
+            -_build_capacity_plan(codes, count, priority, min, max) CapacityPlan
+            -_solve_assignment(score_matrix, min_caps, max_caps) tuple
+            -_apply_company_group_bonus(score_matrix, students) tuple
+        }
+
+        class EmbeddingProvider {
+            <<singleton per model>>
+            -str _model_name
+            +encode_batch(texts, task) ndarray
+            +similarity_matrix(source, target, task) ndarray
+        }
+
+        class DocumentBuilder {
+            <<utility>>
+            +normalize_text(value) str
+            +detect_labels(text) set
+            +student_document(student) str
+            +profile_document(profile) str
+            +student_labels(student) set
+        }
+
+        class Evaluator {
+            <<utility>>
+            +evaluate_retrieval_metrics(score_matrix, students, codes) dict
+            +evaluate_assignment_match_rate(items) dict
+            +build_evaluation_payload(content_scores, hybrid_scores, students, codes, items) dict
+        }
+    }
+
+    namespace Data_Access {
+        class QueryRepository {
+            <<repository>>
+            +get_user_by_id(session, user_id) AppUser
+            +get_user_by_username(session, username) AppUser
+            +get_active_supervisors_ordered(session) list
+            +get_supervisor_by_code(session, code) Supervisor
+            +get_active_supervisor_map(session) dict
+            +get_all_students(session) list
+            +get_students_by_supervisor_codes(session, codes) list
+            +get_latest_run(session) RecommendationRun
+            +list_runs(session, limit) list
+            +get_run_by_id(session, run_id) RecommendationRun
+            +get_recommendations_with_entities(session, run_id) list
+            +get_supervisor_recommendation_counts(session, run_id) list
+        }
+    }
+
+    namespace IO_Modules {
+        class ExcelIO {
+            <<utility>>
+            +read_students_from_excel_path(path, sheet) list
+            +read_students_from_excel_bytes(content, sheet) list
+        }
+    }
+
+    %% Orchestrator → Pipeline
+    RecommenderService ..> RecommendationEngine : uses
+    RecommenderService ..> Evaluator : uses
+
+    %% Orchestrator → Data Access
+    RecommenderService ..> QueryRepository : uses
+
+    %% Orchestrator → IO
+    RecommenderService ..> ExcelIO : uses
+
+    %% Pipeline internals
+    RecommendationEngine ..> EmbeddingProvider : uses
+    RecommendationEngine ..> DocumentBuilder : uses
