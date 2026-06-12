@@ -16,3 +16,4 @@ raw_output.tex
 .context/raw
 .vscode
 .DS_Store
+.claude
