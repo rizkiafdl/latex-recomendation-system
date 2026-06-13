@@ -362,17 +362,6 @@ Halaman Run Details menampilkan rincian hasil dari proses eksekusi run yang tela
         
 Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur. 
 
-\subsubsection{Rules Studio}
-
-\begin{figure}
-    \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/rulestudio.png}
-    \end{center}
-    \caption{Tampilan Halaman Rules Studio}
-    \label{fig:rulestudio}
-\end{figure}
-
-Halaman Rules Studio berfungsi mengonfigurasi parameter klasifikasi label semantik yang digunakan dalam proses rekomendasi. Fitur utama meliputi pengaturan \textit{cosine similarity threshold} per label semantik, pengelolaan deskripsi label yang menentukan pemetaan profil mahasiswa ke kategori penugasan tertentu (seperti \texttt{apple\_mobile} atau \texttt{binus\_bandung}), serta pratinjau skor label untuk profil mahasiswa tertentu. Perubahan konfigurasi pada halaman ini akan berpengaruh pada proses deteksi label pada \textit{pipeline} run berikutnya.
 
 \section{Evaluasi}
 
@@ -402,7 +391,7 @@ Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika
 
 \subsection{Register Page}
 
-Pada halaman ini pengguna dapat membuat akun dengan mengisi data email dan password sebagai kredensial.
+Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama lengkap, password, dan konfirmasi password sebagai data pendaftaran.
 
 \begin{table}
  \centering
@@ -432,27 +421,25 @@ Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman
     \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    1 & Klik Menu "Dashboard"   & - & Sistem mengarahkan pengguna ke halaman Data Center  & Pass  \\ 
+    1 & Klik Menu “Dashboard”   & - & Sistem mengarahkan pengguna ke halaman Dashboard  & Pass  \\
     \hline
-   2 & Klik menu “Run History”  & -  & Sistem mengarahkan pengguna ke halaman Run History  & Pass  \\ 
+    2 & Klik menu “Run History”  & -  & Sistem mengarahkan pengguna ke halaman Run History  & Pass  \\
     \hline
-    3 &Klik menu “Supervisor Studio”     & -  & Sistem mengarahkan pengguna ke halaman Supervisor Studio   & Pass  \\ 
+    3 & Klik menu “Supervisor Studio”     & -  & Sistem mengarahkan pengguna ke halaman Supervisor Studio   & Pass  \\
     \hline
-     4 &Klik menu “Rules Studio”      & -  & Sistem mengarahkan pengguna ke halaman Rules Studio    & Pass  \\ 
+    4 & Klik tombol “Generate New Run”      & -  & Sistem akan mengarahkan pengguna ke tampilan untuk melakukan run baru    & Pass  \\
     \hline
-     5 & Klik tombol “Generate New Run”      & -  & Sistem akan mengarahkan pengguna ke tampilan untuk melakukan run baru    & Pass  \\ 
+    5 & Klik tombol “Open Detail”      & -  & Sistem mengarahkan pengguna ke halaman detail dari run terakhir   & Pass  \\
     \hline
-     6 & Klik tombol “Open Detail”      & -  & Sistem mengarahkan pengguna ke halaman detail dari run terakhir   & Pass  \\ 
+    6 & Klik tombol “Inspect Rows”       & -  & Sistem akan mengarahkan pengguna melihat data rekomendasi pada Run Detail   & Pass  \\
     \hline
-     7 & Klik tombol “Inspect Rows”       & -  & Sistem akan mengarahkan pengguna melihat data pada Run History   & Pass  \\ 
+    7 & Klik tombol “Export Excel”      & -  & Sistem akan melakukan export pada data run terakhir    & Pass  \\
     \hline
-     8 & Klik tombol “Export Excel”      & -  & Sistem akan melakukan export pada data run terakhir.    & Pass  \\ 
+    8 & Sistem menampilkan data pada Summary Cards       & -  & Data yang ditampilkan sesuai dengan database   & Pass  \\
     \hline
-    9 & Sistem menampilkan data pada Summary Cards       & -  & Data yang ditampilkan sesuai dengan database   & Pass  \\ 
+    9 & Sistem menampikan data pada Quality Trend      & -  & Sistem menampikan tooltip detail nilai Match Rate, Hybrid MRR, dan Content MRR    & Pass  \\
     \hline
-    10 & Sistem menampikan data pada Quality Trend      & -  & Sistem menampikan tooltop detail nilai Match Rate, Hybrid MRR, dan Content MRR    & Pass  \\ 
-    \hline
-    11 & Sistem menampikan Informasi Snapshot      & -  & Sistem menampilkan data dari run paling baru     & Pass  \\ 
+    10 & Sistem menampikan Informasi Snapshot      & -  & Sistem menampilkan data dari run paling baru     & Pass  \\
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -497,15 +484,19 @@ Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna 
     \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    1 & Memilih Model   & - & Model yang dipilih akan terlihat dengan ditandai berwarna oren  & Pass  \\ 
+    1 & Memilih Model   & - & Model yang dipilih akan terlihat dengan ditandai berwarna oren  & Pass  \\
     \hline
-   2 & Mengaktifkan Group Bonus  & -  & Toggle group bonus yang dipilih akan berubah warna menjadi oren   & Pass  \\
+    2 & Mengaktifkan Extra Docs  & -  & Toggle extra docs aktif; dokumen tambahan supervisor disertakan dalam representasi vektor pada pipeline   & Pass  \\
     \hline
-    3 & Menonaktifkan Group Bonus     & -  & Toggle group bonus kembali ke kondisi nonaktif  & Pass  \\ 
+    3 & Menonaktifkan Extra Docs  & -  & Toggle extra docs kembali ke kondisi nonaktif  & Pass  \\
     \hline
-     4 & Cancel Run     & -  & Sistem akan menutup pop-up new run  & Pass  \\
+    4 & Mengaktifkan Group Bonus  & -  & Toggle group bonus yang dipilih akan berubah warna menjadi oren   & Pass  \\
     \hline
-     5 & Eksekusi Run Baru     & -  & Sistem akan menjalankan rekomendasi dengan model dan rules yang dipilih    & Pass  \\ 
+    5 & Menonaktifkan Group Bonus     & -  & Toggle group bonus kembali ke kondisi nonaktif  & Pass  \\
+    \hline
+    6 & Cancel Run     & -  & Sistem akan menutup pop-up new run  & Pass  \\
+    \hline
+    7 & Eksekusi Run Baru     & -  & Sistem akan menjalankan rekomendasi dengan model dan konfigurasi yang dipilih    & Pass  \\
     \hline
     
 \end{tabular}
@@ -561,9 +552,11 @@ Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan
     \hline
      5 & Menekan tombol (X) pada salah satu komponen chip       & -  & Chip keyword akan dihapuskan       & Pass  \\ 
     \hline
-     6 & Menekan tombol “Save Keywords” setelah melakukan perubahan chip       & -  & Sistem memperbarui daftar keyword semantik pada dosen di database        & Pass  \\ 
+    6 & Menekan tombol “Save Keywords” setelah melakukan perubahan chip       & -  & Sistem memperbarui daftar keyword semantik pada dosen di database        & Pass  \\
     \hline
-    
+    7 & Mengisi form tambah supervisor (kode, nama, keyword awal) dan menekan tombol “Add Supervisor”  & Data supervisor baru yang valid  & Supervisor baru berhasil disimpan dan muncul pada tabel daftar supervisor  & Pass  \\
+    \hline
+
 \end{tabular}
 \renewcommand{\arraystretch}{1}
 	\caption{Skenario Supervisor Studio}
@@ -571,9 +564,9 @@ Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan
 \end{table}
 
 
-\subsection{Rules Studio}
+\subsection{Run Detail}
 
-Pada halaman ini testing bertujuan untuk memvalidasi fleksibilitas pengaturan rules. Halaman ini mengontrol cosine similarity threshold dan deskripsi label semantik yang menentukan bagaimana profil minat mahasiswa dipetakan ke dalam kategori penugasan tertentu (seperti apple\_mobile atau binus\_bandung).  
+Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendasi per run, mencakup metrik evaluasi, distribusi kapasitas per dosen, \textit{mismatch spotlight}, dan tabel rekomendasi dengan fitur filter server-side.
 
 \begin{table}
  \centering
@@ -581,21 +574,23 @@ Pada halaman ini testing bertujuan untuk memvalidasi fleksibilitas pengaturan ru
     \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
     \hline
-    1 & Mengubah nilai \textit{threshold cosine similarity} pada salah satu label semantik   & Nilai \textit{threshold} yang valid (0--1) & Nilai \textit{threshold} tersimpan dan akan diterapkan pada run berikutnya    & Pass  \\
+    1 & Membuka halaman Run Detail dengan ID yang valid   & ID run yang ada di database & Sistem menampilkan metrik evaluasi, kapasitas per supervisor, dan \textit{mismatch spotlight}  & Pass  \\
     \hline
-   2 & Memasukkan nilai \textit{threshold} yang tidak valid   & Nilai negatif atau lebih dari 1  & Sistem menampilkan pesan \textit{error} dan menolak perubahan     & Pass  \\
+    2 & Membuka halaman Run Detail dengan ID yang tidak valid   & ID run yang tidak ada  & Sistem mengembalikan halaman 404  & Pass  \\
     \hline
-    3 & Memperbarui deskripsi label semantik       & Deskripsi label baru yang valid  & Deskripsi label berhasil diperbarui di database      & Pass  \\
+    3 & Mengisi filter teks pencarian pada tab Rekomendasi  & Nama mahasiswa atau topik  & Tabel hanya menampilkan baris yang cocok dengan kata kunci pencarian  & Pass  \\
     \hline
-     4 & Menekan tombol ``Preview Score'' untuk profil mahasiswa tertentu    & -  & Sistem menampilkan skor per label untuk profil yang dipilih     & Pass  \\
+    4 & Memilih supervisor pada dropdown filter  & Supervisor tertentu  & Tabel hanya menampilkan mahasiswa yang ditugaskan ke supervisor tersebut  & Pass  \\
     \hline
-     5 & Menyimpan perubahan konfigurasi \textit{rules}       & -  & Sistem memperbarui konfigurasi dan menampilkan konfirmasi keberhasilan       & Pass  \\
+    5 & Mengaktifkan toggle \textit{Mismatch Only}  & -  & Tabel hanya menampilkan baris dengan supervisor rekomendasi yang berbeda dari histori  & Pass  \\
     \hline
-     6 & Navigasi kembali ke halaman Dashboard       & -  & Sistem mengarahkan pengguna ke halaman Dashboard        & Pass  \\
+    6 & Klik tombol Export Standard  & -  & File \texttt{rekomendasi\_dosen\_run\_\{id\}.xlsx} (3 sheet) berhasil terunduh  & Pass  \\
+    \hline
+    7 & Klik tombol Export Detailed  & -  & File \texttt{rekomendasi\_dosen\_run\_\{id\}\_detailed.xlsx} (4 sheet) berhasil terunduh  & Pass  \\
     \hline
 
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-	\caption{Skenario Rules Studio}
+	\caption{Skenario Run Detail}
 	\label{table:tab4.10}
 \end{table}
