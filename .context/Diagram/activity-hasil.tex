@@ -1,0 +1,136 @@
+%% AD-09 · Lihat Hasil Rekomendasi
+%% y-guide: start=-1.8  s1/s2=-3.5  d1/err404=-6.0  early_end=-8.2
+%%          s4=-8.7  s5/s6=-11.5  bend=-12.7  d2=-14.0  d2t/merge=-16.5
+%%          s8=-19.0  s9=-21.5  bend=-23.0  d3/d3t=-24.5
+%%          d3f=-27.0  bend=-28.0  bullseye=-29.5  border=-30.8
+%% Decisions: d1 Sistem (run found?), d2 EPC (apply filter?), d3 EPC (export?)
+
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -30.8);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Lihat Hasil Rekomendasi};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -30.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Membuka halaman Run Detail ──────────────────────────────────────
+\node (s1) [action] at (2.8, -3.5)
+  {Membuka halaman\\ Run Detail};
+\draw[->] (2.8, -2.02) -- (s1.north);
+
+%% ── Sistem: Mengambil data RecommendationRun ─────────────────────────────
+\node (s2) [action] at (9.0, -3.5)
+  {Mengambil data\\ RecommendationRun};
+\draw[->] (s1.east) -- (s2.west);
+
+%% ── Sistem: Decision 1 — Run ditemukan? ──────────────────────────────────
+\node (d1) [decision] at (9.0, -6.0)
+  {Run\\ ditemukan?};
+\draw[->] (s2.south) -- (d1.north);
+
+%% D1 — F: 404 in EPC lane, short-circuit end ─────────────────────────────
+\node (err404) [action] at (2.8, -6.0)
+  {Mengembalikan 404\\ Not Found};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err404.east);
+\draw[thick] (2.8, -8.2) circle (0.28cm);
+\fill (2.8, -8.2) circle (0.15cm);
+\draw[->] (err404.south) -- (2.8, -7.92);
+
+%% D1 — T: menampilkan detail run ──────────────────────────────────────────
+\node (s4) [action] at (9.0, -8.7)
+  {Menampilkan: metrik,\\ kapasitas, mismatch};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {T} (s4.north);
+
+%% ── EPC: Berpindah ke tab Rekomendasi (L-shaped from Sistem) ─────────────
+\node (s5) [action] at (2.8, -11.5)
+  {Berpindah ke tab\\ Rekomendasi};
+\draw[->] (s4.south) -- (9.0, -10.2) -- (2.8, -10.2) -- (s5.north);
+
+%% ── Sistem: Menampilkan tabel rekomendasi awal ───────────────────────────
+\node (s6) [action] at (9.0, -11.5)
+  {Menampilkan tabel\\ rekomendasi awal};
+\draw[->] (s5.east) -- (s6.west);
+
+%% ── EPC: Decision 2 — Terapkan filter? (L-shaped from Sistem) ───────────
+\node (d2) [decision] at (2.8, -14.0)
+  {Terapkan\\ filter?};
+\draw[->] (s6.south) -- (9.0, -12.7) -- (2.8, -12.7) -- (d2.north);
+
+%% D2 — T (south): mengisi filter (stays in EPC) ─────────────────────────
+\node (d2t) [action] at (2.8, -16.5)
+  {Mengisi filter:\\ teks, supervisor, mismatch};
+\draw[->] (d2.south) -- node[right, pos=0.12, font=\scriptsize] {T} (d2t.north);
+
+%% D2 — F (east): skip filter → L-path to merge (Sistem) ─────────────────
+\node (merge) [action] at (9.0, -16.5)
+  {Menjalankan query\\ server-side};
+\draw[->] (d2.east) -- node[above, pos=0.08, font=\scriptsize] {F}
+  (9.0, -14.0) -- (merge.north);
+
+%% D2-T path: d2t exits east → merge.west ────────────────────────────────
+\draw[->] (d2t.east) -- (merge.west);
+
+%% ── Sistem: Menampilkan tabel hasil ──────────────────────────────────────
+\node (s8) [action] at (9.0, -19.0)
+  {Menampilkan tabel\\ hasil rekomendasi};
+\draw[->] (merge.south) -- (s8.north);
+
+%% ── Sistem: Menyorot baris mismatch ──────────────────────────────────────
+\node (s9) [action] at (9.0, -21.5)
+  {Menyorot baris\\ mismatch (.bad)};
+\draw[->] (s8.south) -- (s9.north);
+
+%% ── EPC: Decision 3 — Ingin export? (L-shaped from Sistem) ──────────────
+\node (d3) [decision] at (2.8, -24.5)
+  {Ingin\\ export?};
+\draw[->] (s9.south) -- (9.0, -23.0) -- (2.8, -23.0) -- (d3.north);
+
+%% D3 — T (east): lanjut ke export → Sistem lane ──────────────────────────
+\node (d3t) [action] at (9.0, -24.5)
+  {Lanjut ke Export\\ ($\rightarrow$ AD-10)};
+\draw[->] (d3.east) -- node[above, pos=0.08, font=\scriptsize] {T} (d3t.west);
+
+%% D3 — F (south): kembali ke daftar run (stays in EPC) ───────────────────
+\node (d3f) [action] at (2.8, -27.0)
+  {Kembali ke\\ daftar run};
+\draw[->] (d3.south) -- node[right, pos=0.12, font=\scriptsize] {F} (d3f.north);
+
+%% ── End node (bullseye) in Sistem lane ───────────────────────────────────
+\draw[thick] (9.0, -29.5) circle (0.28cm);
+\fill (9.0, -29.5) circle (0.15cm);
+
+%% D3-T path → bullseye (straight down in Sistem) ─────────────────────────
+\draw[->] (d3t.south) -- (9.0, -29.22);
+
+%% D3-F path → L-shape to Sistem → bullseye ───────────────────────────────
+\draw[->] (d3f.south) -- (2.8, -28.0) -- (9.0, -28.0) -- (9.0, -29.22);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Lihat Hasil Rekomendasi}
+\label{fig:ad09-hasil}
+\end{figure}

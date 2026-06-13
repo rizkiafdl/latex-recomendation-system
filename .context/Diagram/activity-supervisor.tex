@@ -1,0 +1,120 @@
+%% AD-04 · Kelola Data Faculty Supervisor
+%% Two independent branches — no merge at end
+%% y-guide: start=-1.8  access/showlist=-3.5  bridge=-5.0  d_fork=-6.5
+%%   Branch B (east, Sistem): gen_excel=-6.5  send_file=-9.0  end_B=-10.7
+%%   Branch A (south, EPC): fill_form=-13.0  check_code=-13.0
+%%     d_kode=-15.5  update=-15.5  insert=-18.0
+%%     refresh=-20.5  end_A=-22.2  border=-23.5
+%% d_fork: east="B" (Export), south="A" (Tambah)
+%% d_kode: west="Ada" (update), south="Baru" (insert)
+%% update merges back via x=5.0 gutter → refresh.west
+
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -23.5);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Kelola Data Faculty Supervisor};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -23.5);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Membuka halaman Supervisors ─────────────────────────────────────
+\node (access) [action] at (2.8, -3.5)
+  {Membuka halaman\\ Supervisors};
+\draw[->] (2.8, -2.02) -- (access.north);
+
+%% ── Sistem: Menampilkan daftar supervisor ────────────────────────────────
+\node (showlist) [action] at (9.0, -3.5)
+  {Menampilkan daftar\\ supervisor aktif/nonaktif};
+\draw[->] (access.east) -- (showlist.west);
+
+%% ── L-shaped return: Sistem → fork decision in EPC (single arrow) ────────
+\node (d_fork) [decision] at (2.8, -6.5)
+  {Pilih\\ aksi?};
+\draw[->] (showlist.south) -- (9.0, -5.0) -- (2.8, -5.0) -- (d_fork.north);
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%% Branch B — Export Konfigurasi (east = "B") ──────────────────────────────
+%% ═══════════════════════════════════════════════════════════════════════════
+
+\node (gen_excel) [action] at (9.0, -6.5)
+  {Generate file Excel\\ (supervisor\_config.xlsx)};
+\draw[->] (d_fork.east) -- node[above, pos=0.08, font=\scriptsize] {B} (gen_excel.west);
+
+\node (send_file) [action] at (9.0, -9.0)
+  {Mengirim file\\ sebagai download};
+\draw[->] (gen_excel.south) -- (send_file.north);
+
+%% Branch B end bullseye ───────────────────────────────────────────────────
+\draw[thick] (9.0, -10.7) circle (0.28cm);
+\fill (9.0, -10.7) circle (0.15cm);
+\draw[->] (send_file.south) -- (9.0, -10.42);
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%% Branch A — Tambah Supervisor (south = "A") ──────────────────────────────
+%% ═══════════════════════════════════════════════════════════════════════════
+
+\node (fill_form) [action] at (2.8, -13.0)
+  {Mengisi form (kode,\\ nama) dan submit};
+\draw[->] (d_fork.south) -- node[right, pos=0.12, font=\scriptsize] {A} (fill_form.north);
+
+%% EPC submits → Sistem checks code ────────────────────────────────────────
+\node (check_code) [action] at (9.0, -13.0)
+  {Mengecek kode\\ supervisor di database};
+\draw[->] (fill_form.east) -- (check_code.west);
+
+%% ── Sistem: Decision — Kode sudah ada? ───────────────────────────────────
+\node (d_kode) [decision] at (9.0, -15.5)
+  {Kode\\ sudah ada?};
+\draw[->] (check_code.south) -- (d_kode.north);
+
+%% d_kode — Ada (west): update di EPC lane ────────────────────────────────
+\node (update) [action] at (2.8, -15.5)
+  {Update nama\\ dan keywords};
+\draw[->] (d_kode.west) -- node[above, pos=0.08, font=\scriptsize] {Ada} (update.east);
+
+%% d_kode — Baru (south): insert baru di Sistem lane ──────────────────────
+\node (insert) [action] at (9.0, -18.0)
+  {Insert supervisor baru\\ (is\_active=True)};
+\draw[->] (d_kode.south) -- node[right, pos=0.12, font=\scriptsize] {Baru} (insert.north);
+
+%% Merge at refresh: update (EPC) via x=5.0 gutter → refresh.west ─────────
+\node (refresh) [action] at (9.0, -20.5)
+  {Refresh daftar\\ supervisor};
+
+\draw[->] (update.east) -- (5.0, -15.5) -- (5.0, -20.5) -- (refresh.west);
+\draw[->] (insert.south) -- (refresh.north);
+
+%% Branch A end bullseye ───────────────────────────────────────────────────
+\draw[thick] (9.0, -22.2) circle (0.28cm);
+\fill (9.0, -22.2) circle (0.15cm);
+\draw[->] (refresh.south) -- (9.0, -21.92);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Kelola Data Faculty Supervisor}
+\label{fig:ad04-supervisor}
+\end{figure}

@@ -16,26 +16,46 @@ classDiagram
         class Student {
             +int id
             +str student_id
+            +str binusian_id
             +str name
+            +str email
+            +str phone
             +str track
             +float gpa
+            +int total_sks
+            +str partner_lecturer
             +str position_topic
+            +str duration
+            +str job_start_date
+            +str job_end_date
+            +str work_schema
             +str enrollment_status
             +str current_supervisor_code
+            +str current_supervisor_name
             +datetime created_at
+            +datetime updated_at
         }
 
         class RecommendationRun {
             +int id
             +datetime created_at
+            +int created_by_id
             +str input_source
             +int total_students
             +int total_supervisors
             +int target_min_capacity
             +int target_max_capacity
+            +bool capacity_relaxed
+            +str capacity_note
+            +str capacity_bounds_json
             +str solver_name
+            +str solver_note
+            +str embedding_backend
             +str embedding_model
+            +str evaluation_json
+            +str pipeline_config_json
             +float objective_score
+            +str rankings_json
         }
 
         class Recommendation {
@@ -47,6 +67,7 @@ classDiagram
             +float group_boost
             +float final_score
             +str rule_matches
+            +str company_group_key
         }
 
         class AppUser {
@@ -131,6 +152,7 @@ classDiagram
     }
 
     %% ORM Associations
+    AppUser "1" --> "*" RecommendationRun : created by
     RecommendationRun "1" --> "*" Recommendation : cascade delete
     Recommendation "*" --> "1" Student
     Recommendation "*" --> "1" Supervisor
