@@ -8,31 +8,31 @@
 
 Sistem rekomendasi merupakan salah satu bentuk sistem pendukung keputusan (decision support system) yang dirancang untuk membantu pengguna dalam memilih alternatif terbaik dari sejumlah pilihan yang tersedia. Sistem ini bekerja dengan menganalisis data dan karakteristik tertentu untuk menghasilkan rekomendasi yang relevan, kontekstual, dan sesuai dengan kebutuhan pengguna. Dalam lingkungan dengan volume data yang besar, sistem rekomendasi berperan penting dalam menyederhanakan proses pengambilan keputusan serta meningkatkan efisiensi dan akurasi hasil yang diperoleh.
 
-Ricci, Rokach, dan Shapira (2015) mendefinisikan sistem rekomendasi sebagai sistem perangkat lunak yang bertujuan untuk memberikan saran yang bermakna kepada pengguna terkait item atau entitas tertentu dalam suatu domain. Rekomendasi tersebut dapat berupa peringkat, prediksi, maupun daftar item yang diurutkan berdasarkan tingkat kesesuaian. Definisi ini menekankan bahwa sistem rekomendasi tidak hanya berfungsi sebagai penyaring informasi, tetapi juga sebagai alat bantu pengambilan keputusan berbasis data.
+Ricci, Rokach, dan Shapira (\citeyear{ricci2015recommender}) mendefinisikan sistem rekomendasi sebagai sistem perangkat lunak yang bertujuan untuk memberikan saran yang bermakna kepada pengguna terkait item atau entitas tertentu dalam suatu domain. Rekomendasi tersebut dapat berupa peringkat, prediksi, maupun daftar item yang diurutkan berdasarkan tingkat kesesuaian. Definisi ini menekankan bahwa sistem rekomendasi tidak hanya berfungsi sebagai penyaring informasi, tetapi juga sebagai alat bantu pengambilan keputusan berbasis data.
 
 \subsection{Artificial Intelligence}\label{artificial-intelligence}
 
 Artificial Intelligence (AI) merupakan bidang ilmu komputer yang berfokus pada pengembangan sistem yang mampu meniru kecerdasan manusia, seperti kemampuan berpikir, belajar, dan mengambil keputusan.
 
-Russell dan Norvig (2021) mendefinisikan AI sebagai studi dan desain agen cerdas yang mampu merasakan lingkungan dan mengambil tindakan untuk mencapai tujuan tertentu. AI menjadi fondasi bagi berbagai aplikasi modern, termasuk sistem rekomendasi. Dalam penelitian ini, sistem rekomendasi faculty supervisor merupakan salah satu penerapan AI dalam bentuk sistem pendukung keputusan berbasis analisis data tekstual.
+Russell dan Norvig (\citeyear{russell2021ai}) mendefinisikan AI sebagai studi dan desain agen cerdas yang mampu merasakan lingkungan dan mengambil tindakan untuk mencapai tujuan tertentu. AI menjadi fondasi bagi berbagai aplikasi modern, termasuk sistem rekomendasi. Dalam penelitian ini, sistem rekomendasi faculty supervisor merupakan salah satu penerapan AI dalam bentuk sistem pendukung keputusan berbasis analisis data tekstual.
 
 \subsection{Machine Learning}\label{machine-learning}
 
 Machine Learning merupakan cabang dari AI yang memungkinkan sistem belajar dari data tanpa diprogram secara eksplisit. Sistem machine learning membangun model berdasarkan pola yang ditemukan dalam data.
 
-Menurut Mitchell (1997), suatu program dikatakan belajar dari pengalaman jika performanya dalam menjalankan suatu tugas meningkat seiring bertambahnya pengalaman. Machine learning banyak digunakan dalam sistem rekomendasi untuk mengenali pola dan hubungan antar data. Dalam penelitian ini, machine learning digunakan melalui model embedding yang mempelajari representasi semantik teks akademik
+Menurut Mitchell (\citeyear{mitchell1997ml}), suatu program dikatakan belajar dari pengalaman jika performanya dalam menjalankan suatu tugas meningkat seiring bertambahnya pengalaman. Machine learning banyak digunakan dalam sistem rekomendasi untuk mengenali pola dan hubungan antar data. Dalam penelitian ini, machine learning digunakan melalui model embedding yang mempelajari representasi semantik teks akademik
 
 \subsection{Deep Learning}\label{deep-learning}
 
 Deep Learning merupakan bagian dari machine learning yang menggunakan jaringan saraf tiruan dengan banyak lapisan (deep neural networks) untuk mempelajari representasi data yang kompleks.
 
-LeCun, Bengio, dan Hinton (2015) menjelaskan bahwa deep learning sangat efektif dalam memproses data tidak terstruktur, seperti teks dan gambar. Pendekatan ini menjadi dasar bagi model-model NLP modern. Model embedding berbasis transformer yang digunakan dalam penelitian ini termasuk dalam kategori deep learning.
+LeCun, Bengio, dan Hinton (\citeyear{lecun2015deep}) menjelaskan bahwa deep learning sangat efektif dalam memproses data tidak terstruktur, seperti teks dan gambar. Pendekatan ini menjadi dasar bagi model-model NLP modern. Model embedding berbasis transformer yang digunakan dalam penelitian ini termasuk dalam kategori deep learning.
 
 \subsection{Natural Language Processing}\label{natural-language-processing}
 
 Natural Language Processing (NLP) merupakan cabang AI yang berfokus pada pemrosesan dan pemahaman bahasa alami manusia oleh komputer. NLP memungkinkan sistem mengekstraksi makna dari data teks.
 
-Jurafsky dan Martin (2023) menyatakan bahwa NLP mencakup berbagai teknik mulai dari pemrosesan dasar hingga analisis semantik tingkat lanjut. NLP menjadi komponen penting dalam sistem rekomendasi berbasis teks. Dalam penelitian ini, NLP digunakan untuk memproses deskripsi minat mahasiswa dan bidang keahlian faculty supervisor.
+Jurafsky dan Martin (\citeyear{jurafsky2023slp}) menyatakan bahwa NLP mencakup berbagai teknik mulai dari pemrosesan dasar hingga analisis semantik tingkat lanjut. NLP menjadi komponen penting dalam sistem rekomendasi berbasis teks. Dalam penelitian ini, NLP digunakan untuk memproses deskripsi minat mahasiswa dan bidang keahlian faculty supervisor.
 
 \subsection{Text Mining}\label{text-mining}
 
@@ -54,7 +54,7 @@ Oleh karena itu, tahapan preprocessing tambahan seperti stemming dan stop word r
 
 Representasi teks merupakan proses mengubah data tekstual yang bersifat tidak terstruktur menjadi bentuk numerik agar dapat diproses oleh sistem komputasi. Dalam sistem rekomendasi berbasis teks, representasi teks menjadi faktor krusial karena menentukan sejauh mana sistem mampu memahami dan membandingkan makna antar dokumen secara akurat.
 
-Menurut Manning, Raghavan, dan Schütze (2008), representasi teks merupakan fondasi utama dalam sistem information retrieval dan text mining, karena kualitas representasi secara langsung memengaruhi performa proses pencarian, pengelompokan, dan pengukuran kemiripan dokumen. Representasi teks yang baik harus mampu menangkap informasi penting sekaligus mengurangi noise yang tidak relevan.
+Menurut Manning, Raghavan, dan Schütze (\citeyear{manning2008ir}), representasi teks merupakan fondasi utama dalam sistem information retrieval dan text mining, karena kualitas representasi secara langsung memengaruhi performa proses pencarian, pengelompokan, dan pengukuran kemiripan dokumen. Representasi teks yang baik harus mampu menangkap informasi penting sekaligus mengurangi noise yang tidak relevan.
 
 Dalam penelitian ini, representasi teks digunakan untuk merepresentasikan profil mahasiswa dan bidang keahlian faculty supervisor dalam bentuk vektor numerik. Representasi ini menjadi dasar dalam perhitungan semantic similarity untuk menghasilkan rekomendasi faculty supervisor Program Enrichment.
 
@@ -62,7 +62,7 @@ Dalam penelitian ini, representasi teks digunakan untuk merepresentasikan profil
 
 TF-IDF merupakan metode representasi teks klasik yang merepresentasikan dokumen sebagai vektor berdasarkan frekuensi kemunculan kata dalam dokumen dan tingkat kelangkaan kata tersebut dalam keseluruhan koleksi dokumen. Pendekatan ini banyak digunakan dalam sistem pencarian berbasis kata kunci.
 
-Salton dan Buckley (1988) menjelaskan bahwa TF-IDF memberikan bobot yang lebih tinggi pada kata yang sering muncul dalam suatu dokumen namun jarang muncul di dokumen lain, sehingga kata tersebut dianggap lebih representatif terhadap isi dokumen. Dengan demikian, TF-IDF mampu menyoroti kata-kata penting dalam dokumen.
+Salton dan Buckley (\citeyear{salton1988tfidf}) menjelaskan bahwa TF-IDF memberikan bobot yang lebih tinggi pada kata yang sering muncul dalam suatu dokumen namun jarang muncul di dokumen lain, sehingga kata tersebut dianggap lebih representatif terhadap isi dokumen. Dengan demikian, TF-IDF mampu menyoroti kata-kata penting dalam dokumen.
 
 Namun, TF-IDF memiliki keterbatasan dalam memahami makna semantik teks. Metode ini tidak mampu menangkap hubungan sinonim, konteks kalimat, maupun makna laten dari suatu teks. Dua dokumen dengan makna serupa tetapi menggunakan kata yang berbeda dapat memiliki tingkat kemiripan yang rendah.
 
@@ -92,7 +92,7 @@ Sehingga rumus TF-IDF dapat dituliskan sebagai berikut:
 
 Word embedding merupakan pendekatan representasi teks yang memetakan kata ke dalam vektor numerik berdasarkan konteks kemunculannya dalam korpus teks. Pendekatan ini memungkinkan sistem untuk menangkap hubungan semantik antar kata dalam ruang vektor.
 
-Mikolov et al. (2013) memperkenalkan Word2Vec yang mempelajari representasi kata berdasarkan konteks lokal, sedangkan Pennington et al. (2014) mengembangkan GloVe yang memanfaatkan statistik global ko-okurensi kata. FastText (Bojanowski et al., 2017) kemudian memperluas pendekatan ini dengan mempertimbangkan subword, sehingga lebih robust terhadap variasi morfologi kata.
+Mikolov et al. (\citeyear{mikolov2013word2vec}) memperkenalkan Word2Vec yang mempelajari representasi kata berdasarkan konteks lokal, sedangkan Pennington et al. (\citeyear{pennington2014glove}) mengembangkan GloVe yang memanfaatkan statistik global ko-okurensi kata. FastText (Bojanowski et al., \citeyear{bojanowski2017fasttext}) kemudian memperluas pendekatan ini dengan mempertimbangkan subword, sehingga lebih robust terhadap variasi morfologi kata.
 
 Meskipun word embedding mampu menangkap hubungan semantik antar kata, pendekatan ini bersifat statis, di mana satu kata memiliki satu representasi vektor tetap tanpa mempertimbangkan konteks kalimat. Keterbatasan ini menyebabkan word embedding kurang optimal untuk merepresentasikan makna pada level kalimat atau dokumen.
 
@@ -100,9 +100,9 @@ Dalam penelitian ini, word embedding diposisikan sebagai tahap evolusi setelah T
 
 \subsection{Transformer-Based Embedding}\label{transformer-based-embedding}
 
-Transformer-based embedding merupakan pendekatan representasi teks modern yang memanfaatkan arsitektur transformer untuk menghasilkan embedding yang bersifat kontekstual. Arsitektur transformer diperkenalkan oleh Vaswani et al. (2017) dan menggunakan mekanisme self-attention untuk memodelkan hubungan antar kata dalam suatu teks secara menyeluruh.
+Transformer-based embedding merupakan pendekatan representasi teks modern yang memanfaatkan arsitektur transformer untuk menghasilkan embedding yang bersifat kontekstual. Arsitektur transformer diperkenalkan oleh Vaswani et al. (\citeyear{vaswani2017attention}) dan menggunakan mekanisme self-attention untuk memodelkan hubungan antar kata dalam suatu teks secara menyeluruh.
 
-Devlin et al. (2019) menjelaskan bahwa model berbasis transformer mampu menghasilkan representasi teks kontekstual, di mana makna suatu kata dipengaruhi oleh keseluruhan konteks kalimat. Pendekatan ini memungkinkan sistem memahami hubungan semantik yang kompleks, termasuk sinonim dan konteks implisit.
+Devlin et al. (\citeyear{devlin2019bert}) menjelaskan bahwa model berbasis transformer mampu menghasilkan representasi teks kontekstual, di mana makna suatu kata dipengaruhi oleh keseluruhan konteks kalimat. Pendekatan ini memungkinkan sistem memahami hubungan semantik yang kompleks, termasuk sinonim dan konteks implisit.
 
 Dalam penelitian ini, transformer-based embedding digunakan karena kemampuannya dalam merepresentasikan dokumen teks akademik secara lebih akurat. Pendekatan ini sangat sesuai untuk membandingkan deskripsi minat mahasiswa dan bidang keahlian faculty supervisor yang memiliki variasi istilah dan gaya bahasa.
 
@@ -110,7 +110,7 @@ Dalam penelitian ini, transformer-based embedding digunakan karena kemampuannya 
 
 BERT (Bidirectional Encoder Representations from Transformers) merupakan model berbasis transformer yang menghasilkan representasi teks dua arah (bidirectional), sehingga setiap token dipahami berdasarkan konteks sebelum dan sesudahnya.
 
-Menurut Devlin et al. (2019), BERT menghasilkan embedding kontekstual yang lebih kaya dibandingkan model sebelumnya karena mempertimbangkan konteks secara menyeluruh. BERT menjadi tonggak penting dalam perkembangan NLP modern.
+Menurut Devlin et al. (\citeyear{devlin2019bert}), BERT menghasilkan embedding kontekstual yang lebih kaya dibandingkan model sebelumnya karena mempertimbangkan konteks secara menyeluruh. BERT menjadi tonggak penting dalam perkembangan NLP modern.
 
 Dalam penelitian ini, konsep BERT embedding digunakan sebagai landasan teoritis bagi penggunaan model embedding kontekstual modern. Meskipun penelitian ini tidak terbatas pada BERT saja, prinsip representasi kontekstual yang diperkenalkan BERT menjadi dasar bagi model embedding lain yang digunakan.
 
@@ -118,13 +118,13 @@ Dalam penelitian ini, konsep BERT embedding digunakan sebagai landasan teoritis 
 
 Semantic similarity merupakan ukuran tingkat kesamaan makna antara dua teks atau konsep berdasarkan konteks dan arti, bukan sekadar kecocokan kata secara literal. Pendekatan ini memungkinkan sistem memahami kesamaan konsep meskipun menggunakan istilah yang berbeda.
 
-Menurut Mihalcea et al. (2006), semantic similarity bertujuan untuk mengukur sejauh mana dua unit teks memiliki makna yang serupa. Pendekatan ini banyak digunakan dalam sistem rekomendasi dan pencarian semantik modern. Dalam penelitian ini, semantic similarity digunakan untuk mengukur tingkat kesesuaian antara profil mahasiswa dan bidang keahlian faculty supervisor, sehingga rekomendasi yang dihasilkan lebih relevan secara konseptual.
+Menurut Mihalcea et al. (\citeyear{mihalcea2006semantic}), semantic similarity bertujuan untuk mengukur sejauh mana dua unit teks memiliki makna yang serupa. Pendekatan ini banyak digunakan dalam sistem rekomendasi dan pencarian semantik modern. Dalam penelitian ini, semantic similarity digunakan untuk mengukur tingkat kesesuaian antara profil mahasiswa dan bidang keahlian faculty supervisor, sehingga rekomendasi yang dihasilkan lebih relevan secara konseptual.
 
 \subsection{Cosine Similarity}\label{cosine-similarity}
 
 Cosine similarity merupakan metode yang umum digunakan untuk mengukur kemiripan antara dua vektor dengan menghitung cosinus sudut di antara keduanya. Nilai cosine similarity berada pada rentang -1 hingga 1.
 
-Menurut Han, Kamber, dan Pei (2012), cosine similarity efektif digunakan dalam pengukuran kemiripan dokumen karena tidak dipengaruhi oleh panjang vektor. Metode ini banyak digunakan dalam sistem berbasis embedding.
+Menurut Han, Kamber, dan Pei (\citeyear{han2012datamining}), cosine similarity efektif digunakan dalam pengukuran kemiripan dokumen karena tidak dipengaruhi oleh panjang vektor. Metode ini banyak digunakan dalam sistem berbasis embedding.
 
 Dalam penelitian ini, cosine similarity digunakan untuk menghitung tingkat kemiripan antara embedding teks mahasiswa dan faculty supervisor sebagai dasar pemeringkatan rekomendasi.
 
@@ -142,17 +142,17 @@ A · B adalah hasil perkalian dot product antara vektor A dan B
 
 \subsection{Text Embedding \& Model Embedding}\label{text-embedding-model-embedding}
 
-Text embedding merupakan teknik untuk merepresentasikan teks dalam bentuk vektor numerik berdimensi tinggi yang merepresentasikan makna semantik. Embedding memungkinkan perbandingan teks dilakukan secara matematis. Menurut Reimers dan Gurevych (2019), embedding berbasis transformer menunjukkan performa yang unggul dalam tugas semantic similarity dan retrieval dibandingkan metode representasi tradisional. Dalam penelitian ini, beberapa model embedding berbasis transformer digunakan untuk membandingkan performa sistem rekomendasi, termasuk model berskala besar dan model ringan.
+Text embedding merupakan teknik untuk merepresentasikan teks dalam bentuk vektor numerik berdimensi tinggi yang merepresentasikan makna semantik. Embedding memungkinkan perbandingan teks dilakukan secara matematis. Menurut Reimers dan Gurevych (\citeyear{reimers2019sbert}), embedding berbasis transformer menunjukkan performa yang unggul dalam tugas semantic similarity dan retrieval dibandingkan metode representasi tradisional. Dalam penelitian ini, beberapa model embedding berbasis transformer digunakan untuk membandingkan performa sistem rekomendasi, termasuk model berskala besar dan model ringan.
 
 \subsection{BGE-M3 (BAAI/bge-m3)}\label{bge-m3-baaibge-m3}
 
 BGE-M3 merupakan model embedding multilingual yang dikembangkan oleh Beijing Academy of Artificial Intelligence (BAAI). Model ini dirancang untuk mendukung tiga fungsi sekaligus: dense retrieval, sparse retrieval, dan multi-vector retrieval, sehingga dinamakan M3 (Multi-Functionality, Multi-Linguality, Multi-Granularity).
 
-Menurut Chen et al. (2024), BGE-M3 mendukung lebih dari 100 bahasa dan mampu memproses teks hingga 8.192 token. Model ini menunjukkan performa kompetitif pada berbagai benchmark retrieval lintas bahasa. Dalam penelitian ini, BGE-M3 digunakan sebagai salah satu kandidat model embedding untuk mengevaluasi kualitas rekomendasi faculty supervisor.
+Menurut Chen et al. (\citeyear{chen2024bgem3}), BGE-M3 mendukung lebih dari 100 bahasa dan mampu memproses teks hingga 8.192 token. Model ini menunjukkan performa kompetitif pada berbagai benchmark retrieval lintas bahasa. Dalam penelitian ini, BGE-M3 digunakan sebagai salah satu kandidat model embedding untuk mengevaluasi kualitas rekomendasi faculty supervisor.
 
 \subsection{Qwen3-Embedding-0.6B}\label{qwen3-embedding-0.6b}
 
-Qwen3-Embedding merupakan model embedding dari keluarga Qwen yang dikembangkan oleh Alibaba Cloud. Varian 0.6B memiliki 600 juta parameter dan dirancang untuk keseimbangan antara performa dan efisiensi komputasi.
+Qwen3-Embedding merupakan model embedding dari keluarga Qwen yang dikembangkan oleh Alibaba Cloud \cite{qwen2024embedding}. Varian 0.6B memiliki 600 juta parameter dan dirancang untuk keseimbangan antara performa dan efisiensi komputasi.
 
 Model ini mendukung pemrosesan teks multilingual dan dioptimalkan untuk tugas semantic search dan text matching. Dalam penelitian ini, Qwen3-Embedding-0.6B digunakan untuk mengevaluasi trade-off antara ukuran model yang lebih kecil dan kualitas embedding yang dihasilkan.
 
@@ -160,13 +160,13 @@ Model ini mendukung pemrosesan teks multilingual dan dioptimalkan untuk tugas se
 
 Multilingual E5 merupakan model embedding yang dikembangkan oleh Microsoft Research. Varian large-instruct memiliki sekitar 560 juta parameter dan mendukung pemrosesan teks dalam lebih dari 90 bahasa.
 
-Menurut Wang et al. (2024), model E5 yang dilengkapi instruction tuning menunjukkan peningkatan performa pada tugas retrieval dan semantic similarity dibandingkan model tanpa instruction. Dalam penelitian ini, Multilingual E5-Large-Instruct digunakan sebagai model default karena performa yang konsisten pada teks campuran Bahasa Indonesia dan Bahasa Inggris yang terdapat dalam data akademik.
+Menurut Wang et al. (\citeyear{wang2024e5}), model E5 yang dilengkapi instruction tuning menunjukkan peningkatan performa pada tugas retrieval dan semantic similarity dibandingkan model tanpa instruction. Dalam penelitian ini, Multilingual E5-Large-Instruct digunakan sebagai model default karena performa yang konsisten pada teks campuran Bahasa Indonesia dan Bahasa Inggris yang terdapat dalam data akademik.
 
 \subsection{\texorpdfstring{\textbf{Evaluasi Sistem Rekomendasi}}{Evaluasi Sistem Rekomendasi}}\label{evaluasi-sistem-rekomendasi}
 
 \textbf{Evaluasi sistem rekomendasi merupakan proses untuk menilai kualitas, relevansi, dan efektivitas rekomendasi yang dihasilkan oleh sistem. Evaluasi bertujuan untuk memastikan sistem memenuhi tujuan fungsional dan kebutuhan pengguna.}
 
-\textbf{Menurut Shani dan Gunawardana (2011), evaluasi sistem rekomendasi dapat dilakukan menggunakan metrik berbasis relevansi dan peringkat. Evaluasi yang baik harus mencerminkan kondisi penggunaan sistem secara nyata.}
+\textbf{Menurut Shani dan Gunawardana (\citeyear{shani2011evaluating}), evaluasi sistem rekomendasi dapat dilakukan menggunakan metrik berbasis relevansi dan peringkat. Evaluasi yang baik harus mencerminkan kondisi penggunaan sistem secara nyata.}
 
 \textbf{Dalam penelitian ini, evaluasi sistem rekomendasi dilakukan menggunakan evaluasi otomatis berbasis metrik kuantitatif, yaitu dengan membandingkan rekomendasi terhadap \textit{ground truth} (mapping dosen pembimbing aktual dari data EPC). Metrik yang digunakan meliputi Mean Reciprocal Rank (MRR), Hit@1 dan Hit@5, nDCG@5 dan nDCG@10, Precision@5, Average Rank, dan Assignment Match Rate. Evaluasi ini dilakukan pada tiga tingkat skor, yaitu Content-Based, Hybrid Score, dan Assignment Match.}
 
@@ -192,7 +192,7 @@ nDCG@K merupakan metrik evaluasi yang mengukur kualitas peringkat rekomendasi de
 
 Recall@K merupakan metrik evaluasi yang mengukur proporsi item relevan yang berhasil muncul dalam K rekomendasi teratas. Recall@K mengukur proporsi item relevan yang berhasil direkomendasikan oleh sistem dalam K rekomendasi teratas. Metrik ini menilai kemampuan sistem dalam menemukan item yang relevan, bukan urutannya
 
-Herlocker et al. (2004) menyatakan bahwa Recall@K sangat sesuai untuk sistem rekomendasi berbasis peringkat karena merepresentasikan kemampuan sistem dalam menemukan item relevan pada daftar rekomendasi teratas.
+Herlocker et al. (\citeyear{herlocker2004recall}) menyatakan bahwa Recall@K sangat sesuai untuk sistem rekomendasi berbasis peringkat karena merepresentasikan kemampuan sistem dalam menemukan item relevan pada daftar rekomendasi teratas.
 
 Dalam penelitian ini, Recall@K digunakan untuk mengukur sejauh mana faculty supervisor yang relevan berhasil direkomendasikan oleh sistem pada posisi teratas.
 
@@ -212,7 +212,7 @@ Precision@K mengukur proporsi item relevan dalam K rekomendasi teratas.
 
 Mean Reciprocal Rank (MRR) merupakan metrik evaluasi yang mengukur posisi item relevan pertama dalam daftar rekomendasi. Mean Reciprocal Rank (MRR) mengukur seberapa cepat item relevan pertama muncul dalam daftar rekomendasi. MRR memberikan bobot lebih besar pada rekomendasi relevan yang muncul di peringkat awal.
 
-Menurut Voorhees (1999), MRR memberikan bobot lebih besar pada item relevan yang muncul di peringkat awal, sehingga cocok untuk sistem rekomendasi yang mengutamakan urutan hasil.
+Menurut Voorhees (\citeyear{voorhees1999mrr}), MRR memberikan bobot lebih besar pada item relevan yang muncul di peringkat awal, sehingga cocok untuk sistem rekomendasi yang mengutamakan urutan hasil.
 
 Dalam penelitian ini, MRR digunakan untuk menilai seberapa cepat sistem menampilkan faculty supervisor yang sesuai dalam daftar rekomendasi.
 
@@ -234,7 +234,7 @@ $RR_i$ adalah nilai reciprocal rank untuk data ke-i
 
 Cosine similarity score merupakan ukuran kemiripan antara dua vektor berdasarkan sudut di antaranya. Cosine similarity mengukur kemiripan antara dua vektor embedding berdasarkan sudut di antara keduanya. Nilai cosine similarity berada pada rentang -1 hingga 1.
 
-Menurut Manning et al. (2008), cosine similarity banyak digunakan dalam model ruang vektor karena tidak dipengaruhi oleh panjang vektor. Dalam penelitian ini, cosine similarity score digunakan sebagai dasar perhitungan kesesuaian semantik antara embedding mahasiswa dan faculty supervisor.
+Menurut Manning et al. (\citeyear{manning2008ir}), cosine similarity banyak digunakan dalam model ruang vektor karena tidak dipengaruhi oleh panjang vektor. Dalam penelitian ini, cosine similarity score digunakan sebagai dasar perhitungan kesesuaian semantik antara embedding mahasiswa dan faculty supervisor.
 
 \subsection{Assignment match rate}\label{assignment-match-rate}
 
@@ -250,7 +250,7 @@ Teknologi pendukung sistem merupakan komponen perangkat lunak dan infrastruktur 
 
 Python merupakan bahasa pemrograman tingkat tinggi yang banyak digunakan dalam pengembangan sistem berbasis data, kecerdasan buatan, dan pemrosesan bahasa alami. Python dikenal memiliki sintaks yang sederhana, mudah dibaca, serta didukung oleh ekosistem pustaka yang sangat luas.
 
-Menurut Van Rossum dan Drake (2009), Python dirancang untuk meningkatkan produktivitas pengembang melalui struktur sintaks yang ringkas dan dukungan paradigma pemrograman yang fleksibel. Dalam domain kecerdasan buatan dan machine learning, Python menjadi bahasa de facto karena dukungan pustaka seperti NumPy, PyTorch, dan Scikit-learn.
+Menurut Van Rossum dan Drake (\citeyear{vanrossum2009python}), Python dirancang untuk meningkatkan produktivitas pengembang melalui struktur sintaks yang ringkas dan dukungan paradigma pemrograman yang fleksibel. Dalam domain kecerdasan buatan dan machine learning, Python menjadi bahasa de facto karena dukungan pustaka seperti NumPy, PyTorch, dan Scikit-learn.
 
 Dalam penelitian ini, Python digunakan sebagai bahasa utama pada sisi backend untuk mengembangkan sistem rekomendasi faculty supervisor. Python digunakan untuk mengelola alur pemrosesan data, integrasi model text embedding, perhitungan semantic similarity, serta evaluasi sistem rekomendasi.
 
@@ -258,7 +258,7 @@ Dalam penelitian ini, Python digunakan sebagai bahasa utama pada sisi backend un
 
 JavaScript merupakan bahasa pemrograman yang digunakan secara luas dalam pengembangan aplikasi berbasis web, khususnya pada sisi klien (client-side). JavaScript memungkinkan pembuatan antarmuka pengguna yang interaktif dan dinamis.
 
-Menurut Flanagan (2020), JavaScript berperan penting dalam pengembangan aplikasi web modern karena mampu berjalan langsung di browser dan mendukung komunikasi asinkron dengan backend melalui HTTP.
+Menurut Flanagan (\citeyear{flanagan2020javascript}), JavaScript berperan penting dalam pengembangan aplikasi web modern karena mampu berjalan langsung di browser dan mendukung komunikasi asinkron dengan backend melalui HTTP.
 
 Dalam penelitian ini, JavaScript digunakan pada sisi frontend untuk membangun antarmuka sistem rekomendasi faculty supervisor. JavaScript memungkinkan pengguna memasukkan data, memicu proses rekomendasi, dan menampilkan hasil rekomendasi secara interaktif.
 
@@ -266,7 +266,7 @@ Dalam penelitian ini, JavaScript digunakan pada sisi frontend untuk membangun an
 
 Flask merupakan micro web framework berbasis Python yang digunakan untuk membangun aplikasi web. Flask mengadopsi pendekatan minimalis dengan menyediakan komponen inti seperti routing, templating, dan session management, namun tetap fleksibel untuk diperluas melalui ekstensi.
 
-Menurut Grinberg (2018), Flask dirancang dengan filosofi "micro" yang berarti framework ini menyediakan fondasi dasar tanpa memaksakan struktur proyek tertentu, sehingga pengembang memiliki kebebasan dalam menentukan arsitektur aplikasi. Flask menggunakan Jinja2 sebagai template engine untuk menghasilkan halaman HTML secara dinamis di sisi server (server-side rendering).
+Menurut Grinberg (\citeyear{grinberg2018flask}), Flask dirancang dengan filosofi "micro" yang berarti framework ini menyediakan fondasi dasar tanpa memaksakan struktur proyek tertentu, sehingga pengembang memiliki kebebasan dalam menentukan arsitektur aplikasi. Flask menggunakan Jinja2 sebagai template engine untuk menghasilkan halaman HTML secara dinamis di sisi server (server-side rendering).
 
 Dalam penelitian ini, Flask digunakan sebagai framework utama untuk membangun antarmuka web sistem rekomendasi faculty supervisor. Flask menangani seluruh alur request-response, termasuk autentikasi pengguna, import data, pemrosesan rekomendasi, dan penyajian hasil dalam bentuk halaman web interaktif. Pendekatan server-side rendering dipilih karena kesederhanaan arsitektur dan kesesuaiannya dengan skala sistem yang bersifat single-user.
 
@@ -274,7 +274,7 @@ Dalam penelitian ini, Flask digunakan sebagai framework utama untuk membangun an
 
 PyTorch merupakan framework deep learning berbasis Python yang mendukung komputasi tensor dan pengembangan model neural network. PyTorch banyak digunakan dalam penelitian dan pengembangan model berbasis transformer.
 
-Menurut Paszke et al. (2019), PyTorch menyediakan fleksibilitas tinggi dalam pengembangan model deep learning serta mendukung eksekusi dinamis (dynamic computation graph), yang memudahkan eksperimen model.
+Menurut Paszke et al. (\citeyear{paszke2019pytorch}), PyTorch menyediakan fleksibilitas tinggi dalam pengembangan model deep learning serta mendukung eksekusi dinamis (dynamic computation graph), yang memudahkan eksperimen model.
 
 Dalam penelitian ini, PyTorch digunakan sebagai framework pendukung untuk menjalankan dan mengelola model text embedding berbasis transformer yang digunakan dalam sistem rekomendasi.
 
@@ -282,7 +282,7 @@ Dalam penelitian ini, PyTorch digunakan sebagai framework pendukung untuk menjal
 
 SQLite merupakan sistem manajemen basis data relasional yang bersifat embedded dan file-based. Berbeda dengan sistem database client-server seperti PostgreSQL, SQLite tidak memerlukan proses server terpisah dan menyimpan seluruh database dalam satu file tunggal.
 
-Menurut Owens (2006), SQLite cocok digunakan pada aplikasi yang memerlukan penyimpanan data terstruktur tanpa overhead konfigurasi server database. SQLite mendukung sebagian besar fitur SQL standar dan banyak digunakan dalam prototipe sistem dan aplikasi skala kecil hingga menengah.
+Menurut Owens (\citeyear{owens2006sqlite}), SQLite cocok digunakan pada aplikasi yang memerlukan penyimpanan data terstruktur tanpa overhead konfigurasi server database. SQLite mendukung sebagian besar fitur SQL standar dan banyak digunakan dalam prototipe sistem dan aplikasi skala kecil hingga menengah.
 
 Dalam penelitian ini, SQLite digunakan sebagai database utama untuk menyimpan data mahasiswa, profil dosen, konfigurasi aturan, serta hasil rekomendasi. Pemilihan SQLite atas PostgreSQL didasarkan pada pertimbangan bahwa sistem ini berjalan sebagai proses tunggal (single-process) dan tidak memerlukan fitur vector store, karena perhitungan similarity dilakukan secara on-the-fly menggunakan operasi matriks NumPy.
 
@@ -290,7 +290,7 @@ Dalam penelitian ini, SQLite digunakan sebagai database utama untuk menyimpan da
 
 SQLAlchemy merupakan pustaka Object-Relational Mapping (ORM) untuk Python yang menyediakan abstraksi antara kode aplikasi dan database relasional. ORM memungkinkan pengembang untuk berinteraksi dengan database menggunakan objek Python tanpa menulis query SQL secara langsung.
 
-Menurut Copeland (2008), SQLAlchemy menyediakan dua lapisan abstraksi: Core (SQL Expression Language) dan ORM (Object-Relational Mapping), yang memungkinkan fleksibilitas dalam tingkat kontrol terhadap database. SQLAlchemy mendukung berbagai backend database termasuk SQLite, PostgreSQL, dan MySQL.
+Menurut Copeland (\citeyear{copeland2008sqlalchemy}), SQLAlchemy menyediakan dua lapisan abstraksi: Core (SQL Expression Language) dan ORM (Object-Relational Mapping), yang memungkinkan fleksibilitas dalam tingkat kontrol terhadap database. SQLAlchemy mendukung berbagai backend database termasuk SQLite, PostgreSQL, dan MySQL.
 
 Dalam penelitian ini, SQLAlchemy digunakan untuk mendefinisikan skema database melalui deklarasi model Python, mengelola sesi transaksi, dan melakukan query data secara terstruktur. Pendekatan ORM memisahkan logika bisnis dari detail implementasi database, sehingga kode lebih mudah dipelihara dan diuji.
 
@@ -298,7 +298,7 @@ Dalam penelitian ini, SQLAlchemy digunakan untuk mendefinisikan skema database m
 
 Sentence-Transformers merupakan pustaka Python yang menyediakan antarmuka untuk menghasilkan embedding pada level kalimat dan dokumen menggunakan model transformer. Pustaka ini memungkinkan proses encoding teks dilakukan secara lokal tanpa memerlukan layanan API eksternal.
 
-Menurut Reimers dan Gurevych (2019), Sentence-BERT (SBERT) menggunakan arsitektur siamese network untuk menghasilkan embedding kalimat yang dapat dibandingkan secara langsung menggunakan cosine similarity. Pendekatan ini secara signifikan lebih efisien dibandingkan melakukan cross-encoding untuk setiap pasangan kalimat.
+Menurut Reimers dan Gurevych (\citeyear{reimers2019sbert}), Sentence-BERT (SBERT) menggunakan arsitektur siamese network untuk menghasilkan embedding kalimat yang dapat dibandingkan secara langsung menggunakan cosine similarity. Pendekatan ini secara signifikan lebih efisien dibandingkan melakukan cross-encoding untuk setiap pasangan kalimat.
 
 Dalam penelitian ini, sentence-transformers digunakan sebagai mekanisme utama untuk menghasilkan embedding teks mahasiswa dan faculty supervisor. Proses encoding dilakukan secara batch dengan normalisasi embedding, sehingga cosine similarity dapat dihitung melalui operasi dot product sederhana. Pustaka ini mendukung eksekusi pada GPU (CUDA) maupun CPU, dengan deteksi perangkat secara otomatis.
 
@@ -306,13 +306,13 @@ Dalam penelitian ini, sentence-transformers digunakan sebagai mekanisme utama un
 
 Port forwarding merupakan teknik jaringan yang memungkinkan akses ke layanan internal melalui jaringan eksternal dengan meneruskan permintaan dari port tertentu ke layanan internal.
 
-Menurut Kurose dan Ross (2017), port forwarding sering digunakan untuk mengakses layanan server yang berada di balik firewall atau jaringan privat.
+Menurut Kurose dan Ross (\citeyear{kurose2017networking}), port forwarding sering digunakan untuk mengakses layanan server yang berada di balik firewall atau jaringan privat.
 
 Dalam penelitian ini, port forwarding digunakan untuk memungkinkan akses ke layanan backend dan layanan embedding yang berjalan pada lingkungan on-premises selama tahap pengujian dan deployment sistem
 
 \subsection{On-Premises Deployment}\label{on-premises-deployment}
 
-On-premises deployment merupakan model penyebaran sistem di mana aplikasi dijalankan pada infrastruktur lokal, bukan pada layanan cloud publik. Menurut Mell dan Grance (2011), pendekatan on-premises memberikan kontrol penuh terhadap data dan infrastruktur.
+On-premises deployment merupakan model penyebaran sistem di mana aplikasi dijalankan pada infrastruktur lokal, bukan pada layanan cloud publik. Menurut Mell dan Grance (\citeyear{mell2011nist}), pendekatan on-premises memberikan kontrol penuh terhadap data dan infrastruktur.
 
 Dalam penelitian ini, sistem rekomendasi faculty supervisor di-deploy secara lokal menggunakan Docker container. Arsitektur deployment terdiri dari satu container aplikasi Flask yang menjalankan seluruh komponen sistem, termasuk web server, pipeline rekomendasi, dan database SQLite. Model embedding diunduh dan dijalankan secara lokal melalui pustaka sentence-transformers, tanpa memerlukan layanan API eksternal.
 
@@ -320,19 +320,19 @@ Pendekatan on-premises dipilih untuk menjaga keamanan data akademik mahasiswa da
 
 \subsection{Unified Modeling Language}\label{unified-modeling-language}
 
-Menurut (Dennis et al., 2020) Unified Modeling Language (UML) adalah alat diagramatis yang digunakan untuk memodelkan sistem berbasis objek dalam software engineering. UML berfungsi sebagai bahasa standar yang menyediakan terminologi dan teknik diagram yang seragam untuk mendukung semua fase pengembangan sistem, mulai dari analisis kebutuhan hingga implementasi.
+Menurut \cite{dennis2020systems} Unified Modeling Language (UML) adalah alat diagramatis yang digunakan untuk memodelkan sistem berbasis objek dalam software engineering. UML berfungsi sebagai bahasa standar yang menyediakan terminologi dan teknik diagram yang seragam untuk mendukung semua fase pengembangan sistem, mulai dari analisis kebutuhan hingga implementasi.
 
 \subsection{Usecase Diagram}\label{usecase-diagram}
 
-Use-case merupakan salah satu elemen penting dalam Unified Modeling Language (UML) yang digunakan untuk memahami fungsi fungsi utama dari sistem secara umum. Use-case diagrams berperan penting dalam mengkomunikasikan secara sederhana kepada pengguna mengenai apa yang akan dilakukan oleh sistem, sehingga diagram ini umumnya dibuat pada tahap pengumpulan dan penentuan kebutuhan sistem. Dengan menyediakan representasi visual yang sederhana, Use-case diagram dapat mendorong pengguna untuk memberikan masukan tambahan terkait kebutuhan sistem pada tingkat yang lebih tinggi. Diagram ini menggambarkan fungsi utama dari sistem serta berbagai jenis pengguna yang akan berinteraksi dengan sistem tersebut (Dennis et al., 2020).
+Use-case merupakan salah satu elemen penting dalam Unified Modeling Language (UML) yang digunakan untuk memahami fungsi fungsi utama dari sistem secara umum. Use-case diagrams berperan penting dalam mengkomunikasikan secara sederhana kepada pengguna mengenai apa yang akan dilakukan oleh sistem, sehingga diagram ini umumnya dibuat pada tahap pengumpulan dan penentuan kebutuhan sistem. Dengan menyediakan representasi visual yang sederhana, Use-case diagram dapat mendorong pengguna untuk memberikan masukan tambahan terkait kebutuhan sistem pada tingkat yang lebih tinggi. Diagram ini menggambarkan fungsi utama dari sistem serta berbagai jenis pengguna yang akan berinteraksi dengan sistem tersebut \cite{dennis2020systems}.
 
 \subsection{Activity Diagram}\label{activity-diagram}
 
-Activity diagram digunakan untuk merepresentasikan perilaku dalam proses bisnis yang tidak bergantung pada objek (independen). Activity diagram dapat digunakan untuk memodelkan segala sesuatu mulai dari alur kerja bisnis tingkat tinggi yang melibatkan banyak use case yang berbeda, hingga detail use case individual, hingga detail spesifik dari metode individual. Singkatnya, diagram aktivitas dapat digunakan untuk memodelkan semua jenis proses (Dennis et al., 2020).
+Activity diagram digunakan untuk merepresentasikan perilaku dalam proses bisnis yang tidak bergantung pada objek (independen). Activity diagram dapat digunakan untuk memodelkan segala sesuatu mulai dari alur kerja bisnis tingkat tinggi yang melibatkan banyak use case yang berbeda, hingga detail use case individual, hingga detail spesifik dari metode individual. Singkatnya, diagram aktivitas dapat digunakan untuk memodelkan semua jenis proses \cite{dennis2020systems}.
 
 \subsection{Class Diagram}\label{class-diagram}
 
-Class diagram adalah salah satu jenis diagram pada UML yang merupakan model statis yang menunjukkan kelas-kelas dan hubungan antar kelas yang tetap konstan dalam sistem dari waktu ke waktu. Diagram ini menggambarkan kelas-kelas yang mencakup perilaku (behavior) dan keadaan (state), serta memperlihatkan hubungan di antara kelas-kelas tersebut. Diagram kelas digunakan untuk memodelkan struktur sistem secara konseptual dengan menekankan pada elemen-elemen yang saling terkait dalam suatu sistem perangkat lunak. Unsur-unsur dalam diagram kelas meliputi atribut, metode, dan relasi seperti asosiasi, pewarisan, serta agregasi (Dennis et al., 2020).
+Class diagram adalah salah satu jenis diagram pada UML yang merupakan model statis yang menunjukkan kelas-kelas dan hubungan antar kelas yang tetap konstan dalam sistem dari waktu ke waktu. Diagram ini menggambarkan kelas-kelas yang mencakup perilaku (behavior) dan keadaan (state), serta memperlihatkan hubungan di antara kelas-kelas tersebut. Diagram kelas digunakan untuk memodelkan struktur sistem secara konseptual dengan menekankan pada elemen-elemen yang saling terkait dalam suatu sistem perangkat lunak. Unsur-unsur dalam diagram kelas meliputi atribut, metode, dan relasi seperti asosiasi, pewarisan, serta agregasi \cite{dennis2020systems}.
 
 \subsection{Entity Relationship Diagram}\label{entity-relationship-diagram}
 
@@ -359,17 +359,17 @@ Entity Relationship Diagram (ERD) adalah representasi visual yang digunakan dala
 \endlastfoot
 
 
-Tang et al., 2016 & A Research Topic Prediction and Supervisor Recommendation System & Mengembangkan sistem untuk memprediksi topik skripsi dan merekomendasikan supervisor secara otomatis & Judul dan abstrak skripsi mahasiswa & Naive Bayes, TF-IDF, Cosine Similarity & Naive Bayes tanpa TF-IDF menghasilkan akurasi 88.69 persen, presisi 89.76 persen, dan sensitivitas 90.49 persen. Penulis menyimpulkan bahwa pendekatan tanpa pembobotan TF-IDF lebih baik untuk klasifikasi topik skripsi. \\ \hline
+Zhang et al. (\citeyear{zhang2016supervisor}) & A Personality Matching-Aided Approach for Supervisor Recommendation & Mengusulkan pendekatan rekomendasi supervisor yang mempertimbangkan kesesuaian kepribadian antara mahasiswa dan supervisor & Data mahasiswa dan supervisor dari institusi pendidikan & Personality Matching, Recommendation Algorithm & Pendekatan berbasis kepribadian dapat memperkuat relevansi rekomendasi supervisor dibandingkan pendekatan berbasis topik penelitian semata \\ \hline
 
-Huang et al., 2019 & Supervisor Recommendation Based on Semantic Similarity & Meningkatkan kesesuaian rekomendasi supervisor berdasarkan kemiripan semantik & Profil mahasiswa dan publikasi dosen & Word2Vec, Cosine Similarity & Penggunaan word embedding meningkatkan tingkat kesesuaian rekomendasi supervisor secara signifikan dibandingkan pencocokan berbasis kata kunci, dengan peningkatan relevansi rekomendasi lebih dari 15 persen. \\ \hline
+Dharmawati et al. (\citeyear{dharmawati2020aplikasi}) & Aplikasi Rekomendasi Dosen Pembimbing Skripsi Berbasis TF-IDF dan Cosine Similarity & Membangun aplikasi rekomendasi dosen pembimbing skripsi berbasis pembobotan TF-IDF dan cosine similarity & Data judul skripsi mahasiswa dan keahlian dosen & TF-IDF, Cosine Similarity & Sistem menghasilkan rekomendasi dosen pembimbing yang relevan berdasarkan kemiripan teks judul skripsi dengan profil keahlian dosen \\ \hline
 
-Aljohani \& Davis, 2020 & Matching Students to Supervisors Using Text Mining Techniques & Mengotomatisasi proses pencocokan mahasiswa dengan supervisor & Proposal penelitian mahasiswa & Text Mining, Vector Space Model & Sistem mampu mengurangi waktu proses pencocokan supervisor hingga lebih dari 40\% dibandingkan proses manual dengan tingkat kecocokan yang dinilai relevan oleh evaluator akademik. \\ \hline
+Agustina et al. (\citeyear{agustina2020sistem}) & Sistem Perekomendasi Dosen Pembimbing berdasarkan Relevansi Topik Tugas Akhir menggunakan Metode Okapi BM25 & Membangun sistem rekomendasi dosen pembimbing berdasarkan relevansi topik tugas akhir menggunakan Okapi BM25 & Data tugas akhir mahasiswa dan profil dosen & Okapi BM25 & Metode BM25 menunjukkan kemampuan dalam meranking dosen pembimbing berdasarkan relevansi topik tugas akhir mahasiswa \\ \hline
 
-Rahman et al., 2023 & Supervisor Recommendation System Using Contextual Text Embeddings & Mengembangkan sistem rekomendasi supervisor berbasis embedding kontekstual & Data dari perlibraryan Universitas & Contextual Embedding, Cosine Similarity, Ranking Metrics & Supervisor Recommendation System Using Contextual Text Embeddings \\ \hline
+Hairani \& Mujahid (\citeyear{hairani2022supervisor}) & Recommendations of Thesis Supervisor using the Cosine Similarity Method & Mengembangkan sistem rekomendasi dosen pembimbing tugas akhir berbasis cosine similarity & Data mahasiswa dan profil dosen di institusi pendidikan & Cosine Similarity & Sistem berhasil memberikan rekomendasi dosen pembimbing yang relevan berdasarkan kemiripan profil mahasiswa dan keahlian dosen \\ \hline
 
-Li et al., 2022 & Semantic Search-Based Supervisor Recommendation System & Menerapkan semantic search untuk rekomendasi supervisor & Universitas Hasyim & Transformer based Embedding, Semantic Search & -Semantic Search-Based Supervisor Recommendation System Academic Advisor \\ \hline
+Sabilillah et al. (\citeyear{sabilillah2024bert}) & Implementasi BERT dan Cosine Similarity untuk Rekomendasi Dosen Pembimbing berdasarkan Judul Tugas Akhir & Mengimplementasikan BERT dan cosine similarity untuk merekomendasikan dosen pembimbing berdasarkan judul tugas akhir & Data judul tugas akhir mahasiswa dan profil dosen & BERT, Cosine Similarity & BERT + cosine similarity menunjukkan performa yang lebih baik dalam mengukur kemiripan semantik antara judul tugas akhir dan keahlian dosen \\ \hline
 
-Zhang et al., 2021 & Academic Advisor Recommendation Using Deep Learning & Mengembangkan sistem rekomendasi academic advisor berbasis deep learning & Data dari perlibraryan & BERT Embedding, Deep Learning Classifier & Academic Advisor Recommendation Using Deep Learning \\ \hline
+Falah \& Suryawan (\citeyear{falah2022recommendation}) & Recommendation System to Propose Final Project Supervisors using Cosine Similarity Matrix & Membangun sistem rekomendasi supervisor proyek akhir menggunakan matriks cosine similarity & Data mahasiswa dan data supervisor di institusi pendidikan & Cosine Similarity Matrix & Sistem rekomendasi berbasis matriks cosine similarity berhasil menghasilkan usulan supervisor proyek akhir yang relevan bagi mahasiswa \\ \hline
 
 \end{longtable}
 \endgroup

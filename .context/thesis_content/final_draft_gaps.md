@@ -9,10 +9,10 @@
 | Chapter | Status Konten | Gap Kritis |
 |---|---|---|
 | BAB 1 | ✅ Written | — |
-| BAB 2 | ⚠️ Mostly written | 3 studi tidak lengkap |
-| BAB 3 | ⚠️ Written tapi inkonsisten | Model kandidat + metrik ≠ BAB 4 |
-| BAB 4 | ⚠️ Partially written | Placeholder model, figure captions, Rules Studio salah |
-| BAB 5 | ✅ Written (baru) | Satu placeholder nama model A |
+| BAB 2 | ⚠️ Mostly written | 3 studi hallucinated, ref.bib kosong |
+| BAB 3 | ✅ Written & consistent | — |
+| BAB 4 | ✅ Written & updated | — |
+| BAB 5 | ✅ Written | — |
 | abstrak.tex | ✅ Written | — |
 | abstract.tex | ⚠️ Disabled | `% \include{abstract}` di-comment di Skripsi.tex |
 
@@ -22,146 +22,174 @@
 **Keputusan: Dihapus (Opsi B)**
 
 Yang dihapus dari bab2.tex:
-- Sub-section `\subsection{System Usability Scale (SUS)}` beserta seluruh isinya (rumus, langkah scoring)
-- Kalimat "Yang kedua adalah Evaluasi Usability (SUS)..." dari paragraf intro Evaluasi Sistem Rekomendasi
+- Sub-section `\subsection{System Usability Scale (SUS)}` beserta seluruh isinya
+- Kalimat "Yang kedua adalah Evaluasi Usability (SUS)..." dari paragraf intro
 - "dan System Usability Scale (SUS)" dari kalimat penutup Penelitian Terkait
 
-Framing evaluasi di BAB 2 sekarang: evaluasi otomatis berbasis metrik kuantitatif saja (MRR, Hit@K, nDCG@K, Match Rate).
+---
+
+## GAP 2 — Figure Captions BAB 4 §4.2.3 ✅ RESOLVED
+**Delapan screenshot sudah memiliki `\caption` dan `\label`:**
+- `fig:login` → "Tampilan Halaman Login"
+- `fig:register` → "Tampilan Halaman Register"
+- `fig:dashboard` → "Tampilan Halaman Dashboard"
+- `fig:datacenter` → "Tampilan Halaman Data Center"
+- `fig:runhistory` → "Tampilan Halaman Run History"
+- `fig:rundetails` → "Tampilan Halaman Run Details"
+- `fig:supervisorstudio` → "Tampilan Halaman Supervisor Studio"
+- `fig:rulestudio` → "Tampilan Halaman Rules Studio"
 
 ---
 
-## GAP 2 — Figure Captions BAB 4 §4.2.3: Semua Kosong
-**Severity: KRITIS**
-
-Delapan screenshot aplikasi web tidak memiliki `\caption` dan `\label`:
-- `pic/login.png`
-- `pic/register.png`
-- `pic/dashboard.png`
-- `pic/datacenter.png`
-- `pic/runhistory.png`
-- `pic/rundetails.png`
-- `pic/supervisorstudio.png`
-- `pic/rulestudio.png`
-
-**Akibat:** Tidak muncul di Daftar Gambar, tidak bisa di-cross-reference dari teks.
-
-**Resolusi:** Tambahkan `\caption{...}` dan `\label{fig:...}` pada setiap `\begin{figure}` di §4.2.3 bab4.tex.
-
-**Format caption yang diusulkan:**
-```
-Gambar 4.1  Tampilan Halaman Login
-Gambar 4.2  Tampilan Halaman Register
-Gambar 4.3  Tampilan Halaman Dashboard
-Gambar 4.4  Tampilan Halaman Data Center
-Gambar 4.5  Tampilan Halaman Run History
-Gambar 4.6  Tampilan Halaman Run Details
-Gambar 4.7  Tampilan Halaman Supervisor Studio
-Gambar 4.8  Tampilan Halaman Rules Studio
-```
+## GAP 3 — Inkonsistensi BAB 3 ↔ BAB 4: Model Kandidat ✅ RESOLVED (2026-06-07)
+Model di BAB 3 §3.2.3 sekarang sesuai dengan yang digunakan di BAB 4:
+- BAAI/bge-m3, Qwen/Qwen3-Embedding-0.6B, intfloat/multilingual-e5-large-instruct
 
 ---
 
-## GAP 3 — Inkonsistensi BAB 3 ↔ BAB 4: Model Kandidat
-**Severity: KRITIS**
-
-| | BAB 3 (direncanakan) | BAB 4 (aktual) |
-|---|---|---|
-| Model 1 | Qwen3-Embedding-0.6B | Qwen/Qwen3-Embedding-0.6B ✓ |
-| Model 2 | EmbeddingGemma-300M | BAAI/bge-m3 ✗ |
-| Model 3 | Jina-embeddings-v3 | intfloat/multilingual-e5-large-instruct ✗ |
-
-**Resolusi:** Update BAB 3 §3.2.3 (sub-section "Kandidat Model Text Embedding") agar deskripsi ketiga model sesuai dengan yang benar-benar digunakan di BAB 4.
+## GAP 4 — Inkonsistensi BAB 3 ↔ BAB 4: Metrik Evaluasi ✅ RESOLVED (2026-06-07)
+BAB 3 §3.2.3 sekarang mencantumkan: MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, Avg Rank, Assignment Match Rate.
 
 ---
 
-## GAP 4 — Inkonsistensi BAB 3 ↔ BAB 4: Metrik Evaluasi
-**Severity: KRITIS**
-
-| | BAB 3 (direncanakan) | BAB 4 (aktual) |
-|---|---|---|
-| Metrik retrieval | Recall@5, nDCG@5 | MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, avg\_rank |
-| Metrik assignment | (tidak disebutkan) | Assignment Match Rate |
-
-**Resolusi:** Update BAB 3 §3.2.3 (sub-section "Strategi Evaluasi") agar mencantumkan metrik yang benar-benar digunakan.
+## GAP 5 — Rules Studio Prose & Testing Table ✅ RESOLVED (2026-06-07)
+- Deskripsi halaman Rules Studio di §4.2.3 sudah ditulis ulang (bukan copy-paste dari Supervisor Studio)
+- Tabel pengujian Rules Studio (tab4.10) sudah diganti dengan skenario yang benar:
+  threshold edit, invalid threshold, label description update, preview score, save config, navigate
 
 ---
 
-## GAP 5 — Rules Studio Prose di BAB 4 §4.2.3: Copy-Paste Salah
-**Severity: SEDANG**
+## GAP 6 — BAB 2 Penelitian Terkait: 3 Studi Hallucinated ❌ OPEN
+**Severity: KRITIS (academic integrity)**
 
-Deskripsi halaman Rules Studio saat ini identik kata per kata dengan deskripsi Supervisor Studio.
+Tiga baris longtable terindikasi hallucinated — tidak ditemukan di web search:
 
-**Yang seharusnya tertulis untuk Rules Studio:**
-Halaman Rules Studio berfungsi mengonfigurasi parameter aturan yang digunakan dalam proses rekomendasi. Fitur utama meliputi pengaturan *cosine similarity threshold* per label semantik, pengelolaan deskripsi label yang menentukan pemetaan profil mahasiswa ke kategori penugasan tertentu (seperti `apple\_mobile` atau `binus\_bandung`), manajemen matriks afinitas (*boost value*) antara dosen dan label, serta pratinjau skor label. Perubahan pada halaman ini akan memicu invalidasi *cache* agar hasil run berikutnya mencerminkan konfigurasi terbaru.
-
-**Resolusi:** Ganti teks duplikat di bab4.tex §4.2.3 Rules Studio dengan deskripsi di atas.
-
----
-
-## GAP 6 — BAB 2 Penelitian Terkait: 3 Studi Tidak Lengkap
-**Severity: SEDANG**
-
-Tiga baris longtable tidak memiliki hasil/temuan:
-
-| Studi | Yang Kurang |
+| Studi | Masalah |
 |---|---|
-| Rahman et al. (2023) | Hasil evaluasi / performa metrik |
-| Li et al. (2022) | Hasil evaluasi / performa metrik |
-| Zhang et al. (2021) | Hasil evaluasi / performa metrik |
+| Rahman et al. (2023) | Zero search results; kolom hasil = copy judul |
+| Li et al. (2022) | Zero search results; dataset "Universitas Hasyim" tidak dapat diverifikasi |
+| Zhang et al. (2021) | Zero search results; kolom hasil = copy judul |
 
-**Resolusi:** Isi kolom hasil ketiga studi dari sumber aslinya (paper/referensi).
-
----
-
-## GAP 7 — "XYZ University": Placeholder atau Anonimisasi?
-**Severity: SEDANG**
-
-Nama mitra universitas muncul sebagai "XYZ University" / "XYZ" di seluruh dokumen:
-- Judul thesis (Awal_konfigurasi.tex)
-- BAB 1 (Latar Belakang, Ruang Lingkup)
-- abstrak.tex (Indonesia + Inggris)
-- BAB 5 (Simpulan)
+**2 paper pengganti nyata sudah ditemukan (dari citation-audit.md):**
+- Hairani & Mujahid (2022) — SISTEMASI — 91.3% accuracy
+- Sabilillah et al. (2024) — Edumatic — 90% accuracy
 
 **Resolusi yang diperlukan:**
-- [ ] Konfirmasi dengan pembimbing: nama nyata dicantumkan atau tetap dianonimkan
-- [ ] Jika perlu diganti: gunakan `replace_all` di setiap file terkait
+- [ ] Cari 1 paper lagi (2021–2023, deep learning / transformer untuk supervisor recommendation)
+- [ ] Ganti 3 baris hallucinated di bab2.tex longtable dengan paper nyata
+- [ ] Isi kolom hasil dengan data aktual (bukan copy judul)
 
 ---
 
-## GAP 8 — Placeholder Nama Model di BAB 4 & BAB 5
-**Severity: SEDANG** (blocker untuk finalisasi)
+## GAP 7 — "XYZ University": Placeholder atau Anonimisasi? ❌ OPEN
+**Severity: SEDANG**
 
-Lokasi `[LENGKAPI: nama model A]` dan variannya:
-- bab4.tex §4.2.1 — dalam paragraf + Table 4.2.1 (3 baris)
-- bab4.tex §4.2.2 — dalam paragraf analisis
-- bab4.tex §4.2.1 — `[LENGKAPI: jumlah model]` (kemungkinan "tiga")
-- bab5.tex §5.1 — poin simpulan no. 3
+Muncul di: Awal_konfigurasi.tex, bab1.tex, abstrak.tex, bab5.tex.
 
-**Resolusi:** Konfirmasi nama model untuk Run 5, 6, 9 lalu isi semua sekaligus.
+**Resolusi yang diperlukan:**
+- [ ] Konfirmasi dengan pembimbing: nama nyata atau tetap anonim
+- [ ] Jika diganti: gunakan `replace_all` di setiap file terkait
 
 ---
 
-## GAP 9 — Lampiran: Belum Ada
+## GAP 8 — Placeholder Nama Model ✅ RESOLVED (2026-06-07)
+Semua placeholder `[LENGKAPI: nama model A/B/C]` sudah diisi:
+- A = BAAI/bge-m3, B = Qwen/Qwen3-Embedding-0.6B, C = intfloat/multilingual-e5-large-instruct
+
+---
+
+## GAP 9 — Lampiran: Belum Ada ❌ OPEN
 **Severity: SEDANG** (tergantung panduan BINUS)
 
-Tidak terdeteksi file lampiran di repository. BINUS umumnya mensyaratkan lampiran untuk:
-- Kuesioner / instrumen evaluasi
-- Surat izin penelitian / pengambilan data
-- Data mentah atau sampel dataset
-- Dokumentasi tambahan (screenshot tambahan, hasil ekspor, dll.)
+- [ ] Cek panduan penulisan skripsi BINUS terbaru
+- [ ] Tambahkan lampiran yang diperlukan (kuesioner, surat izin, sampel data, screenshot)
 
-**Resolusi:** Cek panduan penulisan skripsi BINUS terbaru dan tambahkan lampiran yang diperlukan.
+---
+
+## GAP 10 — ref.bib Kosong & 0 \cite{} Command ❌ OPEN
+**Severity: KRITIS (bibliography tidak akan ter-render)**
+
+- `ref.bib` berisi 13 template placeholder (Peter Adams 1993 dll.) + 2 paper tidak relevan — 0 entry usable
+- Tidak ada satu pun `\cite{}` di seluruh .tex — semua 30+ sitasi ditulis sebagai teks inline
+- Jika compile sekarang: bibliography halaman kosong
+
+**Resolusi yang diperlukan:**
+- [ ] Buat entri BibTeX untuk seluruh 30+ sitasi (Mikolov 2013, Vaswani 2017, Devlin 2019, dst.)
+- [ ] Ganti semua sitasi inline menjadi `\cite{key}` di bab1.tex–bab5.tex
+- [ ] Verifikasi compile: `pdflatex → bibtex → pdflatex × 2`
+
+---
+
+## GAP 11 — BAB 4 Data Evaluasi: Old Batch → New Batch ✅ RESOLVED (2026-06-07)
+Tabel evaluasi bab4.tex diperbarui dari data lama (Run 5/6/9) ke batch terbaru (`batch_20260607_163454`, Run 8/14/20):
+
+| Model | Run lama | Run baru | Perubahan metrik |
+|---|---|---|---|
+| BAAI/bge-m3 | Run 5 | Run 8 | Hit@5: 0.804→0.798, avg_rank: 3.32→3.33 |
+| Qwen3 | Run 6 | Run 14 | MRR: 0.474→0.478, match_rate: 0.357→0.423 |
+| mE5-large | Run 9 | Run 20 | match_rate: 0.381→0.399 |
+
+Tabel similarity scores juga diperbarui dari delta_mean baru.
+
+---
+
+## GAP 12 — BAB 4 Inversion Attribution Salah ✅ RESOLVED (2026-06-07)
+§4.2.2 sebelumnya menyebut mE5-large sebagai model dengan match_rate tertinggi.
+Data batch baru menunjukkan Qwen3-0.6B yang memiliki match_rate tertinggi (0.423).
+Seluruh analisis §4.2.2 sudah ditulis ulang sesuai data baru.
+
+---
+
+## GAP 13 — BAB 4 Sections Baru: Toggle Analysis, Load, Rank ✅ RESOLVED (2026-06-07)
+Tiga subbab baru ditambahkan ke bab4.tex berdasarkan `analysis-finding.md`:
+
+- **§4.2.3 Analisis Pengaruh Parameter Konfigurasi** — tabel extra_docs per model, tabel group_bonus per model, tabel konfigurasi terbaik (Run 8)
+- **§4.2.4 Distribusi Beban Pembimbing** — tabel Gini=0.0138, semua 18 konfigurasi identik
+- **§4.2.5 Distribusi Peringkat Penugasan** — tabel distribusi bimodal (45.4% rank-1, dip 2–3, naik lagi di 4)
+
+---
+
+## GAP 14 — BAB 3 Greedy Solver Description Salah ✅ RESOLVED (2026-06-07)
+§3.2.3.6 (Validasi Slot) sebelumnya mendeskripsikan greedy naif (mahasiswa diproses satu per satu berdasarkan skor). Implementasi aktual adalah 2-phase batch greedy:
+1. Init: semua mahasiswa ke argmax
+2. Phase 1: kurangi overfull (min penalty)
+3. Phase 2: isi underfull (min penalty)
+
+Teks sudah ditulis ulang. Kalimat "mahasiswa tidak dialokasikan jika top-5 penuh" (salah) dihapus — solver raise RuntimeError jika constraint tidak terpenuhi.
+
+---
+
+## GAP 15 — BAB 4 Login/Register Testing: "Email" → "Username" ✅ RESOLVED (2026-06-07)
+Sistem autentikasi menggunakan username (bukan email). Tabel skenario Login dan Register di bab4.tex sudah diperbarui. Register scenarios juga direvisi agar sesuai validasi aktual (password≠confirm, username sudah dipakai).
+
+---
+
+## GAP 16 — BAB 1 Figure 1.1 Missing ✅ RESOLVED (2026-06-07)
+Grafik "Data Mahasiswa 2021--2025" ditambahkan:
+- Image: `pic/pertumbuhan-mahasiswa.png`
+- Label: `fig:fig1.1`
+- \ref{} ditambahkan pada prose di §1.1 ("sebagaimana terlihat pada Gambar~\ref{fig:fig1.1}")
 
 ---
 
 ## Checklist Final Draft
 
+**Resolved:**
 - [x] GAP 1 — SUS dihapus dari BAB 2 ✅
-- [x] GAP 2 — Tambah caption + label ke 8 figure di BAB 4 §4.2.3 ✅
-- [x] GAP 3 — Update model kandidat di BAB 3 §3.2.3 ✅ (EmbeddingGemma→BAAI/bge-m3, Jina→multilingual-e5-large-instruct)
-- [x] GAP 4 — Update metrik evaluasi di BAB 3 §3.2.3 ✅ (Recall@5/nDCG@5 → MRR, Hit@1/5, NDCG@5/10, Avg Rank, Assignment Match Rate)
-- [x] GAP 5 — Tulis ulang Rules Studio prose di BAB 4 §4.2.3 ✅
-- [ ] GAP 6 — Lengkapi 3 studi di BAB 2 longtable
-- [ ] GAP 7 — Klarifikasi dan resolve "XYZ University"
-- [x] GAP 8 — Isi semua placeholder nama model ✅ (A=BAAI/bge-m3, B=Qwen/Qwen3-Embedding-0.6B, C=intfloat/multilingual-e5-large-instruct)
-- [ ] GAP 9 — Cek dan tambahkan lampiran sesuai panduan BINUS
+- [x] GAP 2 — Figure captions 8 gambar BAB 4 ✅
+- [x] GAP 3 — Model kandidat BAB 3 konsisten dengan BAB 4 ✅
+- [x] GAP 4 — Metrik evaluasi BAB 3 konsisten dengan BAB 4 ✅
+- [x] GAP 5 — Rules Studio prose & testing table ✅
+- [x] GAP 8 — Placeholder nama model A/B/C ✅
+- [x] GAP 11 — Data evaluasi diperbarui ke batch terbaru ✅
+- [x] GAP 12 — Inversion attribution diperbaiki (mE5→Qwen3) ✅
+- [x] GAP 13 — Tiga subbab analisis baru (toggle, load, rank) ✅
+- [x] GAP 14 — BAB 3 greedy solver description diperbaiki ✅
+- [x] GAP 15 — Login/Register testing: email→username ✅
+
+**Still Open:**
+- [ ] GAP 6 — 3 studi hallucinated di BAB 2 (butuh penggantian + 1 paper lagi)
+- [ ] GAP 7 — "XYZ University" (keputusan pembimbing diperlukan)
+- [ ] GAP 9 — Lampiran (cek panduan BINUS)
+- [ ] GAP 10 — ref.bib kosong + 0 `\cite{}` command ← **prioritas tertinggi**
+- [x] GAP 16 — BAB 1 Figure 1.1 (grafik pertumbuhan mahasiswa) ✅

@@ -1,0 +1,142 @@
+---
+title: "Data Layer — ORM Models & Runtime Dataclasses"
+---
+classDiagram
+    direction TB
+
+    namespace ORM_Models {
+        class Supervisor {
+            +int id
+            +str code
+            +str name
+            +str profile_keywords
+            +bool is_active
+        }
+
+        class Student {
+            +int id
+            +str student_id
+            +str name
+            +str track
+            +float gpa
+            +str position_topic
+            +str enrollment_status
+            +str current_supervisor_code
+            +datetime created_at
+        }
+
+        class RecommendationRun {
+            +int id
+            +datetime created_at
+            +str input_source
+            +int total_students
+            +int total_supervisors
+            +int target_min_capacity
+            +int target_max_capacity
+            +str solver_name
+            +str embedding_model
+            +float objective_score
+        }
+
+        class Recommendation {
+            +int id
+            +int run_id
+            +int student_id
+            +int supervisor_id
+            +float similarity_score
+            +float group_boost
+            +float final_score
+            +str rule_matches
+        }
+
+        class AppUser {
+            +int id
+            +str username
+            +str full_name
+            +str password_hash
+            +datetime created_at
+        }
+    }
+
+    namespace Runtime_Dataclasses {
+        class SupervisorProfile {
+            <<frozen dataclass>>
+            +str code
+            +str name
+            +tuple~str~ keywords
+            +tuple~str~ labels
+        }
+
+        class RunOverrides {
+            <<dataclass>>
+            +str embedding_model
+            +str embedding_task
+            +bool enable_group_bonus
+            +bool enable_extra_docs
+            +list~str~ capacity_priority_codes
+            +int target_min_capacity
+            +int target_max_capacity
+        }
+
+        class CapacityPlan {
+            <<dataclass>>
+            +list~int~ min_caps
+            +list~int~ max_caps
+            +bool relaxed
+            +str note
+        }
+
+        class RecommendationItem {
+            <<dataclass>>
+            +dict student
+            +SupervisorProfile supervisor
+            +float similarity_score
+            +float group_boost
+            +float final_score
+            +list~str~ rule_matches
+        }
+
+        class RecommendationOutput {
+            <<dataclass>>
+            +list~RecommendationItem~ items
+            +str solver_name
+            +float objective_score
+            +CapacityPlan capacity_plan
+            +str embedding_model
+            +ndarray content_similarity_matrix
+            +ndarray hybrid_score_matrix
+        }
+
+        class EmbeddingInfo {
+            <<dataclass>>
+            +str backend
+            +str model_name
+            +str note
+        }
+    }
+
+    namespace Service_Classes {
+        class EmbeddingProvider {
+            <<singleton per model>>
+            -str _model_name
+            -Lock _lock
+            -bool _loaded
+            -SentenceTransformer _model
+            -EmbeddingInfo _info
+            +EmbeddingInfo info
+            +encode_batch(texts, task) ndarray
+            +similarity_matrix(source, target, task) ndarray
+            -_ensure_loaded() None
+        }
+    }
+
+    %% ORM Associations
+    RecommendationRun "1" --> "*" Recommendation : cascade delete
+    Recommendation "*" --> "1" Student
+    Recommendation "*" --> "1" Supervisor
+
+    %% Runtime Composition
+    RecommendationOutput "1" *-- "*" RecommendationItem : contains
+    RecommendationOutput "1" *-- "1" CapacityPlan : contains
+    RecommendationItem "*" --> "1" SupervisorProfile : references
+    EmbeddingProvider "1" *-- "1" EmbeddingInfo : owns

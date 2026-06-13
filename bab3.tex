@@ -1,12 +1,74 @@
+% !TEX root = Skripsi.tex
 \chapter{\babTiga}
 
 
 
 \section{Kerangka Berpikir}\label{kerangka-berpikir}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[width=2.54722in,height=5.51875in]{pic/kerangka-berpikir}
+\scalebox{0.75}{%
+\begin{tikzpicture}[
+  node distance=0.3cm,
+  terminal/.style={
+    draw, rounded rectangle,
+    text width=2cm, align=center,
+    minimum height=0.55cm, font=\footnotesize
+  },
+  process/.style={
+    draw, rectangle,
+    text width=5.5cm, align=center,
+    minimum height=0.7cm, inner sep=4pt, font=\footnotesize
+  },
+  io/.style={
+    draw, trapezium,
+    trapezium left angle=75, trapezium right angle=105,
+    text width=4.8cm, align=center,
+    minimum height=0.7cm, inner sep=4pt, font=\footnotesize
+  },
+  decision/.style={
+    draw, diamond, aspect=2.5,
+    text width=1.6cm, align=center,
+    inner sep=2pt, font=\footnotesize
+  },
+  arrow/.style={->, >=stealth}
+]
+  \node (mulai)   [terminal]                  {Mulai};
+  \node (input1)  [io,      below=of mulai]   {EPC memasukkan data mahasiswa dan mengelola data faculty supervisor};
+  \node (input2)  [io,      below=of input1]  {EPC mengkonfigurasi parameter pipeline (model embedding, rule boost, group bonus, kapasitas)};
+  \node (p1)      [process, below=of input2]  {Pembentukan dokumen teks mahasiswa dan faculty supervisor};
+  \node (p2)      [process, below=of p1]      {Encoding dokumen menggunakan model embedding (transformer)};
+  \node (p3)      [process, below=of p2]      {Perhitungan cosine similarity matrix};
+  \node (p4)      [process, below=of p3]      {Deteksi label semantik per mahasiswa};
+  \node (p5)      [process, below=of p4]      {Perhitungan company group bonus dan extra document};
+  \node (p6)      [process, below=of p5]      {Perhitungan capacity plan (min/max per supervisor)};
+  \node (p7)      [process, below=of p6]      {Alokasi mahasiswa ke supervisor menggunakan greedy solver};
+  \node (p8)      [process, below=of p7]      {Perhitungan metrik evaluasi (MRR, Match Rate, Coverage)};
+  \node (output1) [process, below=of p8]      {EPC menganalisis hasil rekomendasi};
+  \node (decide)  [decision,below=of output1] {Hasil sesuai?};
+  \node (output2) [io,      below=of decide]  {EPC export hasil ke Excel};
+  \node (selesai) [terminal,below=of output2] {Selesai};
+
+  \draw [arrow] (mulai)   -- (input1);
+  \draw [arrow] (input1)  -- (input2);
+  \draw [arrow] (input2)  -- (p1);
+  \draw [arrow] (p1)      -- (p2);
+  \draw [arrow] (p2)      -- (p3);
+  \draw [arrow] (p3)      -- (p4);
+  \draw [arrow] (p4)      -- (p5);
+  \draw [arrow] (p5)      -- (p6);
+  \draw [arrow] (p6)      -- (p7);
+  \draw [arrow] (p7)      -- (p8);
+  \draw [arrow] (p8)      -- (output1);
+  \draw [arrow] (output1) -- (decide);
+  \draw [arrow] (decide)  -- node[right, font=\footnotesize] {Ya}   (output2);
+  \draw [arrow] (output2) -- (selesai);
+
+  \draw [arrow] (decide.east)
+    -- node[above, font=\footnotesize] {Tidak} ++(2.8,0)
+    |- (input2.east);
+\end{tikzpicture}%
+}
 \caption{Alur Kerangka Berpikir}
 \label{fig:fig3.1}
 \end{figure}
@@ -257,9 +319,17 @@ Struktur data knowledge base yang digunakan dalam proses perhitungan kemiripan d
 
 Selain mempertimbangkan tingkat kesesuaian berdasarkan semantic similarity, sistem juga melakukan validasi terhadap ketersediaan slot bimbingan faculty supervisor. Proses validasi ini dilakukan setelah tahap perangkingan selesai dan bertujuan untuk memastikan bahwa rekomendasi yang dihasilkan dapat direalisasikan sesuai dengan kapasitas bimbingan yang tersedia.
 
-Validasi slot dilakukan secara batch terhadap seluruh mahasiswa yang memenuhi kriteria eligible. Pada tahap ini, mahasiswa diproses secara berurutan berdasarkan skor kemiripan tertinggi yang diperoleh dari hasil perangkingan. Untuk setiap mahasiswa, sistem akan memeriksa daftar rekomendasi top-5 faculty supervisor dan memilih faculty supervisor dengan peringkat tertinggi yang masih memiliki slot bimbingan tersedia. Apabila faculty supervisor pada peringkat teratas telah mencapai batas kapasitas bimbingan, sistem akan melanjutkan pemeriksaan ke peringkat berikutnya hingga ditemukan faculty supervisor dengan slot yang masih tersedia.
+Alokasi dilakukan secara batch terhadap seluruh mahasiswa yang memenuhi kriteria \textit{eligible} menggunakan algoritma \textit{greedy} dua fase. Sebelum fase alokasi dijalankan, sistem menyusun rencana kapasitas (\textit{capacity plan}) yang menentukan batas minimum dan maksimum jumlah mahasiswa per faculty supervisor berdasarkan total mahasiswa dan jumlah supervisor aktif. Parameter \texttt{target\_min} dan \texttt{target\_max} menjadi acuan awal, dengan penyesuaian otomatis apabila total mahasiswa melebihi atau di bawah kapasitas kolektif (\textit{overflow}/\textit{underflow}).
 
-Faculty supervisor yang memenuhi kriteria tersebut kemudian dipasangkan dengan mahasiswa sebagai hasil rekomendasi akhir. Apabila seluruh faculty supervisor dalam daftar rekomendasi top-5 tidak memiliki slot bimbingan yang tersedia, maka mahasiswa tersebut tidak dialokasikan secara otomatis dan dapat ditindaklanjuti melalui proses peninjauan lebih lanjut oleh pihak EPC.
+Algoritma \textit{greedy} dua fase bekerja sebagai berikut:
+
+\begin{enumerate}
+    \item \textbf{Inisialisasi:} Setiap mahasiswa dialokasikan ke faculty supervisor dengan skor tertinggi (\textit{argmax}) tanpa mempertimbangkan kapasitas.
+    \item \textbf{Fase 1 — Pengurangan \textit{Overfull}:} Sistem secara iteratif memindahkan mahasiswa dari supervisor yang melebihi batas maksimum ke supervisor lain yang masih tersedia, dengan memilih pemindahan yang menghasilkan \textit{penalty} skor terkecil.
+    \item \textbf{Fase 2 — Pengisian \textit{Underfull}:} Sistem secara iteratif memindahkan mahasiswa dari supervisor yang berada di atas batas minimum (\textit{donor}) ke supervisor yang berada di bawah batas minimum, kembali dengan memilih pemindahan dengan \textit{penalty} terkecil.
+\end{enumerate}
+
+Setelah kedua fase selesai, sistem melakukan validasi akhir untuk memastikan seluruh constraint kapasitas terpenuhi. Apabila validasi gagal, sistem menghentikan proses dan menampilkan pesan kesalahan kepada EPC. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang memenuhi seluruh batasan kapasitas secara optimal.
 
 \subsection{Strategi evaluasi}\label{strategi-evaluasi}
 
@@ -288,9 +358,50 @@ Perancangan UML dan use case pada penelitian ini bertujuan untuk memodelkan alur
 
 Use case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dalam sistem klasifikasi dan prediksi topik yang dikembangkan. Diagram ini juga menjelaskan aktor-aktor yang terlibat dalam sistem tersebut. Dalam sistem klasifikasi dan prediksi topik skripsi ini, aktor utama yang berperan adalah user dan admin.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[width=4.30537in,height=2.05108in]{pic/usecase-diagram}
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  uc/.style={ellipse, draw, text width=4.0cm, align=center,
+             minimum height=0.9cm, inner sep=3pt},
+]
+
+%% System boundary — sharp corners
+\draw[thick] (1.0, 1.0) rectangle (10.5, -14.2);
+\node[font=\scriptsize\bfseries, above] at (5.75, 1.0)
+  {Sistem Rekomendasi Faculty Supervisor};
+
+%% Single column of use cases at x=6.5
+%% y positions: 0, -1.5, -3.0, ..., -13.5  (centre = -6.75)
+\node (uc1)  [uc] at (6.5,   0.0) {Register};
+\node (uc2)  [uc] at (6.5,  -1.5) {Login};
+\node (uc3)  [uc] at (6.5,  -3.0) {Import Data Mahasiswa};
+\node (uc4)  [uc] at (6.5,  -4.5) {Kelola Data Faculty Supervisor};
+\node (uc5)  [uc] at (6.5,  -6.0) {Kelola Rules Studio};
+\node (uc6)  [uc] at (6.5,  -7.5) {Lihat Dashboard};
+\node (uc7)  [uc] at (6.5,  -9.0) {Trigger Proses Rekomendasi};
+\node (uc8)  [uc] at (6.5, -10.5) {Lihat Hasil Rekomendasi};
+\node (uc9)  [uc] at (6.5, -12.0) {Export Hasil ke Excel};
+\node (uc10) [uc] at (6.5, -13.5) {Logout};
+
+%% Direct fan lines from actor arm-tip to every use case (single column = no crossing)
+\foreach \uc in {uc1, uc2, uc3, uc4, uc5, uc6, uc7, uc8, uc9, uc10} {
+  \draw (-0.28, -6.10) -- (\uc.west);
+}
+
+%% Actor (EPC) — stick figure centred at x=-0.8, y=-6.75
+%% pre-computed: head=-5.20, neck=-5.52, arm=-6.10, hip=-6.60, feet=-7.40
+\draw[fill=white] (-0.8, -5.20) circle (0.32cm);  % head
+\draw (-0.8, -5.52) -- (-0.8, -6.60);             % body
+\draw (-1.32, -6.10) -- (-0.28, -6.10);           % arms
+\draw (-0.8,  -6.60) -- (-1.22, -7.40);           % left leg
+\draw (-0.8,  -6.60) -- (-0.38, -7.40);           % right leg
+\node[font=\scriptsize\bfseries, below=0.12cm] at (-0.8, -7.40) {EPC};
+
+
+\end{tikzpicture}%
+}
 \caption{Use Case Diagram}
 \label{fig:fig3.2}
 \end{figure}
@@ -303,509 +414,988 @@ Perancangan use case narrative mengacu pada proses bisnis dan alur fungsional si
 
 Melalui use case narrative, setiap fungsi utama sistem dijabarkan secara sistematis sehingga dapat memberikan pemahaman yang jelas mengenai bagaimana sistem merespons aksi pengguna dalam berbagai kondisi. Narasi ini juga membantu memastikan bahwa seluruh kebutuhan fungsional yang telah dirancang dapat ditelusuri secara konsisten dari tahap analisis kebutuhan hingga perancangan dan implementasi sistem.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4629}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5371}}@{}}
-\caption{Tabel 3. 6 Use Case Register}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\newlength{\ucdeskcol}
+\setlength{\ucdeskcol}{\dimexpr 9.5cm + 2\tabcolsep + \arrayrulewidth\relax}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.6 Use Case Register} \label{table:tab3.6} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
 \endhead
-\bottomrule\noalign{}
-\endlastfoot
-Use Case Name & Register \\
-Scenario & EPC membuat akun baru untuk mengakses sistem rekomendasi \\
-Triggering Events & EPC membuka halaman registrasi \\
-Brief Description & Use case ini menggambarkan proses pembuatan akun baru oleh EPC yang mencakup pengisian username, nama lengkap, dan password \\
-Actor & EPC \\
-Related Use Case & Login \\
-Stakeholder & EPC \\
-Pre-condition & Sistem dalam kondisi aktif, EPC belum memiliki akun \\
-Post-condition & Akun EPC tersimpan di database, EPC langsung login ke sistem \\
-Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2602}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2755}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Actor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-System
-\end{minipage} \\
-\midrule\noalign{}
-EPC membuka halaman registrasi & Sistem menampilkan formulir registrasi (username, nama lengkap, password, konfirmasi password) \\
-EPC mengisi formulir dan menekan tombol Register & Sistem memvalidasi bahwa password dan konfirmasi password sesuai \\
-& Sistem memeriksa ketersediaan username \\
-& Sistem menyimpan akun baru dengan password ter-hash \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
-Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2618}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2739}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Handling
-\end{minipage} \\
-\midrule\noalign{}
-Password dan konfirmasi password tidak sama & Sistem menampilkan pesan kesalahan dan meminta EPC mengulang \\
-Username sudah digunakan & Sistem menampilkan pesan kesalahan \\
-Username kurang dari 3 karakter & Sistem menolak registrasi \\
-Password kurang dari 6 karakter & Sistem menolak registrasi \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Register} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuat akun baru untuk mengakses sistem rekomendasi} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka halaman registrasi} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses pembuatan akun baru oleh EPC yang mencakup pengisian username, nama lengkap, dan password} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Login} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{Sistem dalam kondisi aktif, EPC belum memiliki akun} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Akun EPC tersimpan di database, EPC langsung login ke sistem} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman registrasi & Sistem menampilkan formulir registrasi (username, nama lengkap, password, konfirmasi password) \\
+\hline
+ & EPC mengisi formulir dan menekan tombol Register & Sistem memvalidasi bahwa password dan konfirmasi password sesuai \\
+\hline
+ & & Sistem memeriksa ketersediaan username \\
+\hline
+ & & Sistem menyimpan akun baru dengan password ter-hash \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Password dan konfirmasi password tidak sama & Sistem menampilkan pesan kesalahan dan meminta EPC mengulang \\
+\hline
+ & Username sudah digunakan & Sistem menampilkan pesan kesalahan \\
+\hline
+ & Username kurang dari 3 karakter & Sistem menolak registrasi \\
+\hline
+ & Password kurang dari 6 karakter & Sistem menolak registrasi \\
+\hline
 \end{longtable}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4442}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5558}}@{}}
-\caption{Tabel 3. 7 Use Case Login}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.7 Use Case Login} \label{table:tab3.7} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
 \endhead
-\bottomrule\noalign{}
-\endlastfoot
-Use Case Name & Login \\
-Scenario & EPC melakukan autentikasi untuk mengakses sistem \\
-Triggering Events & EPC membuka halaman login \\
-Brief Description & Use case ini menggambarkan proses autentikasi EPC menggunakan username dan password \\
-Actor & EPC \\
-Related Use Case & Register, seluruh use case yang memerlukan login \\
-Stakeholder & EPC \\
-Pre-condition & EPC telah memiliki akun terdaftar \\
-Post-condition & EPC berhasil login dan dapat mengakses seluruh fitur sistem \\
-Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2717}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2827}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Actor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-System
-\end{minipage} \\
-\midrule\noalign{}
-EPC membuka halaman login & Sistem menampilkan formulir login (username, password) \\
-EPC mengisi username dan password, lalu menekan tombol Login & Sistem memvalidasi kredensial terhadap database \\
-& Sistem membuat session dan mengarahkan ke halaman Dashboard \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
-Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2552}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2993}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Handling
-\end{minipage} \\
-\midrule\noalign{}
-Username atau password salah & Sistem menampilkan pesan "Username atau password salah" \\
-Username tidak ditemukan & Sistem menampilkan pesan kesalahan yang sama (tanpa membedakan username/password yang salah) \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Login} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC melakukan autentikasi untuk mengakses sistem} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka halaman login} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses autentikasi EPC menggunakan username dan password} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Register, seluruh use case yang memerlukan login} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah memiliki akun terdaftar} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC berhasil login dan dapat mengakses seluruh fitur sistem} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman login & Sistem menampilkan formulir login (username, password) \\
+\hline
+ & EPC mengisi username dan password, lalu menekan tombol Login & Sistem memvalidasi kredensial terhadap database \\
+\hline
+ & & Sistem membuat session dan mengarahkan ke halaman Dashboard \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Username atau password salah & Sistem menampilkan pesan "Username atau password salah" \\
+\hline
+ & Username tidak ditemukan & Sistem menampilkan pesan kesalahan yang sama (tanpa membedakan username/password yang salah) \\
+\hline
 \end{longtable}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4637}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5363}}@{}}
-\caption{Tabel 3. 8 Use Case Import Data Mahasiswa}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.8 Use Case Import Data Mahasiswa} \label{table:tab3.8} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
 \endhead
-\bottomrule\noalign{}
-\endlastfoot
-Use Case Name & Import Data Mahasiswa \\
-Scenario & EPC mengimpor data mahasiswa dari file Excel ke dalam sistem \\
-Triggering Events & EPC membuka menu Data Center dan memilih opsi import \\
-Brief Description & Use case ini menggambarkan proses pengunggahan file Excel yang berisi data mahasiswa, termasuk validasi format dan penyimpanan ke database \\
-Actor & EPC \\
-Related Use Case & Trigger Proses Rekomendasi \\
-Stakeholder & EPC, Program Studi \\
-Pre-condition & EPC telah login; file Excel berformat .xlsx dengan kolom wajib: STUDENT ID, TRACK, PARTNER/LECTURER, POSITION/TOPIC, WORK SCHEMA, GPA \\
-Post-condition & Data mahasiswa tersimpan di database; data siap diproses oleh sistem rekomendasi \\
-Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2598}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2751}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Actor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-System
-\end{minipage} \\
-\midrule\noalign{}
-EPC membuka halaman Data Center & Sistem menampilkan halaman Data Center dengan opsi import (default path atau upload) \\
-EPC memilih file Excel dan menekan tombol Import & Sistem membaca file Excel dan memvalidasi keberadaan kolom wajib \\
-& Sistem melakukan normalisasi data (pembersihan ID, konversi tipe data) \\
-& Sistem melakukan upsert data ke tabel students (insert baru atau update existing) \\
-& Sistem menampilkan notifikasi berisi jumlah inserted, updated, dan total \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
-Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2609}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2740}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Handling
-\end{minipage} \\
-\midrule\noalign{}
-File bukan format .xlsx & Sistem menolak file dan menampilkan pesan kesalahan \\
-Kolom wajib tidak ditemukan & Sistem menampilkan pesan kesalahan dengan daftar kolom yang hilang \\
-Gagal membaca file & Sistem menampilkan pesan kegagalan \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Import Data Mahasiswa} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengimpor data mahasiswa dari file Excel ke dalam sistem} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka menu Data Center dan memilih opsi import} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses pengunggahan file Excel yang berisi data mahasiswa, termasuk validasi format dan penyimpanan ke database} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login; file Excel berformat .xlsx dengan kolom wajib: STUDENT ID, TRACK, PARTNER/LECTURER, POSITION/TOPIC, WORK SCHEMA, GPA} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Data mahasiswa tersimpan di database; data siap diproses oleh sistem rekomendasi} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman Data Center & Sistem menampilkan halaman Data Center dengan opsi import (default path atau upload) \\
+\hline
+ & EPC memilih file Excel dan menekan tombol Import & Sistem membaca file Excel dan memvalidasi keberadaan kolom wajib \\
+\hline
+ & & Sistem melakukan normalisasi data (pembersihan ID, konversi tipe data) \\
+\hline
+ & & Sistem melakukan upsert data ke tabel students (insert baru atau update existing) \\
+\hline
+ & & Sistem menampilkan notifikasi berisi jumlah inserted, updated, dan total \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & File bukan format .xlsx & Sistem menolak file dan menampilkan pesan kesalahan \\
+\hline
+ & Kolom wajib tidak ditemukan & Sistem menampilkan pesan kesalahan dengan daftar kolom yang hilang \\
+\hline
+ & Gagal membaca file & Sistem menampilkan pesan kegagalan \\
+\hline
 \end{longtable}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4504}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5496}}@{}}
-\caption{Tabel 3. 9 Use Case Kelola Data Faculty Supervisor}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.9 Use Case Kelola Data Faculty Supervisor} \label{table:tab3.9} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
 \endhead
-\bottomrule\noalign{}
-\endlastfoot
-Use Case Name & Kelola Data Faculty Supervisor \\
-Scenario & EPC mengelola data faculty supervisor termasuk profil dan keywords \\
-Triggering Events & EPC membuka menu Supervisor Studio \\
-Brief Description & Use case ini menjelaskan proses pengelolaan data profil faculty supervisor melalui Supervisor Studio, termasuk penambahan dosen baru, pembaruan keywords, serta ekspor konfigurasi \\
-Actor & EPC \\
-Related Use Case & Trigger Proses Rekomendasi \\
-Stakeholder & EPC, Faculty Supervisor \\
-Pre-condition & EPC telah login ke sistem \\
-Post-condition & Data faculty supervisor tersimpan dan diperbarui \\
-Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2757}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2726}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Actor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-System
-\end{minipage} \\
-\midrule\noalign{}
-EPC membuka halaman Supervisor Studio & Sistem menampilkan daftar faculty supervisor aktif beserta keywords masing-masing \\
-EPC memilih faculty supervisor untuk diedit atau menambahkan faculty supervisor baru & Sistem menampilkan formulir detail (kode, nama, keywords) \\
-EPC memperbarui keywords dan menekan tombol Simpan & Sistem memvalidasi dan menyimpan perubahan \\
-EPC dapat mengekspor konfigurasi ke Excel & Sistem menghasilkan file Excel berisi daftar supervisor dan track reference \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
-Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2679}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2803}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Handling
-\end{minipage} \\
-\midrule\noalign{}
-Kode dosen kurang dari 3 karakter & Sistem menolak penyimpanan \\
-Nama dosen sudah dipakai oleh kode lain & Sistem menampilkan pesan konflik \\
-Kode dosen atau nama kosong & Sistem menampilkan pesan validasi \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Kelola Data Faculty Supervisor} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengelola data faculty supervisor termasuk profil dan keywords} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka menu Supervisor Studio} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses pengelolaan data profil faculty supervisor melalui Supervisor Studio, termasuk penambahan dosen baru, pembaruan keywords, serta ekspor konfigurasi} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Faculty Supervisor} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login ke sistem} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Data faculty supervisor tersimpan dan diperbarui} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman Supervisor Studio & Sistem menampilkan daftar faculty supervisor aktif beserta keywords masing-masing \\
+\hline
+ & EPC memilih faculty supervisor untuk diedit atau menambahkan faculty supervisor baru & Sistem menampilkan formulir detail (kode, nama, keywords) \\
+\hline
+ & EPC memperbarui keywords dan menekan tombol Simpan & Sistem memvalidasi dan menyimpan perubahan \\
+\hline
+ & EPC dapat mengekspor konfigurasi ke Excel & Sistem menghasilkan file Excel berisi daftar supervisor dan track reference \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Kode dosen kurang dari 3 karakter & Sistem menolak penyimpanan \\
+\hline
+ & Nama dosen sudah dipakai oleh kode lain & Sistem menampilkan pesan konflik \\
+\hline
+ & Kode dosen atau nama kosong & Sistem menampilkan pesan validasi \\
+\hline
 \end{longtable}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
-\caption{Tabel 3. 10 Use Case Kelola Rules Studio}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.10 Use Case Kelola Rules Studio} \label{table:tab3.10} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
 \endhead
-\bottomrule\noalign{}
-\endlastfoot
-Use Case Name & Kelola Rules Studio \\
-Scenario & EPC mengonfigurasi label semantik melalui Rules Studio \\
-Triggering Events & EPC membuka menu Rules Studio \\
-Brief Description & Use case ini menjelaskan proses konfigurasi label descriptions (deskripsi, threshold, status niche) dan nilai boost per pasangan supervisor-label \\
-Actor & EPC \\
-Related Use Case & Trigger Proses Rekomendasi \\
-Stakeholder & EPC \\
-Pre-condition & EPC telah login, data supervisor telah tersedia \\
-Post-condition & Konfigurasi label tersimpan dan digunakan pada run berikutnya \\
-Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2518}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2609}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Actor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-System
-\end{minipage} \\
-\midrule\noalign{}
-EPC membuka halaman Rules Studio & Sistem menampilkan daftar label descriptions dan konfigurasi boost \\
-EPC mengedit deskripsi label, threshold, atau status niche & Sistem memvalidasi (threshold antara 0-1, deskripsi tidak kosong) \\
-EPC menekan simpan & Sistem menyimpan perubahan dan menginvalidasi cache embedding label \\
-EPC mengedit nilai boost per pasangan supervisor-label & Sistem menyimpan perubahan yang dimodifikasi \\
-EPC dapat preview skor label untuk mahasiswa tertentu & Sistem menghitung cosine similarity antara embedding mahasiswa dan label \\
-EPC dapat mereset ke konfigurasi default & Sistem mengembalikan konfigurasi label ke nilai awal \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
-Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2484}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2643}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Handling
-\end{minipage} \\
-\midrule\noalign{}
-Threshold di luar range 0-1 & Sistem menolak penyimpanan \\
-Deskripsi label kosong & Sistem menampilkan pesan validasi \\
-Label tidak ada di default seed (untuk reset) & Sistem menampilkan pesan kesalahan \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Kelola Rules Studio} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengonfigurasi label semantik melalui Rules Studio} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka menu Rules Studio} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses konfigurasi label descriptions (deskripsi, threshold, status niche) dan nilai boost per pasangan supervisor-label} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login, data supervisor telah tersedia} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Konfigurasi label tersimpan dan digunakan pada run berikutnya} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman Rules Studio & Sistem menampilkan daftar label descriptions dan konfigurasi boost \\
+\hline
+ & EPC mengedit deskripsi label, threshold, atau status niche & Sistem memvalidasi (threshold antara 0-1, deskripsi tidak kosong) \\
+\hline
+ & EPC menekan simpan & Sistem menyimpan perubahan dan menginvalidasi cache embedding label \\
+\hline
+ & EPC mengedit nilai boost per pasangan supervisor-label & Sistem menyimpan perubahan yang dimodifikasi \\
+\hline
+ & EPC dapat preview skor label untuk mahasiswa tertentu & Sistem menghitung cosine similarity antara embedding mahasiswa dan label \\
+\hline
+ & EPC dapat mereset ke konfigurasi default & Sistem mengembalikan konfigurasi label ke nilai awal \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Threshold di luar range 0-1 & Sistem menolak penyimpanan \\
+\hline
+ & Deskripsi label kosong & Sistem menampilkan pesan validasi \\
+\hline
+ & Label tidak ada di default seed (untuk reset) & Sistem menampilkan pesan kesalahan \\
+\hline
 \end{longtable}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
-\caption{Tabel 3. 11 Use Case Trigger Proses Rekomendasi}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.11 Use Case Trigger Proses Rekomendasi} \label{table:tab3.11} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
 \endhead
-\bottomrule\noalign{}
-\endlastfoot
-Use Case Name & Trigger Proses Rekomendasi \\
-Scenario & EPC menjalankan proses rekomendasi untuk mengalokasikan mahasiswa ke faculty supervisor \\
-Triggering Events & EPC menekan tombol Generate Recommendation \\
-Brief Description & Use case ini menggambarkan proses inisiasi pipeline rekomendasi lengkap: embedding $\rightarrow$ similarity $\rightarrow$ group bonus $\rightarrow$ capacity planning $\rightarrow$ greedy solver $\rightarrow$ evaluasi \\
-Actor & EPC \\
-Related Use Case & Import Data Mahasiswa, Kelola Data Faculty Supervisor, Kelola Rules Studio \\
-Stakeholder & EPC, Program Studi \\
-Pre-condition & Data mahasiswa telah diimpor; data faculty supervisor telah tersedia; EPC telah login \\
-Post-condition & Hasil rekomendasi (run) tersimpan di database dengan evaluasi metrik \\
-Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2613}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2514}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Actor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-System
-\end{minipage} \\
-\midrule\noalign{}
-EPC memilih model embedding yang akan digunakan & Sistem menampilkan opsi konfigurasi (model, enable/disable group bonus, capacity parameters) \\
-EPC mengonfigurasi parameter dan menekan tombol Generate & Sistem memvalidasi ketersediaan data mahasiswa dan dosen \\
-& Sistem membentuk dokumen teks mahasiswa dan faculty supervisor \\
-& Sistem mengencode dokumen menggunakan model embedding yang dipilih \\
-& Sistem menghitung cosine similarity matrix \\
-& Sistem menghitung company group bonus \\
-& Sistem menghitung capacity plan (min/max per supervisor) \\
-& Sistem menjalankan greedy solver untuk alokasi optimal \\
-& Sistem menghitung metrik evaluasi (content-based dan hybrid) \\
-& Sistem menyimpan hasil run dan mengarahkan ke halaman detail run \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
-Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Handling
-\end{minipage} \\
-\midrule\noalign{}
-Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
-Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
-Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
-Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC menjalankan proses rekomendasi untuk mengalokasikan mahasiswa ke faculty supervisor} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC menekan tombol Generate Recommendation} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses inisiasi pipeline rekomendasi lengkap: embedding $\rightarrow$ similarity $\rightarrow$ group bonus $\rightarrow$ capacity planning $\rightarrow$ greedy solver $\rightarrow$ evaluasi} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Import Data Mahasiswa, Kelola Data Faculty Supervisor, Kelola Rules Studio} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{Data mahasiswa telah diimpor; data faculty supervisor telah tersedia; EPC telah login} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Hasil rekomendasi (run) tersimpan di database dengan evaluasi metrik} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC memilih model embedding yang akan digunakan & Sistem menampilkan opsi konfigurasi (model, enable/disable group bonus, capacity parameters) \\
+\hline
+ & EPC mengonfigurasi parameter dan menekan tombol Generate & Sistem memvalidasi ketersediaan data mahasiswa dan dosen \\
+\hline
+ & & Sistem membentuk dokumen teks mahasiswa dan faculty supervisor \\
+\hline
+ & & Sistem mengencode dokumen menggunakan model embedding yang dipilih \\
+\hline
+ & & Sistem menghitung cosine similarity matrix \\
+\hline
+ & & Sistem menghitung company group bonus \\
+\hline
+ & & Sistem menghitung capacity plan (min/max per supervisor) \\
+\hline
+ & & Sistem menjalankan greedy solver untuk alokasi optimal \\
+\hline
+ & & Sistem menghitung metrik evaluasi (content-based dan hybrid) \\
+\hline
+ & & Sistem menyimpan hasil run dan mengarahkan ke halaman detail run \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
+\hline
+ & Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
+\hline
+ & Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
+\hline
+ & Model embedding tidak tersedia & Sistem menggunakan fallback ke TF-IDF \\
+\hline
 \end{longtable}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4580}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5420}}@{}}
-\caption{Tabel 3. 12 Use Case Lihat Hasil Rekomendasi}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.12 Use Case Lihat Hasil Rekomendasi} \label{table:tab3.12} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
 \endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Elemen
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Deskripsi
-\end{minipage} \\
-\midrule\noalign{}
 \endhead
-\bottomrule\noalign{}
-\endlastfoot
-Use Case Name & Lihat Hasil Rekomendasi \\
-Scenario & EPC melihat detail hasil rekomendasi suatu run \\
-Triggering Events & EPC membuka halaman detail run atau halaman rekomendasi \\
-Brief Description & Use case ini menggambarkan proses penelusuran hasil rekomendasi termasuk evaluasi metrik, distribusi kapasitas, daftar mismatch, dan detail per mahasiswa \\
-Actor & EPC \\
-Related Use Case & Trigger Proses Rekomendasi, Export Hasil ke Excel \\
-Stakeholder & EPC, Program Studi \\
-Pre-condition & Minimal satu run rekomendasi telah berhasil dilakukan \\
-Post-condition & EPC memperoleh informasi detail hasil rekomendasi \\
-Flow Of Events & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2592}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2534}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Actor
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-System
-\end{minipage} \\
-\midrule\noalign{}
-EPC membuka halaman detail run & Sistem menampilkan evaluasi metrik (content-based \& hybrid), distribusi kapasitas per supervisor, dan daftar mismatch \\
-EPC membuka halaman rekomendasi & Sistem menampilkan tabel seluruh pasangan mahasiswa-supervisor dengan skor, rule matches, dan filter pencarian \\
-EPC menggunakan filter (nama, supervisor, mismatch only) & Sistem memfilter dan menampilkan hasil sesuai kriteria \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
-Exception Condtion & \begin{minipage}[t]{\linewidth}\raggedright
-\begin{tabular}{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2519}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2607}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Handling
-\end{minipage} \\
-\midrule\noalign{}
-Data mahasiswa belum diimpor & Sistem menolak proses dan menampilkan notifikasi \\
-Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
-Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
-Sistem menampilkan pesan kesalahan & Sistem menggunakan fallback ke TF-IDF \\
-\bottomrule\noalign{}
-\end{tabular}
-\end{minipage} \\
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Lihat Hasil Rekomendasi} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC melihat detail hasil rekomendasi suatu run} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka halaman detail run atau halaman rekomendasi} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses penelusuran hasil rekomendasi termasuk evaluasi metrik, distribusi kapasitas, daftar mismatch, dan detail per mahasiswa} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi, Export Hasil ke Excel} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{Minimal satu run rekomendasi telah berhasil dilakukan} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC memperoleh informasi detail hasil rekomendasi} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman detail run & Sistem menampilkan evaluasi metrik (content-based \& hybrid), distribusi kapasitas per supervisor, dan daftar mismatch \\
+\hline
+ & EPC membuka halaman rekomendasi & Sistem menampilkan tabel seluruh pasangan mahasiswa-supervisor dengan skor, rule matches, dan filter pencarian \\
+\hline
+ & EPC menggunakan filter (nama, supervisor, mismatch only) & Sistem memfilter dan menampilkan hasil sesuai kriteria \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Run ID tidak ditemukan di database & Sistem menampilkan pesan kesalahan "Run \{run\_id\} tidak ditemukan" \\
+\hline
+ & Tidak ada data rekomendasi pada run yang dipilih & Sistem menampilkan halaman detail run dengan tabel rekomendasi kosong \\
+\hline
+ & Filter pencarian tidak menghasilkan kecocokan & Sistem menampilkan tabel kosong dengan informasi jumlah hasil 0 dari total keseluruhan \\
+\hline
+ & EPC belum login (session expired) & Sistem mengarahkan EPC ke halaman login secara otomatis \\
+\hline
 \end{longtable}
 
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.13 Use Case Export Hasil ke Excel} \label{table:tab3.13} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Export Hasil ke Excel} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengunduh hasil rekomendasi dalam format Excel} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC menekan tombol export pada halaman detail run} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Sistem menghasilkan file Excel berisi 3 sheet: recommendations, summary kapasitas, dan evaluation metrics} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Lihat Hasil Rekomendasi} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login, run rekomendasi telah tersedia} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{File Excel berhasil diunduh oleh EPC} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman detail run & Sistem menampilkan halaman detail run beserta tombol Export Excel \\
+\hline
+ & EPC menekan tombol Export Excel & Sistem mengambil seluruh data rekomendasi dari run yang dipilih (pasangan mahasiswa-supervisor beserta skor similarity, rule boost, group boost, final score, rule matches, dan company group key) \\
+\hline
+ & & Sistem mengambil data summary kapasitas per supervisor (jumlah mahasiswa yang dialokasikan, batas min/max kapasitas, dan status within capacity) \\
+\hline
+ & & Sistem mengambil data evaluasi metrik dari run (content-based metrics dan hybrid score metrics) dan mengonversinya menjadi format tabel (section, metric, value) \\
+\hline
+ & & Sistem membentuk file Excel (.xlsx) menggunakan engine openpyxl dengan 3 sheet: recommendations (daftar lengkap alokasi mahasiswa-supervisor), summary (ringkasan kapasitas per supervisor), dan evaluation (metrik evaluasi) \\
+\hline
+ & & Sistem mengirim file Excel ke browser EPC sebagai attachment dengan nama file rekomendasi\_dosen\_run\_\{run\_id\}.xlsx dan MIME type application/vnd.openxmlformats-officedocument.spreadsheetml.sheet \\
+\hline
+ & EPC menerima dan menyimpan file Excel & \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Run ID tidak ditemukan di database & Sistem menampilkan pesan kesalahan "Run \{run\_id\} tidak ditemukan" dan mengarahkan kembali ke halaman detail run \\
+\hline
+ & Terjadi kegagalan saat pembuatan file Excel (misalnya data corrupt atau error engine openpyxl) & Sistem menampilkan flash message "Gagal export Excel: \{pesan error\}" dan mengarahkan kembali ke halaman detail run \\
+\hline
+ & EPC belum login (session expired) & Sistem mengarahkan EPC ke halaman login secara otomatis \\
+\hline
+\end{longtable}
+
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.14 Use Case Logout} \label{table:tab3.14} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Logout} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengakhiri sesi aktif pada sistem} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC menekan tombol Logout pada navigasi sistem} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses penghapusan sesi autentikasi sehingga EPC tidak lagi dapat mengakses fitur-fitur sistem yang memerlukan login} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Login} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC dalam kondisi telah login (memiliki sesi aktif)} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Sesi EPC dihapus dari server, EPC diarahkan ke halaman login} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC menekan tombol Logout pada navigasi & Sistem menerima request POST ke endpoint logout \\
+\hline
+ & & Sistem menghapus user\_id dari session server \\
+\hline
+ & & Sistem menampilkan flash message "Logout berhasil" \\
+\hline
+ & & Sistem mengarahkan EPC ke halaman login \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & EPC mengakses fitur sistem setelah logout & Sistem mengarahkan EPC ke halaman login secara otomatis melalui mekanisme login\_required \\
+\hline
+ & Session sudah expired sebelum logout & Sistem tetap mengarahkan ke halaman login tanpa error \\
+\hline
+\end{longtable}
+
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.15 Use Case Lihat Dashboard} \label{table:tab3.15} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Lihat Dashboard} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC melihat ringkasan kondisi sistem dan metrik kualitas rekomendasi} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC berhasil login atau membuka halaman Dashboard} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses penampilan halaman utama (Command Center) yang menyajikan statistik ringkasan data, highlight metrik evaluasi dari run terakhir, konfigurasi pipeline aktif, serta daftar riwayat run terbaru} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Login, Trigger Proses Rekomendasi, Lihat Hasil Rekomendasi} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login ke sistem} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC memperoleh gambaran umum kondisi terkini sistem rekomendasi} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman Dashboard (atau diarahkan otomatis setelah login) & Sistem mengambil data run terakhir dari database \\
+\hline
+ & & Sistem mengambil daftar 12 run terbaru beserta metrik per run \\
+\hline
+ & & Sistem menghitung statistik ringkasan: total mahasiswa, jumlah faculty supervisor aktif, dan total run yang pernah dilakukan \\
+\hline
+ & & Sistem mengekstrak highlight metrics dari run terakhir: Assignment Match Rate, Hybrid MRR, dan Content-Based MRR \\
+\hline
+ & & Sistem mengekstrak konfigurasi pipeline dari run terakhir (model embedding, status rule boost, group bonus, extra docs) \\
+\hline
+ & & Sistem menampilkan seluruh informasi dalam halaman Dashboard (Command Center) \\
+\hline
+ & EPC menelusuri informasi ringkasan dan metrik yang ditampilkan & \\
+\hline
+ & EPC dapat memilih run dari daftar riwayat untuk melihat detail & Sistem mengarahkan ke halaman detail run yang dipilih \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Belum ada run rekomendasi yang pernah dilakukan & Sistem tetap menampilkan Dashboard dengan statistik data (total mahasiswa, supervisor aktif) namun bagian metrik dan riwayat run ditampilkan kosong \\
+\hline
+ & EPC belum login & Sistem mengarahkan EPC ke halaman login \\
+\hline
+\end{longtable}
+
+\clearpage
 \subsection{Class diagram}\label{class-diagram-1}
 
 Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar komponen utama dalam sistem rekomendasi. Diagram ini menggambarkan bagaimana setiap entitas pada sistem direpresentasikan, beserta atribut dan operasi yang mendukung proses pembentukan embedding, perhitungan scoring, alokasi menggunakan greedy solver, serta evaluasi hasil rekomendasi.
 
-\begin{figure}
+%% ── Figure 3.3: ORM Models ────────────────────────────────────────
+\begin{figure}[H]
 \centering
-\includegraphics[width=5.18324in,height=1.82627in]{pic/image9}
-\caption{Class Diagram}
+\scalebox{0.75}{%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  class/.style={rectangle, inner sep=0pt},
+  solid/.style={draw},
+  arr/.style={->, >=stealth},
+  lab/.style={font=\tiny\bfseries, fill=white, inner sep=0.8pt}
+]
+
+\node (supervisor) [class] at (0, 0) {%
+  \begin{tabular}{|p{2.6cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Supervisor}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  code : str \\
+  name : str \\
+  profile\_keywords : str \\
+  is\_active : bool \\ \hline
+  \end{tabular}%
+};
+
+\node (run) [class] at (5.8, 0) {%
+  \begin{tabular}{|p{3.2cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{RecommendationRun}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  created\_at : datetime \\
+  input\_source : str \\
+  total\_students : int \\
+  total\_supervisors : int \\
+  target\_min\_capacity : int \\
+  target\_max\_capacity : int \\
+  solver\_name : str \\
+  embedding\_model : str \\
+  objective\_score : float \\ \hline
+  \end{tabular}%
+};
+
+\node (rec) [class] at (2.7, -5.8) {%
+  \begin{tabular}{|p{2.8cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Recommendation}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  \textit{run\_id} : int \\
+  \textit{student\_id} : int \\
+  \textit{supervisor\_id} : int \\
+  similarity\_score : float \\
+  group\_boost : float \\
+  final\_score : float \\
+  rule\_matches : str \\ \hline
+  \end{tabular}%
+};
+
+\node (student) [class] at (0, -12.5) {%
+  \begin{tabular}{|p{3cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Student}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  student\_id : str \\
+  name : str \\
+  track : str \\
+  gpa : float \\
+  position\_topic : str \\
+  enrollment\_status : str \\
+  current\_supervisor\_code : str \\
+  created\_at : datetime \\ \hline
+  \end{tabular}%
+};
+
+\node (appuser) [class] at (5.8, -12.5) {%
+  \begin{tabular}{|p{2.6cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{AppUser}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  username : str \\
+  full\_name : str \\
+  password\_hash : str \\
+  created\_at : datetime \\ \hline
+  \end{tabular}%
+};
+
+%% Supervisor 1 -> N Recommendation
+\draw[solid] (supervisor.south)
+  -- node[lab, left, pos=0.25]{1} node[lab, left, pos=0.75]{N}
+  (rec.north west);
+
+%% RecommendationRun 1 -> N Recommendation (cascade delete)
+\draw[solid] (run.south)
+  -- node[lab, right, pos=0.25]{1} node[lab, right, pos=0.75]{N}
+  (rec.north east);
+
+%% Recommendation N -> 1 Student
+\draw[solid] (rec.south west)
+  -- node[lab, left, pos=0.25]{N} node[lab, left, pos=0.75]{1}
+  (student.north);
+
+\end{tikzpicture}%
+}
+\caption{Class Diagram: ORM Models (\underline{id} = PK, \textit{italic} = FK)}
 \label{fig:fig3.3}
+\end{figure}
+
+%% ── Figure 3.3b: Runtime Dataclasses ───────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.75}{%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  class/.style={rectangle, inner sep=0pt},
+  arr/.style={->, >=stealth},
+  lab/.style={font=\tiny\bfseries, fill=white, inner sep=0.8pt}
+]
+
+\node (runov) [class] at (0, 0) {%
+  \begin{tabular}{|p{3.2cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{\tiny $\ll$dataclass$\gg$}} \\
+  \multicolumn{1}{|c|}{\textbf{RunOverrides}} \\ \hline
+  embedding\_model : str \\
+  embedding\_task : str \\
+  enable\_group\_bonus : bool \\
+  enable\_extra\_docs : bool \\
+  capacity\_priority\_codes : list \\
+  target\_min\_capacity : int \\
+  target\_max\_capacity : int \\ \hline
+  \end{tabular}%
+};
+
+\node (recout) [class] at (0, -5.2) {%
+  \begin{tabular}{|p{3.2cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{\tiny $\ll$dataclass$\gg$}} \\
+  \multicolumn{1}{|c|}{\textbf{RecommendationOutput}} \\ \hline
+  items : list \\
+  solver\_name : str \\
+  objective\_score : float \\
+  capacity\_plan : CapacityPlan \\
+  embedding\_model : str \\
+  content\_similarity\_matrix \\
+  hybrid\_score\_matrix \\ \hline
+  \end{tabular}%
+};
+
+\node (cap) [class] at (6.5, -4.2) {%
+  \begin{tabular}{|p{2.4cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{\tiny $\ll$dataclass$\gg$}} \\
+  \multicolumn{1}{|c|}{\textbf{CapacityPlan}} \\ \hline
+  min\_caps : list \\
+  max\_caps : list \\
+  relaxed : bool \\
+  note : str \\ \hline
+  \end{tabular}%
+};
+
+\node (recitem) [class] at (0, -11) {%
+  \begin{tabular}{|p{3.2cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{\tiny $\ll$dataclass$\gg$}} \\
+  \multicolumn{1}{|c|}{\textbf{RecommendationItem}} \\ \hline
+  student : dict \\
+  supervisor : SupervisorProfile \\
+  similarity\_score : float \\
+  group\_boost : float \\
+  final\_score : float \\
+  rule\_matches : list \\ \hline
+  \end{tabular}%
+};
+
+\node (supprof) [class] at (6.5, -10.5) {%
+  \begin{tabular}{|p{2.4cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{\tiny $\ll$frozen$\gg$}} \\
+  \multicolumn{1}{|c|}{\textbf{SupervisorProfile}} \\ \hline
+  code : str \\
+  name : str \\
+  keywords : tuple \\
+  labels : tuple \\ \hline
+  \end{tabular}%
+};
+
+\node (embprov) [class] at (0, -17) {%
+  \begin{tabular}{|p{3.2cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{\tiny $\ll$singleton$\gg$}} \\
+  \multicolumn{1}{|c|}{\textbf{EmbeddingProvider}} \\ \hline
+  \_model\_name : str \\
+  \_lock : Lock \\
+  \_loaded : bool \\
+  \_model : SentenceTransformer \\
+  \_info : EmbeddingInfo \\ \hline
+  +encode\_batch() \\
+  +similarity\_matrix() \\ \hline
+  \end{tabular}%
+};
+
+\node (embinfo) [class] at (6.5, -17) {%
+  \begin{tabular}{|p{2.4cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{\tiny $\ll$dataclass$\gg$}} \\
+  \multicolumn{1}{|c|}{\textbf{EmbeddingInfo}} \\ \hline
+  backend : str \\
+  model\_name : str \\
+  note : str \\ \hline
+  \end{tabular}%
+};
+
+%% RunOverrides drives RecommendationOutput
+\draw[arr] (runov.south)
+  -- node[lab, right]{drives}
+  (recout.north);
+
+%% RecommendationOutput 1:1 CapacityPlan (composition)
+\draw[arr] (recout.east) -- ++(0.5,0)
+  |- node[lab, right, pos=0.8]{1:1}
+  (cap.west);
+
+%% RecommendationOutput 1:N RecommendationItem (composition)
+\draw[arr] (recout.south)
+  -- node[lab, right]{1:N}
+  (recitem.north);
+
+%% RecommendationItem -> SupervisorProfile (association)
+\draw[arr] (recitem.east) -- ++(0.5,0)
+  |- node[lab, right, pos=0.8]{ref}
+  (supprof.west);
+
+%% EmbeddingProvider owns EmbeddingInfo (composition)
+\draw[arr] (embprov.east) -- ++(0.5,0)
+  |- node[lab, right, pos=0.8]{owns}
+  (embinfo.west);
+
+\end{tikzpicture}%
+}
+\caption{Class Diagram: Runtime Dataclasses}
+\label{fig:fig3.3b}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  class/.style={rectangle, inner sep=0pt},
+  darr/.style={->, >=stealth, dashed},
+  lab/.style={font=\scriptsize\bfseries, fill=white, inner sep=1pt}
+]
+
+\node (svc) [class] at (7.5, 0) {%
+  \begin{tabular}{|p{5.5cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«service»}} \\
+  \multicolumn{1}{|c|}{\textbf{RecommenderService}} \\ \hline
+  +init\_db() \\
+  +register\_user(...) \\
+  +authenticate\_user(...) \\
+  +import\_students\_from\_path(...) \\
+  +import\_students\_from\_bytes(...) \\
+  +add\_or\_update\_supervisor(...) \\
+  +update\_supervisor\_keywords(...) \\
+  +list\_supervisor\_profiles\_for\_web(...) \\
+  +generate\_and\_store\_recommendations(...) \\
+  +list\_recommendations(...) \\
+  +summary\_by\_supervisor(...) \\
+  +evaluation\_by\_run(...) \\
+  +export\_recommendations\_excel(...) \\
+  +export\_recommendations\_excel\_detailed(...) \\
+  +export\_supervisor\_configuration\_excel(...) \\ \hline
+  \end{tabular}%
+};
+
+\node (engine) [class] at (1.0, -11) {%
+  \begin{tabular}{|p{4cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{RecommendationEngine}} \\ \hline
+  +generate\_recommendations(...) \\
+  -\_build\_capacity\_plan(...) \\
+  -\_solve\_assignment(...) \\
+  -\_apply\_company\_group\_bonus(...) \\ \hline
+  \end{tabular}%
+};
+
+\node (excel) [class] at (6.0, -11) {%
+  \begin{tabular}{|p{4cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{ExcelIO}} \\ \hline
+  +read\_students\_excel\_path(...) \\
+  +read\_students\_excel\_bytes(...) \\ \hline
+  \end{tabular}%
+};
+
+\node (repo) [class] at (11.0, -11) {%
+  \begin{tabular}{|p{4cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«repository»}} \\
+  \multicolumn{1}{|c|}{\textbf{QueryRepository}} \\ \hline
+  +get\_user\_by\_id(...) \\
+  +get\_user\_by\_username(...) \\
+  +get\_active\_supervisors\_ordered(...) \\
+  +get\_supervisor\_by\_code(...) \\
+  +get\_active\_supervisor\_map(...) \\
+  +get\_all\_students(...) \\
+  +get\_students\_by\_supervisor\_codes(...) \\
+  +get\_latest\_run(...) \\
+  +list\_runs(...) \\
+  +get\_run\_by\_id(...) \\
+  +get\_recommendations\_with\_entities(...) \\
+  +get\_supervisor\_rec\_counts(...) \\ \hline
+  \end{tabular}%
+};
+
+\node (eval) [class] at (16.0, -11) {%
+  \begin{tabular}{|p{4cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{Evaluator}} \\ \hline
+  +evaluate\_retrieval\_metrics(...) \\
+  +evaluate\_assignment\_match\_rate(...) \\
+  +build\_evaluation\_payload(...) \\ \hline
+  \end{tabular}%
+};
+
+\node (embprov) [class] at (0.0, -19) {%
+  \begin{tabular}{|p{3.8cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«singleton»}} \\
+  \multicolumn{1}{|c|}{\textbf{EmbeddingProvider}} \\ \hline
+  -\_model\_name \\
+  -\_lock \\
+  -\_loaded \\ \hline
+  +encode\_batch(...) \\
+  +similarity\_matrix(...) \\ \hline
+  \end{tabular}%
+};
+
+\node (docbld) [class] at (4.5, -19) {%
+  \begin{tabular}{|p{3.8cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textit{«utility»}} \\
+  \multicolumn{1}{|c|}{\textbf{DocumentBuilder}} \\ \hline
+  +normalize\_text(...) \\
+  +detect\_labels(...) \\
+  +student\_document(...) \\
+  +profile\_document(...) \\
+  +student\_labels(...) \\ \hline
+  \end{tabular}%
+};
+
+\draw[darr] (svc.south) -- ++(0,-1.5) -| node[lab, near end, right]{uses} (engine.north);
+\draw[darr] (svc.south) -- ++(0,-1.5) -| node[lab, near end, right]{uses} (excel.north);
+\draw[darr] (svc.south) -- ++(0,-1.5) -| node[lab, near end, right]{uses} (repo.north);
+\draw[darr] (svc.south) -- ++(0,-1.5) -| node[lab, near end, right]{uses} (eval.north);
+
+\draw[darr] (engine.south) -- ++(0,-1.2) -| node[lab, near end, right]{uses} (embprov.north);
+\draw[darr] (engine.south) -- ++(0,-1.2) -| node[lab, near end, right]{uses} (docbld.north);
+
+\end{tikzpicture}%
+}
+\caption{Class Diagram: Service Architecture}
+\label{fig:fig3.3c}
 \end{figure}
 
 \subsection{Entity Relationship Diagram}\label{entity-relationship-diagram-1}
 
 Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan hubungan antar entitas yang disimpan dalam basis data SQLite. ERD ini merepresentasikan tujuh entitas utama yang diperlukan dalam proses scoring, alokasi greedy, dan evaluasi hasil rekomendasi.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[width=5.23273in,height=3.54888in]{pic/image10}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=1.5cm and 3cm,
+  font=\footnotesize,
+  entity/.style={rectangle, inner sep=0pt},
+  rel/.style={draw, thick},
+  lab/.style={font=\scriptsize\bfseries, fill=white, inner sep=2pt}
+]
+
+\node (students) [entity] {%
+  \begin{tabular}{|l|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{students}} \\ \hline
+  \underline{\textbf{id}} : Integer \\
+  student\_id : String \\
+  binusian\_id : String \\
+  name : String \\
+  email : String \\
+  track : String \\
+  gpa : Float \\
+  position\_topic : Text \\
+  enrollment\_status : String \\
+  current\_supervisor\_code : String \\
+  created\_at : DateTime \\ \hline
+  \end{tabular}%
+};
+
+\node (rec) [entity, right=3.5cm of students] {%
+  \begin{tabular}{|l|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{recommendations}} \\ \hline
+  \underline{\textbf{id}} : Integer \\
+  \textit{run\_id} : Integer (FK) \\
+  \textit{student\_id} : Integer (FK) \\
+  \textit{supervisor\_id} : Integer (FK) \\
+  similarity\_score : Float \\
+  group\_boost : Float \\
+  final\_score : Float \\
+  rule\_matches : Text \\
+  company\_group\_key : String \\ \hline
+  \end{tabular}%
+};
+
+\node (runs) [entity, right=3.5cm of rec] {%
+  \begin{tabular}{|l|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{recommendation\_runs}} \\ \hline
+  \underline{\textbf{id}} : Integer \\
+  input\_source : String \\
+  total\_students : Integer \\
+  total\_supervisors : Integer \\
+  target\_min\_capacity : Integer \\
+  target\_max\_capacity : Integer \\
+  embedding\_model : String \\
+  solver\_name : String \\
+  objective\_score : Float \\
+  created\_at : DateTime \\ \hline
+  \end{tabular}%
+};
+
+\node (supervisors) [entity, below=2.5cm of rec] {%
+  \begin{tabular}{|l|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{supervisors}} \\ \hline
+  \underline{\textbf{id}} : Integer \\
+  code : String \\
+  name : String \\
+  profile\_keywords : Text \\
+  is\_active : Boolean \\ \hline
+  \end{tabular}%
+};
+
+\node (appusers) [entity, below=2.5cm of students] {%
+  \begin{tabular}{|l|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{app\_users}} \\ \hline
+  \underline{\textbf{id}} : Integer \\
+  username : String \\
+  full\_name : String \\
+  password\_hash : String \\
+  created\_at : DateTime \\ \hline
+  \end{tabular}%
+};
+
+% students (1) -- (N) recommendations
+\draw [rel] (students.east) --
+  node[lab, above, pos=0.15] {1}
+  node[lab, above, pos=0.85] {N}
+  (rec.west);
+
+% recommendation_runs (1) -- (N) recommendations
+\draw [rel] (runs.west) --
+  node[lab, above, pos=0.15] {1}
+  node[lab, above, pos=0.85] {N}
+  (rec.east);
+
+% supervisors (1) -- (N) recommendations
+\draw [rel] (supervisors.north) --
+  node[lab, right, pos=0.15] {1}
+  node[lab, right, pos=0.85] {N}
+  (rec.south);
+
+\end{tikzpicture}%
+}
 \caption{Entity Relationship Diagram}
 \label{fig:fig3.4}
 \end{figure}
