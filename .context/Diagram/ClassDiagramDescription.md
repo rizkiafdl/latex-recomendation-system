@@ -20,7 +20,7 @@ These are pure data containers — no meaningful domain methods, only SQLAlchemy
 - **Relationships:** recommendations: list[Recommendation]
 
 ### RecommendationRun
-- **Attributes:** id: int, created_at: datetime, input_source: str, total_students: int, total_supervisors: int,
+- **Attributes:** id: int, created_at: datetime, created_by_id: int (FK → app_users), input_source: str, total_students: int, total_supervisors: int,
   target_min_capacity: int, target_max_capacity: int, capacity_relaxed: bool, capacity_note: str, capacity_bounds_json: str,
   solver_name: str, solver_note: str, embedding_backend: str, embedding_model: str, evaluation_json: str,
   pipeline_config_json: str, objective_score: float, rankings_json: str
@@ -47,6 +47,7 @@ Frozen / plain dataclasses — no methods, pure value objects used during the pi
 ### RunOverrides
 - embedding_model: str, embedding_task: str, enable_group_bonus: bool, enable_extra_docs: bool,
   capacity_priority_codes: list[str], target_min_capacity: int, target_max_capacity: int
+  *(Note: `enable_rule_boost` removed — rule-based scoring is no longer in the pipeline)*
 
 ### CapacityPlan
 - min_caps: list[int], max_caps: list[int], relaxed: bool, note: str
@@ -54,6 +55,7 @@ Frozen / plain dataclasses — no methods, pure value objects used during the pi
 ### RecommendationItem
 - student: dict, supervisor: SupervisorProfile, similarity_score: float, group_boost: float, final_score: float,
   rule_matches: list[str], company_group_key: str
+  *(Note: `rule_boost` removed)*
 
 ### RecommendationOutput
 - items: list[RecommendationItem], counts_by_supervisor: dict[str, int], solver_name: str, objective_score: float,
@@ -142,6 +144,7 @@ Represented as «utility» stereotype classes — implemented as Python module-l
 ## Relationships
 
 ### ORM Associations (solid lines with multiplicities)
+- AppUser `1` → `*` RecommendationRun (created_by_id FK)
 - RecommendationRun `1` → `*` Recommendation (cascade delete)
 - Recommendation `*` → `1` Student
 - Recommendation `*` → `1` Supervisor

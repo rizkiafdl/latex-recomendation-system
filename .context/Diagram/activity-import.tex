@@ -1,0 +1,138 @@
+%% ── Activity Diagram: Import Data Mahasiswa (AD-03) ─────────────────────────
+%% y-guide: start=-1.8  page=-3.5  d_src=-5.5  import_default=-5.5
+%%          upload_epc/upload_sys=-8.0  merge=-9.3  step3=-10.5
+%%          step4=-13.0  d_col/err_col=-15.5  end_err=-17.5
+%%          iterasi=-18.2  d_ups/insert=-20.7  update=-23.2
+%%          merge_ups=-25.0  ringkasan=-27.5  end=-29.5  border=-30.8
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -30.8);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Import Data Mahasiswa};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────────
+\draw[thick] (0, -1.0) -- (12, -1.0);
+%% Vertical divider starts at y=-0.1 (title bar bottom) — NOT y=0.7
+\draw[thick] (5.8, -0.1) -- (5.8, -30.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Membuka halaman Data Center ─────────────────────────────────────────
+\node (page) [action] at (2.8, -3.5)
+  {Membuka halaman\\Data Center (/data)};
+\draw[->] (2.8, -2.02) -- (page.north);
+
+%% ── EPC: Decision — Sumber file? ─────────────────────────────────────────────
+\node (d_src) [decision] at (2.8, -5.5)
+  {Sumber\\file?};
+\draw[->] (page.south) -- (d_src.north);
+
+%% D_src — Branch A (east, label "A"): langsung baca path default via Sistem ───
+\node (import_default) [action] at (9.0, -5.5)
+  {Membaca path dari\\env DEFAULT\_EXCEL\_PATH};
+\draw[->] (d_src.east) -- node[above, pos=0.08, font=\scriptsize] {A} (import_default.west);
+
+%% D_src — Branch B (south, label "B"): EPC pilih file, lalu kirim ke Sistem ───
+\node (upload_epc) [action] at (2.8, -8.0)
+  {Memilih file Excel;\\tekan Upload};
+\draw[->] (d_src.south) -- node[right, pos=0.12, font=\scriptsize] {B} (upload_epc.north);
+
+\node (upload_sys) [action] at (9.0, -8.0)
+  {Menerima file bytes\\dari HTTP multipart};
+\draw[->] (upload_epc.east) -- (upload_sys.west);
+
+%% ── Merge Branch A & B → Sistem: Membaca sheet Excel ────────────────────────
+%% No arrowhead on incoming legs; single arrowhead on outgoing leg
+\draw (import_default.south) -- (9.0, -9.3);
+\draw (upload_sys.south)     -- (9.0, -9.3);
+\node (step3) [action] at (9.0, -10.5)
+  {Membaca sheet Excel\\dengan pandas};
+\draw[->] (9.0, -9.3) -- (step3.north);
+
+%% ── Sistem: Validasi 6 kolom wajib Excel ─────────────────────────────────────
+\node (step4) [action] at (9.0, -13.0)
+  {Validasi 6 kolom\\wajib Excel};
+\draw[->] (step3.south) -- (step4.north);
+
+%% ── Sistem: Decision — Kolom lengkap? ────────────────────────────────────────
+\node (d_col) [decision] at (9.0, -15.5)
+  {Kolom\\lengkap?};
+\draw[->] (step4.south) -- (d_col.north);
+
+%% D_col — F (west): Tampilkan error di EPC lane, lalu end ───────────────────
+\node (err_col) [action] at (2.8, -15.5)
+  {Tampilkan error:\\kolom tidak lengkap};
+\draw[->] (d_col.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err_col.east);
+
+%% End node for column-error path (bullseye in EPC lane)
+\draw[thick] (2.8, -17.5) circle (0.28cm);
+\fill        (2.8, -17.5) circle (0.15cm);
+\draw[->] (err_col.south) -- (2.8, -17.22);
+
+%% D_col — T (south): Iterasi per baris; bersihkan data ──────────────────────
+\node (iterasi) [action] at (9.0, -18.2)
+  {Iterasi per baris;\\bersihkan data};
+\draw[->] (d_col.south) -- node[right, pos=0.12, font=\scriptsize] {T} (iterasi.north);
+
+%% ── Sistem: Decision — student_id ada di database? ──────────────────────────
+\node (d_ups) [decision] at (9.0, -20.7)
+  {student\_id\\ada di DB?};
+\draw[->] (iterasi.south) -- (d_ups.north);
+
+%% D_ups — F (west): Insert mahasiswa baru di EPC lane ───────────────────────
+\node (insert) [action] at (2.8, -20.7)
+  {Insert mahasiswa\\baru};
+\draw[->] (d_ups.west) -- node[above, pos=0.08, font=\scriptsize] {F} (insert.east);
+
+%% D_ups — T (south): Update data mahasiswa (upsert) ─────────────────────────
+\node (update) [action] at (9.0, -23.2)
+  {Update data\\mahasiswa (upsert)};
+\draw[->] (d_ups.south) -- node[right, pos=0.12, font=\scriptsize] {T} (update.north);
+
+%% ── Merge upsert branches at y=-25.0 ─────────────────────────────────────────
+%% insert (EPC, y=-20.7) → south to y=-25.0, then east to Sistem merge point
+%% update (Sistem, y=-23.2) → south to Sistem merge point
+%% Single arrowhead only on the outgoing path (to ringkasan)
+\draw (insert.south) -- (2.8, -25.0) -- (9.0, -25.0);
+\draw (update.south) -- (9.0, -25.0);
+
+%% ── Loop-back arrow: merge point → right gutter → iterasi.east ──────────────
+%% Right gutter at x=11.5; loop back up to iterasi (y=-18.2)
+\draw[->] (9.0, -25.0) -- (11.5, -25.0) -- (11.5, -18.2) -- (iterasi.east);
+
+%% ── Sistem: Tampilkan ringkasan ──────────────────────────────────────────────
+%% Flow continues south from merge coordinate after loop completes all rows
+\node (ringkasan) [action] at (9.0, -27.5)
+  {Tampilkan ringkasan\\(total, inserted, updated)};
+\draw[->] (9.0, -25.0) -- (ringkasan.north);
+
+%% ── End node (bullseye in Sistem lane) ───────────────────────────────────────
+\draw[thick] (9.0, -29.5) circle (0.28cm);
+\fill        (9.0, -29.5) circle (0.15cm);
+\draw[->] (ringkasan.south) -- (9.0, -29.22);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Import Data Mahasiswa}
+\label{fig:ad03-import}
+\end{figure}

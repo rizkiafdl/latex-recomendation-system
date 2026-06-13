@@ -1,0 +1,160 @@
+%% AD-01 · Register
+%% y-guide: start=-1.8  access/showform=-3.5  bridge=-5.0  fill=-6.5
+%%          click/valuser=-8.8  d1/err1=-11.3  validpw=-13.8
+%%          d2/err2=-16.3  validconfirm=-18.8  d3/err3=-21.3
+%%          checkdup=-23.8  d4/err4=-26.3  hashpw=-28.8
+%%          saveuser=-31.3  redir=-33.8  end=-35.5  border=-36.8
+%% Loop-backs: all 4 error nodes → fill (y=-6.5) via gutters x=0.8/0.6/0.4/0.2
+%% Entry offsets on fill.west: y=-6.8/-6.6/-6.4/-6.2 (± from centre -6.5)
+
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -36.8);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Register};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -36.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Mengakses halaman Register ──────────────────────────────────────
+\node (access) [action] at (2.8, -3.5)
+  {Mengakses halaman\\ Register};
+\draw[->] (2.8, -2.02) -- (access.north);
+
+%% ── Sistem: Menampilkan form Register ────────────────────────────────────
+\node (showform) [action] at (9.0, -3.5)
+  {Menampilkan\\ form Register};
+\draw[->] (access.east) -- (showform.west);
+
+%% ── Sistem → EPC: form siap diisi (single arrow, no corner arrowhead) ────
+\node (fill) [action] at (2.8, -6.5)
+  {Mengisi username,\\ password, konfirmasi};
+\draw[->] (showform.south) -- (9.0, -5.0) -- (2.8, -5.0) -- (fill.north);
+
+%% ── EPC: Menekan tombol Register ─────────────────────────────────────────
+\node (click) [action] at (2.8, -8.8)
+  {Menekan tombol\\ Register};
+\draw[->] (fill.south) -- (click.north);
+
+%% ── Sistem: Validasi username ────────────────────────────────────────────
+\node (valuser) [action] at (9.0, -8.8)
+  {Validasi username:\\ panjang \(\geq\) 3 karakter};
+\draw[->] (click.east) -- (valuser.west);
+
+%% ── Sistem: Decision 1 — Username valid? ─────────────────────────────────
+\node (d1) [decision] at (9.0, -11.3)
+  {Username\\ valid?};
+\draw[->] (valuser.south) -- (d1.north);
+
+%% D1 — F: error di EPC lane ──────────────────────────────────────────────
+\node (err1) [action] at (2.8, -11.3)
+  {Tampilkan\\ pesan error};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err1.east);
+
+%% D1 — T: validasi password ──────────────────────────────────────────────
+\node (validpw) [action] at (9.0, -13.8)
+  {Validasi password:\\ panjang \(\geq\) 6 karakter};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {T} (validpw.north);
+
+%% ── Sistem: Decision 2 — Password valid? ─────────────────────────────────
+\node (d2) [decision] at (9.0, -16.3)
+  {Password\\ valid?};
+\draw[->] (validpw.south) -- (d2.north);
+
+%% D2 — F: error di EPC lane ──────────────────────────────────────────────
+\node (err2) [action] at (2.8, -16.3)
+  {Tampilkan\\ pesan error};
+\draw[->] (d2.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err2.east);
+
+%% D2 — T: validasi konfirmasi password ───────────────────────────────────
+\node (validconfirm) [action] at (9.0, -18.8)
+  {Validasi kesesuaian\\ konfirmasi password};
+\draw[->] (d2.south) -- node[right, pos=0.12, font=\scriptsize] {T} (validconfirm.north);
+
+%% ── Sistem: Decision 3 — Password cocok? ─────────────────────────────────
+\node (d3) [decision] at (9.0, -21.3)
+  {Password\\ cocok?};
+\draw[->] (validconfirm.south) -- (d3.north);
+
+%% D3 — F: error di EPC lane ──────────────────────────────────────────────
+\node (err3) [action] at (2.8, -21.3)
+  {Tampilkan\\ pesan error};
+\draw[->] (d3.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err3.east);
+
+%% D3 — T: cek duplikasi username ─────────────────────────────────────────
+\node (checkdup) [action] at (9.0, -23.8)
+  {Cek duplikasi\\ username di database};
+\draw[->] (d3.south) -- node[right, pos=0.12, font=\scriptsize] {T} (checkdup.north);
+
+%% ── Sistem: Decision 4 — Username unik? ──────────────────────────────────
+\node (d4) [decision] at (9.0, -26.3)
+  {Username\\ unik?};
+\draw[->] (checkdup.south) -- (d4.north);
+
+%% D4 — F: error di EPC lane ──────────────────────────────────────────────
+\node (err4) [action] at (2.8, -26.3)
+  {Tampilkan: username\\ sudah digunakan};
+\draw[->] (d4.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err4.east);
+
+%% D4 — T: hash password ──────────────────────────────────────────────────
+\node (hashpw) [action] at (9.0, -28.8)
+  {Hash password\\ (PBKDF2, Werkzeug)};
+\draw[->] (d4.south) -- node[right, pos=0.12, font=\scriptsize] {T} (hashpw.north);
+
+%% ── Sistem: Simpan AppUser ────────────────────────────────────────────────
+\node (saveuser) [action] at (9.0, -31.3)
+  {Simpan AppUser\\ ke database};
+\draw[->] (hashpw.south) -- (saveuser.north);
+
+%% ── Sistem: Redirect ke Login ────────────────────────────────────────────
+\node (redir) [action] at (9.0, -33.8)
+  {Redirect ke\\ halaman Login};
+\draw[->] (saveuser.south) -- (redir.north);
+
+%% ── End node (bullseye) ──────────────────────────────────────────────────
+\draw[thick] (9.0, -35.5) circle (0.28cm);
+\fill (9.0, -35.5) circle (0.15cm);
+\draw[->] (redir.south) -- (9.0, -35.22);
+
+%% ── 4 loop-back arrows: all error nodes → fill node ──────────────────────
+%% Helper coords: x is irrelevant (|- takes x from fill.west); y = entry height
+%% fill centre y=-6.5, half-height=0.5 → spans [-6.0, -7.0]
+%% 4 entries spaced 0.2 apart within the node height range
+\coordinate (fill_w1) at (0, -6.8);
+\coordinate (fill_w2) at (0, -6.6);
+\coordinate (fill_w3) at (0, -6.4);
+\coordinate (fill_w4) at (0, -6.2);
+
+\draw[->] (err1.west) -- (0.8, -11.3) -- (0.8, -6.8) -- (fill.west |- fill_w1);
+\draw[->] (err2.west) -- (0.6, -16.3) -- (0.6, -6.6) -- (fill.west |- fill_w2);
+\draw[->] (err3.west) -- (0.4, -21.3) -- (0.4, -6.4) -- (fill.west |- fill_w3);
+\draw[->] (err4.west) -- (0.2, -26.3) -- (0.2, -6.2) -- (fill.west |- fill_w4);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Register}
+\label{fig:ad01-register}
+\end{figure}

@@ -1,0 +1,163 @@
+%% AD-07 · Trigger Proses Rekomendasi
+%% y-guide: modal=-3.5  params=-6.0  generate=-8.5  overrides=-8.5
+%%          load_mhs=-11.0  d1=-13.5  err_mhs=-13.5  early_end=-15.5
+%%          load_spv=-16.5  build_docs=-19.2  init_embed=-21.7
+%%          d2=-24.2  tfidf=-24.2  cosine=-26.9  d3=-29.6  bonus=-29.6
+%%          capacity=-32.3  greedy=-35.0  evaluate=-37.7  save=-40.4
+%%          redir=-43.0  end=-45.0  border=-46.3
+%% Merges: D2-F (tfidf) → right gutter x=11.5 → d3.east
+%%         D3-Ya (bonus) → cross-lane x=6.5 → capacity.west
+
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -46.3);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Trigger Proses Rekomendasi};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -46.3);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Membuka modal konfigurasi run ────────────────────────────────────
+\node (modal) [action] at (2.8, -3.5)
+  {Membuka modal\\ konfigurasi run};
+\draw[->] (2.8, -2.02) -- (modal.north);
+
+%% ── EPC: Mengatur parameter ───────────────────────────────────────────────
+\node (params) [action] at (2.8, -6.0)
+  {Mengatur parameter\\ (model, bonus, kapasitas)};
+\draw[->] (modal.south) -- (params.north);
+
+%% ── EPC: Menekan tombol Generate ─────────────────────────────────────────
+\node (generate) [action] at (2.8, -8.5)
+  {Menekan tombol\\ ``Generate''};
+\draw[->] (params.south) -- (generate.north);
+
+%% ── Sistem: Membuat RunOverrides ──────────────────────────────────────────
+\node (overrides) [action] at (9.0, -8.5)
+  {Membuat objek\\ RunOverrides};
+\draw[->] (generate.east) -- (overrides.west);
+
+%% ── Sistem: Memuat data mahasiswa ─────────────────────────────────────────
+\node (load_mhs) [action] at (9.0, -11.0)
+  {Memuat data mahasiswa\\ dari database};
+\draw[->] (overrides.south) -- (load_mhs.north);
+
+%% ── Sistem: Decision 1 — Ada mahasiswa? ───────────────────────────────────
+\node (d1) [decision] at (9.0, -13.5)
+  {Ada\\ mahasiswa?};
+\draw[->] (load_mhs.south) -- (d1.north);
+
+%% D1 — F: error, short-circuit end in EPC lane ───────────────────────────
+\node (err_mhs) [action] at (2.8, -13.5)
+  {Error: tidak ada\\ mahasiswa};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err_mhs.east);
+\draw[thick] (2.8, -15.5) circle (0.28cm);
+\fill (2.8, -15.5) circle (0.15cm);
+\draw[->] (err_mhs.south) -- (2.8, -15.22);
+
+%% D1 — T: memuat profil supervisor ───────────────────────────────────────
+\node (load_spv) [action] at (9.0, -16.5)
+  {Memuat profil supervisor;\\ enrichment adaptif};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {T} (load_spv.north);
+
+%% ── Sistem: Membangun dokumen teks ───────────────────────────────────────
+\node (build_docs) [action] at (9.0, -19.2)
+  {Membangun dokumen\\ teks per entitas};
+\draw[->] (load_spv.south) -- (build_docs.north);
+
+%% ── Sistem: Inisialisasi EmbeddingProvider ───────────────────────────────
+\node (init_embed) [action] at (9.0, -21.7)
+  {Inisialisasi\\ EmbeddingProvider};
+\draw[->] (build_docs.south) -- (init_embed.north);
+
+%% ── Sistem: Decision 2 — Model embedding tersedia? ───────────────────────
+\node (d2) [decision] at (9.0, -24.2)
+  {Model embedding\\ tersedia?};
+\draw[->] (init_embed.south) -- (d2.north);
+
+%% D2 — F: TF-IDF / Token Overlap di EPC lane ─────────────────────────────
+\node (tfidf) [action] at (2.8, -24.2)
+  {Hitung TF-IDF atau\\ Token Overlap similarity};
+\draw[->] (d2.west) -- node[above, pos=0.08, font=\scriptsize] {F} (tfidf.east);
+
+%% D2 — T: cosine similarity ───────────────────────────────────────────────
+\node (cosine) [action] at (9.0, -26.9)
+  {Hitung cosine\\ similarity matrix};
+\draw[->] (d2.south) -- node[right, pos=0.12, font=\scriptsize] {T} (cosine.north);
+
+%% ── Sistem: Decision 3 — Group bonus aktif? ───────────────────────────────
+\node (d3) [decision] at (9.0, -29.6)
+  {Group bonus\\ aktif?};
+\draw[->] (cosine.south) -- (d3.north);
+
+%% D2-F merge: tfidf (EPC) → right gutter x=11.5 → d3.east
+%% Single continuous arrow; enters diamond from east side
+\draw[->] (tfidf.east) -- (11.5, -24.2) -- (11.5, -29.6) -- (d3.east);
+
+%% D3 — Ya (west): Terapkan Group Bonus di EPC lane ───────────────────────
+\node (bonus) [action] at (2.8, -29.6)
+  {Terapkan Company\\ Group Bonus};
+\draw[->] (d3.west) -- node[above, pos=0.08, font=\scriptsize] {Ya} (bonus.east);
+
+%% D3 — Tdk (south): skip bonus → capacity plan ───────────────────────────
+\node (capacity) [action] at (9.0, -32.3)
+  {Buat capacity plan;\\ hitung min/max};
+\draw[->] (d3.south) -- node[right, pos=0.12, font=\scriptsize] {Tdk} (capacity.north);
+
+%% D3-Ya merge: bonus (EPC) → cross-lane bend → capacity.west
+%% Routes through x=6.5 (between divider and Sistem nodes) entering from west
+\draw[->] (bonus.east) -- (6.5, -29.6) -- (6.5, -32.3) -- (capacity.west);
+
+%% ── Sistem: Greedy Assignment Solver ─────────────────────────────────────
+\node (greedy) [action] at (9.0, -35.0)
+  {Greedy Assignment\\ Solver (Fase 1 \& 2)};
+\draw[->] (capacity.south) -- (greedy.north);
+
+%% ── Sistem: Evaluasi hasil ───────────────────────────────────────────────
+\node (evaluate) [action] at (9.0, -37.7)
+  {Evaluasi hasil\\ (MRR, NDCG, dll.)};
+\draw[->] (greedy.south) -- (evaluate.north);
+
+%% ── Sistem: Simpan ke database ───────────────────────────────────────────
+\node (save) [action] at (9.0, -40.4)
+  {Simpan RecommendationRun\\ ke database};
+\draw[->] (evaluate.south) -- (save.north);
+
+%% ── Sistem: Redirect ke Run Detail ───────────────────────────────────────
+\node (redir) [action] at (9.0, -43.0)
+  {Redirect ke\\ Run Detail};
+\draw[->] (save.south) -- (redir.north);
+
+%% ── End node (bullseye) ──────────────────────────────────────────────────
+\draw[thick] (9.0, -45.0) circle (0.28cm);
+\fill (9.0, -45.0) circle (0.15cm);
+\draw[->] (redir.south) -- (9.0, -44.72);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Trigger Proses Rekomendasi}
+\label{fig:ad07-trigger}
+\end{figure}

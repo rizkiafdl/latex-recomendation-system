@@ -1,0 +1,70 @@
+%% Kerangka Berpikir — VERSI LAMA (pipeline end-to-end)
+%% Disimpan sebagai referensi sebelum diganti versi metodologi
+
+\begin{figure}[H]
+\centering
+\scalebox{0.75}{%
+\begin{tikzpicture}[
+  node distance=0.3cm,
+  terminal/.style={
+    draw, rounded rectangle,
+    text width=2cm, align=center,
+    minimum height=0.55cm, font=\footnotesize
+  },
+  process/.style={
+    draw, rectangle,
+    text width=5.5cm, align=center,
+    minimum height=0.7cm, inner sep=4pt, font=\footnotesize
+  },
+  io/.style={
+    draw, trapezium,
+    trapezium left angle=75, trapezium right angle=105,
+    text width=4.8cm, align=center,
+    minimum height=0.7cm, inner sep=4pt, font=\footnotesize
+  },
+  decision/.style={
+    draw, diamond, aspect=2.5,
+    text width=1.6cm, align=center,
+    inner sep=2pt, font=\footnotesize
+  },
+  arrow/.style={->, >=stealth}
+]
+  \node (mulai)   [terminal]                  {Mulai};
+  \node (input1)  [io,      below=of mulai]   {EPC memasukkan data mahasiswa dan mengelola data faculty supervisor};
+  \node (input2)  [io,      below=of input1]  {EPC mengkonfigurasi parameter pipeline (model embedding, rule boost, group bonus, kapasitas)};
+  \node (p1)      [process, below=of input2]  {Pembentukan dokumen teks mahasiswa dan faculty supervisor};
+  \node (p2)      [process, below=of p1]      {Encoding dokumen menggunakan model embedding (transformer)};
+  \node (p3)      [process, below=of p2]      {Perhitungan cosine similarity matrix};
+  \node (p4)      [process, below=of p3]      {Deteksi label semantik per mahasiswa};
+  \node (p5)      [process, below=of p4]      {Perhitungan company group bonus dan extra document};
+  \node (p6)      [process, below=of p5]      {Perhitungan capacity plan (min/max per supervisor)};
+  \node (p7)      [process, below=of p6]      {Alokasi mahasiswa ke supervisor menggunakan greedy solver};
+  \node (p8)      [process, below=of p7]      {Perhitungan metrik evaluasi (MRR, Match Rate, Coverage)};
+  \node (output1) [process, below=of p8]      {EPC menganalisis hasil rekomendasi};
+  \node (decide)  [decision,below=of output1] {Hasil sesuai?};
+  \node (output2) [io,      below=of decide]  {EPC export hasil ke Excel};
+  \node (selesai) [terminal,below=of output2] {Selesai};
+
+  \draw [arrow] (mulai)   -- (input1);
+  \draw [arrow] (input1)  -- (input2);
+  \draw [arrow] (input2)  -- (p1);
+  \draw [arrow] (p1)      -- (p2);
+  \draw [arrow] (p2)      -- (p3);
+  \draw [arrow] (p3)      -- (p4);
+  \draw [arrow] (p4)      -- (p5);
+  \draw [arrow] (p5)      -- (p6);
+  \draw [arrow] (p6)      -- (p7);
+  \draw [arrow] (p7)      -- (p8);
+  \draw [arrow] (p8)      -- (output1);
+  \draw [arrow] (output1) -- (decide);
+  \draw [arrow] (decide)  -- node[right, font=\footnotesize] {Ya}   (output2);
+  \draw [arrow] (output2) -- (selesai);
+
+  \draw [arrow] (decide.east)
+    -- node[above, font=\footnotesize] {Tidak} ++(2.8,0)
+    |- (input2.east);
+\end{tikzpicture}%
+}
+\caption{Alur Kerangka Berpikir}
+\label{fig:fig3.1}
+\end{figure}

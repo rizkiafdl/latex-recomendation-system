@@ -43,27 +43,10 @@ classDiagram
         +List~Recommendation~ recommendations
     }
 
-    class LabelDescription {
-        +int id
-        +String label_name
-        +Text description
-        +Float threshold
-        +Boolean is_niche
-        +DateTime updated_at
-    }
-
-    class SupervisorLabelAffinity {
-        +int id
-        +int supervisor_id
-        +String label_name
-        +Float boost_value
-        +Boolean is_niche_penalty
-        +DateTime updated_at
-    }
-
     class RecommendationRun {
         +int id
         +DateTime created_at
+        +int created_by_id
         +String input_source
         +int total_students
         +int total_supervisors
@@ -79,6 +62,7 @@ classDiagram
         +Text evaluation_json
         +Text pipeline_config_json
         +Float objective_score
+        +Text rankings_json
         +List~Recommendation~ recommendations
     }
 
@@ -88,7 +72,6 @@ classDiagram
         +int student_id
         +int supervisor_id
         +Float similarity_score
-        +Float rule_boost
         +Float group_boost
         +Float final_score
         +Text rule_matches
@@ -107,7 +90,6 @@ classDiagram
         <<dataclass>>
         +String embedding_model
         +String embedding_task
-        +Boolean enable_rule_boost
         +Boolean enable_group_bonus
         +Boolean enable_extra_docs
         +List~str~ capacity_priority_codes
@@ -128,7 +110,6 @@ classDiagram
         +Dict student
         +SupervisorProfile supervisor
         +Float similarity_score
-        +Float rule_boost
         +Float group_boost
         +Float final_score
         +List~str~ rule_matches
@@ -151,10 +132,10 @@ classDiagram
         +ndarray hybrid_score_matrix
     }
 
-    RecommendationRun "1" --> "*" Recommendation : has
+    RecommendationRun "1" --> "*" Recommendation : cascade delete
+    AppUser "1" --> "*" RecommendationRun : created by
     Student "1" --> "*" Recommendation : has
     Supervisor "1" --> "*" Recommendation : has
-    Supervisor "1" --> "*" SupervisorLabelAffinity : has
     RecommendationOutput "1" --> "*" RecommendationItem : contains
     RecommendationOutput "1" --> "1" CapacityPlan : contains
     RecommendationItem "*" --> "1" SupervisorProfile : references
@@ -202,27 +183,10 @@ erDiagram
         DATETIME updated_at "NOT NULL, DEFAULT now"
     }
 
-    label_descriptions {
-        INTEGER id PK
-        VARCHAR_64 label_name UK "NOT NULL"
-        TEXT description "NOT NULL"
-        FLOAT threshold "NOT NULL, DEFAULT 0.45"
-        BOOLEAN is_niche "NOT NULL, DEFAULT false"
-        DATETIME updated_at "NOT NULL, DEFAULT now"
-    }
-
-    supervisor_label_affinities {
-        INTEGER id PK
-        INTEGER supervisor_id FK
-        VARCHAR_64 label_name "NOT NULL"
-        FLOAT boost_value "NOT NULL, DEFAULT 0.0"
-        BOOLEAN is_niche_penalty "NOT NULL, DEFAULT false"
-        DATETIME updated_at "NOT NULL, DEFAULT now"
-    }
-
     recommendation_runs {
         INTEGER id PK
         DATETIME created_at "NOT NULL, DEFAULT now"
+        INTEGER created_by_id FK
         VARCHAR_255 input_source
         INTEGER total_students "NOT NULL"
         INTEGER total_supervisors "NOT NULL"
@@ -238,6 +202,7 @@ erDiagram
         TEXT evaluation_json
         TEXT pipeline_config_json
         FLOAT objective_score
+        TEXT rankings_json
     }
 
     recommendations {
@@ -246,14 +211,13 @@ erDiagram
         INTEGER student_id FK "NOT NULL"
         INTEGER supervisor_id FK "NOT NULL"
         FLOAT similarity_score "NOT NULL, DEFAULT 0.0"
-        FLOAT rule_boost "NOT NULL, DEFAULT 0.0"
         FLOAT group_boost "NOT NULL, DEFAULT 0.0"
         FLOAT final_score "NOT NULL"
         TEXT rule_matches
         VARCHAR_255 company_group_key
     }
 
-    supervisors ||--o{ supervisor_label_affinities : "memiliki"
+    app_users ||--o{ recommendation_runs : "membuat"
     supervisors ||--o{ recommendations : "direkomendasikan untuk"
     students ||--o{ recommendations : "mendapat rekomendasi"
     recommendation_runs ||--o{ recommendations : "menghasilkan"
