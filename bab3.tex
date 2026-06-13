@@ -1,3 +1,4 @@
+% !TEX root = Skripsi.tex
 \chapter{\babTiga}
 
 
@@ -412,9 +413,50 @@ Perancangan UML dan use case pada penelitian ini bertujuan untuk memodelkan alur
 
 Use case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dalam sistem klasifikasi dan prediksi topik yang dikembangkan. Diagram ini juga menjelaskan aktor-aktor yang terlibat dalam sistem tersebut. Dalam sistem klasifikasi dan prediksi topik skripsi ini, aktor utama yang berperan adalah user dan admin.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[width=4.30537in,height=2.05108in]{pic/usecase-diagram}
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  uc/.style={ellipse, draw, text width=4.0cm, align=center,
+             minimum height=0.9cm, inner sep=3pt},
+]
+
+%% System boundary — sharp corners
+\draw[thick] (1.0, 1.0) rectangle (10.5, -14.2);
+\node[font=\scriptsize\bfseries, above] at (5.75, 1.0)
+  {Sistem Rekomendasi Faculty Supervisor};
+
+%% Single column of use cases at x=6.5
+%% y positions: 0, -1.5, -3.0, ..., -13.5  (centre = -6.75)
+\node (uc1)  [uc] at (6.5,   0.0) {Register};
+\node (uc2)  [uc] at (6.5,  -1.5) {Login};
+\node (uc3)  [uc] at (6.5,  -3.0) {Import Data Mahasiswa};
+\node (uc4)  [uc] at (6.5,  -4.5) {Kelola Data Faculty Supervisor};
+\node (uc5)  [uc] at (6.5,  -6.0) {Kelola Rules Studio};
+\node (uc6)  [uc] at (6.5,  -7.5) {Lihat Dashboard};
+\node (uc7)  [uc] at (6.5,  -9.0) {Trigger Proses Rekomendasi};
+\node (uc8)  [uc] at (6.5, -10.5) {Lihat Hasil Rekomendasi};
+\node (uc9)  [uc] at (6.5, -12.0) {Export Hasil ke Excel};
+\node (uc10) [uc] at (6.5, -13.5) {Logout};
+
+%% Direct fan lines from actor arm-tip to every use case (single column = no crossing)
+\foreach \uc in {uc1, uc2, uc3, uc4, uc5, uc6, uc7, uc8, uc9, uc10} {
+  \draw (-0.28, -6.10) -- (\uc.west);
+}
+
+%% Actor (EPC) — stick figure centred at x=-0.8, y=-6.75
+%% pre-computed: head=-5.20, neck=-5.52, arm=-6.10, hip=-6.60, feet=-7.40
+\draw[fill=white] (-0.8, -5.20) circle (0.32cm);  % head
+\draw (-0.8, -5.52) -- (-0.8, -6.60);             % body
+\draw (-1.32, -6.10) -- (-0.28, -6.10);           % arms
+\draw (-0.8,  -6.60) -- (-1.22, -7.40);           % left leg
+\draw (-0.8,  -6.60) -- (-0.38, -7.40);           % right leg
+\node[font=\scriptsize\bfseries, below=0.12cm] at (-0.8, -7.40) {EPC};
+
+
+\end{tikzpicture}%
+}
 \caption{Use Case Diagram}
 \label{fig:fig3.2}
 \end{figure}
