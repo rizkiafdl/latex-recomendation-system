@@ -184,7 +184,7 @@ Hasil akhir dari proses rekomendasi adalah pasangan mahasiswa dan faculty superv
 
 \subsubsection{Pembentukan Representasi Data Faculty Supervisor}\label{pembentukan-representasi-data-faculty-supervisor}
 
-Setiap faculty supervisor direpresentasikan dalam bentuk \textbf{satu} dokumen profil teks yang dibentuk secara dinamis pada saat pipeline dijalankan. Dokumen profil tersebut bersumber dari kata kunci kompetensi (\texttt{profile\_keywords}) yang dikelola EPC di basis data. Apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan dua sumber data tambahan, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
+Setiap faculty supervisor direpresentasikan dalam bentuk satu dokumen profil teks yang dibentuk secara dinamis pada saat pipeline dijalankan. Dokumen profil tersebut bersumber dari kata kunci kompetensi (\texttt{profile\_keywords}) yang dikelola EPC di basis data. Apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan dua sumber data tambahan, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
 
 Profil setiap faculty supervisor disimpan dalam tabel \texttt{supervisors} yang memuat atribut kata kunci kompetensi (\texttt{profile\_keywords}). Pada saat pipeline rekomendasi dijalankan, modul \texttt{rules.py} membangun dokumen teks secara dinamis dari data tersebut; apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan data historis bimbingan mahasiswa yang diambil dari basis data. Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model \textit{text embedding} pada saat inferensi, menghasilkan matriks embedding berukuran $N \times M$ (mahasiswa $\times$ \textit{faculty supervisor}) yang digunakan sebagai dasar perhitungan kemiripan dan perangkingan rekomendasi.
 
@@ -365,7 +365,7 @@ Perancangan UML dan use case pada penelitian ini bertujuan untuk memodelkan alur
 
 \subsection{Use Case Diagram}\label{use-case-diagram}
 
-Use Case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dalam Sistem Rekomendasi \textit{Faculty Supervisor} yang dikembangkan. Diagram ini menggambarkan aktor yang berinteraksi dengan sistem beserta fungsionalitas yang tersedia. Aktor utama dalam sistem ini adalah \textbf{EPC}, yaitu koordinator program studi yang menggunakan sistem untuk mengelola data mahasiswa, mengonfigurasi profil \textit{faculty supervisor}, menjalankan proses rekomendasi, serta menganalisis dan mengekspor hasilnya.
+Use Case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dalam Sistem Rekomendasi \textit{Faculty Supervisor} yang dikembangkan. Diagram ini menggambarkan aktor yang berinteraksi dengan sistem beserta fungsionalitas yang tersedia. Aktor utama dalam sistem ini adalah EPC, yaitu koordinator program studi yang menggunakan sistem untuk mengelola data mahasiswa, mengonfigurasi profil \textit{faculty supervisor}, menjalankan proses rekomendasi, serta menganalisis dan mengekspor hasilnya.
 
 \begin{figure}[H]
 \centering
@@ -978,7 +978,7 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \clearpage
 \subsection{Activity Diagram}\label{activity-diagram}
 
-\textit{Activity Diagram} menggambarkan alur aktivitas yang terjadi antara aktor (\textbf{EPC}) dan sistem dalam setiap use case yang telah didefinisikan. Diagram ini menggunakan dua \textit{swimlane} — EPC dan Sistem — untuk memperlihatkan tanggung jawab masing-masing pihak pada setiap tahap proses, termasuk titik keputusan (\textit{decision point}) dan jalur alternatif yang mungkin terjadi.
+\textit{Activity Diagram} menggambarkan alur aktivitas yang terjadi antara aktor (EPC) dan sistem dalam setiap use case yang telah didefinisikan. Diagram ini menggunakan dua \textit{swimlane} — EPC dan Sistem — untuk memperlihatkan tanggung jawab masing-masing pihak pada setiap tahap proses, termasuk titik keputusan (\textit{decision point}) dan jalur alternatif yang mungkin terjadi.
 
 %% ── Activity Diagram: Login ──────────────────────────────────────────────
 %% Fixes: divider starts at y=-0.1 (not y=0.7) so title bar is undivided;
