@@ -186,7 +186,7 @@ Hasil akhir dari proses rekomendasi adalah pasangan mahasiswa dan faculty superv
 
 Setiap faculty supervisor direpresentasikan dalam bentuk satu atau lebih dokumen teks yang bersifat unik. Dokumen teks tersebut dibentuk dengan menggabungkan field-field tekstual dari masing-masing sumber data. Pada penelitian ini terdapat dua sumber utama, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
 
-Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model text embedding. Hasil transformasi berupa vektor embedding disimpan ke dalam basis data, dengan satu baris data merepresentasikan satu dokumen milik faculty supervisor. Kumpulan embedding ini berfungsi sebagai knowledge base yang digunakan sebagai referensi utama dalam proses perhitungan kemiripan dan perangkingan rekomendasi.
+Profil setiap faculty supervisor disimpan dalam tabel \texttt{supervisors} yang memuat atribut kata kunci kompetensi (\texttt{profile\_keywords}). Pada saat pipeline rekomendasi dijalankan, modul \texttt{rules.py} membangun dokumen teks secara dinamis dari data tersebut; apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan data historis bimbingan mahasiswa yang diambil dari basis data. Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model \textit{text embedding} pada saat inferensi, menghasilkan matriks embedding berukuran $N \times M$ (mahasiswa $\times$ \textit{faculty supervisor}) yang digunakan sebagai dasar perhitungan kemiripan dan perangkingan rekomendasi.
 
 \begin{longtable}[c]{|p{2.5cm}|p{2.5cm}|p{3.5cm}|p{5.5cm}|}
 
@@ -299,7 +299,7 @@ Karena setiap faculty supervisor direpresentasikan oleh beberapa dokumen teks ya
 
 Berdasarkan skor akhir tersebut, sistem melakukan pengurutan faculty supervisor dari tingkat kesesuaian tertinggi hingga terendah untuk setiap mahasiswa. Hasil dari proses ini berupa daftar rekomendasi top-5 faculty supervisor yang selanjutnya digunakan sebagai input pada tahap validasi dan alokasi slot bimbingan yang dijelaskan pada Subbab 3.2.3.6.
 
-Struktur data knowledge base yang digunakan dalam proses perhitungan kemiripan dan perangkingan ditunjukkan pada Tabel berikut.
+Struktur tabel \texttt{supervisors} yang menjadi sumber data utama dalam pipeline rekomendasi ditunjukkan pada Tabel berikut. Dokumen teks dan matriks embedding tidak disimpan secara persisten, melainkan dibangun dan dihitung ulang pada setiap eksekusi pipeline.
 
 \begin{longtable}[c]{|p{4.5cm}|p{9.5cm}|}
 
@@ -312,14 +312,14 @@ Struktur data knowledge base yang digunakan dalam proses perhitungan kemiripan d
 \endhead
 
 \hline
-\caption{Struktur Data Knowledge Base} \label{table:struktur_data_knowledge_base} \\
+\caption{Struktur Tabel \texttt{supervisors}} \label{table:struktur_tabel_supervisors} \\
 \endlastfoot
 
-\texttt{faculty\_supervisor\_id} & Identitas unik \textit{faculty supervisor}. \\ \hline
-\texttt{document\_id} & Identitas dokumen. \\ \hline
-\texttt{document\_source\_type} & Jenis sumber dokumen (Data Historis Mahasiswa / Topik Skripsi). \\ \hline
-\texttt{document\_text} & Hasil penggabungan seluruh atribut tekstual. \\ \hline
-\texttt{vector\_embedding} & Representasi vektor dari dokumen teks. \\ \hline
+\texttt{id} & Identitas unik \textit{faculty supervisor} (\textit{primary key}). \\ \hline
+\texttt{code} & Kode \textit{faculty supervisor} (contoh: D2211). \\ \hline
+\texttt{name} & Nama lengkap \textit{faculty supervisor}. \\ \hline
+\texttt{profile\_keywords} & Kata kunci kompetensi yang dikelola EPC, disimpan sebagai teks dengan pemisah koma. \\ \hline
+\texttt{is\_active} & Status keaktifan \textit{faculty supervisor} dalam siklus rekomendasi. \\ \hline
 
 \end{longtable}
 
