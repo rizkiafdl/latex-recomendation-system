@@ -1,0 +1,74 @@
+%% ============================================================
+%% USE CASE DIAGRAM — Sistem Rekomendasi Faculty Supervisor
+%% Revised 2026-06-13
+%%
+%% Changes from previous version:
+%%   - "Kelola Rules Studio" → "Kelola Keywords Supervisor" (matches actual feature)
+%%   - Added "Lihat Riwayat Run" (route /runs)
+%%   - Single actor EPC (no admin role in system — session-based auth, all users equal)
+%%   - Fixed stale description paragraph
+%%   - Boundary extended to y=-16.2 for 11 use cases
+%% ============================================================
+
+\subsection{Use Case Diagram}\label{use-case-diagram}
+
+Use Case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung
+dalam Sistem Rekomendasi \textit{Faculty Supervisor} yang dikembangkan.
+Diagram ini menggambarkan aktor yang berinteraksi dengan sistem beserta
+fungsionalitas yang tersedia. Aktor utama dalam sistem ini adalah \textbf{EPC},
+yaitu koordinator program studi yang menggunakan sistem untuk mengelola data
+mahasiswa, mengonfigurasi profil \textit{faculty supervisor}, menjalankan
+proses rekomendasi, serta menganalisis dan mengekspor hasilnya.
+
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  uc/.style={ellipse, draw, text width=4.0cm, align=center,
+             minimum height=0.9cm, inner sep=3pt},
+]
+
+%% System boundary
+\draw[thick] (1.0, 1.0) rectangle (10.5, -16.2);
+\node[font=\scriptsize\bfseries, above] at (5.75, 1.0)
+  {Sistem Rekomendasi Faculty Supervisor};
+
+%% Use cases — single column at x=6.5
+%% y positions: 0, -1.5, ..., -15.0  (11 nodes, centre = -7.5)
+\node (uc1)  [uc] at (6.5,   0.0) {Register};
+\node (uc2)  [uc] at (6.5,  -1.5) {Login};
+\node (uc3)  [uc] at (6.5,  -3.0) {Import Data Mahasiswa};
+\node (uc4)  [uc] at (6.5,  -4.5) {Kelola Data Faculty Supervisor};
+\node (uc5)  [uc] at (6.5,  -6.0) {Kelola Keywords Supervisor};
+\node (uc6)  [uc] at (6.5,  -7.5) {Lihat Dashboard};
+\node (uc7)  [uc] at (6.5,  -9.0) {Trigger Proses Rekomendasi};
+\node (uc8)  [uc] at (6.5, -10.5) {Lihat Riwayat Run};
+\node (uc9)  [uc] at (6.5, -12.0) {Lihat Hasil Rekomendasi};
+\node (uc10) [uc] at (6.5, -13.5) {Export Hasil ke Excel};
+\node (uc11) [uc] at (6.5, -15.0) {Logout};
+
+%% Fan lines from actor right arm-tip (-0.28, -6.85) to each use case
+%% Actor centred at (-0.8, -7.5); arm at y = -7.5 + 0.65 = -6.85
+\foreach \uc in {uc1, uc2, uc3, uc4, uc5, uc6, uc7, uc8, uc9, uc10, uc11} {
+  \draw (-0.28, -6.85) -- (\uc.west);
+}
+
+%% Actor (EPC) — stick figure centred at x=-0.8, y=-7.5
+%% head:  -7.5 + 1.55 = -5.95
+%% neck:  -7.5 + 1.23 = -6.27
+%% arm:   -7.5 + 0.65 = -6.85
+%% hip:   -7.5 + 0.15 = -7.35
+%% feet:  -7.5 - 0.65 = -8.15
+\draw[fill=white] (-0.8, -5.95) circle (0.32cm);  % head
+\draw (-0.8, -6.27) -- (-0.8, -7.35);             % body
+\draw (-1.32, -6.85) -- (-0.28, -6.85);           % arms
+\draw (-0.8,  -7.35) -- (-1.22, -8.15);           % left leg
+\draw (-0.8,  -7.35) -- (-0.38, -8.15);           % right leg
+\node[font=\scriptsize\bfseries, below=0.12cm] at (-0.8, -8.15) {EPC};
+
+\end{tikzpicture}%
+}
+\caption{Use Case Diagram Sistem Rekomendasi Faculty Supervisor}
+\label{fig:fig3.2}
+\end{figure}

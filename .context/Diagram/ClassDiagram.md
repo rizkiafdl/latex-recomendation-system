@@ -29,18 +29,23 @@ classDiagram
         class RecommendationRun {
             +int id
             +datetime created_at
+            +int created_by_id
             +str input_source
             +int total_students
             +int total_supervisors
             +int target_min_capacity
             +int target_max_capacity
             +bool capacity_relaxed
+            +str capacity_note
+            +str capacity_bounds_json
             +str solver_name
+            +str solver_note
             +str embedding_backend
             +str embedding_model
-            +float objective_score
             +str evaluation_json
             +str pipeline_config_json
+            +float objective_score
+            +str rankings_json
         }
 
         class Recommendation {
@@ -209,6 +214,7 @@ classDiagram
     }
 
     %% ── ORM Associations ──────────────────────────────────────────────
+    AppUser "1" --> "*" RecommendationRun : created by
     RecommendationRun "1" --> "*" Recommendation : cascade delete
     Recommendation "*" --> "1" Student
     Recommendation "*" --> "1" Supervisor

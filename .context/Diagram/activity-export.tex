@@ -1,0 +1,111 @@
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+%% bottom = last_node_y - 1.3 = -23.5 - 1.3 = -24.8
+\draw[thick] (0, 0.7) rectangle (12, -24.8);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Export Hasil ke Excel};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+\draw[thick] (0, -1.0) -- (12, -1.0);
+%% Divider starts at y=-0.1 (title bar bottom) — NOT y=0.7
+\draw[thick] (5.8, -0.1) -- (5.8, -24.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Dari Run Detail, memilih tipe export ─────────────────────────────
+\node (pilih) [action] at (2.8, -3.5)
+  {Dari Run Detail,\\memilih tipe export};
+\draw[->] (2.8, -2.02) -- (pilih.north);
+
+%% ── EPC: Decision — Tipe export? ─────────────────────────────────────────
+\node (d_type) [decision] at (2.8, -6.0)
+  {Tipe\\export?};
+\draw[->] (pilih.south) -- (d_type.north);
+
+%% ────────────────────────────────────────────────────────────────────────
+%% BRANCH A — Detailed (d_type.east → "Det" → Sistem lane)
+%% ────────────────────────────────────────────────────────────────────────
+
+%% D1: Ambil data + rankings JSON (Sistem, same y as d_type)
+\node (d1) [action] at (9.0, -6.0)
+  {Ambil data di atas\\+ rankings JSON};
+\draw[->] (d_type.east) -- node[above, pos=0.08, font=\scriptsize] {Det} (d1.west);
+
+%% D2: Buat workbook 4 sheet (Sistem)
+\node (d2) [action] at (9.0, -8.5)
+  {Buat workbook 4 sheet\\(+ sheet rankings)};
+\draw[->] (d1.south) -- (d2.north);
+
+%% D3: Kirim file detailed (Sistem)
+\node (d3) [action] at (9.0, -11.0)
+  {Kirim file detailed\\sebagai attachment};
+\draw[->] (d2.south) -- (d3.north);
+
+%% D3 exits via right gutter to merge node (below Standard branch)
+%% Route: D3.south → right gutter x=11.5 → south → west to file.east
+%% (Routing right avoids crossing Standard branch nodes in Sistem lane)
+
+%% ────────────────────────────────────────────────────────────────────────
+%% BRANCH B — Standard (d_type.south → "Std" → bend → east to Sistem)
+%% ────────────────────────────────────────────────────────────────────────
+
+%% S1: Ambil data rekomendasi, kapasitas, evaluasi (Sistem, y=-14.0)
+%% Route: d_type.south → (2.8, -13.5) → east → S1.west
+\node (s1) [action] at (9.0, -14.0)
+  {Ambil data rekomendasi,\\kapasitas, evaluasi};
+\draw[->] (d_type.south) -- node[right, pos=0.08, font=\scriptsize] {Std}
+  (2.8, -13.5) -- (9.0, -13.5) -- (s1.west);
+
+%% S2: Buat workbook 3 sheet (Sistem)
+\node (s2) [action] at (9.0, -16.5)
+  {Buat workbook 3 sheet\\(rekomendasi, summary)};
+\draw[->] (s1.south) -- (s2.north);
+
+%% S3: Kirim file standard (Sistem)
+\node (s3) [action] at (9.0, -19.0)
+  {Kirim file standard\\sebagai attachment};
+\draw[->] (s2.south) -- (s3.north);
+
+%% ────────────────────────────────────────────────────────────────────────
+%% MERGE — File terunduh otomatis ke perangkat (Sistem, below both branches)
+%% ────────────────────────────────────────────────────────────────────────
+\node (file) [action] at (9.0, -21.5)
+  {File terunduh otomatis\\ke perangkat};
+
+%% S3.south → file.north (same lane, straight down)
+\draw[->] (s3.south) -- (file.north);
+
+%% D3.south → right gutter (x=11.5) → south to file_y − margin → west → file.east
+\draw[->] (d3.south) -- (11.5, -11.5) -- (11.5, -21.5) -- (file.east);
+
+%% ── End node (bullseye) in Sistem lane ───────────────────────────────────
+%% end y = -23.5; arrow tip at end_y + 0.28 = -23.22
+\draw[thick] (9.0, -23.5) circle (0.28cm);
+\fill        (9.0, -23.5) circle (0.15cm);
+\draw[->] (file.south) -- (9.0, -23.22);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Export Hasil ke Excel}
+\label{fig:ad10-export}
+\end{figure}

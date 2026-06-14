@@ -9,16 +9,16 @@
 \centering
 \scalebox{0.75}{%
 \begin{tikzpicture}[
-  node distance=0.3cm,
+  node distance=0.4cm,
   terminal/.style={
     draw, rounded rectangle,
     text width=2cm, align=center,
-    minimum height=0.55cm, font=\footnotesize
+    minimum height=0.6cm, font=\footnotesize
   },
   process/.style={
     draw, rectangle,
     text width=5.5cm, align=center,
-    minimum height=0.7cm, inner sep=4pt, font=\footnotesize
+    minimum height=0.75cm, inner sep=5pt, font=\footnotesize
   },
   io/.style={
     draw, trapezium,
@@ -33,40 +33,28 @@
   },
   arrow/.style={->, >=stealth}
 ]
-  \node (mulai)   [terminal]                  {Mulai};
-  \node (input1)  [io,      below=of mulai]   {EPC memasukkan data mahasiswa dan mengelola data faculty supervisor};
-  \node (input2)  [io,      below=of input1]  {EPC mengkonfigurasi parameter pipeline (model embedding, rule boost, group bonus, kapasitas)};
-  \node (p1)      [process, below=of input2]  {Pembentukan dokumen teks mahasiswa dan faculty supervisor};
-  \node (p2)      [process, below=of p1]      {Encoding dokumen menggunakan model embedding (transformer)};
-  \node (p3)      [process, below=of p2]      {Perhitungan cosine similarity matrix};
-  \node (p4)      [process, below=of p3]      {Deteksi label semantik per mahasiswa};
-  \node (p5)      [process, below=of p4]      {Perhitungan company group bonus dan extra document};
-  \node (p6)      [process, below=of p5]      {Perhitungan capacity plan (min/max per supervisor)};
-  \node (p7)      [process, below=of p6]      {Alokasi mahasiswa ke supervisor menggunakan greedy solver};
-  \node (p8)      [process, below=of p7]      {Perhitungan metrik evaluasi (MRR, Match Rate, Coverage)};
-  \node (output1) [process, below=of p8]      {EPC menganalisis hasil rekomendasi};
-  \node (decide)  [decision,below=of output1] {Hasil sesuai?};
-  \node (output2) [io,      below=of decide]  {EPC export hasil ke Excel};
-  \node (selesai) [terminal,below=of output2] {Selesai};
+  \node (mulai)   [terminal]                   {Mulai};
+  \node (analisis)[process,  below=of mulai]   {Analisis permasalahan, kebutuhan\\ fungsional \& non-fungsional, dan data};
+  \node (rencana) [process,  below=of analisis]{Perencanaan: ruang lingkup, pendekatan\\ semantic similarity, dan strategi evaluasi};
+  \node (model)   [process,  below=of rencana] {Perancangan model rekomendasi\\ berbasis semantic similarity};
+  \node (eval)    [process,  below=of model]   {Evaluasi hasil rekomendasi\\ menggunakan metrik information retrieval};
+  \node (decide)  [decision, below=of eval]    {Memenuhi\\ kriteria?};
+  \node (uml)     [process,  below=of decide]  {Perancangan UML: Use Case Diagram,\\ Activity Diagram, Class Diagram};
+  \node (impl)    [io,       below=of uml]     {Implementasi aplikasi web sebagai\\ decision support system (DSS)};
+  \node (selesai) [terminal, below=of impl]    {Selesai};
 
-  \draw [arrow] (mulai)   -- (input1);
-  \draw [arrow] (input1)  -- (input2);
-  \draw [arrow] (input2)  -- (p1);
-  \draw [arrow] (p1)      -- (p2);
-  \draw [arrow] (p2)      -- (p3);
-  \draw [arrow] (p3)      -- (p4);
-  \draw [arrow] (p4)      -- (p5);
-  \draw [arrow] (p5)      -- (p6);
-  \draw [arrow] (p6)      -- (p7);
-  \draw [arrow] (p7)      -- (p8);
-  \draw [arrow] (p8)      -- (output1);
-  \draw [arrow] (output1) -- (decide);
-  \draw [arrow] (decide)  -- node[right, font=\footnotesize] {Ya}   (output2);
-  \draw [arrow] (output2) -- (selesai);
+  \draw [arrow] (mulai)    -- (analisis);
+  \draw [arrow] (analisis) -- (rencana);
+  \draw [arrow] (rencana)  -- (model);
+  \draw [arrow] (model)    -- (eval);
+  \draw [arrow] (eval)     -- (decide);
+  \draw [arrow] (decide)   -- node[right, font=\footnotesize] {Ya}   (uml);
+  \draw [arrow] (uml)      -- (impl);
+  \draw [arrow] (impl)     -- (selesai);
 
   \draw [arrow] (decide.east)
     -- node[above, font=\footnotesize] {Tidak} ++(2.8,0)
-    |- (input2.east);
+    |- (rencana.east);
 \end{tikzpicture}%
 }
 \caption{Alur Kerangka Berpikir}
@@ -255,6 +243,26 @@ Mahasiswa & Status eligible & Tidak & Digunakan sebagai filter kelayakan mahasis
 
 \end{longtable}
 
+\subsection{Alur Pemrosesan Data}\label{alur-pemrosesan-data}
+
+Pipeline sistem terdiri dari delapan tahap berurutan, dimulai dari impor data Excel oleh EPC hingga ekspor hasil rekomendasi.
+
+\textbf{Tahap 1 Impor Data Excel.} EPC mengunggah file Excel data mahasiswa melalui antarmuka web. Modul \texttt{excel\_io.py} membersihkan dan menormalisasi setiap kolom, lalu menyimpan hasilnya ke tabel \texttt{students} dengan mekanisme \textit{upsert}.
+
+\textbf{Tahap 2 Pembangunan Dokumen Teks.} Modul \texttt{rules.py} mengubah data basis data menjadi representasi teks. Dokumen mahasiswa adalah gabungan posisi kerja, peran, dan nama perusahaan. Dokumen faculty supervisor berasal dari kata kunci kompetensi di basis data; bila fitur \textit{extra docs} diaktifkan, dokumen diperkaya dengan data historis bimbingan dan rekomendasi skripsi.
+
+\textbf{Tahap 3 Generasi Embedding dan Perhitungan Similaritas.} Modul \texttt{embedding.py} mengubah semua dokumen menjadi vektor embedding dengan model yang sama. Urutan \textit{fallback}: \textit{SentenceTransformer} (utama) $\to$ TF-IDF $\to$ \textit{token overlap}. Embedding dinormalisasi L2, lalu \textit{cosine similarity} dihitung untuk setiap pasang mahasiswa--faculty supervisor, menghasilkan matriks kemiripan $N \times M$.
+
+\textbf{Tahap 4 Penyusunan Skor \textit{Hybrid}.} Skor akhir adalah matriks kemiripan dikalikan bobot (default 1,0), ditambah \textit{company group bonus} bila diaktifkan. Bonus mendorong mahasiswa se-perusahaan ke faculty supervisor yang sama, dengan tiga syarat: minimal dua mahasiswa se-perusahaan, diversitas topik $\leq 6$ token, dan selisih skor dua dosen terbaik $\geq 0{,}08$. Nilai bonus menurun secara logaritmik seiring besarnya kelompok.
+
+\textbf{Tahap 5 Perencanaan Kapasitas.} Kapasitas setiap faculty supervisor ditetapkan pada rentang 10--12 mahasiswa. Bila total mahasiswa melebihi total kapasitas maksimum (\textit{overflow}), slot tambahan dialokasikan ke dosen berprioritas terlebih dahulu, lalu \textit{round-robin}. Bila kurang dari total minimum (\textit{underflow}), batas minimum dikurangi dari dosen berprioritas terendah.
+
+\textbf{Tahap 6 Penugasan \textit{Greedy}.} Algoritma \textit{greedy} dua fase menyelesaikan penugasan. Inisialisasi: tiap mahasiswa ke faculty supervisor dengan skor tertinggi (\textit{argmax}). Fase 1 memindahkan mahasiswa dari dosen kelebihan kapasitas ke yang masih kosong, memilih pemindahan dengan penalti skor terkecil. Fase 2 mengisi dosen yang belum mencapai batas minimum dengan cara serupa. Jika setelah iterasi maksimum masih ada pelanggaran kapasitas, sistem melempar \textit{RuntimeError}.
+
+\textbf{Tahap 7 Evaluasi.} Evaluasi dijalankan tiga kali: dari matriks kemiripan konten, matriks skor \textit{hybrid}, dan hasil penugasan akhir. Ketiganya dibandingkan terhadap \textit{ground truth} (\texttt{current\_supervisor\_code}) menggunakan metrik MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, \textit{Precision}@5, dan \textit{Match Rate}.
+
+\textbf{Tahap 8 Penyimpanan dan Ekspor.} Hasil pipeline disimpan ke tabel \texttt{recommendation\_runs} dan \texttt{recommendations}. Top-5 kandidat beserta skor tiap mahasiswa tersimpan sebagai JSON di kolom \texttt{rankings\_json}. EPC mengunduh hasil dalam dua format Excel: ekspor standar (3 \textit{sheet}: rekomendasi, kapasitas, evaluasi) atau ekspor \textit{detailed} (4 \textit{sheet}, ditambah peringkat kandidat per mahasiswa).
+
 \subsection{Kandidat Model Text Embedding}\label{kandidat-model-text-embedding}
 
 Pada penelitian ini, vektor embedding dibentuk menggunakan model text embedding open-source tanpa proses pelatihan ulang fine-tuning. Pemilihan kandidat model mempertimbangkan kebutuhan sistem yang menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, serta karakteristik data yang berpotensi memuat istilah campuran Bahasa Indonesia--Inggris. Seluruh kandidat model akan digunakan dengan mekanisme yang konsisten: teks mahasiswa dan dokumen faculty supervisor diubah menjadi embedding menggunakan model yang sama, kemudian dihitung kemiripannya menggunakan cosine similarity. Embedding yang dihasilkan digunakan apa adanya sesuai keluaran model tanpa normalisasi manual tambahan pada tahap pra-pemrosesan, dan sistem menghasilkan rekomendasi top-5 dosen sebelum tahap alokasi slot bimbingan.
@@ -356,7 +364,7 @@ Perancangan UML dan use case pada penelitian ini bertujuan untuk memodelkan alur
 
 \subsection{Use Case Diagram}\label{use-case-diagram}
 
-Use case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dalam sistem klasifikasi dan prediksi topik yang dikembangkan. Diagram ini juga menjelaskan aktor-aktor yang terlibat dalam sistem tersebut. Dalam sistem klasifikasi dan prediksi topik skripsi ini, aktor utama yang berperan adalah user dan admin.
+Use Case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dalam Sistem Rekomendasi \textit{Faculty Supervisor} yang dikembangkan. Diagram ini menggambarkan aktor yang berinteraksi dengan sistem beserta fungsionalitas yang tersedia. Aktor utama dalam sistem ini adalah \textbf{EPC}, yaitu koordinator program studi yang menggunakan sistem untuk mengelola data mahasiswa, mengonfigurasi profil \textit{faculty supervisor}, menjalankan proses rekomendasi, serta menganalisis dan mengekspor hasilnya.
 
 \begin{figure}[H]
 \centering
@@ -367,42 +375,43 @@ Use case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dal
              minimum height=0.9cm, inner sep=3pt},
 ]
 
-%% System boundary — sharp corners
-\draw[thick] (1.0, 1.0) rectangle (10.5, -14.2);
+%% System boundary
+\draw[thick] (1.0, 1.0) rectangle (10.5, -16.2);
 \node[font=\scriptsize\bfseries, above] at (5.75, 1.0)
   {Sistem Rekomendasi Faculty Supervisor};
 
-%% Single column of use cases at x=6.5
-%% y positions: 0, -1.5, -3.0, ..., -13.5  (centre = -6.75)
+%% Use cases — single column at x=6.5
+%% y positions: 0, -1.5, ..., -15.0  (11 nodes, centre = -7.5)
 \node (uc1)  [uc] at (6.5,   0.0) {Register};
 \node (uc2)  [uc] at (6.5,  -1.5) {Login};
 \node (uc3)  [uc] at (6.5,  -3.0) {Import Data Mahasiswa};
 \node (uc4)  [uc] at (6.5,  -4.5) {Kelola Data Faculty Supervisor};
-\node (uc5)  [uc] at (6.5,  -6.0) {Kelola Rules Studio};
+\node (uc5)  [uc] at (6.5,  -6.0) {Kelola Keywords Supervisor};
 \node (uc6)  [uc] at (6.5,  -7.5) {Lihat Dashboard};
 \node (uc7)  [uc] at (6.5,  -9.0) {Trigger Proses Rekomendasi};
-\node (uc8)  [uc] at (6.5, -10.5) {Lihat Hasil Rekomendasi};
-\node (uc9)  [uc] at (6.5, -12.0) {Export Hasil ke Excel};
-\node (uc10) [uc] at (6.5, -13.5) {Logout};
+\node (uc8)  [uc] at (6.5, -10.5) {Lihat Riwayat Run};
+\node (uc9)  [uc] at (6.5, -12.0) {Lihat Hasil Rekomendasi};
+\node (uc10) [uc] at (6.5, -13.5) {Export Hasil ke Excel};
+\node (uc11) [uc] at (6.5, -15.0) {Logout};
 
-%% Direct fan lines from actor arm-tip to every use case (single column = no crossing)
-\foreach \uc in {uc1, uc2, uc3, uc4, uc5, uc6, uc7, uc8, uc9, uc10} {
-  \draw (-0.28, -6.10) -- (\uc.west);
+%% Fan lines from actor right arm-tip (-0.28, -6.85) to each use case
+%% Actor centred at (-0.8, -7.5); arm at y = -7.5 + 0.65 = -6.85
+\foreach \uc in {uc1, uc2, uc3, uc4, uc5, uc6, uc7, uc8, uc9, uc10, uc11} {
+  \draw (-0.28, -6.85) -- (\uc.west);
 }
 
-%% Actor (EPC) — stick figure centred at x=-0.8, y=-6.75
-%% pre-computed: head=-5.20, neck=-5.52, arm=-6.10, hip=-6.60, feet=-7.40
-\draw[fill=white] (-0.8, -5.20) circle (0.32cm);  % head
-\draw (-0.8, -5.52) -- (-0.8, -6.60);             % body
-\draw (-1.32, -6.10) -- (-0.28, -6.10);           % arms
-\draw (-0.8,  -6.60) -- (-1.22, -7.40);           % left leg
-\draw (-0.8,  -6.60) -- (-0.38, -7.40);           % right leg
-\node[font=\scriptsize\bfseries, below=0.12cm] at (-0.8, -7.40) {EPC};
-
+%% Actor (EPC) — stick figure centred at x=-0.8, y=-7.5
+%% head: -5.95, neck: -6.27, arm: -6.85, hip: -7.35, feet: -8.15
+\draw[fill=white] (-0.8, -5.95) circle (0.32cm);  % head
+\draw (-0.8, -6.27) -- (-0.8, -7.35);             % body
+\draw (-1.32, -6.85) -- (-0.28, -6.85);           % arms
+\draw (-0.8,  -7.35) -- (-1.22, -8.15);           % left leg
+\draw (-0.8,  -7.35) -- (-0.38, -8.15);           % right leg
+\node[font=\scriptsize\bfseries, below=0.12cm] at (-0.8, -8.15) {EPC};
 
 \end{tikzpicture}%
 }
-\caption{Use Case Diagram}
+\caption{Use Case Diagram Sistem Rekomendasi Faculty Supervisor}
 \label{fig:fig3.2}
 \end{figure}
 
@@ -441,7 +450,7 @@ Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
 Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{Sistem dalam kondisi aktif, EPC belum memiliki akun} \\
 \hline
-Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Akun EPC tersimpan di database, EPC langsung login ke sistem} \\
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Akun EPC tersimpan di database dengan password ter-hash (PBKDF2); EPC diarahkan ke halaman Login untuk melakukan autentikasi} \\
 \hline
 Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
@@ -496,9 +505,11 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & EPC membuka halaman login & Sistem menampilkan formulir login (username, password) \\
 \hline
- & EPC mengisi username dan password, lalu menekan tombol Login & Sistem memvalidasi kredensial terhadap database \\
+ & EPC mengisi username dan password, lalu menekan tombol Login & Sistem menormalisasi username (lowercase, strip whitespace) sebelum melakukan pencarian di database \\
 \hline
- & & Sistem membuat session dan mengarahkan ke halaman Dashboard \\
+ & & Sistem memvalidasi kredensial terhadap database \\
+\hline
+ & & Sistem membuat session dan mengarahkan ke halaman Dashboard (atau URL aman sebelumnya) \\
 \hline
 Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \hline
@@ -572,7 +583,7 @@ Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengelola data faculty supervisor
 \hline
 Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka menu Supervisor Studio} \\
 \hline
-Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses pengelolaan data profil faculty supervisor melalui Supervisor Studio, termasuk penambahan dosen baru, pembaruan keywords, serta ekspor konfigurasi} \\
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses pengelolaan data profil faculty supervisor, termasuk penambahan supervisor baru, pembaruan nama dan status aktif, serta ekspor konfigurasi supervisor ke file Excel} \\
 \hline
 Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
@@ -588,24 +599,24 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & EPC membuka halaman Supervisor Studio & Sistem menampilkan daftar faculty supervisor aktif beserta keywords masing-masing \\
 \hline
- & EPC memilih faculty supervisor untuk diedit atau menambahkan faculty supervisor baru & Sistem menampilkan formulir detail (kode, nama, keywords) \\
+ & EPC memilih faculty supervisor untuk diedit atau menambahkan faculty supervisor baru & Sistem menampilkan formulir detail (kode, nama) \\
 \hline
- & EPC memperbarui keywords dan menekan tombol Simpan & Sistem memvalidasi dan menyimpan perubahan \\
+ & EPC mengisi atau memperbarui data dan menekan tombol Simpan & Sistem memvalidasi dan menyimpan perubahan \\
 \hline
  & EPC dapat mengekspor konfigurasi ke Excel & Sistem menghasilkan file Excel berisi daftar supervisor dan track reference \\
 \hline
 Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \hline
- & Kode dosen kurang dari 3 karakter & Sistem menolak penyimpanan \\
+ & Nama supervisor sudah digunakan oleh kode lain & Sistem menampilkan pesan konflik (UNIQUE constraint pada kolom name) \\
 \hline
- & Nama dosen sudah dipakai oleh kode lain & Sistem menampilkan pesan konflik \\
+ & Kode supervisor atau nama kosong & Sistem menampilkan pesan validasi \\
 \hline
- & Kode dosen atau nama kosong & Sistem menampilkan pesan validasi \\
+ & EPC belum login (session expired) & Sistem mengarahkan EPC ke halaman login secara otomatis \\
 \hline
 \end{longtable}
 
 \begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
-\caption{Tabel 3.10 Use Case Kelola Rules Studio} \label{table:tab3.10} \\
+\caption{Tabel 3.10 Use Case Kelola Keywords Supervisor} \label{table:tab3.10} \\
 \hline
 \textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
 \hline
@@ -613,45 +624,47 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \endhead
 \hline
 \endfoot
-Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Kelola Rules Studio} \\
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Kelola Keywords Supervisor} \\
 \hline
-Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengonfigurasi label semantik melalui Rules Studio} \\
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengelola keyword kompetensi masing-masing faculty supervisor melalui Keywords Studio} \\
 \hline
-Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka menu Rules Studio} \\
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC memilih supervisor dan membuka Keywords Studio di halaman Supervisors} \\
 \hline
-Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses konfigurasi label descriptions (deskripsi, threshold, status niche) dan nilai boost per pasangan supervisor-label} \\
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses penambahan, pengeditan, dan penghapusan keyword kompetensi faculty supervisor menggunakan antarmuka chip berbasis token (Keywords Studio). Keyword yang tersimpan digunakan sebagai profil supervisor dalam pipeline rekomendasi.} \\
 \hline
 Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
-Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi} \\
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Kelola Data Faculty Supervisor, Trigger Proses Rekomendasi} \\
 \hline
-Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Faculty Supervisor} \\
 \hline
-Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login, data supervisor telah tersedia} \\
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login; data faculty supervisor telah tersedia di sistem} \\
 \hline
-Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Konfigurasi label tersimpan dan digunakan pada run berikutnya} \\
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Keyword supervisor tersimpan di kolom \texttt{profile\_keywords} pada tabel supervisors; profil siap digunakan pada run rekomendasi berikutnya} \\
 \hline
 Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
- & EPC membuka halaman Rules Studio & Sistem menampilkan daftar label descriptions dan konfigurasi boost \\
+ & EPC membuka halaman Supervisors dan memilih supervisor dari dropdown & Sistem menampilkan chip keyword yang sudah tersimpan untuk supervisor tersebut \\
 \hline
- & EPC mengedit deskripsi label, threshold, atau status niche & Sistem memvalidasi (threshold antara 0-1, deskripsi tidak kosong) \\
+ & EPC mengetik keyword baru di input field & \\
 \hline
- & EPC menekan simpan & Sistem menyimpan perubahan dan menginvalidasi cache embedding label \\
+ & EPC menekan Enter, Comma, atau tombol Add & Sistem menormalisasi token (trim, collapse whitespace) dan melakukan pengecekan duplikasi (case-insensitive) \\
 \hline
- & EPC mengedit nilai boost per pasangan supervisor-label & Sistem menyimpan perubahan yang dimodifikasi \\
+ & & Jika bukan duplikat: Sistem menambahkan chip keyword baru ke tampilan \\
 \hline
- & EPC dapat preview skor label untuk mahasiswa tertentu & Sistem menghitung cosine similarity antara embedding mahasiswa dan label \\
+ & EPC menghapus chip keyword yang tidak relevan (klik $\times$) & Sistem menghapus keyword dari tampilan sementara \\
 \hline
- & EPC dapat mereset ke konfigurasi default & Sistem mengembalikan konfigurasi label ke nilai awal \\
+ & EPC menekan tombol Save & Sistem menggabungkan semua keyword aktif menjadi string comma-separated dan menyimpan ke kolom \texttt{profile\_keywords} di database \\
+\hline
+ & & Sistem menampilkan konfirmasi berhasil \\
 \hline
 Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \hline
- & Threshold di luar range 0-1 & Sistem menolak penyimpanan \\
+ & Keyword yang ditambahkan sudah ada (duplikat, case-insensitive) & Sistem mengabaikan token duplikat dan tidak menambahkan chip baru \\
 \hline
- & Deskripsi label kosong & Sistem menampilkan pesan validasi \\
+ & Supervisor tidak ditemukan saat simpan & Sistem menampilkan pesan kesalahan \\
 \hline
- & Label tidak ada di default seed (untuk reset) & Sistem menampilkan pesan kesalahan \\
+ & EPC belum login (session expired) & Sistem mengarahkan EPC ke halaman login secara otomatis \\
 \hline
 \end{longtable}
 
@@ -674,7 +687,7 @@ Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan p
 \hline
 Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
-Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Import Data Mahasiswa, Kelola Data Faculty Supervisor, Kelola Rules Studio} \\
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Import Data Mahasiswa, Kelola Data Faculty Supervisor, Kelola Keywords Supervisor} \\
 \hline
 Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
 \hline
@@ -690,17 +703,21 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & & Sistem membentuk dokumen teks mahasiswa dan faculty supervisor \\
 \hline
+ & & Sistem memperkaya profil supervisor secara adaptif dari histori assignment mahasiswa sebelumnya (adaptive profile enrichment) \\
+\hline
  & & Sistem mengencode dokumen menggunakan model embedding yang dipilih \\
 \hline
  & & Sistem menghitung cosine similarity matrix \\
 \hline
- & & Sistem menghitung company group bonus \\
+ & & Jika parameter group bonus diaktifkan (\texttt{enable\_group\_bonus = true}), sistem menerapkan Company Group Bonus pada score matrix berdasarkan pengelompokan company partner mahasiswa \\
 \hline
  & & Sistem menghitung capacity plan (min/max per supervisor) \\
 \hline
  & & Sistem menjalankan greedy solver untuk alokasi optimal \\
 \hline
  & & Sistem menghitung metrik evaluasi (content-based dan hybrid) \\
+\hline
+ & & Sistem membangun rankings JSON (top-5 kandidat per mahasiswa beserta skor) \\
 \hline
  & & Sistem menyimpan hasil run dan mengarahkan ke halaman detail run \\
 \hline
@@ -712,12 +729,55 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \hline
  & Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
 \hline
- & Model embedding tidak tersedia & Sistem menggunakan fallback ke TF-IDF \\
+ & Model SentenceTransformer tidak tersedia atau gagal dimuat & Sistem menggunakan fallback ke TF-IDF; jika TF-IDF juga gagal, sistem menggunakan Token Overlap (Jaccard coefficient) \\
 \hline
 \end{longtable}
 
 \begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
-\caption{Tabel 3.12 Use Case Lihat Hasil Rekomendasi} \label{table:tab3.12} \\
+\caption{Tabel 3.12 Use Case Lihat Riwayat Run} \label{table:tab3.12} \\
+\hline
+\textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Lihat Riwayat Run} \\
+\hline
+Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC menelusuri seluruh riwayat eksekusi proses rekomendasi yang pernah dilakukan} \\
+\hline
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC membuka menu Runs atau memilih tautan riwayat dari Dashboard} \\
+\hline
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan proses penelusuran daftar run rekomendasi yang tersimpan di database, meliputi informasi ringkasan setiap run (waktu, jumlah mahasiswa, objective score, match rate) serta navigasi menuju detail run tertentu} \\
+\hline
+Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
+\hline
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi, Lihat Hasil Rekomendasi} \\
+\hline
+Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
+\hline
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC telah login ke sistem} \\
+\hline
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC memperoleh daftar seluruh run dan dapat memilih run untuk dilihat detailnya} \\
+\hline
+Flow Of Events & \textbf{Actor} & \textbf{System} \\
+\hline
+ & EPC membuka halaman Riwayat Run (/runs) & Sistem mengambil hingga 250 run terbaru dari database, diurutkan berdasarkan waktu terbaru \\
+\hline
+ & & Sistem menampilkan tabel riwayat run (Run ID, tanggal eksekusi, jumlah mahasiswa, jumlah supervisor, objective score, match rate, embedding model) \\
+\hline
+ & EPC memilih run yang ingin dilihat detailnya & Sistem mengarahkan ke halaman detail run (/runs/\{id\}) \\
+\hline
+Exception Condition & \textbf{Condition} & \textbf{Handling} \\
+\hline
+ & Belum ada run yang pernah dilakukan & Sistem menampilkan tabel kosong dengan informasi bahwa belum ada run tersedia \\
+\hline
+ & EPC belum login (session expired) & Sistem mengarahkan EPC ke halaman login secara otomatis \\
+\hline
+\end{longtable}
+
+\begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\caption{Tabel 3.13 Use Case Lihat Hasil Rekomendasi} \label{table:tab3.13} \\
 \hline
 \textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
 \hline
@@ -735,11 +795,11 @@ Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menggambarkan p
 \hline
 Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
-Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi, Export Hasil ke Excel} \\
+Related Use Case & \multicolumn{2}{p{\ucdeskcol}|}{Trigger Proses Rekomendasi, Lihat Riwayat Run, Export Hasil ke Excel} \\
 \hline
 Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC, Program Studi} \\
 \hline
-Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{Minimal satu run rekomendasi telah berhasil dilakukan} \\
+Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{Minimal satu run rekomendasi telah berhasil dilakukan; EPC telah memilih run dari daftar riwayat} \\
 \hline
 Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC memperoleh informasi detail hasil rekomendasi} \\
 \hline
@@ -764,7 +824,7 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \end{longtable}
 
 \begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
-\caption{Tabel 3.13 Use Case Export Hasil ke Excel} \label{table:tab3.13} \\
+\caption{Tabel 3.14 Use Case Export Hasil ke Excel} \label{table:tab3.14} \\
 \hline
 \textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
 \hline
@@ -776,9 +836,9 @@ Use Case Name & \multicolumn{2}{p{\ucdeskcol}|}{Export Hasil ke Excel} \\
 \hline
 Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengunduh hasil rekomendasi dalam format Excel} \\
 \hline
-Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC menekan tombol export pada halaman detail run} \\
+Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC menekan tombol Export Standard atau Export Detailed pada halaman detail run} \\
 \hline
-Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Sistem menghasilkan file Excel berisi 3 sheet: recommendations, summary kapasitas, dan evaluation metrics} \\
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Sistem menghasilkan file Excel hasil rekomendasi dalam dua pilihan format: Standard Export (3 sheet: recommendations, summary, evaluation) atau Detailed Export (4 sheet: menambahkan sheet rankings berisi top-N kandidat per mahasiswa)} \\
 \hline
 Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
@@ -794,15 +854,15 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & EPC membuka halaman detail run & Sistem menampilkan halaman detail run beserta tombol Export Excel \\
 \hline
- & EPC menekan tombol Export Excel & Sistem mengambil seluruh data rekomendasi dari run yang dipilih (pasangan mahasiswa-supervisor beserta skor similarity, rule boost, group boost, final score, rule matches, dan company group key) \\
+ & EPC menekan tombol Export Standard & Sistem mengambil seluruh data rekomendasi dari run yang dipilih (pasangan mahasiswa-supervisor beserta skor similarity, group boost, final score, rule matches, dan company group key) \\
 \hline
  & & Sistem mengambil data summary kapasitas per supervisor (jumlah mahasiswa yang dialokasikan, batas min/max kapasitas, dan status within capacity) \\
 \hline
  & & Sistem mengambil data evaluasi metrik dari run (content-based metrics dan hybrid score metrics) dan mengonversinya menjadi format tabel (section, metric, value) \\
 \hline
- & & Sistem membentuk file Excel (.xlsx) menggunakan engine openpyxl dengan 3 sheet: recommendations (daftar lengkap alokasi mahasiswa-supervisor), summary (ringkasan kapasitas per supervisor), dan evaluation (metrik evaluasi) \\
+ & & Sistem membentuk file Excel (.xlsx) menggunakan engine openpyxl dengan 3 sheet: recommendations, summary, dan evaluation; mengirim sebagai attachment dengan nama rekomendasi\_dosen\_run\_\{run\_id\}.xlsx \\
 \hline
- & & Sistem mengirim file Excel ke browser EPC sebagai attachment dengan nama file rekomendasi\_dosen\_run\_\{run\_id\}.xlsx dan MIME type application/vnd.openxmlformats-officedocument.spreadsheetml.sheet \\
+ & EPC menekan tombol Export Detailed (opsional) & Sistem mengambil data yang sama ditambah rankings JSON (top-N kandidat per mahasiswa) dan membentuk file Excel 4 sheet (recommendations, summary, evaluation, rankings) dengan nama rekomendasi\_dosen\_run\_\{run\_id\}\_detailed.xlsx \\
 \hline
  & EPC menerima dan menyimpan file Excel & \\
 \hline
@@ -817,7 +877,7 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \end{longtable}
 
 \begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
-\caption{Tabel 3.14 Use Case Logout} \label{table:tab3.14} \\
+\caption{Tabel 3.15 Use Case Logout} \label{table:tab3.15} \\
 \hline
 \textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
 \hline
@@ -862,7 +922,7 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \end{longtable}
 
 \begin{longtable}{|p{3.5cm}|p{4.5cm}|p{5cm}|}
-\caption{Tabel 3.15 Use Case Lihat Dashboard} \label{table:tab3.15} \\
+\caption{Tabel 3.16 Use Case Lihat Dashboard} \label{table:tab3.16} \\
 \hline
 \textbf{Elemen} & \multicolumn{2}{p{\ucdeskcol}|}{\textbf{Deskripsi}} \\
 \hline
@@ -898,7 +958,7 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & & Sistem mengekstrak highlight metrics dari run terakhir: Assignment Match Rate, Hybrid MRR, dan Content-Based MRR \\
 \hline
- & & Sistem mengekstrak konfigurasi pipeline dari run terakhir (model embedding, status rule boost, group bonus, extra docs) \\
+ & & Sistem mengekstrak konfigurasi pipeline dari run terakhir (model embedding, group bonus, extra docs, similarity weight) \\
 \hline
  & & Sistem menampilkan seluruh informasi dalam halaman Dashboard (Command Center) \\
 \hline
@@ -915,24 +975,606 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \end{longtable}
 
 \clearpage
+\subsection{Activity Diagram}\label{activity-diagram}
+
+\textit{Activity Diagram} menggambarkan alur aktivitas yang terjadi antara aktor (\textbf{EPC}) dan sistem dalam setiap use case yang telah didefinisikan. Diagram ini menggunakan dua \textit{swimlane} — EPC dan Sistem — untuk memperlihatkan tanggung jawab masing-masing pihak pada setiap tahap proses, termasuk titik keputusan (\textit{decision point}) dan jalur alternatif yang mungkin terjadi.
+
+%% ── Activity Diagram: Login ──────────────────────────────────────────────
+%% Fixes: divider starts at y=-0.1 (not y=0.7) so title bar is undivided;
+%%        text width 3.5cm reduces norm node from 4→2 lines;
+%%        all vertical gaps increased to ~2.5 units.
+%% y-guide: start=-1.8  access/showform=-3.5  bridge=-5.0  fill=-6.5
+%%          click/norm=-8.8  d1/err1=-11.5  verify=-14.0  d2/err2=-16.5
+%%          session=-19.2  redir=-21.5  end=-23.2
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -24.5);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Login};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+%% NOTE: vertical divider starts at -0.1 (title bar bottom) so it does NOT
+%%       cut through the "Login" title text above it.
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -24.5);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Mengakses halaman Login ──────────────────────────────────────────
+\node (access) [action] at (2.8, -3.5)
+  {Mengakses\\halaman Login};
+\draw[->] (2.8, -2.02) -- (access.north);
+
+%% ── Sistem: Menampilkan form Login ────────────────────────────────────────
+\node (showform) [action] at (9.0, -3.5)
+  {Menampilkan\\form Login};
+\draw[->] (access.east) -- (showform.west);
+
+%% ── Sistem -> EPC: form siap diisi ───────────────────────────────────────
+%% Single continuous arrow (no intermediate arrowhead at the bend corner)
+\node (fill) [action] at (2.8, -6.5)
+  {Mengisi username\\dan password};
+\draw[->] (showform.south) -- (9.0, -5.0) -- (2.8, -5.0) -- (fill.north);
+
+%% ── EPC: Menekan tombol Login ─────────────────────────────────────────────
+\node (click) [action] at (2.8, -8.8)
+  {Menekan tombol\\Login};
+\draw[->] (fill.south) -- (click.north);
+
+%% ── Sistem: Normalisasi + cari user ──────────────────────────────────────
+\node (norm) [action] at (9.0, -8.8)
+  {Normalisasi username;\\cari user di database};
+\draw[->] (click.east) -- (norm.west);
+
+%% ── Sistem: Decision 1 — User ditemukan? ─────────────────────────────────
+\node (d1) [decision] at (9.0, -11.5)
+  {User\\ditemukan?};
+\draw[->] (norm.south) -- (d1.north);
+
+%% D1 — F: error di EPC lane, loop back ke click ──────────────────────────
+\node (err1) [action] at (2.8, -11.5)
+  {Tampilkan\\pesan error};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err1.east);
+%% |- derives click.west x automatically (exact left edge); avoids entering node interior
+\coordinate (cleft_up) at (0, -8.55);
+\draw[->] (err1.west) -- (0.8, -11.5) -- (0.8, -8.55) -- (click.west |- cleft_up);
+
+%% D1 — T: verifikasi password ────────────────────────────────────────────
+\node (verify) [action] at (9.0, -14.0)
+  {Verifikasi password\\hash (Werkzeug)};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {T} (verify.north);
+
+%% ── Sistem: Decision 2 — Password cocok? ─────────────────────────────────
+\node (d2) [decision] at (9.0, -16.5)
+  {Password\\cocok?};
+\draw[->] (verify.south) -- (d2.north);
+
+%% D2 — F: error di EPC lane, loop back ke click ──────────────────────────
+\node (err2) [action] at (2.8, -16.5)
+  {Tampilkan\\pesan error};
+\draw[->] (d2.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err2.east);
+%% |- derives click.west x automatically (exact left edge); avoids entering node interior
+\coordinate (cleft_dn) at (0, -9.05);
+\draw[->] (err2.west) -- (0.5, -16.5) -- (0.5, -9.05) -- (click.west |- cleft_dn);
+
+%% D2 — T: simpan session ─────────────────────────────────────────────────
+\node (session) [action] at (9.0, -19.2)
+  {Simpan \texttt{user\_id}\\ke session};
+\draw[->] (d2.south) -- node[right, pos=0.12, font=\scriptsize] {T} (session.north);
+
+%% ── Sistem: Redirect ke Dashboard ────────────────────────────────────────
+\node (redir) [action] at (9.0, -21.5)
+  {Redirect ke halaman\\Dashboard};
+\draw[->] (session.south) -- (redir.north);
+
+%% ── End node (bullseye) ──────────────────────────────────────────────────
+\draw[thick] (9.0, -23.2) circle (0.28cm);
+\fill (9.0, -23.2) circle (0.15cm);
+\draw[->] (redir.south) -- (9.0, -22.92);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Login}
+\label{fig:ad02-login}
+\end{figure}
+
+%% ── AD-01: Register ──────────────────────────────────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+\draw[thick] (0, 0.7) rectangle (12, -36.8);
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Register};
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -36.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+\fill (2.8, -1.8) circle (0.22cm);
+\node (access) [action] at (2.8, -3.5) {Mengakses halaman\\ Register};
+\draw[->] (2.8, -2.02) -- (access.north);
+\node (showform) [action] at (9.0, -3.5) {Menampilkan\\ form Register};
+\draw[->] (access.east) -- (showform.west);
+\node (fill) [action] at (2.8, -6.5) {Mengisi username,\\ password, konfirmasi};
+\draw[->] (showform.south) -- (9.0, -5.0) -- (2.8, -5.0) -- (fill.north);
+\node (click) [action] at (2.8, -8.8) {Menekan tombol\\ Register};
+\draw[->] (fill.south) -- (click.north);
+\node (valuser) [action] at (9.0, -8.8) {Validasi username:\\ panjang \(\geq\) 3 karakter};
+\draw[->] (click.east) -- (valuser.west);
+\node (d1) [decision] at (9.0, -11.3) {Username\\ valid?};
+\draw[->] (valuser.south) -- (d1.north);
+\node (err1) [action] at (2.8, -11.3) {Tampilkan\\ pesan error};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err1.east);
+\node (validpw) [action] at (9.0, -13.8) {Validasi password:\\ panjang \(\geq\) 6 karakter};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {T} (validpw.north);
+\node (d2) [decision] at (9.0, -16.3) {Password\\ valid?};
+\draw[->] (validpw.south) -- (d2.north);
+\node (err2) [action] at (2.8, -16.3) {Tampilkan\\ pesan error};
+\draw[->] (d2.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err2.east);
+\node (validconfirm) [action] at (9.0, -18.8) {Validasi kesesuaian\\ konfirmasi password};
+\draw[->] (d2.south) -- node[right, pos=0.12, font=\scriptsize] {T} (validconfirm.north);
+\node (d3) [decision] at (9.0, -21.3) {Password\\ cocok?};
+\draw[->] (validconfirm.south) -- (d3.north);
+\node (err3) [action] at (2.8, -21.3) {Tampilkan\\ pesan error};
+\draw[->] (d3.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err3.east);
+\node (checkdup) [action] at (9.0, -23.8) {Cek duplikasi\\ username di database};
+\draw[->] (d3.south) -- node[right, pos=0.12, font=\scriptsize] {T} (checkdup.north);
+\node (d4) [decision] at (9.0, -26.3) {Username\\ unik?};
+\draw[->] (checkdup.south) -- (d4.north);
+\node (err4) [action] at (2.8, -26.3) {Tampilkan: username\\ sudah digunakan};
+\draw[->] (d4.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err4.east);
+\node (hashpw) [action] at (9.0, -28.8) {Hash password\\ (PBKDF2, Werkzeug)};
+\draw[->] (d4.south) -- node[right, pos=0.12, font=\scriptsize] {T} (hashpw.north);
+\node (saveuser) [action] at (9.0, -31.3) {Simpan AppUser\\ ke database};
+\draw[->] (hashpw.south) -- (saveuser.north);
+\node (redir) [action] at (9.0, -33.8) {Redirect ke\\ halaman Login};
+\draw[->] (saveuser.south) -- (redir.north);
+\draw[thick] (9.0, -35.5) circle (0.28cm);
+\fill (9.0, -35.5) circle (0.15cm);
+\draw[->] (redir.south) -- (9.0, -35.22);
+\coordinate (fill_w1) at (0, -6.8);
+\coordinate (fill_w2) at (0, -6.6);
+\coordinate (fill_w3) at (0, -6.4);
+\coordinate (fill_w4) at (0, -6.2);
+\draw[->] (err1.west) -- (0.8, -11.3) -- (0.8, -6.8) -- (fill.west |- fill_w1);
+\draw[->] (err2.west) -- (0.6, -16.3) -- (0.6, -6.6) -- (fill.west |- fill_w2);
+\draw[->] (err3.west) -- (0.4, -21.3) -- (0.4, -6.4) -- (fill.west |- fill_w3);
+\draw[->] (err4.west) -- (0.2, -26.3) -- (0.2, -6.2) -- (fill.west |- fill_w4);
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Register}
+\label{fig:ad01-register}
+\end{figure}
+
+%% ── AD-03: Import Data Mahasiswa ─────────────────────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+\draw[thick] (0, 0.7) rectangle (12, -30.8);
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Import Data Mahasiswa};
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -30.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+\fill (2.8, -1.8) circle (0.22cm);
+\node (page) [action] at (2.8, -3.5) {Membuka halaman\\Data Center (/data)};
+\draw[->] (2.8, -2.02) -- (page.north);
+\node (d_src) [decision] at (2.8, -5.5) {Sumber\\file?};
+\draw[->] (page.south) -- (d_src.north);
+\node (import_default) [action] at (9.0, -5.5) {Membaca path dari\\env DEFAULT\_EXCEL\_PATH};
+\draw[->] (d_src.east) -- node[above, pos=0.08, font=\scriptsize] {A} (import_default.west);
+\node (upload_epc) [action] at (2.8, -8.0) {Memilih file Excel;\\tekan Upload};
+\draw[->] (d_src.south) -- node[right, pos=0.12, font=\scriptsize] {B} (upload_epc.north);
+\node (upload_sys) [action] at (9.0, -8.0) {Menerima file bytes\\dari HTTP multipart};
+\draw[->] (upload_epc.east) -- (upload_sys.west);
+\draw (import_default.south) -- (9.0, -9.3);
+\draw (upload_sys.south)     -- (9.0, -9.3);
+\node (step3) [action] at (9.0, -10.5) {Membaca sheet Excel\\dengan pandas};
+\draw[->] (9.0, -9.3) -- (step3.north);
+\node (step4) [action] at (9.0, -13.0) {Validasi 6 kolom\\wajib Excel};
+\draw[->] (step3.south) -- (step4.north);
+\node (d_col) [decision] at (9.0, -15.5) {Kolom\\lengkap?};
+\draw[->] (step4.south) -- (d_col.north);
+\node (err_col) [action] at (2.8, -15.5) {Tampilkan error:\\kolom tidak lengkap};
+\draw[->] (d_col.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err_col.east);
+\draw[thick] (2.8, -17.5) circle (0.28cm);
+\fill        (2.8, -17.5) circle (0.15cm);
+\draw[->] (err_col.south) -- (2.8, -17.22);
+\node (iterasi) [action] at (9.0, -18.2) {Iterasi per baris;\\bersihkan data};
+\draw[->] (d_col.south) -- node[right, pos=0.12, font=\scriptsize] {T} (iterasi.north);
+\node (d_ups) [decision] at (9.0, -20.7) {student\_id\\ada di DB?};
+\draw[->] (iterasi.south) -- (d_ups.north);
+\node (insert) [action] at (2.8, -20.7) {Insert mahasiswa\\baru};
+\draw[->] (d_ups.west) -- node[above, pos=0.08, font=\scriptsize] {F} (insert.east);
+\node (update) [action] at (9.0, -23.2) {Update data\\mahasiswa (upsert)};
+\draw[->] (d_ups.south) -- node[right, pos=0.12, font=\scriptsize] {T} (update.north);
+\draw (insert.south) -- (2.8, -25.0) -- (9.0, -25.0);
+\draw (update.south) -- (9.0, -25.0);
+\draw[->] (9.0, -25.0) -- (11.5, -25.0) -- (11.5, -18.2) -- (iterasi.east);
+\node (ringkasan) [action] at (9.0, -27.5) {Tampilkan ringkasan\\(total, inserted, updated)};
+\draw[->] (9.0, -25.0) -- (ringkasan.north);
+\draw[thick] (9.0, -29.5) circle (0.28cm);
+\fill        (9.0, -29.5) circle (0.15cm);
+\draw[->] (ringkasan.south) -- (9.0, -29.22);
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Import Data Mahasiswa}
+\label{fig:ad03-import}
+\end{figure}
+
+%% ── AD-04: Kelola Data Faculty Supervisor ────────────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+\draw[thick] (0, 0.7) rectangle (12, -23.5);
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Kelola Data Faculty Supervisor};
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -23.5);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+\fill (2.8, -1.8) circle (0.22cm);
+\node (access) [action] at (2.8, -3.5) {Membuka halaman\\ Supervisors};
+\draw[->] (2.8, -2.02) -- (access.north);
+\node (showlist) [action] at (9.0, -3.5) {Menampilkan daftar\\ supervisor aktif/nonaktif};
+\draw[->] (access.east) -- (showlist.west);
+\node (d_fork) [decision] at (2.8, -6.5) {Pilih\\ aksi?};
+\draw[->] (showlist.south) -- (9.0, -5.0) -- (2.8, -5.0) -- (d_fork.north);
+\node (gen_excel) [action] at (9.0, -6.5) {Generate file Excel\\ (supervisor\_config.xlsx)};
+\draw[->] (d_fork.east) -- node[above, pos=0.08, font=\scriptsize] {B} (gen_excel.west);
+\node (send_file) [action] at (9.0, -9.0) {Mengirim file\\ sebagai download};
+\draw[->] (gen_excel.south) -- (send_file.north);
+\draw[thick] (9.0, -10.7) circle (0.28cm);
+\fill (9.0, -10.7) circle (0.15cm);
+\draw[->] (send_file.south) -- (9.0, -10.42);
+\node (fill_form) [action] at (2.8, -13.0) {Mengisi form (kode,\\ nama) dan submit};
+\draw[->] (d_fork.south) -- node[right, pos=0.12, font=\scriptsize] {A} (fill_form.north);
+\node (check_code) [action] at (9.0, -13.0) {Mengecek kode\\ supervisor di database};
+\draw[->] (fill_form.east) -- (check_code.west);
+\node (d_kode) [decision] at (9.0, -15.5) {Kode\\ sudah ada?};
+\draw[->] (check_code.south) -- (d_kode.north);
+\node (update) [action] at (2.8, -15.5) {Update nama\\ dan keywords};
+\draw[->] (d_kode.west) -- node[above, pos=0.08, font=\scriptsize] {Ada} (update.east);
+\node (insert) [action] at (9.0, -18.0) {Insert supervisor baru\\ (is\_active=True)};
+\draw[->] (d_kode.south) -- node[right, pos=0.12, font=\scriptsize] {Baru} (insert.north);
+\node (refresh) [action] at (9.0, -20.5) {Refresh daftar\\ supervisor};
+\draw[->] (update.east) -- (5.0, -15.5) -- (5.0, -20.5) -- (refresh.west);
+\draw[->] (insert.south) -- (refresh.north);
+\draw[thick] (9.0, -22.2) circle (0.28cm);
+\fill (9.0, -22.2) circle (0.15cm);
+\draw[->] (refresh.south) -- (9.0, -21.92);
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Kelola Data Faculty Supervisor}
+\label{fig:ad04-supervisor}
+\end{figure}
+
+%% ── AD-05: Kelola Keywords Supervisor ────────────────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+\draw[thick] (0, 0.7) rectangle (12, -25.3);
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Kelola Keywords Supervisor};
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -25.3);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+\fill (2.8, -1.8) circle (0.22cm);
+\node (select_sup) [action] at (2.8, -3.5) {Memilih supervisor\\ dari dropdown};
+\draw[->] (2.8, -2.02) -- (select_sup.north);
+\node (show_chips) [action] at (9.0, -3.5) {Menampilkan chip\\ keywords tersimpan};
+\draw[->] (select_sup.east) -- (show_chips.west);
+\node (keyword_input) [action] at (2.8, -6.5) {Mengetik keyword\\ baru di input field};
+\draw[->] (show_chips.south) -- (9.0, -5.0) -- (2.8, -5.0) -- (keyword_input.north);
+\node (press_add) [action] at (2.8, -8.8) {Menekan Enter/Comma\\ atau tombol ``Add''};
+\draw[->] (keyword_input.south) -- (press_add.north);
+\node (norm) [action] at (9.0, -8.8) {Normalisasi token\\ (trim, lowercase)};
+\draw[->] (press_add.east) -- (norm.west);
+\node (d1) [decision] at (9.0, -11.5) {Token\\ duplikat?};
+\draw[->] (norm.south) -- (d1.north);
+\node (ignore) [action] at (2.8, -11.5) {Abaikan token;\\ (ulangi input)};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {Ya} (ignore.east);
+\coordinate (kw_left) at (0, -6.25);
+\draw[->] (ignore.west) -- (0.8, -11.5) -- (0.8, -6.25) -- (keyword_input.west |- kw_left);
+\node (add_chip) [action] at (9.0, -14.0) {Menambahkan chip\\ keyword ke tampilan};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {Tidak} (add_chip.north);
+\node (press_save) [action] at (2.8, -17.5) {Menekan tombol\\ Save};
+\draw[->] (add_chip.south) -- (9.0, -15.5) -- (2.8, -15.5) -- (press_save.north);
+\node (gabung_csv) [action] at (9.0, -17.5) {Gabungkan keywords\\ menjadi string CSV};
+\draw[->] (press_save.east) -- (gabung_csv.west);
+\node (update_db) [action] at (9.0, -20.0) {Update \texttt{profile\_keywords}\\ di tabel supervisors};
+\draw[->] (gabung_csv.south) -- (update_db.north);
+\node (confirm) [action] at (9.0, -22.3) {Menampilkan konfirmasi\\ berhasil};
+\draw[->] (update_db.south) -- (confirm.north);
+\draw[thick] (9.0, -24.0) circle (0.28cm);
+\fill        (9.0, -24.0) circle (0.15cm);
+\draw[->] (confirm.south) -- (9.0, -23.72);
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Kelola Keywords Supervisor}
+\label{fig:ad05-keywords}
+\end{figure}
+
+%% ── AD-07: Trigger Proses Rekomendasi ────────────────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+%% Simplified: 3 EPC steps merged into 1; load_spv+build_docs+init_embed merged;
+%% greedy+evaluate+save merged. Canvas 46.3 → 28.8 to fit one page.
+\draw[thick] (0, 0.7) rectangle (12, -28.8);
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Trigger Proses Rekomendasi};
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -28.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+\fill (2.8, -1.8) circle (0.22cm);
+%% EPC: modal + params + generate merged into one config node
+\node (config) [action] at (2.8, -3.5) {Buka modal, atur\\ parameter \& Generate};
+\draw[->] (2.8, -2.02) -- (config.north);
+\node (overrides) [action] at (9.0, -3.5) {Membuat objek\\ RunOverrides};
+\draw[->] (config.east) -- (overrides.west);
+\node (load_mhs) [action] at (9.0, -6.0) {Memuat data mahasiswa\\ dari database};
+\draw[->] (overrides.south) -- (load_mhs.north);
+\node (d1) [decision] at (9.0, -8.5) {Ada\\ mahasiswa?};
+\draw[->] (load_mhs.south) -- (d1.north);
+\node (err_mhs) [action] at (2.8, -8.5) {Error: tidak ada\\ mahasiswa};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err_mhs.east);
+\draw[thick] (2.8, -10.5) circle (0.28cm);
+\fill (2.8, -10.5) circle (0.15cm);
+\draw[->] (err_mhs.south) -- (2.8, -10.22);
+%% Merged: load_spv + build_docs + init_embed → prep
+\node (prep) [action] at (9.0, -12.0) {Muat supervisor;\\ bangun dokumen \& embedding};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {T} (prep.north);
+\node (d2) [decision] at (9.0, -14.7) {Model embedding\\ tersedia?};
+\draw[->] (prep.south) -- (d2.north);
+\node (tfidf) [action] at (2.8, -14.7) {Hitung TF-IDF atau\\ Token Overlap};
+\draw[->] (d2.west) -- node[above, pos=0.08, font=\scriptsize] {F} (tfidf.east);
+\node (cosine) [action] at (9.0, -17.4) {Hitung cosine\\ similarity matrix};
+\draw[->] (d2.south) -- node[right, pos=0.12, font=\scriptsize] {T} (cosine.north);
+\node (d3) [decision] at (9.0, -20.1) {Group bonus\\ aktif?};
+\draw[->] (cosine.south) -- (d3.north);
+\draw[->] (tfidf.east) -- (11.5, -14.7) -- (11.5, -20.1) -- (d3.east);
+\node (bonus) [action] at (2.8, -20.1) {Terapkan Company\\ Group Bonus};
+\draw[->] (d3.west) -- node[above, pos=0.08, font=\scriptsize] {Ya} (bonus.east);
+%% Merged: capacity + greedy + evaluate + save → pipeline
+\node (pipeline) [action] at (9.0, -22.8) {Greedy solver;\\ evaluasi \& simpan};
+\draw[->] (d3.south) -- node[right, pos=0.12, font=\scriptsize] {Tdk} (pipeline.north);
+\draw[->] (bonus.east) -- (6.5, -20.1) -- (6.5, -22.8) -- (pipeline.west);
+\node (redir) [action] at (9.0, -25.5) {Redirect ke\\ Run Detail};
+\draw[->] (pipeline.south) -- (redir.north);
+\draw[thick] (9.0, -27.5) circle (0.28cm);
+\fill (9.0, -27.5) circle (0.15cm);
+\draw[->] (redir.south) -- (9.0, -27.22);
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Trigger Proses Rekomendasi}
+\label{fig:ad07-trigger}
+\end{figure}
+
+%% ── AD-09: Lihat Hasil Rekomendasi ───────────────────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+\draw[thick] (0, 0.7) rectangle (12, -30.8);
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Lihat Hasil Rekomendasi};
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -30.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+\fill (2.8, -1.8) circle (0.22cm);
+\node (s1) [action] at (2.8, -3.5) {Membuka halaman\\ Run Detail};
+\draw[->] (2.8, -2.02) -- (s1.north);
+\node (s2) [action] at (9.0, -3.5) {Mengambil data\\ RecommendationRun};
+\draw[->] (s1.east) -- (s2.west);
+\node (d1) [decision] at (9.0, -6.0) {Run\\ ditemukan?};
+\draw[->] (s2.south) -- (d1.north);
+\node (err404) [action] at (2.8, -6.0) {Mengembalikan 404\\ Not Found};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {F} (err404.east);
+\draw[thick] (2.8, -8.2) circle (0.28cm);
+\fill (2.8, -8.2) circle (0.15cm);
+\draw[->] (err404.south) -- (2.8, -7.92);
+\node (s4) [action] at (9.0, -8.7) {Menampilkan: metrik,\\ kapasitas, mismatch};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {T} (s4.north);
+\node (s5) [action] at (2.8, -11.5) {Berpindah ke tab\\ Rekomendasi};
+\draw[->] (s4.south) -- (9.0, -10.2) -- (2.8, -10.2) -- (s5.north);
+\node (s6) [action] at (9.0, -11.5) {Menampilkan tabel\\ rekomendasi awal};
+\draw[->] (s5.east) -- (s6.west);
+\node (d2) [decision] at (2.8, -14.0) {Terapkan\\ filter?};
+\draw[->] (s6.south) -- (9.0, -12.7) -- (2.8, -12.7) -- (d2.north);
+\node (d2t) [action] at (2.8, -16.5) {Mengisi filter:\\ teks, supervisor, mismatch};
+\draw[->] (d2.south) -- node[right, pos=0.12, font=\scriptsize] {T} (d2t.north);
+\node (merge) [action] at (9.0, -16.5) {Menjalankan query\\ server-side};
+\draw[->] (d2.east) -- node[above, pos=0.08, font=\scriptsize] {F}
+  (9.0, -14.0) -- (merge.north);
+\draw[->] (d2t.east) -- (merge.west);
+\node (s8) [action] at (9.0, -19.0) {Menampilkan tabel\\ hasil rekomendasi};
+\draw[->] (merge.south) -- (s8.north);
+\node (s9) [action] at (9.0, -21.5) {Menyorot baris\\ mismatch (.bad)};
+\draw[->] (s8.south) -- (s9.north);
+\node (d3) [decision] at (2.8, -24.5) {Ingin\\ export?};
+\draw[->] (s9.south) -- (9.0, -23.0) -- (2.8, -23.0) -- (d3.north);
+\node (d3t) [action] at (9.0, -24.5) {Lanjut ke Export\\ ($\rightarrow$ AD-10)};
+\draw[->] (d3.east) -- node[above, pos=0.08, font=\scriptsize] {T} (d3t.west);
+\node (d3f) [action] at (2.8, -27.0) {Kembali ke\\ daftar run};
+\draw[->] (d3.south) -- node[right, pos=0.12, font=\scriptsize] {F} (d3f.north);
+\draw[thick] (9.0, -29.5) circle (0.28cm);
+\fill (9.0, -29.5) circle (0.15cm);
+\draw[->] (d3t.south) -- (9.0, -29.22);
+\draw[->] (d3f.south) -- (2.8, -28.0) -- (9.0, -28.0) -- (9.0, -29.22);
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Lihat Hasil Rekomendasi}
+\label{fig:ad09-hasil}
+\end{figure}
+
+%% ── AD-10: Export Hasil ke Excel ─────────────────────────────────────────────
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+\draw[thick] (0, 0.7) rectangle (12, -24.8);
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Export Hasil ke Excel};
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -24.8);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+\fill (2.8, -1.8) circle (0.22cm);
+\node (pilih) [action] at (2.8, -3.5) {Dari Run Detail,\\memilih tipe export};
+\draw[->] (2.8, -2.02) -- (pilih.north);
+\node (d_type) [decision] at (2.8, -6.0) {Tipe\\export?};
+\draw[->] (pilih.south) -- (d_type.north);
+\node (d1) [action] at (9.0, -6.0) {Ambil data di atas\\+ rankings JSON};
+\draw[->] (d_type.east) -- node[above, pos=0.08, font=\scriptsize] {Det} (d1.west);
+\node (d2) [action] at (9.0, -8.5) {Buat workbook 4 sheet\\(+ sheet rankings)};
+\draw[->] (d1.south) -- (d2.north);
+\node (d3) [action] at (9.0, -11.0) {Kirim file detailed\\sebagai attachment};
+\draw[->] (d2.south) -- (d3.north);
+\node (s1) [action] at (9.0, -14.0) {Ambil data rekomendasi,\\kapasitas, evaluasi};
+\draw[->] (d_type.south) -- node[right, pos=0.08, font=\scriptsize] {Std}
+  (2.8, -13.5) -- (9.0, -13.5) -- (s1.west);
+\node (s2) [action] at (9.0, -16.5) {Buat workbook 3 sheet\\(rekomendasi, summary)};
+\draw[->] (s1.south) -- (s2.north);
+\node (s3) [action] at (9.0, -19.0) {Kirim file standard\\sebagai attachment};
+\draw[->] (s2.south) -- (s3.north);
+\node (file) [action] at (9.0, -21.5) {File terunduh otomatis\\ke perangkat};
+\draw[->] (s3.south) -- (file.north);
+\draw[->] (d3.south) -- (11.5, -11.5) -- (11.5, -21.5) -- (file.east);
+\draw[thick] (9.0, -23.5) circle (0.28cm);
+\fill        (9.0, -23.5) circle (0.15cm);
+\draw[->] (file.south) -- (9.0, -23.22);
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Export Hasil ke Excel}
+\label{fig:ad10-export}
+\end{figure}
+
+\clearpage
 \subsection{Class diagram}\label{class-diagram-1}
 
 Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar komponen utama dalam sistem rekomendasi. Diagram ini menggambarkan bagaimana setiap entitas pada sistem direpresentasikan, beserta atribut dan operasi yang mendukung proses pembentukan embedding, perhitungan scoring, alokasi menggunakan greedy solver, serta evaluasi hasil rekomendasi.
 
 %% ── Figure 3.3: ORM Models ────────────────────────────────────────
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \scalebox{0.75}{%
 \begin{tikzpicture}[
-  font=\scriptsize,
+  font=\footnotesize,
   class/.style={rectangle, inner sep=0pt},
   solid/.style={draw},
   arr/.style={->, >=stealth},
-  lab/.style={font=\tiny\bfseries, fill=white, inner sep=0.8pt}
+  lab/.style={font=\scriptsize\bfseries, fill=white, inner sep=1.5pt}
 ]
 
+%% top-left: Supervisor
 \node (supervisor) [class] at (0, 0) {%
-  \begin{tabular}{|p{2.6cm}|}
+  \begin{tabular}{|p{3.5cm}|}
   \hline
   \multicolumn{1}{|c|}{\textbf{Supervisor}} \\ \hline
   \underline{\textbf{id}} : int \\
@@ -943,56 +1585,9 @@ Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar 
   \end{tabular}%
 };
 
-\node (run) [class] at (5.8, 0) {%
-  \begin{tabular}{|p{3.2cm}|}
-  \hline
-  \multicolumn{1}{|c|}{\textbf{RecommendationRun}} \\ \hline
-  \underline{\textbf{id}} : int \\
-  created\_at : datetime \\
-  input\_source : str \\
-  total\_students : int \\
-  total\_supervisors : int \\
-  target\_min\_capacity : int \\
-  target\_max\_capacity : int \\
-  solver\_name : str \\
-  embedding\_model : str \\
-  objective\_score : float \\ \hline
-  \end{tabular}%
-};
-
-\node (rec) [class] at (2.7, -5.8) {%
-  \begin{tabular}{|p{2.8cm}|}
-  \hline
-  \multicolumn{1}{|c|}{\textbf{Recommendation}} \\ \hline
-  \underline{\textbf{id}} : int \\
-  \textit{run\_id} : int \\
-  \textit{student\_id} : int \\
-  \textit{supervisor\_id} : int \\
-  similarity\_score : float \\
-  group\_boost : float \\
-  final\_score : float \\
-  rule\_matches : str \\ \hline
-  \end{tabular}%
-};
-
-\node (student) [class] at (0, -12.5) {%
-  \begin{tabular}{|p{3cm}|}
-  \hline
-  \multicolumn{1}{|c|}{\textbf{Student}} \\ \hline
-  \underline{\textbf{id}} : int \\
-  student\_id : str \\
-  name : str \\
-  track : str \\
-  gpa : float \\
-  position\_topic : str \\
-  enrollment\_status : str \\
-  current\_supervisor\_code : str \\
-  created\_at : datetime \\ \hline
-  \end{tabular}%
-};
-
-\node (appuser) [class] at (5.8, -12.5) {%
-  \begin{tabular}{|p{2.6cm}|}
+%% top-right: AppUser
+\node (appuser) [class] at (11, 0) {%
+  \begin{tabular}{|p{3.5cm}|}
   \hline
   \multicolumn{1}{|c|}{\textbf{AppUser}} \\ \hline
   \underline{\textbf{id}} : int \\
@@ -1003,19 +1598,96 @@ Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar 
   \end{tabular}%
 };
 
+%% right: RecommendationRun (below AppUser)
+\node (run) [class] at (11, -10) {%
+  \begin{tabular}{|p{4.0cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{RecommendationRun}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  created\_at : datetime \\
+  \textit{created\_by\_id} : int \\
+  input\_source : str \\
+  total\_students : int \\
+  total\_supervisors : int \\
+  target\_min\_capacity : int \\
+  target\_max\_capacity : int \\
+  capacity\_relaxed : bool \\
+  capacity\_note : str \\
+  capacity\_bounds\_json : str \\
+  solver\_name : str \\
+  solver\_note : str \\
+  embedding\_backend : str \\
+  embedding\_model : str \\
+  evaluation\_json : str \\
+  pipeline\_config\_json : str \\
+  objective\_score : float \\
+  rankings\_json : str \\ \hline
+  \end{tabular}%
+};
+
+%% center: Recommendation (junction table)
+\node (rec) [class] at (5, -10) {%
+  \begin{tabular}{|p{4.0cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Recommendation}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  \textit{run\_id} : int \\
+  \textit{student\_id} : int \\
+  \textit{supervisor\_id} : int \\
+  similarity\_score : float \\
+  group\_boost : float \\
+  final\_score : float \\
+  rule\_matches : str \\
+  company\_group\_key : str \\ \hline
+  \end{tabular}%
+};
+
+%% bottom-left: Student
+\node (student) [class] at (0, -22) {%
+  \begin{tabular}{|p{4.5cm}|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Student}} \\ \hline
+  \underline{\textbf{id}} : int \\
+  student\_id : str \\
+  binusian\_id : str \\
+  name : str \\
+  email : str \\
+  phone : str \\
+  track : str \\
+  gpa : float \\
+  total\_sks : int \\
+  partner\_lecturer : str \\
+  position\_topic : str \\
+  duration : str \\
+  job\_start\_date : str \\
+  job\_end\_date : str \\
+  work\_schema : str \\
+  enrollment\_status : str \\
+  current\_supervisor\_code : str \\
+  current\_supervisor\_name : str \\
+  created\_at : datetime \\
+  updated\_at : datetime \\ \hline
+  \end{tabular}%
+};
+
 %% Supervisor 1 -> N Recommendation
 \draw[solid] (supervisor.south)
-  -- node[lab, left, pos=0.25]{1} node[lab, left, pos=0.75]{N}
-  (rec.north west);
+  -- node[lab, left, pos=0.15]{1} node[lab, left, pos=0.85]{N}
+  (rec.north);
+
+%% AppUser 1 -> N RecommendationRun
+\draw[solid] (appuser.south)
+  -- node[lab, right, pos=0.2]{1} node[lab, right, pos=0.8]{N}
+  (run.north);
 
 %% RecommendationRun 1 -> N Recommendation (cascade delete)
-\draw[solid] (run.south)
-  -- node[lab, right, pos=0.25]{1} node[lab, right, pos=0.75]{N}
-  (rec.north east);
+\draw[solid] (run.west)
+  -- node[lab, above, pos=0.2]{1} node[lab, above, pos=0.8]{N}
+  (rec.east);
 
 %% Recommendation N -> 1 Student
-\draw[solid] (rec.south west)
-  -- node[lab, left, pos=0.25]{N} node[lab, left, pos=0.75]{1}
+\draw[solid] (rec.south)
+  -- node[lab, left, pos=0.2]{N} node[lab, left, pos=0.8]{1}
   (student.north);
 
 \end{tikzpicture}%
@@ -1025,7 +1697,7 @@ Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar 
 \end{figure}
 
 %% ── Figure 3.3b: Runtime Dataclasses ───────────────────────────────
-\begin{figure}[H]
+\begin{figure}[!h]
 \centering
 \scalebox{0.75}{%
 \begin{tikzpicture}[
@@ -1288,21 +1960,21 @@ Class diagram disusun untuk merepresentasikan struktur kelas dan hubungan antar 
 
 \subsection{Entity Relationship Diagram}\label{entity-relationship-diagram-1}
 
-Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan hubungan antar entitas yang disimpan dalam basis data SQLite. ERD ini merepresentasikan tujuh entitas utama yang diperlukan dalam proses scoring, alokasi greedy, dan evaluasi hasil rekomendasi.
+Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan hubungan antar entitas yang disimpan dalam basis data SQLite. ERD ini merepresentasikan lima entitas utama yang diperlukan dalam proses scoring, alokasi greedy, dan evaluasi hasil rekomendasi.
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
-  node distance=1.5cm and 3cm,
   font=\footnotesize,
   entity/.style={rectangle, inner sep=0pt},
   rel/.style={draw, thick},
   lab/.style={font=\scriptsize\bfseries, fill=white, inner sep=2pt}
 ]
 
-\node (students) [entity] {%
-  \begin{tabular}{|l|}
+%% left: students
+\node (students) [entity] at (0, 0) {%
+  \begin{tabular}{|p{4.0cm}|}
   \hline
   \multicolumn{1}{|c|}{\textbf{students}} \\ \hline
   \underline{\textbf{id}} : Integer \\
@@ -1310,17 +1982,27 @@ Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan h
   binusian\_id : String \\
   name : String \\
   email : String \\
+  phone : String \\
   track : String \\
   gpa : Float \\
+  total\_sks : Integer \\
+  partner\_lecturer : String \\
   position\_topic : Text \\
+  duration : String \\
+  job\_start\_date : String \\
+  job\_end\_date : String \\
+  work\_schema : String \\
   enrollment\_status : String \\
   current\_supervisor\_code : String \\
-  created\_at : DateTime \\ \hline
+  current\_supervisor\_name : String \\
+  created\_at : DateTime \\
+  updated\_at : DateTime \\ \hline
   \end{tabular}%
 };
 
-\node (rec) [entity, right=3.5cm of students] {%
-  \begin{tabular}{|l|}
+%% center: recommendations
+\node (rec) [entity] at (6, 0) {%
+  \begin{tabular}{|p{4.2cm}|}
   \hline
   \multicolumn{1}{|c|}{\textbf{recommendations}} \\ \hline
   \underline{\textbf{id}} : Integer \\
@@ -1335,25 +2017,36 @@ Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan h
   \end{tabular}%
 };
 
-\node (runs) [entity, right=3.5cm of rec] {%
-  \begin{tabular}{|l|}
+%% right: recommendation_runs
+\node (runs) [entity] at (12, 0) {%
+  \begin{tabular}{|p{5.0cm}|}
   \hline
   \multicolumn{1}{|c|}{\textbf{recommendation\_runs}} \\ \hline
   \underline{\textbf{id}} : Integer \\
+  created\_at : DateTime \\
+  \textit{created\_by\_id} : Integer (FK) \\
   input\_source : String \\
   total\_students : Integer \\
   total\_supervisors : Integer \\
   target\_min\_capacity : Integer \\
   target\_max\_capacity : Integer \\
-  embedding\_model : String \\
+  capacity\_relaxed : Boolean \\
+  capacity\_note : Text \\
+  capacity\_bounds\_json : Text \\
   solver\_name : String \\
+  solver\_note : Text \\
+  embedding\_backend : String \\
+  embedding\_model : String \\
+  evaluation\_json : Text \\
+  pipeline\_config\_json : Text \\
   objective\_score : Float \\
-  created\_at : DateTime \\ \hline
+  rankings\_json : Text \\ \hline
   \end{tabular}%
 };
 
-\node (supervisors) [entity, below=2.5cm of rec] {%
-  \begin{tabular}{|l|}
+%% below rec: supervisors
+\node (supervisors) [entity] at (6, -8) {%
+  \begin{tabular}{|p{3.5cm}|}
   \hline
   \multicolumn{1}{|c|}{\textbf{supervisors}} \\ \hline
   \underline{\textbf{id}} : Integer \\
@@ -1364,8 +2057,9 @@ Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan h
   \end{tabular}%
 };
 
-\node (appusers) [entity, below=2.5cm of students] {%
-  \begin{tabular}{|l|}
+%% below runs: app_users
+\node (appusers) [entity] at (12, -12) {%
+  \begin{tabular}{|p{3.5cm}|}
   \hline
   \multicolumn{1}{|c|}{\textbf{app\_users}} \\ \hline
   \underline{\textbf{id}} : Integer \\
@@ -1376,27 +2070,33 @@ Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan h
   \end{tabular}%
 };
 
-% students (1) -- (N) recommendations
+%% students (1) -- (N) recommendations
 \draw [rel] (students.east) --
   node[lab, above, pos=0.15] {1}
   node[lab, above, pos=0.85] {N}
   (rec.west);
 
-% recommendation_runs (1) -- (N) recommendations
+%% recommendation_runs (1) -- (N) recommendations
 \draw [rel] (runs.west) --
   node[lab, above, pos=0.15] {1}
   node[lab, above, pos=0.85] {N}
   (rec.east);
 
-% supervisors (1) -- (N) recommendations
+%% supervisors (1) -- (N) recommendations
 \draw [rel] (supervisors.north) --
   node[lab, right, pos=0.15] {1}
   node[lab, right, pos=0.85] {N}
   (rec.south);
 
+%% app_users (1) -- (N) recommendation_runs
+\draw [rel] (appusers.north) --
+  node[lab, right, pos=0.15] {N}
+  node[lab, right, pos=0.85] {1}
+  (runs.south);
+
 \end{tikzpicture}%
 }
-\caption{Entity Relationship Diagram}
+\caption{Entity Relationship Diagram (\underline{id} = PK, \textit{italic} = FK)}
 \label{fig:fig3.4}
 \end{figure}
 

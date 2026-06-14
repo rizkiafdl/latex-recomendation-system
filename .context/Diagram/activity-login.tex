@@ -1,0 +1,121 @@
+%% Activity Diagram — AD-02: Login
+%% Generated: 2026-06-13  (spacing revised)
+%% Swimlanes: EPC (left, x=2.8) | Sistem (right, x=9.0)
+%% Divider: x=5.8
+%%
+%% y-spacing guide (~2 units between nodes for breathing room):
+%%   start=-1.8  access/showform=-3.3  bridge=-4.8  fill=-6.0
+%%   click/norm=-8.0  d1/err1=-10.2  verify=-12.4  d2/err2=-14.6
+%%   session=-16.8  redir=-18.8  end=-20.2  border=-21.0
+%%
+%% Decision exits:
+%%   d.west = F (alternative/error path -> EPC lane, then loop back)
+%%   d.south = T (primary path continues downward)
+
+\begin{figure}[H]
+\centering
+\scalebox{0.75}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.0cm, align=center, minimum height=0.9cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=1.8cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -21.0);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Login};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, 0.7) -- (5.8, -21.0);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Mengakses halaman Login ──────────────────────────────────────────
+\node (access) [action] at (2.8, -3.3)
+  {Mengakses\\halaman Login};
+\draw[->] (2.8, -2.02) -- (access.north);
+
+%% ── Sistem: Menampilkan form Login ────────────────────────────────────────
+\node (showform) [action] at (9.0, -3.3)
+  {Menampilkan\\form Login};
+\draw[->] (access.east) -- (showform.west);
+
+%% ── Sistem -> EPC: form siap diisi ───────────────────────────────────────
+\draw[->] (showform.south) -- (9.0, -4.8) -- (2.8, -4.8);
+
+%% ── EPC: Mengisi form ─────────────────────────────────────────────────────
+\node (fill) [action] at (2.8, -6.0)
+  {Mengisi username\\dan password};
+\draw[->] (2.8, -4.8) -- (fill.north);
+
+%% ── EPC: Menekan tombol Login ─────────────────────────────────────────────
+\node (click) [action] at (2.8, -8.0)
+  {Menekan tombol\\Login};
+\draw[->] (fill.south) -- (click.north);
+
+%% ── Sistem: Normalisasi + cari user ──────────────────────────────────────
+\node (norm) [action] at (9.0, -8.0)
+  {Normalisasi username;\\cari user di database};
+\draw[->] (click.east) -- (norm.west);
+
+%% ── Sistem: Decision 1 — User ditemukan? ─────────────────────────────────
+\node (d1) [decision] at (9.0, -10.2)
+  {User\\ditemukan?};
+\draw[->] (norm.south) -- (d1.north);
+
+%% D1 — F: error di EPC lane, loop back ke click ──────────────────────────
+\node (err1) [action] at (2.8, -10.2)
+  {Tampilkan\\pesan error};
+\draw[->] (d1.west) -- node[above, font=\scriptsize] {F} (err1.east);
+\draw[->] (err1.west) -- (0.8, -10.2) -- (0.8, -8.0) -- (click.west);
+
+%% D1 — T: verifikasi password ────────────────────────────────────────────
+\node (verify) [action] at (9.0, -12.4)
+  {Verifikasi password\\hash (Werkzeug)};
+\draw[->] (d1.south) -- node[right, font=\scriptsize] {T} (verify.north);
+
+%% ── Sistem: Decision 2 — Password cocok? ─────────────────────────────────
+\node (d2) [decision] at (9.0, -14.6)
+  {Password\\cocok?};
+\draw[->] (verify.south) -- (d2.north);
+
+%% D2 — F: error di EPC lane, loop back ke click ──────────────────────────
+\node (err2) [action] at (2.8, -14.6)
+  {Tampilkan\\pesan error};
+\draw[->] (d2.west) -- node[above, font=\scriptsize] {F} (err2.east);
+\draw[->] (err2.west) -- (0.5, -14.6) -- (0.5, -8.0) -- (click.west);
+
+%% D2 — T: simpan session ─────────────────────────────────────────────────
+\node (session) [action] at (9.0, -16.8)
+  {Simpan \texttt{user\_id}\\ke session};
+\draw[->] (d2.south) -- node[right, font=\scriptsize] {T} (session.north);
+
+%% ── Sistem: Redirect ke Dashboard ────────────────────────────────────────
+\node (redir) [action] at (9.0, -18.8)
+  {Redirect ke halaman\\Dashboard};
+\draw[->] (session.south) -- (redir.north);
+
+%% ── End node (bullseye) ──────────────────────────────────────────────────
+\draw[thick] (9.0, -20.2) circle (0.28cm);
+\fill (9.0, -20.2) circle (0.15cm);
+\draw[->] (redir.south) -- (9.0, -19.92);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Login}
+\label{fig:ad02-login}
+\end{figure}

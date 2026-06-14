@@ -1,0 +1,108 @@
+\begin{figure}[H]
+\centering
+\scalebox{0.65}{%
+\begin{tikzpicture}[
+  font=\small,
+  action/.style={
+    rectangle, rounded corners=4pt, draw=black, thick,
+    text width=3.5cm, align=center, minimum height=1.0cm, fill=white
+  },
+  decision/.style={
+    diamond, draw=black, thick, aspect=1.6,
+    text width=2.0cm, align=center, fill=white
+  },
+  >=latex,
+]
+
+%% ── Outer border ──────────────────────────────────────────────────────────
+\draw[thick] (0, 0.7) rectangle (12, -25.3);
+
+%% ── Title bar ─────────────────────────────────────────────────────────────
+\draw[thick] (0, -0.1) -- (12, -0.1);
+\node[font=\normalsize\bfseries] at (6, 0.3) {Kelola Keywords Supervisor};
+
+%% ── Swimlane headers ──────────────────────────────────────────────────────
+%% Vertical divider starts at -0.1 (title bar bottom), NOT at 0.7
+\draw[thick] (0, -1.0) -- (12, -1.0);
+\draw[thick] (5.8, -0.1) -- (5.8, -25.3);
+\node[font=\small\bfseries] at (2.9, -0.55) {EPC};
+\node[font=\small\bfseries] at (8.9, -0.55) {Sistem};
+
+%% ── Start node ────────────────────────────────────────────────────────────
+\fill (2.8, -1.8) circle (0.22cm);
+
+%% ── EPC: Memilih supervisor dari dropdown ─────────────────────────────────
+\node (select_sup) [action] at (2.8, -3.5)
+  {Memilih supervisor\\ dari dropdown};
+\draw[->] (2.8, -2.02) -- (select_sup.north);
+
+%% ── Sistem: Menampilkan chip keywords tersimpan ───────────────────────────
+\node (show_chips) [action] at (9.0, -3.5)
+  {Menampilkan chip\\ keywords tersimpan};
+\draw[->] (select_sup.east) -- (show_chips.west);
+
+%% ── Sistem -> EPC: L-shaped return ke input keyword ──────────────────────
+%% Single continuous arrow; bend at y=-5.0
+\node (keyword_input) [action] at (2.8, -6.5)
+  {Mengetik keyword\\ baru di input field};
+\draw[->] (show_chips.south) -- (9.0, -5.0) -- (2.8, -5.0) -- (keyword_input.north);
+
+%% ── EPC: Menekan Enter / Comma atau tombol "Add" ─────────────────────────
+\node (press_add) [action] at (2.8, -8.8)
+  {Menekan Enter/Comma\\ atau tombol ``Add''};
+\draw[->] (keyword_input.south) -- (press_add.north);
+
+%% ── Sistem: Normalisasi token ─────────────────────────────────────────────
+\node (norm) [action] at (9.0, -8.8)
+  {Normalisasi token\\ (trim, lowercase)};
+\draw[->] (press_add.east) -- (norm.west);
+
+%% ── Sistem: Decision — Token duplikat? ───────────────────────────────────
+\node (d1) [decision] at (9.0, -11.5)
+  {Token\\ duplikat?};
+\draw[->] (norm.south) -- (d1.north);
+
+%% D1 — Ya (west): abaikan token, loop back ke keyword_input ──────────────
+\node (ignore) [action] at (2.8, -11.5)
+  {Abaikan token;\\ (ulangi input)};
+\draw[->] (d1.west) -- node[above, pos=0.08, font=\scriptsize] {Ya} (ignore.east);
+%% Loop-back: ignore.west -> gutter x=0.8 -> up to keyword_input y+0.25 -> keyword_input.west
+\coordinate (kw_left) at (0, -6.25);
+\draw[->] (ignore.west) -- (0.8, -11.5) -- (0.8, -6.25) -- (keyword_input.west |- kw_left);
+
+%% D1 — Tidak (south): tambahkan chip ─────────────────────────────────────
+\node (add_chip) [action] at (9.0, -14.0)
+  {Menambahkan chip\\ keyword ke tampilan};
+\draw[->] (d1.south) -- node[right, pos=0.12, font=\scriptsize] {Tidak} (add_chip.north);
+
+%% ── Sistem -> EPC: L-shaped return ke press_save ─────────────────────────
+%% add_chip.south -> bend at y=-15.5 -> EPC lane -> press_save.north
+\node (press_save) [action] at (2.8, -17.5)
+  {Menekan tombol\\ Save};
+\draw[->] (add_chip.south) -- (9.0, -15.5) -- (2.8, -15.5) -- (press_save.north);
+
+%% ── Sistem: Gabungkan keywords menjadi string CSV ─────────────────────────
+\node (gabung_csv) [action] at (9.0, -17.5)
+  {Gabungkan keywords\\ menjadi string CSV};
+\draw[->] (press_save.east) -- (gabung_csv.west);
+
+%% ── Sistem: Update profile_keywords di tabel supervisors ─────────────────
+\node (update_db) [action] at (9.0, -20.0)
+  {Update \texttt{profile\_keywords}\\ di tabel supervisors};
+\draw[->] (gabung_csv.south) -- (update_db.north);
+
+%% ── Sistem: Menampilkan konfirmasi berhasil ───────────────────────────────
+\node (confirm) [action] at (9.0, -22.3)
+  {Menampilkan konfirmasi\\ berhasil};
+\draw[->] (update_db.south) -- (confirm.north);
+
+%% ── End node (bullseye) ──────────────────────────────────────────────────
+\draw[thick] (9.0, -24.0) circle (0.28cm);
+\fill        (9.0, -24.0) circle (0.15cm);
+\draw[->] (confirm.south) -- (9.0, -23.72);
+
+\end{tikzpicture}%
+}
+\caption{Activity Diagram Kelola Keywords Supervisor}
+\label{fig:ad05-keywords}
+\end{figure}
