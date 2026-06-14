@@ -80,11 +80,11 @@ Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
     \hline
     \textbf{Model} & \textbf{MRR} & \textbf{Hit@1} & \textbf{Hit@5} & \textbf{NDCG@5} & \textbf{NDCG@10} & \textbf{Avg Rank} & \textbf{Match Rate} \\
     \hline
-    \textbf{BAAI/bge-m3} (Run 8) & 0,585 & 0,417 & 0,798 & 0,620 & 0,668 & 3,33 & 0,357 \\
+    \textbf{BAAI/bge-m3} (Run 26) & 0,711 & 0,560 & 0,929 & 0,759 & 0,779 & 2,17 & 0,530 \\
     \hline
-    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 14) & 0,478 & 0,298 & 0,750 & 0,523 & 0,580 & 4,14 & 0,423 \\
+    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 32) & 0,617 & 0,470 & 0,851 & 0,660 & 0,698 & 2,95 & 0,512 \\
     \hline
-    \textbf{intfloat/multilingual-e5-large-instruct} (Run 20) & 0,469 & 0,304 & 0,649 & 0,483 & 0,563 & 4,60 & 0,399 \\
+    \textbf{intfloat/multilingual-e5-large-instruct} (Run 38) & 0,672 & 0,506 & 0,905 & 0,721 & 0,748 & 2,43 & 0,583 \\
     \hline
     \textit{Random baseline} & $\sim$0,23 & $\sim$0,07 & $\sim$0,36 & $\sim$0,21 & --- & $\sim$7,5 & --- \\
     \hline
@@ -94,7 +94,7 @@ Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
     \label{table:tab4.2.1}
 \end{table}
 
-Secara deskriptif, \textbf{BAAI/bge-m3} memperoleh MRR tertinggi sebesar 0,585 dengan dosen pembimbing sebenarnya berada pada peringkat rata-rata 3,33. \textbf{Qwen/Qwen3-Embedding-0.6B} memperoleh MRR 0,478 dengan rata-rata peringkat 4,14, namun memiliki \textit{Assignment Match Rate} tertinggi sebesar 0,423. \textbf{intfloat/multilingual-e5-large-instruct} memperoleh MRR 0,469 dengan rata-rata peringkat 4,60 dan \textit{match rate} 0,399. Seluruh model berada jauh di atas \textit{random baseline}, yang menunjukkan bahwa pendekatan kemiripan semantik memberikan sinyal pencocokan yang nyata.
+Secara deskriptif, \textbf{BAAI/bge-m3} memperoleh MRR tertinggi sebesar 0,711 dengan dosen pembimbing sebenarnya berada pada peringkat rata-rata 2,17. \textbf{intfloat/multilingual-e5-large-instruct} memperoleh MRR 0,672 dengan rata-rata peringkat 2,43 dan memiliki \textit{Assignment Match Rate} tertinggi sebesar 0,583. \textbf{Qwen/Qwen3-Embedding-0.6B} memperoleh MRR 0,617 dengan rata-rata peringkat 2,95 dan \textit{match rate} 0,512. Seluruh model berada jauh di atas \textit{random baseline}, yang menunjukkan bahwa pendekatan kemiripan semantik memberikan sinyal pencocokan yang nyata.
 
 Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan pada Tabel~\ref{table:tab4.2.2}.
 
@@ -104,11 +104,11 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
     \hline
     \textbf{Model} & \textbf{Avg Similarity @1} & \textbf{Avg True Similarity} & \textbf{Selisih (sebaran)} \\
     \hline
-    \textbf{BAAI/bge-m3} (Run 8) & 0,617 & 0,585 & 0,032 \\
+    \textbf{BAAI/bge-m3} (Run 26) & 0,674 & 0,645 & 0,030 \\
     \hline
-    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 14) & 0,689 & 0,621 & 0,068 \\
+    \textbf{Qwen/Qwen3-Embedding-0.6B} (Run 32) & 0,726 & 0,684 & 0,042 \\
     \hline
-    \textbf{intfloat/multilingual-e5-large-instruct} (Run 20) & 0,870 & 0,853 & 0,017 \\
+    \textbf{intfloat/multilingual-e5-large-instruct} (Run 38) & 0,907 & 0,893 & 0,014 \\
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -118,11 +118,11 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
 
 \subsection{Hasil Analisis Model dan Pemilihan Model Akhir}
 
-Berdasarkan hasil pada Tabel~\ref{table:tab4.2.1}, \textbf{BAAI/bge-m3} unggul pada seluruh metrik \textit{retrieval}: MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, dan rata-rata peringkat terbaik (3,33). Keunggulan ini konsisten di setiap metrik, bukan hanya pada satu indikator, sehingga menunjukkan kualitas pemeringkatan yang lebih baik secara menyeluruh.
+Berdasarkan hasil pada Tabel~\ref{table:tab4.2.1}, \textbf{BAAI/bge-m3} unggul pada seluruh metrik \textit{retrieval}: MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, dan rata-rata peringkat terbaik (2,17). Keunggulan ini konsisten di setiap metrik, bukan hanya pada satu indikator, sehingga menunjukkan kualitas pemeringkatan yang lebih baik secara menyeluruh.
 
-Temuan yang menarik muncul pada \textbf{Qwen/Qwen3-Embedding-0.6B}. Model ini memiliki \textit{Assignment Match Rate} tertinggi (0,423), meskipun metrik \textit{retrieval}-nya berada di bawah \textbf{BAAI/bge-m3}. Inversi ini mengindikasikan bahwa distribusi skor qwen3 secara kebetulan lebih selaras dengan ketersediaan slot kapasitas aktual, sehingga alokasi akhir lebih sering cocok dengan penugasan historis. Sebaliknya, \textbf{BAAI/bge-m3} yang unggul pada \textit{retrieval} justru memperoleh \textit{match rate} terendah (0,357) karena model tersebut meranking supervisor yang ``paling tepat'' secara semantik, yang belum tentu identik dengan pilihan historis admin.
+Temuan yang menarik muncul pada \textbf{intfloat/multilingual-e5-large-instruct}. Model ini memiliki \textit{Assignment Match Rate} tertinggi (0,583), meskipun metrik \textit{retrieval}-nya berada di bawah \textbf{BAAI/bge-m3}. Inversi ini mengindikasikan bahwa distribusi skor me5-large secara kebetulan lebih selaras dengan ketersediaan slot kapasitas aktual, sehingga alokasi akhir lebih sering cocok dengan penugasan historis. Sebaliknya, \textbf{BAAI/bge-m3} yang unggul pada \textit{retrieval} memperoleh \textit{match rate} lebih rendah (0,530) karena model tersebut meranking supervisor yang ``paling tepat'' secara semantik, yang belum tentu identik dengan pilihan historis admin.
 
-Temuan lain dapat diamati pada \textbf{intfloat/multilingual-e5-large-instruct} melalui Tabel~\ref{table:tab4.2.2}: model ini menghasilkan skor kemiripan yang sangat tinggi namun nyaris seragam (rata-rata skor peringkat-1 sebesar 0,870 dan skor dosen sebenarnya 0,853, dengan sebaran hanya 0,017). Artinya, model ini menilai hampir seluruh pasangan mahasiswa--dosen sebagai ``sangat mirip'' sehingga kehilangan kemampuan untuk membedakan satu dosen dari dosen lainnya secara tajam.
+Hal ini juga dapat diamati melalui Tabel~\ref{table:tab4.2.2}: \textbf{intfloat/multilingual-e5-large-instruct} menghasilkan skor kemiripan yang sangat tinggi namun nyaris seragam (rata-rata skor peringkat-1 sebesar 0,907 dan skor dosen sebenarnya 0,893, dengan sebaran hanya 0,014). Artinya, model ini menilai hampir seluruh pasangan mahasiswa--dosen sebagai ``sangat mirip'' sehingga kehilangan kemampuan untuk membedakan satu dosen dari dosen lainnya secara tajam, yang menjelaskan mengapa meskipun \textit{match rate}-nya tinggi, metrik \textit{retrieval}-nya lebih rendah dari bge-m3.
 
 Temuan-temuan ini menegaskan prinsip penting dalam pemilihan model: \textbf{sebuah sistem rekomendasi dinilai dari kualitas pemeringkatannya} --- yaitu kemampuan menempatkan dosen yang tepat pada posisi teratas --- sehingga metrik \textit{retrieval} menjadi acuan utama. \textit{Assignment Match Rate} merupakan metrik hasil akhir yang bersifat melengkapi, namun apabila digunakan sendirian dapat menyesatkan.
 
@@ -142,11 +142,11 @@ Parameter \texttt{extra\_docs} menentukan apakah teks tambahan dari profil dosen
     \hline
     \textbf{Model} & \textbf{extra\_docs= True} & \textbf{extra\_docs= False} & \textbf{$\Delta$\%Rank-1} & \textbf{Rekomendasi} \\
     \hline
-    BAAI/bge-m3 & 61,4\% & 53,8\% & \textbf{+7,6pp} & Aktifkan \\
+    BAAI/bge-m3 & 67,8\% & 62,0\% & \textbf{+5,8pp} & Aktifkan \\
     \hline
-    Qwen3-Embedding-0.6B & 31,6\% & 33,9\% & -2,3pp & Nonaktifkan \\
+    Qwen3-Embedding-0.6B & 49,1\% & 50,9\% & -1,8pp & Nonaktifkan \\
     \hline
-    mE5-large-instruct & 35,5\% & 52,0\% & \textbf{-16,5pp} & Nonaktifkan \\
+    mE5-large-instruct & 54,4\% & 60,8\% & \textbf{-6,4pp} & Nonaktifkan \\
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -154,7 +154,7 @@ Parameter \texttt{extra\_docs} menentukan apakah teks tambahan dari profil dosen
     \label{table:tab4.2.3}
 \end{table}
 
-Pengaruh \texttt{extra\_docs} bersifat \textit{model-dependent}. Pada \textbf{BAAI/bge-m3}, dokumen tambahan memperkaya profil supervisor yang sebelumnya tipis sehingga meningkatkan kemampuan diskriminasi model sebesar 7,6 poin persentase. Sebaliknya, pada \textbf{mE5-large-instruct}, dokumen tambahan justru merusak ruang \textit{embedding} yang telah terkalibrasi, menyebabkan penurunan tajam sebesar 16,5 poin persentase karena skor antar supervisor menjadi semakin seragam.
+Pengaruh \texttt{extra\_docs} bersifat \textit{model-dependent}. Pada \textbf{BAAI/bge-m3}, dokumen tambahan memperkaya profil supervisor yang sebelumnya tipis sehingga meningkatkan kemampuan diskriminasi model sebesar 5,8 poin persentase. Sebaliknya, pada \textbf{mE5-large-instruct}, dokumen tambahan justru merusak ruang \textit{embedding} yang telah terkalibrasi, menyebabkan penurunan sebesar 6,4 poin persentase karena skor antar supervisor menjadi semakin seragam.
 
 \subsubsection{Pengaruh Parameter \texttt{group\_bonus}}
 
@@ -166,11 +166,11 @@ Parameter \texttt{group\_bonus} menambahkan skor tambahan bagi pasangan mahasisw
     \hline
     \textbf{Model} & \textbf{group\_bonus= False} & \textbf{group\_bonus= True} & \textbf{$\Delta$\%Rank-1} \\
     \hline
-    BAAI/bge-m3 & 61,4\% & 53,8\% & \textbf{-7,6pp} \\
+    BAAI/bge-m3 & 62,0\% & 62,0\% & 0pp \\
     \hline
-    Qwen3-Embedding-0.6B & 31,6\% & 33,9\% & +2,3pp \\
+    Qwen3-Embedding-0.6B & 50,9\% & 50,9\% & 0pp \\
     \hline
-    mE5-large-instruct & 35,5\% & tidak aktif & tidak berlaku \\
+    mE5-large-instruct & 60,8\% & 60,8\% & 0pp \\
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -178,11 +178,11 @@ Parameter \texttt{group\_bonus} menambahkan skor tambahan bagi pasangan mahasisw
     \label{table:tab4.2.4}
 \end{table}
 
-Secara keseluruhan, \texttt{group\_bonus} bersifat netral hingga merugikan. Pada \textbf{BAAI/bge-m3}, parameter ini menurunkan \%Rank-1 sebesar 7,6 poin persentase. Pada \textbf{mE5-large-instruct}, kondisi grup \textit{overflow} tidak pernah terpenuhi dalam data ini sehingga parameter tidak memberikan efek apapun. Hanya pada \textbf{Qwen3-Embedding-0.6B} yang menunjukkan sedikit peningkatan, namun diikuti dengan peningkatan nilai \textit{delta\_mean} yang mengindikasikan \textit{displacement} lebih besar dari peringkat optimal.
+Hasil evaluasi menunjukkan bahwa \texttt{group\_bonus} \textbf{tidak memberikan pengaruh nyata} terhadap metrik \textit{retrieval}. Ketika parameter \texttt{extra\_docs} dikontrol pada nilai yang sama, nilai \%Rank-1 identik antara kondisi \texttt{group\_bonus=True} dan \texttt{group\_bonus=False} pada ketiga model. Perbedaan yang tampak pada perbandingan antar batch eksperimen bersifat \textit{spurious} karena \texttt{group\_bonus=True} selalu disertai \texttt{extra\_docs=False} --- kedua variabel tidak pernah divariasikan secara independen. Meski demikian, parameter ini tetap memberikan kontribusi kecil pada nilai skor akhir (\textit{gap fin-sim} $\approx$ 0,008), yang membuktikan bahwa bonus diterapkan secara teknis namun tidak cukup besar untuk mengubah urutan peringkat mahasiswa.
 
 \subsubsection{Konfigurasi Terbaik}
 
-Berdasarkan hasil evaluasi terhadap 18 eksperimen, konfigurasi terbaik yang dipilih adalah \textbf{BAAI/bge-m3} dengan \texttt{extra\_docs=True} dan \texttt{group\_bonus=False} (Run 8). Konfigurasi ini menghasilkan MRR tertinggi (0,585), Hit@5 tertinggi (0,798), dan persentase mahasiswa yang mendapat peringkat pertama tertinggi (61,4\%). Tabel~\ref{table:tab4.2.5} merangkum metrik konfigurasi terbaik ini.
+Berdasarkan hasil evaluasi terhadap 18 eksperimen, konfigurasi terbaik yang dipilih adalah \textbf{BAAI/bge-m3} dengan \texttt{extra\_docs=True} dan \texttt{group\_bonus=False} (Run 26). Konfigurasi ini menghasilkan MRR tertinggi (0,711), Hit@5 tertinggi (0,929), dan persentase mahasiswa yang mendapat peringkat pertama tertinggi (67,8\%). Tabel~\ref{table:tab4.2.5} merangkum metrik konfigurasi terbaik ini.
 
 \begin{table}[h]
 \centering
@@ -190,23 +190,23 @@ Berdasarkan hasil evaluasi terhadap 18 eksperimen, konfigurasi terbaik yang dipi
     \hline
     \textbf{Metrik} & \textbf{Nilai} \\
     \hline
-    MRR & 0,585 \\
+    MRR & 0,711 \\
     \hline
-    Hit@1 & 0,417 \\
+    Hit@1 & 0,560 \\
     \hline
-    Hit@5 & 0,798 \\
+    Hit@5 & 0,929 \\
     \hline
-    nDCG@10 & 0,668 \\
+    nDCG@10 & 0,779 \\
     \hline
-    \%Rank-1 & 61,4\% \\
+    \%Rank-1 & 67,8\% \\
     \hline
-    \%Top-3 & 74,9\% \\
+    \%Top-3 & 85,4\% \\
     \hline
-    Rata-rata Peringkat & 3,22 \\
+    Rata-rata Peringkat & 2,17 \\
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Metrik Konfigurasi Terbaik (Run 8: bge-m3, extra\_docs=True, group\_bonus=False)}
+    \caption{Metrik Konfigurasi Terbaik (Run 26: bge-m3, extra\_docs=True, group\_bonus=False)}
     \label{table:tab4.2.5}
 \end{table}
 
@@ -254,17 +254,17 @@ Untuk memahami kualitas alokasi dari perspektif kepuasan mahasiswa, dilakukan an
     \hline
     \textbf{Peringkat Ditetapkan} & \textbf{Jumlah} & \textbf{Persentase} \\
     \hline
-    1 & 1.397 & 45,4\% \\
+    1 & 1.779 & 57,8\% \\
     \hline
-    2 & 342 & 11,1\% \\
+    2 & 411 & 13,4\% \\
     \hline
-    3 & 211 & 6,9\% \\
+    3 & 313 & 10,2\% \\
     \hline
-    4 & 291 & 9,5\% \\
+    4 & 147 & 4,8\% \\
     \hline
-    5 & 90 & 2,9\% \\
+    5 & 76 & 2,5\% \\
     \hline
-    6 ke atas & 747 & 24,3\% \\
+    6 ke atas & 352 & 11,4\% \\
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -272,7 +272,7 @@ Untuk memahami kualitas alokasi dari perspektif kepuasan mahasiswa, dilakukan an
     \label{table:tab4.2.7}
 \end{table}
 
-Distribusi ini memperlihatkan pola bimodal: puncak kuat pada peringkat 1 (45,4\%), penurunan pada peringkat 2--3, dan peningkatan kembali pada peringkat 4. Pola ini mencerminkan dinamika saturasi kapasitas --- ketika supervisor pilihan pertama seorang mahasiswa sudah penuh, mahasiswa tersebut cenderung jatuh ke peringkat 4--6 alih-alih peringkat 2--3. Hal ini terjadi karena supervisor-supervisor dengan kemiripan semantik tertinggi sering kali memiliki kapasitas yang terisi bersamaan, sehingga pilihan alternatif terdekat sudah tidak tersedia.
+Distribusi ini memperlihatkan bahwa sebagian besar mahasiswa memperoleh supervisor yang paling sesuai: 57,8\% ditetapkan pada peringkat 1, dan 81,4\% berada dalam tiga besar (peringkat 1--3). Sebanyak 11,4\% mahasiswa terpaksa ditetapkan di luar peringkat 5, bukan karena kegagalan model, melainkan akibat saturasi kapasitas ketika lima supervisor teratas sudah penuh, sistem harus beralih ke pilihan berikutnya. Pola ini merupakan konsekuensi matematis dari keterbatasan slot, bukan indikasi kualitas rekomendasi yang buruk.
 
 \subsection{Aplikasi Web}
 
