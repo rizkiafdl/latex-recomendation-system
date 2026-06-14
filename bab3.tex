@@ -97,7 +97,7 @@ Dengan pemisahan peran tersebut, sistem difokuskan sebagai decision support syst
 
 \subsection{Analisis Kebutuhan Sistem}\label{analisis-kebutuhan-sistem}
 
-\subsection{Kebutuhan Fungsional}\label{kebutuhan-fungsional}
+\subsubsection{Kebutuhan Fungsional}\label{kebutuhan-fungsional}
 
 Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang harus dipenuhi oleh sistem rekomendasi adalah sebagai berikut:
 
@@ -125,7 +125,7 @@ Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang ha
 
 \end{longtable}
 
-\subsection{Kebutuhan Non-Fungsional}\label{kebutuhan-non-fungsional}
+\subsubsection{Kebutuhan Non-Fungsional}\label{kebutuhan-non-fungsional}
 
 \begin{longtable}[c]{|p{0.5cm}|p{12.5cm}|}
 
@@ -174,7 +174,7 @@ Sebagai batasan penelitian, sistem tidak dirancang sebagai layanan mandiri yang 
 
 Perancangan model rekomendasi pada penelitian ini bertujuan untuk menentukan mekanisme pencocokan antara mahasiswa dan faculty supervisor berdasarkan kesesuaian informasi tekstual. Model yang digunakan dalam sistem ini tidak melibatkan proses pelatihan training dari awal, melainkan memanfaatkan model text embedding open-source yang telah tersedia. Pendekatan ini dipilih untuk menghasilkan sistem rekomendasi yang efisien dan mudah diimplementasikan dalam konteks sistem informasi berbasis website.
 
-\subsection{Konsep Dasar Model Rekomendasi}\label{konsep-dasar-model-rekomendasi}
+\subsubsection{Konsep Dasar Model Rekomendasi}\label{konsep-dasar-model-rekomendasi}
 
 Model rekomendasi dirancang menggunakan pendekatan semantic similarity, yaitu metode untuk mengukur tingkat kemiripan makna antara dua teks. Dalam penelitian ini, semantic similarity digunakan untuk membandingkan informasi tekstual mahasiswa dengan dokumen faculty supervisor sehingga sistem dapat menghasilkan rekomendasi dosen dengan tingkat kesesuaian tertinggi.
 
@@ -182,7 +182,7 @@ Informasi tekstual mahasiswa meliputi deskripsi posisi kerja, peran, nama perusa
 
 Hasil akhir dari proses rekomendasi adalah pasangan mahasiswa dan faculty supervisor yang dipilih berdasarkan peringkat kemiripan tertinggi dengan mempertimbangkan ketersediaan slot bimbingan dosen.
 
-\subsection{Pembentukan Representasi Data Faculty Supervisor}\label{pembentukan-representasi-data-faculty-supervisor}
+\subsubsection{Pembentukan Representasi Data Faculty Supervisor}\label{pembentukan-representasi-data-faculty-supervisor}
 
 Setiap faculty supervisor direpresentasikan dalam bentuk satu atau lebih dokumen teks yang bersifat unik. Dokumen teks tersebut dibentuk dengan menggabungkan field-field tekstual dari masing-masing sumber data. Pada penelitian ini terdapat dua sumber utama, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
 
@@ -215,7 +215,7 @@ Faculty supervisor & Jenis skripsi & Data Rekomendasi Skripsi Dari Faculty Super
 
 Dalam implementasinya, apabila seorang faculty supervisor tidak memiliki data pada salah satu sumber, maka dokumen dari sumber tersebut tidak dibentuk. Dengan demikian, faculty supervisor tersebut tetap dapat direpresentasikan menggunakan dokumen yang tersedia, sehingga jumlah dokumen per faculty supervisor dapat berbeda-beda tergantung kelengkapan data.
 
-\subsection{Pemrosesan Data Mahasiswa}\label{pemrosesan-data-mahasiswa}
+\subsubsection{Pemrosesan Data Mahasiswa}\label{pemrosesan-data-mahasiswa}
 
 Data mahasiswa yang dimasukkan oleh EPC melalui sistem mencakup informasi posisi kerja, peran, dan nama perusahaan. Seluruh informasi tersebut digabungkan menjadi satu teks input dengan pemisah berupa whitespace untuk merepresentasikan karakteristik mahasiswa secara menyeluruh. Urutan penggabungan field ditetapkan secara konsisten, yaitu posisi kerja, peran, kemudian perusahaan. Apabila terdapat field yang tidak tersedia, field tersebut tidak disertakan tanpa mengubah urutan penggabungan.
 
@@ -243,7 +243,7 @@ Mahasiswa & Status eligible & Tidak & Digunakan sebagai filter kelayakan mahasis
 
 \end{longtable}
 
-\subsection{Alur Pemrosesan Data}\label{alur-pemrosesan-data}
+\subsubsection{Alur Pemrosesan Data}\label{alur-pemrosesan-data}
 
 Pipeline sistem terdiri dari delapan tahap berurutan, dimulai dari impor data Excel oleh EPC hingga ekspor hasil rekomendasi.
 
@@ -323,7 +323,7 @@ Struktur data knowledge base yang digunakan dalam proses perhitungan kemiripan d
 
 \end{longtable}
 
-\subsection{Validasi Slot Bimbingan faculty supervisor}\label{validasi-slot-bimbingan-faculty-supervisor}
+\subsubsection{Validasi Slot Bimbingan faculty supervisor}\label{validasi-slot-bimbingan-faculty-supervisor}
 
 Selain mempertimbangkan tingkat kesesuaian berdasarkan semantic similarity, sistem juga melakukan validasi terhadap ketersediaan slot bimbingan faculty supervisor. Proses validasi ini dilakukan setelah tahap perangkingan selesai dan bertujuan untuk memastikan bahwa rekomendasi yang dihasilkan dapat direalisasikan sesuai dengan kapasitas bimbingan yang tersedia.
 
@@ -339,7 +339,7 @@ Algoritma \textit{greedy} dua fase bekerja sebagai berikut:
 
 Setelah kedua fase selesai, sistem melakukan validasi akhir untuk memastikan seluruh constraint kapasitas terpenuhi. Apabila validasi gagal, sistem menghentikan proses dan menampilkan pesan kesalahan kepada EPC. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang memenuhi seluruh batasan kapasitas secara optimal.
 
-\subsection{Strategi evaluasi}\label{strategi-evaluasi}
+\subsubsection{Strategi evaluasi}\label{strategi-evaluasi}
 
 Strategi evaluasi pada penelitian ini dirancang untuk menilai efektivitas model rekomendasi berbasis semantic similarity dalam menghasilkan pasangan mahasiswa dan faculty supervisor yang relevan. Evaluasi difokuskan pada dua aspek utama, yaitu kualitas hasil perangkingan rekomendasi dan dampak penerapan validasi slot bimbingan terhadap hasil akhir alokasi.
 
