@@ -246,7 +246,7 @@ Match Rate = jumlah assignment cocok / total assignment yang memiliki ground tru
 
 Teknologi pendukung sistem merupakan komponen perangkat lunak dan infrastruktur yang digunakan untuk mengembangkan dan menjalankan sistem rekomendasi. Pemilihan teknologi harus mempertimbangkan skalabilitas, efisiensi, dan kemudahan integrasi.
 
-\subsection{Python}\label{python}
+\subsubsection{Python}\label{python}
 
 Python merupakan bahasa pemrograman tingkat tinggi yang banyak digunakan dalam pengembangan sistem berbasis data, kecerdasan buatan, dan pemrosesan bahasa alami. Python dikenal memiliki sintaks yang sederhana, mudah dibaca, serta didukung oleh ekosistem pustaka yang sangat luas.
 
@@ -254,7 +254,7 @@ Menurut Van Rossum dan Drake (\citeyear{vanrossum2009python}), Python dirancang 
 
 Dalam penelitian ini, Python digunakan sebagai bahasa utama pada sisi backend untuk mengembangkan sistem rekomendasi faculty supervisor. Python digunakan untuk mengelola alur pemrosesan data, integrasi model text embedding, perhitungan semantic similarity, serta evaluasi sistem rekomendasi.
 
-\subsection{JavaScript}\label{javascript}
+\subsubsection{JavaScript}\label{javascript}
 
 JavaScript merupakan bahasa pemrograman yang digunakan secara luas dalam pengembangan aplikasi berbasis web, khususnya pada sisi klien (client-side). JavaScript memungkinkan pembuatan antarmuka pengguna yang interaktif dan dinamis.
 
@@ -262,7 +262,7 @@ Menurut Flanagan (\citeyear{flanagan2020javascript}), JavaScript berperan pentin
 
 Dalam penelitian ini, JavaScript digunakan pada sisi frontend untuk membangun antarmuka sistem rekomendasi faculty supervisor. JavaScript memungkinkan pengguna memasukkan data, memicu proses rekomendasi, dan menampilkan hasil rekomendasi secara interaktif.
 
-\subsection{Flask + Jinja2}\label{flask-jinja2}
+\subsubsection{Flask + Jinja2}\label{flask-jinja2}
 
 Flask merupakan micro web framework berbasis Python yang digunakan untuk membangun aplikasi web. Flask mengadopsi pendekatan minimalis dengan menyediakan komponen inti seperti routing, templating, dan session management, namun tetap fleksibel untuk diperluas melalui ekstensi.
 
@@ -270,7 +270,7 @@ Menurut Grinberg (\citeyear{grinberg2018flask}), Flask dirancang dengan filosofi
 
 Dalam penelitian ini, Flask digunakan sebagai framework utama untuk membangun antarmuka web sistem rekomendasi faculty supervisor. Flask menangani seluruh alur request-response, termasuk autentikasi pengguna, import data, pemrosesan rekomendasi, dan penyajian hasil dalam bentuk halaman web interaktif. Pendekatan server-side rendering dipilih karena kesederhanaan arsitektur dan kesesuaiannya dengan skala sistem yang bersifat single-user.
 
-\subsection{Pytorch}\label{pytorch}
+\subsubsection{Pytorch}\label{pytorch}
 
 PyTorch merupakan framework deep learning berbasis Python yang mendukung komputasi tensor dan pengembangan model neural network. PyTorch banyak digunakan dalam penelitian dan pengembangan model berbasis transformer.
 
@@ -278,7 +278,7 @@ Menurut Paszke et al. (\citeyear{paszke2019pytorch}), PyTorch menyediakan fleksi
 
 Dalam penelitian ini, PyTorch digunakan sebagai framework pendukung untuk menjalankan dan mengelola model text embedding berbasis transformer yang digunakan dalam sistem rekomendasi.
 
-\subsection{SQLite}\label{sqlite}
+\subsubsection{SQLite}\label{sqlite}
 
 SQLite merupakan sistem manajemen basis data relasional yang bersifat embedded dan file-based. Berbeda dengan sistem database client-server seperti PostgreSQL, SQLite tidak memerlukan proses server terpisah dan menyimpan seluruh database dalam satu file tunggal.
 
@@ -286,7 +286,7 @@ Menurut Owens (\citeyear{owens2006sqlite}), SQLite cocok digunakan pada aplikasi
 
 Dalam penelitian ini, SQLite digunakan sebagai database utama untuk menyimpan data mahasiswa, profil dosen, konfigurasi aturan, serta hasil rekomendasi. Pemilihan SQLite atas PostgreSQL didasarkan pada pertimbangan bahwa sistem ini berjalan sebagai proses tunggal (single-process) dan tidak memerlukan fitur vector store, karena perhitungan similarity dilakukan secara on-the-fly menggunakan operasi matriks NumPy.
 
-\subsection{SQLAlchemy}\label{sqlalchemy}
+\subsubsection{SQLAlchemy}\label{sqlalchemy}
 
 SQLAlchemy merupakan pustaka Object-Relational Mapping (ORM) untuk Python yang menyediakan abstraksi antara kode aplikasi dan database relasional. ORM memungkinkan pengembang untuk berinteraksi dengan database menggunakan objek Python tanpa menulis query SQL secara langsung.
 
@@ -294,7 +294,7 @@ Menurut Copeland (\citeyear{copeland2008sqlalchemy}), SQLAlchemy menyediakan dua
 
 Dalam penelitian ini, SQLAlchemy digunakan untuk mendefinisikan skema database melalui deklarasi model Python, mengelola sesi transaksi, dan melakukan query data secara terstruktur. Pendekatan ORM memisahkan logika bisnis dari detail implementasi database, sehingga kode lebih mudah dipelihara dan diuji.
 
-\subsection{Sentence-Transformers}\label{sentence-transformers}
+\subsubsection{Sentence-Transformers}\label{sentence-transformers}
 
 Sentence-Transformers merupakan pustaka Python yang menyediakan antarmuka untuk menghasilkan embedding pada level kalimat dan dokumen menggunakan model transformer. Pustaka ini memungkinkan proses encoding teks dilakukan secara lokal tanpa memerlukan layanan API eksternal.
 
@@ -322,19 +322,19 @@ Pendekatan on-premises dipilih untuk menjaga keamanan data akademik mahasiswa da
 
 Menurut \cite{dennis2020systems} Unified Modeling Language (UML) adalah alat diagramatis yang digunakan untuk memodelkan sistem berbasis objek dalam software engineering. UML berfungsi sebagai bahasa standar yang menyediakan terminologi dan teknik diagram yang seragam untuk mendukung semua fase pengembangan sistem, mulai dari analisis kebutuhan hingga implementasi.
 
-\subsection{Usecase Diagram}\label{usecase-diagram}
+\subsubsection{Usecase Diagram}\label{usecase-diagram}
 
 Use-case merupakan salah satu elemen penting dalam Unified Modeling Language (UML) yang digunakan untuk memahami fungsi fungsi utama dari sistem secara umum. Use-case diagrams berperan penting dalam mengkomunikasikan secara sederhana kepada pengguna mengenai apa yang akan dilakukan oleh sistem, sehingga diagram ini umumnya dibuat pada tahap pengumpulan dan penentuan kebutuhan sistem. Dengan menyediakan representasi visual yang sederhana, Use-case diagram dapat mendorong pengguna untuk memberikan masukan tambahan terkait kebutuhan sistem pada tingkat yang lebih tinggi. Diagram ini menggambarkan fungsi utama dari sistem serta berbagai jenis pengguna yang akan berinteraksi dengan sistem tersebut \cite{dennis2020systems}.
 
-\subsection{Activity Diagram}\label{activity-diagram}
+\subsubsection{Activity Diagram}\label{activity-diagram}
 
 Activity diagram digunakan untuk merepresentasikan perilaku dalam proses bisnis yang tidak bergantung pada objek (independen). Activity diagram dapat digunakan untuk memodelkan segala sesuatu mulai dari alur kerja bisnis tingkat tinggi yang melibatkan banyak use case yang berbeda, hingga detail use case individual, hingga detail spesifik dari metode individual. Singkatnya, diagram aktivitas dapat digunakan untuk memodelkan semua jenis proses \cite{dennis2020systems}.
 
-\subsection{Class Diagram}\label{class-diagram}
+\subsubsection{Class Diagram}\label{class-diagram}
 
 Class diagram adalah salah satu jenis diagram pada UML yang merupakan model statis yang menunjukkan kelas-kelas dan hubungan antar kelas yang tetap konstan dalam sistem dari waktu ke waktu. Diagram ini menggambarkan kelas-kelas yang mencakup perilaku (behavior) dan keadaan (state), serta memperlihatkan hubungan di antara kelas-kelas tersebut. Diagram kelas digunakan untuk memodelkan struktur sistem secara konseptual dengan menekankan pada elemen-elemen yang saling terkait dalam suatu sistem perangkat lunak. Unsur-unsur dalam diagram kelas meliputi atribut, metode, dan relasi seperti asosiasi, pewarisan, serta agregasi \cite{dennis2020systems}.
 
-\subsection{Entity Relationship Diagram}\label{entity-relationship-diagram}
+\subsubsection{Entity Relationship Diagram}\label{entity-relationship-diagram}
 
 Entity Relationship Diagram (ERD) adalah representasi visual yang digunakan dalam analisis sistem untuk memodelkan informasi yang diciptakan, disimpan, dan digunakan oleh suatu sistem bisnis. Diagram ini membantu analis memahami berbagai komponen informasi serta hubungan antar komponen dalam sistem tersebut. Dalam ERD, data yang serupa dikelompokkan menjadi entities, yang direpresentasikan dengan kotak-kotak. Hubungan antar entities ditunjukkan dengan garis, dan simbol-simbol digunakan untuk menggambarkan aturan bisnis tingkat tinggi. Setiap entity memiliki atribut yang menjelaskan informasi spesifik terkait dengannya, dan hubungan antar entities digambarkan untuk menunjukkan bagaimana mereka saling berinteraksi atau saling tergantung satu sama lain. ERD sangat penting dalam mengorganisir data sistem tanpa menunjukkan urutan atau alur spesifik antara entities.
 

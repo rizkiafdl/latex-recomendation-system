@@ -11,12 +11,13 @@
 \justifying
 \noindent Dengan ini saya, \\
 
-    \renewcommand{\arraystretch}{1} % Increases row height by 50%
-    \begin{tabular}{ll}
-    \indent Nama & :\hspace*{0.2 cm}\penulis \\
-    \indent NIM & :\hspace*{0.2 cm}\nim \\
-    \indent Judul Skripsi & :\hspace*{0.2 cm} \Judul \\
-    \end{tabular}
+\renewcommand{\arraystretch}{1} % Catatan: Ubah ke 1.5 jika ingin tinggi baris bertambah 50%. Kalau angka 1 itu kembali ke ukuran normal.
+\noindent % Menghilangkan indentasi otomatis pada tabel agar sejajar dengan teks di atasnya
+\begin{tabular}{l c p{0.65\textwidth}}
+Nama          & : & \penulis \\
+NIM           & : & \nim \\
+Judul Skripsi & : & \Judul \\
+\end{tabular}
 
 \vspace*{1 cm}
 Memberikan kepada Universitas Bina Nusantara hak non-eksklusif untuk menyimpan, memperbanyak, dan menyebarluaskan Skripsi karya saya, secara keseluruhan atau hanya sebagian atau hanya ringkasannya saja, dalam bentuk format tercetak dan atau elektronik.
@@ -45,7 +46,7 @@ Jakarta, \tanggalPengesahan,\\
     \noindent Hormat Saya,
     \vspace{2cm} \newline % Beri jarak dan baris baru
     \underline{\textbf{\penulis}} \\[-6pt]
-    NIM.00000
+    \nim
     
     & % Pindah ke kolom kanan
     
