@@ -178,13 +178,13 @@ Perancangan model rekomendasi pada penelitian ini bertujuan untuk menentukan mek
 
 Model rekomendasi dirancang menggunakan pendekatan semantic similarity, yaitu metode untuk mengukur tingkat kemiripan makna antara dua teks. Dalam penelitian ini, semantic similarity digunakan untuk membandingkan informasi tekstual mahasiswa dengan dokumen faculty supervisor sehingga sistem dapat menghasilkan rekomendasi dosen dengan tingkat kesesuaian tertinggi.
 
-Informasi tekstual mahasiswa meliputi deskripsi posisi kerja, peran, nama perusahaan, serta kategori perusahaan. Sementara itu, informasi faculty supervisor direpresentasikan dalam beberapa dokumen teks yang menggambarkan karakteristik dan keahlian dosen berdasarkan data historis bimbingan serta informasi topik yang tersedia. Dokumen-dokumen tersebut dikelompokkan berdasarkan jenis sumber, sedangkan rincian sumber dan format penyusunan dokumen dijelaskan pada Subbab 3.2.3.2.
+Informasi tekstual mahasiswa terdiri dari tiga \textit{field}: \textit{track} (program studi), \textit{position\_topic} (posisi dan topik magang), serta \textit{work\_schema} (skema kerja). Ketiga \textit{field} tersebut digabungkan menjadi satu teks untuk direpresentasikan sebagai \textit{embedding} mahasiswa. Sementara itu, profil \textit{faculty supervisor} direpresentasikan dalam satu dokumen teks yang dibentuk dari kata kunci kompetensi yang tersimpan di basis data; apabila fitur \textit{extra docs} diaktifkan, dokumen diperkaya secara adaptif dengan data historis bimbingan mahasiswa dan informasi topik skripsi. Rincian sumber data yang berkontribusi pada profil \textit{faculty supervisor} dijelaskan pada Subbab 3.2.3.2.
 
 Hasil akhir dari proses rekomendasi adalah pasangan mahasiswa dan faculty supervisor yang dipilih berdasarkan peringkat kemiripan tertinggi dengan mempertimbangkan ketersediaan slot bimbingan dosen.
 
 \subsubsection{Pembentukan Representasi Data Faculty Supervisor}\label{pembentukan-representasi-data-faculty-supervisor}
 
-Setiap faculty supervisor direpresentasikan dalam bentuk satu atau lebih dokumen teks yang bersifat unik. Dokumen teks tersebut dibentuk dengan menggabungkan field-field tekstual dari masing-masing sumber data. Pada penelitian ini terdapat dua sumber utama, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
+Setiap faculty supervisor direpresentasikan dalam bentuk \textbf{satu} dokumen profil teks yang dibentuk secara dinamis pada saat pipeline dijalankan. Dokumen profil tersebut bersumber dari kata kunci kompetensi (\texttt{profile\_keywords}) yang dikelola EPC di basis data. Apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan dua sumber data tambahan, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
 
 Profil setiap faculty supervisor disimpan dalam tabel \texttt{supervisors} yang memuat atribut kata kunci kompetensi (\texttt{profile\_keywords}). Pada saat pipeline rekomendasi dijalankan, modul \texttt{rules.py} membangun dokumen teks secara dinamis dari data tersebut; apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan data historis bimbingan mahasiswa yang diambil dari basis data. Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model \textit{text embedding} pada saat inferensi, menghasilkan matriks embedding berukuran $N \times M$ (mahasiswa $\times$ \textit{faculty supervisor}) yang digunakan sebagai dasar perhitungan kemiripan dan perangkingan rekomendasi.
 
@@ -217,7 +217,7 @@ Dalam implementasinya, apabila seorang faculty supervisor tidak memiliki data pa
 
 \subsubsection{Pemrosesan Data Mahasiswa}\label{pemrosesan-data-mahasiswa}
 
-Data mahasiswa yang dimasukkan oleh EPC melalui sistem mencakup informasi posisi kerja, peran, dan nama perusahaan. Seluruh informasi tersebut digabungkan menjadi satu teks input dengan pemisah berupa whitespace untuk merepresentasikan karakteristik mahasiswa secara menyeluruh. Urutan penggabungan field ditetapkan secara konsisten, yaitu posisi kerja, peran, kemudian perusahaan. Apabila terdapat field yang tidak tersedia, field tersebut tidak disertakan tanpa mengubah urutan penggabungan.
+Data mahasiswa yang dimasukkan oleh EPC melalui sistem memiliki tiga \textit{field} yang digunakan sebagai teks: \textit{track} (program studi), \textit{position\_topic} (posisi dan topik magang), serta \textit{work\_schema} (skema kerja). Ketiga \textit{field} tersebut digabungkan secara berurutan menjadi satu teks \textit{input} dengan pemisah berupa \textit{whitespace}. Apabila terdapat \textit{field} yang tidak tersedia, \textit{field} tersebut tidak disertakan tanpa mengubah urutan penggabungan. Atribut \textit{partner\_lecturer} (nama perusahaan) tidak diikutsertakan dalam dokumen teks mahasiswa, melainkan digunakan secara terpisah sebagai kunci pengelompokan untuk \textit{company group bonus}.
 
 Teks input mahasiswa selanjutnya diproses menggunakan model text embedding yang sama dengan yang digunakan pada data faculty supervisor, sehingga dihasilkan vektor embedding mahasiswa yang berada pada ruang representasi yang sama. Kondisi ini memungkinkan sistem melakukan perhitungan kemiripan secara langsung antara vektor embedding mahasiswa dan vektor embedding dokumen faculty supervisor. Selain itu, atribut status eligible digunakan sebagai filter kelayakan mahasiswa sebelum proses rekomendasi dan alokasi dosen dilakukan.
 
@@ -236,9 +236,10 @@ Teks input mahasiswa selanjutnya diproses menggunakan model text embedding yang 
 \endlastfoot
 
 Mahasiswa & Identitas mahasiswa & Tidak & Digunakan sebagai identifikasi data. \\ \hline
-Mahasiswa & Posisi mahasiswa & Ya & Posisi atau peran magang yang diminati. \\ \hline
-Mahasiswa & Perusahaan & Ya & Nama perusahaan tujuan atau pengalaman. \\ \hline
-Mahasiswa & Kategori perusahaan & Ya & Klasifikasi bidang industri perusahaan. \\ \hline
+Mahasiswa & Program studi (\textit{track}) & Ya & Program studi mahasiswa; merepresentasikan latar belakang akademik. \\ \hline
+Mahasiswa & Posisi dan topik magang (\textit{position\_topic}) & Ya & Deskripsi posisi magang dan topik pekerjaan mahasiswa. \\ \hline
+Mahasiswa & Skema kerja (\textit{work\_schema}) & Ya & Jenis pengaturan kerja (misalnya: \textit{hybrid}, \textit{WFH}, \textit{onsite}). \\ \hline
+Mahasiswa & Nama perusahaan (\textit{partner\_lecturer}) & Tidak & Digunakan sebagai kunci pengelompokan untuk \textit{company group bonus}, bukan sebagai teks \textit{embedding}. \\ \hline
 Mahasiswa & Status eligible & Tidak & Digunakan sebagai filter kelayakan mahasiswa. \\ \hline
 
 \end{longtable}
@@ -265,7 +266,7 @@ Pipeline sistem terdiri dari delapan tahap berurutan, dimulai dari impor data Ex
 
 \subsection{Kandidat Model Text Embedding}\label{kandidat-model-text-embedding}
 
-Pada penelitian ini, vektor embedding dibentuk menggunakan model text embedding open-source tanpa proses pelatihan ulang fine-tuning. Pemilihan kandidat model mempertimbangkan kebutuhan sistem yang menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, serta karakteristik data yang berpotensi memuat istilah campuran Bahasa Indonesia--Inggris. Seluruh kandidat model akan digunakan dengan mekanisme yang konsisten: teks mahasiswa dan dokumen faculty supervisor diubah menjadi embedding menggunakan model yang sama, kemudian dihitung kemiripannya menggunakan cosine similarity. Embedding yang dihasilkan digunakan apa adanya sesuai keluaran model tanpa normalisasi manual tambahan pada tahap pra-pemrosesan, dan sistem menghasilkan rekomendasi top-5 dosen sebelum tahap alokasi slot bimbingan.
+Pada penelitian ini, vektor embedding dibentuk menggunakan model text embedding open-source tanpa proses pelatihan ulang fine-tuning. Pemilihan kandidat model mempertimbangkan kebutuhan sistem yang menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, serta karakteristik data yang berpotensi memuat istilah campuran Bahasa Indonesia--Inggris. Seluruh kandidat model akan digunakan dengan mekanisme yang konsisten: teks mahasiswa dan dokumen faculty supervisor diubah menjadi embedding menggunakan model yang sama, kemudian dihitung kemiripannya menggunakan cosine similarity. Embedding yang dihasilkan dinormalisasi L2 oleh modul \texttt{embedding.py} sehingga \textit{cosine similarity} dapat dihitung melalui perkalian titik (\textit{dot product}) antar vektor yang telah ternormalisasi. Sistem menghasilkan rekomendasi \textit{top-5} dosen berdasarkan skor kemiripan sebelum tahap alokasi slot bimbingan.
 
 \subsection{Qwen3-Embedding-0.6B}\label{qwen3-embedding-0.6b-1}
 
@@ -293,11 +294,11 @@ Sebagai transisi ke Subbab 3.2.3.7, penentuan model terbaik dilakukan melalui st
 
 \subsection{Mekanisme Perhitungan dan Perangkingan Rekomendasi}\label{mekanisme-perhitungan-dan-perangkingan-rekomendasi}
 
-Setelah vektor embedding mahasiswa dan dokumen faculty supervisor tersedia, sistem melakukan perhitungan tingkat kemiripan antara embedding mahasiswa dan seluruh embedding dokumen faculty supervisor yang tersimpan dalam knowledge base. Perhitungan kemiripan dilakukan menggunakan cosine similarity, yang mengukur kedekatan arah antara dua vektor pada ruang embedding.
+Setelah vektor \textit{embedding} mahasiswa dan profil \textit{faculty supervisor} dihitung pada saat inferensi, sistem melakukan perhitungan tingkat kemiripan antara \textit{embedding} mahasiswa dan \textit{embedding} profil setiap \textit{faculty supervisor}. Perhitungan kemiripan dilakukan menggunakan \textit{cosine similarity} melalui perkalian titik antar vektor yang telah dinormalisasi L2, menghasilkan matriks kemiripan berukuran $N \times M$ (mahasiswa $\times$ \textit{faculty supervisor}).
 
-Karena setiap faculty supervisor direpresentasikan oleh beberapa dokumen teks yang berasal dari jenis sumber yang berbeda, perhitungan kemiripan dilakukan pada tingkat dokumen. Selanjutnya, nilai kemiripan pada tingkat dokumen diagregasi menjadi skor pada tingkat faculty supervisor. Agregasi dilakukan dengan mengambil nilai kemiripan maksimum dari seluruh dokumen yang dimiliki oleh faculty supervisor tersebut. Pendekatan ini dipilih karena setiap dokumen merepresentasikan aspek kompetensi yang berbeda, sehingga kecocokan tinggi pada salah satu aspek dianggap cukup untuk menunjukkan relevansi awal antara mahasiswa dan faculty supervisor.
+Karena setiap \textit{faculty supervisor} direpresentasikan oleh satu dokumen profil, setiap entri dalam matriks kemiripan merupakan skor langsung antara satu mahasiswa dan satu \textit{faculty supervisor} tanpa tahap agregasi tambahan. Skor ini selanjutnya digunakan untuk melakukan pengurutan \textit{faculty supervisor} dari tingkat kesesuaian tertinggi hingga terendah untuk setiap mahasiswa.
 
-Berdasarkan skor akhir tersebut, sistem melakukan pengurutan faculty supervisor dari tingkat kesesuaian tertinggi hingga terendah untuk setiap mahasiswa. Hasil dari proses ini berupa daftar rekomendasi top-5 faculty supervisor yang selanjutnya digunakan sebagai input pada tahap validasi dan alokasi slot bimbingan yang dijelaskan pada Subbab 3.2.3.6.
+Hasil dari proses perangkingan ini berupa daftar rekomendasi \textit{top-5} \textit{faculty supervisor} yang selanjutnya digunakan sebagai \textit{input} pada tahap validasi dan alokasi slot bimbingan yang dijelaskan pada Subbab 3.2.3.6.
 
 Struktur tabel \texttt{supervisors} yang menjadi sumber data utama dalam pipeline rekomendasi ditunjukkan pada Tabel berikut. Dokumen teks dan matriks embedding tidak disimpan secara persisten, melainkan dibangun dan dihitung ulang pada setiap eksekusi pipeline.
 
