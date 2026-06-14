@@ -359,13 +359,21 @@ Halaman Run History menyajikan riwayat seluruh proses eksekusi run yang telah di
     \label{fig:rundetail}
 \end{figure}
 
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{pic/rundetail_below.png}
+    \end{center}
+    \caption{Tampilan Halaman Run Detail metrics}
+    \label{fig:rundetail_below}
+\end{figure}
+
 Halaman Run Detail menyajikan analisis menyeluruh dari satu eksekusi \textit{run}. Informasi yang ditampilkan meliputi metrik evaluasi utama (MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, \textit{Objective Score}), konfigurasi \textit{pipeline} yang digunakan (model \textit{embedding}, status \texttt{group\_bonus} dan \texttt{extra\_docs}), ringkasan kapasitas per dosen pembimbing dengan indikator warna (hijau bila sesuai kapasitas, merah bila tidak), serta \textit{mismatch spotlight} yang menampilkan 10 mahasiswa dengan perbedaan supervisor terbesar dibandingkan histori penugasan.
 
 \subsubsection{Run Recommendations}
 
 \begin{figure}
     \begin{center}
-        \includegraphics[width=0.7\linewidth]{pic/rundetails.png}
+        \includegraphics[width=0.7\linewidth]{pic/runrecomendationresult.png}
     \end{center}
     \caption{Tampilan Halaman Run Recommendations}
     \label{fig:runrecommendations}
@@ -399,43 +407,44 @@ Fitur logout memungkinkan pengguna untuk mengakhiri sesi aktif secara aman. Keti
 
 \section{Evaluasi}
 
-Pengujian Black Box dilakukan untuk memvalidasi fungsionalitas sistem dari sudut pandang pengguna tanpa melihat struktur kode internal. Fokus pengujian ini adalah memastikan bahwa setiap input memberikan output yang sesuai dengan spesifikasi kebutuhan sistem. Metode yang digunakan adalah Equivalence Partitioning, di mana data uji dibagi ke dalam beberapa kategori untuk menguji perilaku sistem terhadap input yang valid dan tidak valid. 
+Pengujian Black Box dilakukan untuk memvalidasi fungsionalitas sistem dari sudut pandang pengguna tanpa melihat struktur kode internal. Fokus pengujian ini adalah memastikan bahwa setiap input memberikan output yang sesuai dengan spesifikasi kebutuhan sistem. Metode yang digunakan adalah Equivalence Partitioning, di mana data uji dibagi ke dalam beberapa kategori untuk menguji perilaku sistem terhadap input yang valid dan tidak valid.
 
 \subsection{Login Page}
 
-Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika mengisi kredensial dengan benar. 
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika mengisi kredensial dengan benar.
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
-    \hline
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
     1 & Login dengan kredensial valid  & Username dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\
     \hline
     2 & Login dengan kata sandi salah   & Username benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\
     \hline
-    3 & Login dengan username salah   & Username salah, kata sandi benar  & Sistem menampilkan message “Kredential Salah”  & Pass  \\ 
+    3 & Login dengan username salah   & Username salah, kata sandi benar  & Sistem menampilkan message “Kredential Salah”  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Login Page}
-	\label{table:tab4.3.1}
-\end{table}
+\caption{Skenario Login Page}\label{table:tab4.3.1}
+\end{longtable}
 
 \subsection{Register Page}
 
 Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama lengkap, password, dan konfirmasi password sebagai data pendaftaran.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
-    \hline
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
     1 & Mendaftarkan akun dengan data valid   & Username, nama lengkap, password, dan konfirmasi password benar & Sistem menyimpan akun dan mengarahkan pengguna ke dashboard & Pass  \\
     \hline
-   2 & Mendaftarkan akun dengan password tidak cocok    & Password dan konfirmasi password berbeda  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\
+    2 & Mendaftarkan akun dengan password tidak cocok    & Password dan konfirmasi password berbeda  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\
     \hline
     3 & Mendaftarkan akun dengan username yang sudah terdaftar    & Username yang sudah digunakan akun lain  & Sistem menampilkan message “Data tidak sesuai”  & Pass  \\
     \hline
@@ -443,22 +452,21 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama 
     \hline
     5 & Mendaftarkan akun dengan password terlalu pendek  & Password kurang dari 6 karakter  & Sistem menampilkan pesan error dan menolak pendaftaran  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Register Page}
-	\label{table:tab4.4}
-\end{table}
+\caption{Skenario Register Page}\label{table:tab4.4}
+\end{longtable}
 
 \subsection{Dashboard}
 
 Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman Dashboard. Pengujian mencakup validasi tampilan data statistik, grafik tren, detail eksekusi terbaru, dan kontrol navigasi.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
-    \hline
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
     1 & Klik Menu “Dashboard”   & - & Sistem mengarahkan pengguna ke halaman Dashboard  & Pass  \\
     \hline
     2 & Klik menu “Run History”  & -  & Sistem mengarahkan pengguna ke halaman Run History  & Pass  \\
@@ -479,29 +487,28 @@ Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman
     \hline
     10 & Sistem menampikan Informasi Snapshot      & -  & Sistem menampilkan data dari run paling baru     & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Dashboard}
-	\label{table:tab4.5}
-\end{table}
+\caption{Skenario Dashboard}\label{table:tab4.5}
+\end{longtable}
 
 \subsection{Data Center}
 
-Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import data serta interaksi pipeline trigger. Halaman ini krusial karena bertindak sebagai penyedia data utama sebelum sistem menjalankan algoritma rekomendasi. 
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import data serta interaksi pipeline trigger. Halaman ini krusial karena bertindak sebagai penyedia data utama sebelum sistem menjalankan algoritma rekomendasi.
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
+    1 & Upload Data Kosong   & - & Sistem menolak proses import dan menampikan error message  & Pass  \\
     \hline
-    1 & Upload Data Kosong   & - & Sistem menolak proses import dan menampikan error message  & Pass  \\ 
+    2 & Upload Data dengan Format Salah  & -  & Sistem menolak proses import dan menampilkan  error message   & Pass  \\
     \hline
-   2 & Upload Data dengan Format Salah  & -  & Sistem menolak proses import dan menampilkan  error message   & Pass  \\ 
+    3 & Upload Valid     & -  & File berhasil disimpan, dan sistem akan menampilkan data pada sumarry cards.    & Pass  \\
     \hline
-    3 & Upload Valid     & -  & File berhasil disimpan, dan sistem akan menampilkan data pada sumarry cards.    & Pass  \\ 
-    \hline
-     4 & Data pada Summary Cards sesuai      & -  & Data yang ditampilkan sesuai dengan data upload     & Pass  \\ 
+    4 & Data pada Summary Cards sesuai      & -  & Data yang ditampilkan sesuai dengan data upload     & Pass  \\
     \hline
     5 & Klik tombol “Generate New Run”      & -  & Sistem akan mengarahkan pengguna ke tampilan untuk melakukan run baru    & Pass  \\
     \hline
@@ -509,22 +516,21 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import 
     \hline
     7 & Import data dari file default server  & -  & Sistem membaca file dari path \texttt{DEFAULT\_EXCEL\_PATH}, memproses upsert per baris, dan menampilkan ringkasan hasil import  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Data Center}
-	\label{table:tab4.6}
-\end{table}
+\caption{Skenario Data Center}\label{table:tab4.6}
+\end{longtable}
 
 \subsection{Generate New Run}
 
-Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna ingin melakukan run baru dengan memilih model dan rules boost yang akan diterapkan pada run tersebut. 
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna ingin melakukan run baru dengan memilih model dan rules boost yang akan diterapkan pada run tersebut.
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
-    \hline
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
     1 & Memilih Model   & - & Model yang dipilih akan terlihat dengan ditandai berwarna oren  & Pass  \\
     \hline
     2 & Mengaktifkan Extra Docs  & -  & Toggle extra docs aktif; dokumen tambahan supervisor disertakan dalam representasi vektor pada pipeline   & Pass  \\
@@ -541,57 +547,56 @@ Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna 
     \hline
     8 & Eksekusi run saat tidak ada data mahasiswa di database  & Database mahasiswa kosong  & Sistem menampilkan pesan error dan membatalkan proses rekomendasi  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Generate New Run}
-	\label{table:tab4.7}
-\end{table}
+\caption{Skenario Generate New Run}\label{table:tab4.7}
+\end{longtable}
 
 \subsection{Run History}
 
-Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwayat  run algoritma secara kronologis dan akurat. Fokus utama meliputi kebenaran metadata yang ditampilkan serta fungsionalitas button. 
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwayat  run algoritma secara kronologis dan akurat. Fokus utama meliputi kebenaran metadata yang ditampilkan serta fungsionalitas button.
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
+    1 & Sistem menampikan tabel riwayat run yang sudah dijalankan  & - & Sistem menampilkan kolom Run ID, Created, Students, Supervisor, Model, Solver, Objective, Match Rate, dan Hybrid MRR   & Pass  \\
     \hline
-    1 & Sistem menampikan tabel riwayat run yang sudah dijalankan  & - & Sistem menampilkan kolom Run ID, Created, Students, Supervisor, Model, Solver, Objective, Match Rate, dan Hybrid MRR   & Pass  \\ 
+    2 & Tabel Riwayat di Tampilkan Berdasarkan Urutan Terakhir Dijalankan  & -  & Data ditampilkan secara urut (Descending)    & Pass  \\
     \hline
-   2 & Tabel Riwayat di Tampilkan Berdasarkan Urutan Terakhir Dijalankan  & -  & Data ditampilkan secara urut (Descending)    & Pass  \\ 
+    3 & Klik tombol “Details Row” pada salah satu ID Run      & -  & Sistem berpindah ke halaman detail page dari run yang dipilih     & Pass  \\
     \hline
-    3 & Klik tombol “Details Row” pada salah satu ID Run      & -  & Sistem berpindah ke halaman detail page dari run yang dipilih     & Pass  \\ 
-    \hline
-     4 & Klik tombol “Export Data’ pada salah satu ID Run      & -  & Sistem melakukan export data sesuai ID Run yang dipilih    & Pass  \\ 
+    4 & Klik tombol “Export Data’ pada salah satu ID Run      & -  & Sistem melakukan export data sesuai ID Run yang dipilih    & Pass  \\
     \hline
     5 & Klik tombol “Generate New Run” pada page Run History  & -  & Sistem mengarahkan pengguna ke halaman pembuatan run baru  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Run History}
-	\label{table:tab4.8}
-\end{table}
+\caption{Skenario Run History}\label{table:tab4.8}
+\end{longtable}
 
+\pagebreak
 \subsection{Supervisor Studio}
 
 Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan data dosen pembimbing beserta kata kunci semantik.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
+    1 & Membuka menu dropdown dan mencari berdasarkan nama atau kode dosen   & - & Sistem menyaring data secara dinamis berdasarkan data dosen yang dicari    & Pass  \\
     \hline
-    1 & Membuka menu dropdown dan mencari berdasarkan nama atau kode dosen   & - & Sistem menyaring data secara dinamis berdasarkan data dosen yang dicari    & Pass  \\ 
+    2 & Memilih salah satu nama dosen kemudian menekan tombol “Load Supervisor”   & -  & Sistem menampilkan profil dosen dan keyword yang sesuai dengan dosen tersebut     & Pass  \\
     \hline
-   2 & Memilih salah satu nama dosen kemudian menekan tombol “Load Supervisor”   & -  & Sistem menampilkan profil dosen dan keyword yang sesuai dengan dosen tersebut     & Pass  \\ 
+    3 & Menekan tombol “Export Config”       & -  & Sistem akan mengunduh berkas excel berisikan data dosen dan profilnya.      & Pass  \\
     \hline
-    3 & Menekan tombol “Export Config”       & -  & Sistem akan mengunduh berkas excel berisikan data dosen dan profilnya.      & Pass  \\ 
+    4 & Mengetikkan keyword baru pada kolom “Add Keyword”    & -  & Keyword di daftarkan di dalam daftar keyword     & Pass  \\
     \hline
-     4 & Mengetikkan keyword baru pada kolom “Add Keyword”    & -  & Keyword di daftarkan di dalam daftar keyword     & Pass  \\ 
-    \hline
-     5 & Menekan tombol (X) pada salah satu komponen chip       & -  & Chip keyword akan dihapuskan       & Pass  \\ 
+    5 & Menekan tombol (X) pada salah satu komponen chip       & -  & Chip keyword akan dihapuskan       & Pass  \\
     \hline
     6 & Menekan tombol “Save Keywords” setelah melakukan perubahan chip       & -  & Sistem memperbarui daftar keyword semantik pada dosen di database        & Pass  \\
     \hline
@@ -601,22 +606,21 @@ Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan
     \hline
     9 & Mengetikkan keyword yang sudah ada pada kolom “Add Keyword” (\textit{case-insensitive})  & Keyword duplikat  & Sistem mengabaikan token duplikat tanpa menambahkan chip baru  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Supervisor Studio}
-	\label{table:tab4.9}
-\end{table}
+\caption{Skenario Supervisor Studio}\label{table:tab4.9}
+\end{longtable}
 
 \subsection{Run Detail}
 
 Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendasi per run, mencakup metrik evaluasi, distribusi kapasitas per dosen, \textit{mismatch spotlight}, dan tabel rekomendasi dengan fitur filter server-side.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
-    \hline
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
     1 & Membuka halaman Run Detail dengan ID yang valid   & ID run yang ada di database & Sistem menampilkan metrik evaluasi, kapasitas per supervisor, dan \textit{mismatch spotlight}  & Pass  \\
     \hline
     2 & Membuka halaman Run Detail dengan ID yang tidak valid   & ID run yang tidak ada  & Sistem mengembalikan halaman 404  & Pass  \\
@@ -631,28 +635,24 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendas
     \hline
     7 & Klik tombol Export Detailed  & -  & File \texttt{rekomendasi\_dosen\_run\_\{id\}\_detailed.xlsx} (4 sheet) berhasil terunduh  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Run Detail}
-	\label{table:tab4.10}
-\end{table}
+\caption{Skenario Run Detail}\label{table:tab4.10}
+\end{longtable}
 
 \subsection{Logout}
 
 Pada halaman ini pengujian bertujuan untuk memastikan sesi pengguna dihapus dengan benar saat melakukan logout, sehingga akses ke halaman yang dilindungi tidak dapat dilakukan tanpa login ulang.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-    \hline
+\begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
-    \hline
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\endlastfoot
     1 & Menekan tombol Logout  & -  & Sistem menghapus sesi aktif dan mengarahkan pengguna ke halaman Login  & Pass  \\
     \hline
     2 & Mengakses halaman yang dilindungi setelah logout  & URL halaman Dashboard, Data Center, Run History, atau Supervisor Studio  & Sistem mendeteksi tidak ada sesi aktif dan mengarahkan pengguna ke halaman Login  & Pass  \\
     \hline
-\end{tabular}
-\renewcommand{\arraystretch}{1}
-	\caption{Skenario Logout}
-	\label{table:tab4.11}
-\end{table}
+\caption{Skenario Logout}\label{table:tab4.11}
+\end{longtable}

@@ -597,3 +597,89 @@ Arrow points **from** the base use case **to** the included/extended one (UML co
 - Keep all use case ellipses inside the boundary
 - Use elbow routing (`-- ++(dx,0) |-`) for association lines that would otherwise cross
 - Do **not** use `\begin{center}` inside `\begin{figure}` — use `\centering` (Rule 2)
+
+---
+
+## 22. Inline signature blocks (orisinalitas, pengesahan, orisinal, pernyataan)
+
+All signature pages use the same tabular pattern: signature image → underlined name → NIM/NIK. Never use `minipage` per author — always one shared `tabular`.
+
+### Standard values (must be consistent across all pages)
+
+| Element | 3-col (penulis) | 2-col (pembimbing / pernyataan) |
+|---|---|---|
+| Column spec | `>{\centering\arraybackslash}p{4cm}` × 3 | `>{\centering\arraybackslash}p{6cm}` × 2 |
+| Image height | `height=1.8cm` | `height=1.8cm` |
+| Image max width | `width=3.5cm` | `width=5.5cm` |
+| Always add | `keepaspectratio` | `keepaspectratio` |
+| Space after image row | `\\[4pt]` | `\\[4pt]` |
+| Space after name row | `\\[4pt]` | `\\[4pt]` |
+| Name underline box | `\makebox[3.8cm][c]{...}` | `\makebox[5.5cm][c]{...}` |
+| NIM / NIK font | `\fontsize{12}{14}\selectfont\bf{...}` | `\fontsize{12}{14}\selectfont\bf{...}` |
+
+**Never** use `\fontsize{12}{0}` — zero leading causes the NIM to overlap the underline.
+
+### 3-column layout (penulisSatu / penulisDua / penulisTiga)
+
+Used in: `orisinalitas.tex`, `pengesahan.tex`
+
+```latex
+\begin{center}
+\begin{tabular}{>{\centering\arraybackslash}p{4cm}>{\centering\arraybackslash}p{4cm}>{\centering\arraybackslash}p{4cm}}
+    \includegraphics[height=1.8cm, width=3.5cm, keepaspectratio]{pic/rizkiafdl_signature.png} &
+    \includegraphics[height=1.8cm, width=3.5cm, keepaspectratio]{pic/rakha_picture.png} &
+    \includegraphics[height=1.8cm, width=3.5cm, keepaspectratio]{pic/ttdtheo.png} \\[4pt]
+    \underline{\makebox[3.8cm][c]{\penulisSatu}} & \underline{\makebox[3.8cm][c]{\penulisDua}} & \underline{\makebox[3.8cm][c]{\penulisTiga}} \\[4pt]
+    \fontsize{12}{14}\selectfont\bf{\NIMpenulisSatu} & \fontsize{12}{14}\selectfont\bf{\NIMpenulisDua} & \fontsize{12}{14}\selectfont\bf{\NIMpenulisTiga} \\
+\end{tabular}
+\end{center}
+```
+
+`p{4cm}` × 3 = 12 cm — fits within the 14 cm text width (`left=4cm, right=3cm` on A4).
+`\makebox[3.8cm]` — slightly narrower than the column to absorb `\tabcolsep` padding and prevent Overfull.
+
+### 2-column layout (pembimbing — pengesahan.tex)
+
+```latex
+\begin{center}
+\begin{tabular}{>{\centering\arraybackslash}p{6cm}>{\centering\arraybackslash}p{6cm}}
+    \includegraphics[height=1.8cm, width=5.5cm, keepaspectratio]{pic/pak_budi_signature.png} & \\[4pt]
+    \underline{\makebox[5.5cm][c]{\pembimbingSatu}} & \underline{\makebox[5.5cm][c]{\pembimbingDua}} \\[4pt]
+    \fontsize{12}{14}\selectfont\bf{\nikSatu} & \fontsize{12}{14}\selectfont\bf{Head of Computer Science Study Program} \\
+\end{tabular}
+\end{center}
+```
+
+Leave the image cell empty (`& \\[4pt]`) for any person without a provided image.
+
+### 2-column layout (penulis + pembimbing — pernyataan.tex)
+
+```latex
+\begin{center}
+\begin{tabular}{>{\centering\arraybackslash}p{6cm}>{\centering\arraybackslash}p{6cm}}
+    Hormat Saya, & Diketahui oleh, \\[4pt]
+    \includegraphics[height=1.8cm, width=5.5cm, keepaspectratio]{pic/rizkiafdl_signature.png} &
+    \includegraphics[height=1.8cm, width=5.5cm, keepaspectratio]{pic/pak_budi_signature.png} \\[4pt]
+    \underline{\makebox[5.5cm][c]{\penulis}} & \underline{\makebox[5.5cm][c]{\pembimbingSatu}} \\[4pt]
+    \fontsize{12}{14}\selectfont\bf{\nim} & \fontsize{12}{14}\selectfont\bf{\nikSatu} \\
+\end{tabular}
+\end{center}
+```
+
+### Image–name assignment
+
+| Macro | Person | Image file |
+|---|---|---|
+| `\penulisSatu` | Muhammad Rizki Afdolli | `pic/rizkiafdl_signature.png` |
+| `\penulisDua` | Rakha Naufal Azizi | `pic/rakha_picture.png` |
+| `\penulisTiga` | Theofilus Adhi Septian | `pic/ttdtheo.png` |
+| `\pembimbingSatu` | Pak Budi (supervisor) | `pic/pak_budi_signature.png` |
+
+### Common mistakes to avoid
+
+- **Do NOT** omit `width=Xcm, keepaspectratio` — without it, wide signatures overflow the column
+- **Do NOT** use `\fontsize{12}{0}` — zero leading overlaps the NIM into the underline
+- **Do NOT** use `\renewcommand{\arraystretch}{0.5}` — compresses row heights, squeezes images into names
+- **Do NOT** use negative row skip (`\\[-14pt]`) between name and NIM rows
+- **Do NOT** split authors across tabular + minipage — always one tabular for all authors on a page
+- **Do NOT** use `\begingroup`/`\endgroup` inside `\begin{center}` without closing before `\end{center}` (Rule 1)
