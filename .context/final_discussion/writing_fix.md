@@ -18,14 +18,14 @@ File to edit: `Awal_konfigurasi.tex` (unless noted)
 
 | # | Issue | Current | Target | Status |
 |---|---|---|---|---|
-| A1 | Right/Top/Bottom margin | 3 cm | 2.5 cm | ⏳ pending |
-| A2 | Line spacing | `\doublespacing` (2.0) | `\onehalfspacing` (1.5) | ⏳ pending |
-| A3 | Chapter number style | `\Roman{chapter}` (I, II…) | `\arabic{chapter}` (1, 2…) | ⏳ pending |
-| A4 | Figure label | `Figure` (English) | `Gambar` (Indonesian) | ⏳ pending |
-| A5 | Table label | `Table` (English) | `Tabel` (Indonesian) | ⏳ pending |
-| A6 | Caption font size | `footnotesize` | `normalsize` (12pt) | ⏳ pending |
-| A7 | Bibliography heading | `DAFTAR PUSTAKA` | `REFERENSI` | ⏳ pending |
-| A8 | Chapter heading style | fncychap `ConnyRevised` | plain centered bold | ⏳ pending |
+| A1 | Right/Top/Bottom margin | 3 cm | 2.5 cm | ✅ Fixed (2026-06-14) |
+| A2 | Line spacing | `\doublespacing` (2.0) | `\onehalfspacing` (1.5) | ✅ Fixed (2026-06-14) |
+| A3 | Chapter number style | `\Roman{chapter}` (I, II…) | `\arabic{chapter}` (1, 2…) | ✅ Fixed (2026-06-14) |
+| A4 | Figure label | `Figure` (English) | `Gambar` (Indonesian) | ✅ Fixed (2026-06-14) |
+| A5 | Table label | `Table` (English) | `Tabel` (Indonesian) | ✅ Fixed (2026-06-14) |
+| A6 | Caption font size | `footnotesize` | `normalsize` (12pt) | ✅ Fixed (2026-06-14) |
+| A7 | Bibliography heading | `DAFTAR PUSTAKA` | `REFERENSI` | ✅ Fixed (2026-06-14) |
+| A8 | Chapter heading style | fncychap `ConnyRevised` | plain centered bold | ✅ Fixed (2026-06-14) |
 
 ---
 
@@ -80,7 +80,7 @@ Acronym EPC bolded mid-paragraph in two places. Acronyms in body text should be 
 
 ---
 
-## Config Fix Status (Section A — not yet applied)
+## Config Fix Status (Section A — all applied 2026-06-14)
 
-All 8 config fixes (A1–A8) require edits to `Awal_konfigurasi.tex` and `Skripsi.tex`.  
-These affect the visual layout of the entire compiled PDF and should be applied together in one pass to avoid repeated compilation.
+All 8 config fixes applied to `ta.sty` (A1–A6, A8) and `Skripsi.tex` (A7).  
+For A8: fncychap commented out, replaced with `titlesec` plain centered bold chapter format.
