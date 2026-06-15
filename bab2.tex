@@ -162,7 +162,7 @@ Multilingual E5 merupakan model embedding yang dikembangkan oleh Microsoft Resea
 
 Menurut Wang et al. (\citeyear{wang2024e5}), model E5 yang dilengkapi instruction tuning menunjukkan peningkatan performa pada tugas retrieval dan semantic similarity dibandingkan model tanpa instruction. Dalam penelitian ini, Multilingual E5-Large-Instruct digunakan sebagai model default karena performa yang konsisten pada teks campuran Bahasa Indonesia dan Bahasa Inggris yang terdapat dalam data akademik.
 
-\subsection{\texorpdfstring{\textbf{Evaluasi Sistem Rekomendasi}}{Evaluasi Sistem Rekomendasi}}\label{evaluasi-sistem-rekomendasi}
+\subsection{Evaluasi Sistem Rekomendasi}\label{evaluasi-sistem-rekomendasi}
 
 Evaluasi sistem rekomendasi merupakan proses untuk menilai kualitas, relevansi, dan efektivitas rekomendasi yang dihasilkan oleh sistem. Evaluasi bertujuan untuk memastikan sistem memenuhi tujuan fungsional dan kebutuhan pengguna.
 
@@ -190,7 +190,7 @@ nDCG@K merupakan metrik evaluasi yang mengukur kualitas peringkat rekomendasi de
 
 \subsection{Recall@K}\label{recallk}
 
-Recall@K merupakan metrik evaluasi yang mengukur proporsi item relevan yang berhasil muncul dalam K rekomendasi teratas. Recall@K mengukur proporsi item relevan yang berhasil direkomendasikan oleh sistem dalam K rekomendasi teratas. Metrik ini menilai kemampuan sistem dalam menemukan item yang relevan, bukan urutannya
+Recall@K merupakan metrik evaluasi yang mengukur proporsi item relevan yang berhasil muncul dalam K rekomendasi teratas. Metrik ini menilai kemampuan sistem dalam menemukan item yang relevan, bukan urutannya
 
 Herlocker et al. (\citeyear{herlocker2004recall}) menyatakan bahwa Recall@K sangat sesuai untuk sistem rekomendasi berbasis peringkat karena merepresentasikan kemampuan sistem dalam menemukan item relevan pada daftar rekomendasi teratas.
 
@@ -210,7 +210,7 @@ Precision@K mengukur proporsi item relevan dalam K rekomendasi teratas.
 
 \subsection{Mean Reciprocal Rank (MRR)}\label{mean-reciprocal-rank-mrr}
 
-Mean Reciprocal Rank (MRR) merupakan metrik evaluasi yang mengukur posisi item relevan pertama dalam daftar rekomendasi. Mean Reciprocal Rank (MRR) mengukur seberapa cepat item relevan pertama muncul dalam daftar rekomendasi. MRR memberikan bobot lebih besar pada rekomendasi relevan yang muncul di peringkat awal.
+Mean Reciprocal Rank (MRR) merupakan metrik evaluasi yang mengukur posisi item relevan pertama dalam daftar rekomendasi. MRR mengukur seberapa cepat item relevan pertama muncul dalam daftar rekomendasi. MRR memberikan bobot lebih besar pada rekomendasi relevan yang muncul di peringkat awal.
 
 Menurut Voorhees (\citeyear{voorhees1999mrr}), MRR memberikan bobot lebih besar pada item relevan yang muncul di peringkat awal, sehingga cocok untuk sistem rekomendasi yang mengutamakan urutan hasil.
 
@@ -232,7 +232,7 @@ $RR_i$ adalah nilai reciprocal rank untuk data ke-i
 
 \subsection{Cosine Similarity Score}\label{cosine-similarity-score}
 
-Cosine similarity score merupakan ukuran kemiripan antara dua vektor berdasarkan sudut di antaranya. Cosine similarity mengukur kemiripan antara dua vektor embedding berdasarkan sudut di antara keduanya. Nilai cosine similarity berada pada rentang -1 hingga 1.
+Cosine similarity score merupakan ukuran kemiripan antara dua vektor berdasarkan sudut di antaranya. Nilai cosine similarity berada pada rentang -1 hingga 1.
 
 Menurut Manning et al. (\citeyear{manning2008ir}), cosine similarity banyak digunakan dalam model ruang vektor karena tidak dipengaruhi oleh panjang vektor. Dalam penelitian ini, cosine similarity score digunakan sebagai dasar perhitungan kesesuaian semantik antara embedding mahasiswa dan faculty supervisor.
 
@@ -302,7 +302,7 @@ Menurut Reimers dan Gurevych (\citeyear{reimers2019sbert}), Sentence-BERT (SBERT
 
 Dalam penelitian ini, sentence-transformers digunakan sebagai mekanisme utama untuk menghasilkan embedding teks mahasiswa dan faculty supervisor. Proses encoding dilakukan secara batch dengan normalisasi embedding, sehingga cosine similarity dapat dihitung melalui operasi dot product sederhana. Pustaka ini mendukung eksekusi pada GPU (CUDA) maupun CPU, dengan deteksi perangkat secara otomatis.
 
-\subsection{Post Forwarding}\label{post-forwarding}
+\subsection{Port Forwarding}\label{port-forwarding}
 
 Port forwarding merupakan teknik jaringan yang memungkinkan akses ke layanan internal melalui jaringan eksternal dengan meneruskan permintaan dari port tertentu ke layanan internal.
 
