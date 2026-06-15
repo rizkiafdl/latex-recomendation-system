@@ -187,7 +187,7 @@ Hasil akhir dari proses rekomendasi adalah pasangan mahasiswa dan faculty superv
 Setiap faculty supervisor direpresentasikan dalam bentuk satu dokumen profil teks yang dibentuk secara dinamis pada saat pipeline dijalankan. Dokumen profil tersebut bersumber dari kata kunci kompetensi (\texttt{profile\_keywords}) yang dikelola EPC di basis data. Apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan dua sumber data tambahan, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
 
 Profil setiap faculty supervisor disimpan dalam tabel \texttt{supervisors} yang memuat atribut kata kunci kompetensi (\texttt{profile\_keywords}). Pada saat pipeline rekomendasi dijalankan, modul \texttt{rules.py} membangun dokumen teks secara dinamis dari data tersebut; apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan data historis bimbingan mahasiswa yang diambil dari basis data. Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model \textit{text embedding} pada saat inferensi, menghasilkan matriks embedding berukuran $N \times M$ (mahasiswa $\times$ \textit{faculty supervisor}) yang digunakan sebagai dasar perhitungan kemiripan dan perangkingan rekomendasi.
-\newpage
+
 \begin{longtable}[c]{|p{2.5cm}|p{2.5cm}|p{3.5cm}|p{5.5cm}|}
 
 \hline
