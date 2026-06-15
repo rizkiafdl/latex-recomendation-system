@@ -187,7 +187,7 @@ Hasil akhir dari proses rekomendasi adalah pasangan mahasiswa dan faculty superv
 Setiap faculty supervisor direpresentasikan dalam bentuk satu dokumen profil teks yang dibentuk secara dinamis pada saat pipeline dijalankan. Dokumen profil tersebut bersumber dari kata kunci kompetensi (\texttt{profile\_keywords}) yang dikelola EPC di basis data. Apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan dua sumber data tambahan, yaitu data historis bimbingan faculty supervisor terhadap mahasiswa yang mencakup informasi posisi magang, perusahaan, dan deskripsi pekerjaan mahasiswa, serta data rekomendasi skripsi dari faculty supervisor yang mencakup topik skripsi, deskripsi skripsi, rumusan masalah, luaran yang diharapkan, dan jenis skripsi apabila tersedia.
 
 Profil setiap faculty supervisor disimpan dalam tabel \texttt{supervisors} yang memuat atribut kata kunci kompetensi (\texttt{profile\_keywords}). Pada saat pipeline rekomendasi dijalankan, modul \texttt{rules.py} membangun dokumen teks secara dinamis dari data tersebut; apabila fitur \textit{extra docs} diaktifkan, profil diperkaya secara adaptif dengan data historis bimbingan mahasiswa yang diambil dari basis data. Dokumen teks yang telah terbentuk kemudian ditransformasikan ke dalam representasi numerik menggunakan model \textit{text embedding} pada saat inferensi, menghasilkan matriks embedding berukuran $N \times M$ (mahasiswa $\times$ \textit{faculty supervisor}) yang digunakan sebagai dasar perhitungan kemiripan dan perangkingan rekomendasi.
-
+\newpage
 \begin{longtable}[c]{|p{2.5cm}|p{2.5cm}|p{3.5cm}|p{5.5cm}|}
 
 \hline
@@ -2161,19 +2161,138 @@ Hasil rekomendasi ditampilkan dalam bentuk peringkat (ranking), di mana faculty 
 
 Tahap akhir dalam implementasi adalah pengembangan dan deployment prototipe sistem. Prototipe sistem dikembangkan dalam bentuk aplikasi berbasis web yang terdiri dari antarmuka pengguna dan backend untuk memproses data dan menghasilkan rekomendasi.
 
-Prototipe ini memungkinkan pengguna untuk:
+Deployment sistem dilakukan pada infrastruktur Virtual Private Server (VPS) berbasis cloud dengan konfigurasi single-process untuk mendukung pengoperasian selama tahap penelitian. Arsitektur deployment dirancang untuk menjamin ketersediaan layanan, efisiensi penggunaan sumber daya, serta kemudahan pengelolaan.
+
+\subsubsection{Arsitektur Deployment}\label{arsitektur-deployment}
+
+Sistem rekomendasi di-deploy menggunakan tumpukan teknologi Flask, SQLite, dan sentence-transformers pada VPS Tencent Cloud dengan spesifikasi 2 vCPU, 8 GB RAM, dan 80 GB SSD. Komunikasi antara pengguna dan sistem dimediasi oleh nginx yang bertindak sebagai reverse proxy dengan dukungan SSL melalui Let's Encrypt, diteruskan ke server aplikasi gunicorn yang menjalankan Flask pada port 5001.
+
+Komponen arsitektur deployment adalah sebagai berikut:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Mengakses data mahasiswa dan faculty supervisor.
+  \textit{Nginx} berperan sebagai reverse proxy yang menerima permintaan dari internet melalui port 80 (HTTP) dan 443 (HTTPS), kemudian meneruskan ke server aplikasi internal.
 \item
-  Menjalankan proses rekomendasi secara otomatis.
+  \textit{Gunicorn} menjalankan Flask dengan satu worker process karena EmbeddingProvider merupakan singleton per-proses; penggunaan lebih dari satu worker akan mengakibatkan duplikasi model dalam memori dan berisiko kehabisan RAM.
 \item
-  Melihat hasil rekomendasi faculty supervisor berdasarkan tingkat kesesuaian.
+  \textit{Flask Application} menangani logika bisnis, pengelolaan data, dan pemanggilan model embedding untuk proses rekomendasi.
 \item
-  Menggunakan sistem sebagai alat bantu dalam proses pemetaan faculty supervisor.
+  \textit{SQLite} digunakan sebagai basis data utama karena skalanya sesuai dengan kebutuhan penelitian (sekitar 170 mahasiswa dan 14 faculty supervisor dengan pengguna konkuren yang terbatas).
+\item
+  \textit{Docker Volumes} digunakan untuk menyimpan basis data, file Excel data mahasiswa, dan cache model Hugging Face secara persisten di luar container sehingga data tidak hilang ketika container diperbarui.
 \end{enumerate}
 
-Deployment dilakukan untuk memastikan bahwa sistem dapat berjalan secara operasional dan siap digunakan sebagai pendukung proses pemetaan faculty supervisor Program Enrichment di Universitas XYZ
+\subsubsection{Spesifikasi Infrastruktur}\label{spesifikasi-infrastruktur-deployment}
+
+Spesifikasi VPS yang digunakan untuk deployment sistem rekomendasi dapat dilihat pada Tabel~\ref{table:vps_spec}. Pemilihan konfigurasi ini didasarkan pada estimasi kebutuhan memori untuk menjalankan dua model embedding secara bersamaan.
+
+\begin{table}[H]
+\centering
+\caption{Spesifikasi VPS Deployment}
+\label{table:vps_spec}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+\textbf{Komponen} & \textbf{Spesifikasi} \\ \hline
+Provider & Tencent Cloud \\ \hline
+CPU & 2 vCPU \\ \hline
+RAM & 8 GB \\ \hline
+Storage & 80 GB SSD \\ \hline
+Sistem Operasi & Ubuntu Server 22.04 LTS \\ \hline
+Swap & 4 GB (untuk menangani puncak penggunaan memori saat pemuatan model) \\ \hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Konfigurasi Lingkungan Produksi}\label{konfigurasi-lingkungan-produksi}
+
+Deployment sistem menggunakan Docker dan Docker Compose untuk memastikan konsistensi lingkungan antara pengembangan dan produksi. Konfigurasi utama terdiri dari tiga komponen:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Dockerfile} mendefinisikan image container berbasis \texttt{python:3.11-slim} dengan instalasi dependensi sistem dan Python, termasuk gunicorn sebagai WSGI server. Model embedding tidak diunduh pada saat build image, melainkan diunduh sekali saat runtime dan disimpan dalam Docker volume yang persisten.
+\item
+  \textbf{docker-compose.yml} mengonfigurasi service tunggal dengan parameter gunicorn \texttt{-{}-timeout 300} untuk mengakomodasi durasi proses rekomendasi yang membutuhkan waktu 2–4 menit pada perangkat CPU. Dua volume persisten dikonfigurasi: satu untuk basis data dan file Excel, serta satu untuk cache model Hugging Face.
+\item
+  \textbf{File konfigurasi lingkungan} (.env.prod) menyimpan variabel konfigurasi produksi termasuk kunci rahasia Flask, parameter model embedding, dan pengaturan kapasitas faculty supervisor. File ini tidak disertakan dalam repositori kode sumber untuk menjaga keamanan.
+\end{enumerate}
+
+\subsubsection{Anggaran Sumber Daya Memori}\label{anggaran-sumber-daya-memori}
+
+Estimasi penggunaan memori selama sistem berjalan dalam kondisi normal dengan dua model embedding termuat disajikan pada Tabel~\ref{table:ram_budget}. Konfigurasi dua model dipilih untuk mengurangi kebutuhan memori dibandingkan mengoperasikan tiga model secara bersamaan.
+
+\begin{longtable}[c]{|p{7cm}|p{5cm}|}
+
+\hline
+\textbf{Komponen} & \textbf{Estimasi RAM} \\ \hline
+\endfirsthead
+
+\hline
+\textbf{Komponen} & \textbf{Estimasi RAM} \\ \hline
+\endhead
+
+\hline
+\caption{Estimasi Penggunaan Memori pada VPS} \label{table:ram_budget} \\
+\endlastfoot
+
+OS dan proses sistem & $\sim$400 MB \\ \hline
+nginx & $\sim$50 MB \\ \hline
+Gunicorn master process & $\sim$100 MB \\ \hline
+Flask application (idle) & $\sim$200 MB \\ \hline
+Model BAAI/bge-m3 (termuat) & $\sim$2,0–2,5 GB \\ \hline
+Model Qwen3-Embedding-0.6B (termuat) & $\sim$2,0–2,5 GB \\ \hline
+SQLite dan Python heap & $\sim$200 MB \\ \hline
+\textbf{Total (dua model termuat)} & \textbf{$\sim$5,5–6,0 GB} \\ \hline
+\textbf{Headroom tersedia} & \textbf{$\sim$2,0–2,5 GB} \\ \hline
+
+\end{longtable}
+
+Swap file sebesar 4 GB dikonfigurasi untuk menangani puncak penggunaan memori sementara selama proses pemuatan model. Dengan konfigurasi dua model, penggunaan RAM pada VPS 8 GB berada dalam batas yang aman.
+
+\subsubsection{Tahapan Deployment}\label{tahapan-deployment}
+
+Proses deployment sistem dilakukan melalui enam tahapan yang dilaksanakan secara berurutan:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Persiapan Pra-Deployment}: Meliputi perbaikan konfigurasi docker-compose untuk menghapus service yang tidak digunakan, pembuatan Dockerfile produksi dengan gunicorn, serta penyiapan file variabel lingkungan produksi yang menyimpan kunci rahasia dan parameter konfigurasi sistem.
+\item
+  \textbf{Konfigurasi Awal VPS}: Meliputi pembuatan pengguna non-root dengan hak akses sudo, pembaruan sistem, instalasi dependensi dasar, konfigurasi swap file 4 GB, dan konfigurasi firewall untuk membatasi akses hanya pada port SSH, HTTP (80), dan HTTPS (443).
+\item
+  \textbf{Instalasi Docker}: Instalasi Docker Engine dan Docker Compose pada VPS, serta penambahan pengguna ke grup docker untuk mengelola container tanpa hak akses root.
+\item
+  \textbf{Deployment Aplikasi}: Meliputi kloning repositori, penyalinan file konfigurasi produksi, pembangunan Docker image, pengunduhan awal model embedding ke dalam volume persisten, serta inisialisasi basis data dan seeding data faculty supervisor.
+\item
+  \textbf{Konfigurasi Nginx dan SSL}: Instalasi dan konfigurasi nginx sebagai reverse proxy dengan parameter timeout yang disesuaikan (360 detik) untuk mengakomodasi durasi proses rekomendasi. Sertifikat SSL diperoleh melalui Let's Encrypt menggunakan certbot apabila nama domain tersedia.
+\item
+  \textbf{Verifikasi End-to-End}: Pengujian fungsional sistem secara menyeluruh meliputi proses login, impor data mahasiswa, eksekusi rekomendasi, hingga ekspor hasil dalam format Excel.
+\end{enumerate}
+
+\subsubsection{Pertimbangan Teknis Deployment}\label{pertimbangan-teknis-deployment}
+
+Beberapa pertimbangan teknis yang perlu diperhatikan dalam proses deployment dan operasional sistem disajikan pada Tabel~\ref{table:deployment_issues}.
+
+\begin{longtable}[c]{|p{4.5cm}|p{3cm}|p{5.5cm}|}
+
+\hline
+\textbf{Potensi Masalah} & \textbf{Dampak} & \textbf{Mitigasi} \\ \hline
+\endfirsthead
+
+\hline
+\textbf{Potensi Masalah} & \textbf{Dampak} & \textbf{Mitigasi} \\ \hline
+\endhead
+
+\hline
+\caption{Pertimbangan Teknis Deployment} \label{table:deployment_issues} \\
+\endlastfoot
+
+Pemuatan model embedding pertama kali memicu pengunduhan sekitar 1,8 GB & Request timeout 10–20 menit & Model diunduh secara eksplisit ke volume persisten sebelum container pertama kali menerima request \\ \hline
+EmbeddingProvider adalah singleton per-proses & Penggunaan lebih dari satu worker menyebabkan duplikasi model dalam RAM & Konfigurasi satu worker pada gunicorn (\texttt{-w 1}) \\ \hline
+Proses rekomendasi membutuhkan waktu 2–4 menit pada CPU & Request timeout pada nilai default (30 detik) & Timeout gunicorn diset 300 detik, timeout nginx 360 detik \\ \hline
+Basis data SQLite berada di dalam container & Data hilang jika container dihapus & Volume Docker menyimpan basis data di luar container secara persisten \\ \hline
+
+\end{longtable}
+
+Deployment sistem pada VPS merupakan komponen penting dalam penelitian ini karena memungkinkan pengujian sistem secara operasional dalam kondisi yang mendekati lingkungan nyata, sekaligus memvalidasi kelayakan arsitektur yang dirancang untuk mendukung proses pemetaan faculty supervisor Program Enrichment di Universitas XYZ.
 
