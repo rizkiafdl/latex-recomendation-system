@@ -7,7 +7,7 @@
 %-----------------------------------------------------------------------------%
 
 \section{Testing Environment}
-Dalam penelitian ini, penulis menggunakan bahasa pemrograman Python untuk membangun dan mengimplementasikan sistem rekomendasi Faculty Supervisor berbasis semantic similarity. Penulis juga menggunakan perangkat keras dan lunak tertentu untuk mengembangkan sistem tersebut. Berikut adalah daftar perangkat keras yang digunakan dalam penelitian ini.
+Dalam penelitian ini, penulis menggunakan bahasa pemrograman Python untuk membangun dan mengimplementasikan sistem rekomendasi Faculty Supervisor berbasis \textit{semantic similarity}. Penulis juga menggunakan perangkat keras dan lunak tertentu untuk mengembangkan sistem tersebut. Berikut adalah daftar perangkat keras yang digunakan dalam penelitian ini.
 \begin{table}[H]
 \centering
 \caption{\bi{Spesifikasi Perangkat Keras}}	\label{table:tab4.1}
@@ -43,7 +43,7 @@ Perangkat keras tersebut juga menggunakan beberapa perangkat lunak untuk proses 
     \hline
     Web Framework  & Flask 3.1.0   \\
     \hline
-    ORM / Database  & SQLAlchemy 2.0.49 + SQLite  \\
+    ORM / \textit{Database}  & SQLAlchemy 2.0.49 + SQLite  \\
     \hline
     Embedding Library  & sentence-transformers   \\
     \hline
@@ -119,7 +119,7 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
 
 Berdasarkan hasil pada Tabel~\ref{table:tab4.2.1}, BAAI/bge-m3 unggul pada seluruh metrik \textit{retrieval}: MRR, Hit@1, Hit@5, NDCG@5, NDCG@10, dan rata-rata peringkat terbaik (2,17). Keunggulan ini konsisten di setiap metrik, bukan hanya pada satu indikator, sehingga menunjukkan kualitas pemeringkatan yang lebih baik secara menyeluruh.
 
-Temuan yang menarik muncul pada intfloat/multilingual-e5-large-instruct. Model ini memiliki \textit{Assignment Match Rate} tertinggi (0,583), meskipun metrik \textit{retrieval}-nya berada di bawah BAAI/bge-m3. Inversi ini mengindikasikan bahwa distribusi skor me5-large secara kebetulan lebih selaras dengan ketersediaan slot kapasitas aktual, sehingga alokasi akhir lebih sering cocok dengan penugasan historis. Sebaliknya, BAAI/bge-m3 yang unggul pada \textit{retrieval} memperoleh \textit{match rate} lebih rendah (0,530) karena model tersebut meranking supervisor yang ``paling tepat'' secara semantik, yang belum tentu identik dengan pilihan historis admin.
+Temuan yang menarik muncul pada intfloat/multilingual-e5-large-instruct. Model ini memiliki \textit{Assignment Match Rate} tertinggi (0,583), meskipun metrik \textit{retrieval}-nya berada di bawah BAAI/bge-m3. Inversi ini mengindikasikan bahwa distribusi skor me5-large secara kebetulan lebih selaras dengan ketersediaan slot kapasitas aktual, sehingga alokasi akhir lebih sering cocok dengan penugasan historis. Sebaliknya, BAAI/bge-m3 yang unggul pada \textit{retrieval} memperoleh \textit{match rate} lebih rendah (0,530) karena model tersebut memeringkat supervisor yang ``paling tepat'' secara semantik, yang belum tentu identik dengan pilihan historis admin.
 
 Hal ini juga dapat diamati melalui Tabel~\ref{table:tab4.2.2}: intfloat/multilingual-e5-large-instruct menghasilkan skor kemiripan yang sangat tinggi namun nyaris seragam (rata-rata skor peringkat-1 sebesar 0,907 dan skor dosen sebenarnya 0,893, dengan sebaran hanya 0,014). Artinya, model ini menilai hampir seluruh pasangan mahasiswa--dosen sebagai ``sangat mirip'' sehingga kehilangan kemampuan untuk membedakan satu dosen dari dosen lainnya secara tajam, yang menjelaskan mengapa meskipun \textit{match rate}-nya tinggi, metrik \textit{retrieval}-nya lebih rendah dari bge-m3.
 
@@ -177,7 +177,7 @@ Parameter \texttt{group\_bonus} menambahkan skor tambahan bagi pasangan mahasisw
 \renewcommand{\arraystretch}{1}
 \end{table}
 
-Hasil evaluasi menunjukkan bahwa \texttt{group\_bonus} tidak memberikan pengaruh nyata terhadap metrik \textit{retrieval}. Ketika parameter \texttt{extra\_docs} dikontrol pada nilai yang sama, nilai \%Rank-1 identik antara kondisi \texttt{group\_bonus=True} dan \texttt{group\_bonus=False} pada ketiga model. Perbedaan yang tampak pada perbandingan antar batch eksperimen bersifat \textit{spurious} karena \texttt{group\_bonus=True} selalu disertai \texttt{extra\_docs=False} --- kedua variabel tidak pernah divariasikan secara independen. Meski demikian, parameter ini tetap memberikan kontribusi kecil pada nilai skor akhir (\textit{gap fin-sim} $\approx$ 0,008), yang membuktikan bahwa bonus diterapkan secara teknis namun tidak cukup besar untuk mengubah urutan peringkat mahasiswa.
+Hasil evaluasi menunjukkan bahwa \texttt{group\_bonus} tidak memberikan pengaruh nyata terhadap metrik \textit{retrieval}. Ketika parameter \texttt{extra\_docs} dikontrol pada nilai yang sama, nilai \%Rank-1 identik antara kondisi \texttt{group\_bonus=True} dan \texttt{group\_bonus=False} pada ketiga model. Perbedaan yang tampak pada perbandingan antar \textit{batch} eksperimen bersifat \textit{spurious} karena \texttt{group\_bonus=True} selalu disertai \texttt{extra\_docs=False} --- kedua variabel tidak pernah divariasikan secara independen. Meski demikian, parameter ini tetap memberikan kontribusi kecil pada nilai skor akhir (\textit{gap fin-sim} $\approx$ 0,008), yang membuktikan bahwa bonus diterapkan secara teknis namun tidak cukup besar untuk mengubah urutan peringkat mahasiswa.
 
 \subsubsection{Konfigurasi Terbaik}
 
@@ -271,11 +271,11 @@ Untuk memahami kualitas alokasi dari perspektif kepuasan mahasiswa, dilakukan an
 \renewcommand{\arraystretch}{1}
 \end{table}
 
-Distribusi ini memperlihatkan bahwa sebagian besar mahasiswa memperoleh supervisor yang paling sesuai: 57,8\% ditetapkan pada peringkat 1, dan 81,4\% berada dalam tiga besar (peringkat 1--3). Sebanyak 11,4\% mahasiswa terpaksa ditetapkan di luar peringkat 5, bukan karena kegagalan model, melainkan akibat saturasi kapasitas ketika lima supervisor teratas sudah penuh, sistem harus beralih ke pilihan berikutnya. Pola ini merupakan konsekuensi matematis dari keterbatasan slot, bukan indikasi kualitas rekomendasi yang buruk.
+Distribusi ini memperlihatkan bahwa sebagian besar mahasiswa memperoleh supervisor yang paling sesuai: 57,8\% ditetapkan pada peringkat 1, dan 81,4\% berada dalam tiga besar (peringkat 1--3). Sebanyak 11,4\% mahasiswa terpaksa ditetapkan di luar peringkat 5, bukan karena kegagalan model, melainkan akibat saturasi kapasitas ketika lima supervisor teratas sudah penuh, sistem harus beralih ke pilihan berikutnya. Pola ini merupakan konsekuensi matematis dari keterbatasan \textit{slot}, bukan indikasi kualitas rekomendasi yang buruk.
 
 \subsection{Aplikasi Web}
 
-Sistem rekomendasi mahasiswa ini diimplementasikan dalam bentuk aplikasi berbasis web dengan antarmuka yang fungsional. Aplikasi ini dirancang untuk memfasilitasi Enrichment Program Coordinator dalam melakukan pemetaan (mapping) antara mahasiswa peserta program enrichment dengan faculty supervisor terkait.   
+Sistem rekomendasi mahasiswa ini diimplementasikan dalam bentuk aplikasi berbasis web dengan antarmuka yang fungsional. Aplikasi ini dirancang untuk memfasilitasi Enrichment Program Coordinator dalam melakukan pemetaan (\textit{mapping}) antara mahasiswa peserta program enrichment dengan faculty supervisor terkait.   
 
 \subsubsection{Login Page}
 
@@ -287,7 +287,7 @@ Sistem rekomendasi mahasiswa ini diimplementasikan dalam bentuk aplikasi berbasi
     \label{fig:login}
 \end{figure}
         
-Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang menyediakan formulir terstruktur untuk memasukkan data kredensial. Antarmuka (interface) ini mencakup kolom (field) username dan kata sandi yang telah didaftarkan oleh pengguna sebelumnya. Juga bila pengguna belum memiliki akun bisa mendaftarkan akun dengan memilih tombol registrasi. 
+Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang menyediakan formulir terstruktur untuk memasukkan data kredensial. Antarmuka (interface) ini mencakup kolom (field) \textit{username} dan kata sandi yang telah didaftarkan oleh pengguna sebelumnya. Juga bila pengguna belum memiliki akun bisa mendaftarkan akun dengan memilih tombol registrasi. 
 
 \subsubsection{Register Page}
 
@@ -299,7 +299,7 @@ Halaman login merupakan gerbang utama interaksi pengguna dengan sistem yang meny
     \label{fig:register}
 \end{figure}
         
-Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields seperti nama lengkap, username, password dan konfirmasi password. Lalu proses dilanjutkan dengan memilih tombol registrasi setelah mengisi data dan akun akan otomatis dibuat. 
+Pada halaman ini pengguna dapat membuat akun dengan mengisi beberapa fields seperti nama lengkap, \textit{username}, \textit{password} dan konfirmasi \textit{password}. Lalu proses dilanjutkan dengan memilih tombol registrasi setelah mengisi data dan akun akan otomatis dibuat. 
 
 \subsubsection{Dashboard}
 
@@ -322,7 +322,7 @@ Halaman dashboard menyajikan ringkasan data statistik utama, meliputi total maha
     \label{fig:datacenter}
 \end{figure}
         
-Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pengendali eksekusi awal (pipeline trigger) sistem. Peran utamanya adalah melakukan proses ETL (Extract, Transform, Load) guna memastikan kesiapan data mahasiswa dan dosen pembimbing sebelum diproses oleh algoritma rekomendasi.
+Halaman ini berfungsi sebagai pusat pengelolaan data masukan (\textit{dataset}) serta pengendali eksekusi awal (\textit{pipeline trigger}) sistem. Peran utamanya adalah melakukan proses ETL (\textit{Extract, Transform, Load}) guna memastikan kesiapan data mahasiswa dan dosen pembimbing sebelum diproses oleh algoritma rekomendasi.
 
 \subsubsection{Generate New Run}
 
@@ -334,7 +334,7 @@ Halaman ini berfungsi sebagai pusat pengelolaan data masukan (dataset) serta pen
     \label{fig:generatenewrun}
 \end{figure}
 
-Modal \textit{Generate New Run} merupakan antarmuka konfigurasi \textit{pipeline} rekomendasi yang dapat diakses dari halaman Dashboard maupun Data Center. Pengguna dapat memilih model \textit{embedding} yang akan digunakan (\texttt{BAAI/bge-m3}, \texttt{Qwen/Qwen3-Embedding-0.6B}, atau \texttt{intfloat/multilingual-e5-large-instruct}), mengaktifkan atau menonaktifkan parameter \texttt{extra\_docs} dan \texttt{group\_bonus}, serta mengatur kapasitas minimum dan maksimum penugasan per dosen pembimbing. Setelah konfigurasi selesai, pengguna menekan tombol \textit{Generate} untuk memulai seluruh proses rekomendasi secara penuh hingga hasil tersimpan di database.
+Modal \textit{Generate New Run} merupakan antarmuka konfigurasi \textit{pipeline} rekomendasi yang dapat diakses dari halaman Dashboard maupun Data Center. Pengguna dapat memilih model \textit{embedding} yang akan digunakan (\texttt{BAAI/bge-m3}, \texttt{Qwen/Qwen3-Embedding-0.6B}, atau \texttt{intfloat/multilingual-e5-large-instruct}), mengaktifkan atau menonaktifkan parameter \texttt{extra\_docs} dan \texttt{group\_bonus}, serta mengatur kapasitas minimum dan maksimum penugasan per dosen pembimbing. Setelah konfigurasi selesai, pengguna menekan tombol \textit{Generate} untuk memulai seluruh proses rekomendasi secara penuh hingga hasil tersimpan di \textit{database}.
 
 \subsubsection{Run History}
 
@@ -390,7 +390,7 @@ Halaman Run Recommendations menampilkan tabel penugasan lengkap hasil eksekusi \
     \label{fig:supervisorstudio}
 \end{figure}
         
-Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan semantic keywords. Fitur utama halaman ini meliputi searchable dropdown dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel Keywords Studio untuk memanipulasi komponen chip kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur.
+Halaman Supervisor Studio berfungsi mengelola repositori dosen pembimbing dan \textit{semantic keywords}. Fitur utama halaman ini meliputi \textit{searchable dropdown} dan tombol Load Supervisor untuk pemanggilan profil dosen, serta Export Config Excel untuk pencadangan data. Selain itu, terdapat formulir Add Supervisor untuk perekaman data dosen baru, panel \textit{Keyword}s Studio untuk memanipulasi komponen \textit{chip} kata kunci secara dinamis, dan Supervisor Table yang menyajikan akumulasi data dosen terdaftar secara terstruktur.
 
 \subsubsection{Logout}
 
@@ -421,18 +421,18 @@ Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika
 \hline
 \endfoot
 \endlastfoot
-    1 & Login dengan kredensial valid  & Username dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\
+    1 & Login dengan kredensial valid  & \textit{Username} dan kata sandi benar & Sistem mengarahkan pengguna ke dashboard & Pass  \\
     \hline
-    2 & Login dengan kata sandi salah   & Username benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\
+    2 & Login dengan kata sandi salah   & \textit{Username} benar, kata sandi salah  & Sistem menampilkan \textit{message} “Kredential Salah” & Pass  \\
     \hline
-    3 & Login dengan username     salah   & Username salah, kata sandi benar  & Sistem menampilkan message “Kredential Salah”  & Pass  \\
+    3 & Login dengan \textit{username}     salah   & \textit{Username} salah, kata sandi benar  & Sistem menampilkan \textit{message} “Kredential Salah”  & Pass  \\
     \hline
 
 \end{longtable}
 
 \subsection{Register Page}
 
-Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama lengkap, password, dan konfirmasi password sebagai data pendaftaran.
+Pada halaman ini pengguna dapat membuat akun dengan mengisi data \textit{username}, nama lengkap, \textit{password}, dan konfirmasi \textit{password} sebagai data pendaftaran.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
 \caption{\bi{Skenario Register Page}}\label{table:tab4.4} \\
 \hline
@@ -443,15 +443,15 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama 
 \hline
 \endfoot
 \endlastfoot
-    1 & Mendaftarkan akun dengan data valid   & Username, nama lengkap, password, dan konfirmasi password benar & Sistem menyimpan akun dan mengarahkan pengguna ke dashboard & Pass  \\
+    1 & Mendaftarkan akun dengan data valid   & \textit{Username}, nama lengkap, \textit{password}, dan konfirmasi \textit{password} benar & Sistem menyimpan akun dan mengarahkan pengguna ke dashboard & Pass  \\
     \hline
-    2 & Mendaftarkan akun dengan password tidak cocok    & Password dan konfirmasi password berbeda  & Sistem menampilkan message “Data tidak sesuai” & Pass  \\
+    2 & Mendaftarkan akun dengan \textit{password} tidak cocok    & \textit{Password} dan konfirmasi \textit{password} berbeda  & Sistem menampilkan \textit{message} “Data tidak sesuai” & Pass  \\
     \hline
-    3 & Mendaftarkan akun dengan username yang sudah terdaftar    & Username yang sudah digunakan akun lain  & Sistem menampilkan message “Data tidak sesuai”  & Pass  \\
+    3 & Mendaftarkan akun dengan \textit{username} yang sudah terdaftar    & \textit{Username} yang sudah digunakan akun lain  & Sistem menampilkan \textit{message} “Data tidak sesuai”  & Pass  \\
     \hline
-    4 & Mendaftarkan akun dengan username terlalu pendek  & Username kurang dari 3 karakter  & Sistem menampilkan pesan error dan menolak pendaftaran  & Pass  \\
+    4 & Mendaftarkan akun dengan \textit{username} terlalu pendek  & \textit{Username} kurang dari 3 karakter  & Sistem menampilkan pesan error dan menolak pendaftaran  & Pass  \\
     \hline
-    5 & Mendaftarkan akun dengan password terlalu pendek  & Password kurang dari 6 karakter  & Sistem menampilkan pesan error dan menolak pendaftaran  & Pass  \\
+    5 & Mendaftarkan akun dengan \textit{password} terlalu pendek  & \textit{Password} kurang dari 6 karakter  & Sistem menampilkan pesan error dan menolak pendaftaran  & Pass  \\
     \hline
 \end{longtable}
 
@@ -480,11 +480,11 @@ Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman
     \hline
     6 & Klik tombol “Inspect Rows”       & -  & Sistem akan mengarahkan pengguna melihat data rekomendasi pada Run Detail   & Pass  \\
     \hline
-    7 & Klik tombol “Export Excel”      & -  & Sistem akan melakukan export pada data run terakhir    & Pass  \\
+    7 & Klik tombol “Export Excel”      & -  & Sistem akan melakukan \textit{export} pada data run terakhir    & Pass  \\
     \hline
-    8 & Sistem menampilkan data pada Summary Cards       & -  & Data yang ditampilkan sesuai dengan database   & Pass  \\
+    8 & Sistem menampilkan data pada Summary Cards       & -  & Data yang ditampilkan sesuai dengan \textit{database}   & Pass  \\
     \hline
-    9 & Sistem menampikan data pada Quality Trend      & -  & Sistem menampikan tooltip detail nilai Match Rate, Hybrid MRR, dan Content MRR    & Pass  \\
+    9 & Sistem menampikan data pada Quality Trend      & -  & Sistem menampikan \textit{tooltip} detail nilai Match Rate, Hybrid MRR, dan Content MRR    & Pass  \\
     \hline
     10 & Sistem menampikan Informasi Snapshot      & -  & Sistem menampilkan data dari run paling baru     & Pass  \\
     \hline
@@ -492,7 +492,7 @@ Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman
 
 \subsection{Data Center}
 
-Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import data serta interaksi pipeline trigger. Halaman ini krusial karena bertindak sebagai penyedia data utama sebelum sistem menjalankan algoritma rekomendasi.
+Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  \textit{import} data serta interaksi \textit{pipeline trigger}. Halaman ini krusial karena bertindak sebagai penyedia data utama sebelum sistem menjalankan algoritma rekomendasi.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
 \caption{\bi{Skenario Data Center}}\label{table:tab4.6} \\
 \hline
@@ -503,25 +503,25 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import 
 \hline
 \endfoot
 \endlastfoot
-    1 & Upload Data Kosong   & - & Sistem menolak proses import dan menampikan error message  & Pass  \\
+    1 & \textit{Upload} Data Kosong   & - & Sistem menolak proses \textit{import} dan menampikan \textit{error message}  & Pass  \\
     \hline
-    2 & Upload Data dengan Format Salah  & -  & Sistem menolak proses import dan menampilkan  error message   & Pass  \\
+    2 & \textit{Upload} Data dengan Format Salah  & -  & Sistem menolak proses \textit{import} dan menampilkan  \textit{error message}   & Pass  \\
     \hline
-    3 & Upload Valid     & -  & File berhasil disimpan, dan sistem akan menampilkan data pada sumarry cards.    & Pass  \\
+    3 & \textit{Upload} Valid     & -  & File berhasil disimpan, dan sistem akan menampilkan data pada sumarry cards.    & Pass  \\
     \hline
-    4 & Data pada Summary Cards sesuai      & -  & Data yang ditampilkan sesuai dengan data upload     & Pass  \\
+    4 & Data pada Summary Cards sesuai      & -  & Data yang ditampilkan sesuai dengan data \textit{upload}     & Pass  \\
     \hline
     5 & Klik tombol “Generate New Run”      & -  & Sistem akan mengarahkan pengguna ke tampilan untuk melakukan run baru    & Pass  \\
     \hline
-    6 & Upload file Excel dengan kolom wajib tidak lengkap  & File Excel tanpa salah satu dari 6 kolom wajib (STUDENT ID, TRACK, PARTNER/LECTURER, POSITION/TOPIC, WORK SCHEMA, GPA)  & Sistem menolak import dan menampilkan pesan error validasi kolom  & Pass  \\
+    6 & \textit{Upload} file Excel dengan kolom wajib tidak lengkap  & File Excel tanpa salah satu dari 6 kolom wajib (STUDENT ID, TRACK, PARTNER/LECTURER, POSITION/TOPIC, WORK SCHEMA, GPA)  & Sistem menolak \textit{import} dan menampilkan pesan error validasi kolom  & Pass  \\
     \hline
-    7 & Import data dari file default server  & -  & Sistem membaca file dari path \texttt{DEFAULT\_EXCEL\_PATH}, memproses upsert per baris, dan menampilkan ringkasan hasil import  & Pass  \\
+    7 & Import data dari file default server  & -  & Sistem membaca file dari path \texttt{DEFAULT\_EXCEL\_PATH}, memproses \textit{upsert} per baris, dan menampilkan ringkasan hasil \textit{import}  & Pass  \\
     \hline
 \end{longtable}
 
 \subsection{Generate New Run}
 
-Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna ingin melakukan run baru dengan memilih model dan rules boost yang akan diterapkan pada run tersebut.
+Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna ingin melakukan run baru dengan memilih model dan \textit{rules boost} yang akan diterapkan pada run tersebut.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
 \caption{\bi{Skenario Generate New Run}}\label{table:tab4.7} \\ 
 \hline
@@ -534,25 +534,25 @@ Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna 
 \endlastfoot
     1 & Memilih Model   & - & Model yang dipilih akan terlihat dengan ditandai berwarna oren  & Pass  \\
     \hline
-    2 & Mengaktifkan Extra Docs  & -  & Toggle extra docs aktif; dokumen tambahan supervisor disertakan dalam representasi vektor pada pipeline   & Pass  \\
+    2 & Mengaktifkan Extra Docs  & -  & \textit{Toggle} extra docs aktif; dokumen tambahan supervisor disertakan dalam representasi vektor pada pipeline   & Pass  \\
     \hline
-    3 & Menonaktifkan Extra Docs  & -  & Toggle extra docs kembali ke kondisi nonaktif  & Pass  \\
+    3 & Menonaktifkan Extra Docs  & -  & \textit{Toggle} extra docs kembali ke kondisi nonaktif  & Pass  \\
     \hline
-    4 & Mengaktifkan Group Bonus  & -  & Toggle group bonus yang dipilih akan berubah warna menjadi oren   & Pass  \\
+    4 & Mengaktifkan Group Bonus  & -  & \textit{Toggle} group bonus yang dipilih akan berubah warna menjadi oren   & Pass  \\
     \hline
-    5 & Menonaktifkan Group Bonus     & -  & Toggle group bonus kembali ke kondisi nonaktif  & Pass  \\
+    5 & Menonaktifkan Group Bonus     & -  & \textit{Toggle} group bonus kembali ke kondisi nonaktif  & Pass  \\
     \hline
-    6 & Cancel Run     & -  & Sistem akan menutup pop-up new run  & Pass  \\
+    6 & Cancel Run     & -  & Sistem akan menutup \textit{pop-up} new run  & Pass  \\
     \hline
     7 & Eksekusi Run Baru     & -  & Sistem akan menjalankan rekomendasi dengan model dan konfigurasi yang dipilih    & Pass  \\
     \hline
-    8 & Eksekusi run saat tidak ada data mahasiswa di database  & Database mahasiswa kosong  & Sistem menampilkan pesan error dan membatalkan proses rekomendasi  & Pass  \\
+    8 & Eksekusi run saat tidak ada data mahasiswa di \textit{database}  & \textit{Database} mahasiswa kosong  & Sistem menampilkan pesan error dan membatalkan proses rekomendasi  & Pass  \\
     \hline
 \end{longtable}
 
 \subsection{Run History}
 
-Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwayat  run algoritma secara kronologis dan akurat. Fokus utama meliputi kebenaran metadata yang ditampilkan serta fungsionalitas button.
+Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwayat  run algoritma secara kronologis dan akurat. Fokus utama meliputi kebenaran \textit{metadata} yang ditampilkan serta fungsionalitas \textit{button}.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
 \caption{\bi{Skenario Run History}}\label{table:tab4.8} \\
 \hline
@@ -569,7 +569,7 @@ Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwa
     \hline
     3 & Klik tombol “Details Row” pada salah satu ID Run      & -  & Sistem berpindah ke halaman detail page dari run yang dipilih     & Pass  \\
     \hline
-    4 & Klik tombol “Export Data’ pada salah satu ID Run      & -  & Sistem melakukan export data sesuai ID Run yang dipilih    & Pass  \\
+    4 & Klik tombol “Export Data’ pada salah satu ID Run      & -  & Sistem melakukan \textit{export} data sesuai ID Run yang dipilih    & Pass  \\
     \hline
     5 & Klik tombol “Generate New Run” pada page Run History  & -  & Sistem mengarahkan pengguna ke halaman pembuatan run baru  & Pass  \\
     \hline
@@ -590,29 +590,29 @@ Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan
 \hline
 \endfoot
 \endlastfoot
-    1 & Membuka menu dropdown dan mencari berdasarkan nama atau kode dosen   & - & Sistem menyaring data secara dinamis berdasarkan data dosen yang dicari    & Pass  \\
+    1 & Membuka menu \textit{dropdown} dan mencari berdasarkan nama atau kode dosen   & - & Sistem menyaring data secara dinamis berdasarkan data dosen yang dicari    & Pass  \\
     \hline
-    2 & Memilih salah satu nama dosen kemudian menekan tombol “Load Supervisor”   & -  & Sistem menampilkan profil dosen dan keyword yang sesuai dengan dosen tersebut     & Pass  \\
+    2 & Memilih salah satu nama dosen kemudian menekan tombol “Load Supervisor”   & -  & Sistem menampilkan profil dosen dan \textit{keyword} yang sesuai dengan dosen tersebut     & Pass  \\
     \hline
     3 & Menekan tombol “Export Config”       & -  & Sistem akan mengunduh berkas excel berisikan data dosen dan profilnya.      & Pass  \\
     \hline
-    4 & Mengetikkan keyword baru pada kolom “Add Keyword”    & -  & Keyword di daftarkan di dalam daftar keyword     & Pass  \\
+    4 & Mengetikkan \textit{keyword} baru pada kolom “Add \textit{Keyword}”    & -  & \textit{Keyword} di daftarkan di dalam daftar \textit{keyword}     & Pass  \\
     \hline
-    5 & Menekan tombol (X) pada salah satu komponen chip       & -  & Chip keyword akan dihapuskan       & Pass  \\
+    5 & Menekan tombol (X) pada salah satu komponen \textit{chip}       & -  & Chip \textit{keyword} akan dihapuskan       & Pass  \\
     \hline
-    6 & Menekan tombol “Save Keywords” setelah melakukan perubahan chip       & -  & Sistem memperbarui daftar keyword semantik pada dosen di database        & Pass  \\
+    6 & Menekan tombol “Save \textit{Keyword}s” setelah melakukan perubahan \textit{chip}       & -  & Sistem memperbarui daftar \textit{keyword} semantik pada dosen di \textit{database}        & Pass  \\
     \hline
-    7 & Mengisi form tambah supervisor (kode, nama, keyword awal) dan menekan tombol “Add Supervisor”  & Data supervisor baru yang valid  & Supervisor baru berhasil disimpan dan muncul pada tabel daftar supervisor  & Pass  \\
+    7 & Mengisi form tambah supervisor (kode, nama, \textit{keyword} awal) dan menekan tombol “Add Supervisor”  & Data supervisor baru yang valid  & Supervisor baru berhasil disimpan dan muncul pada tabel daftar supervisor  & Pass  \\
     \hline
-    8 & Mengisi form tambah supervisor dengan kode yang sudah terdaftar di sistem  & Kode supervisor yang sudah ada  & Sistem memperbarui nama dan keyword supervisor yang ada (\textit{upsert}) dan menampilkan konfirmasi  & Pass  \\
+    8 & Mengisi form tambah supervisor dengan kode yang sudah terdaftar di sistem  & Kode supervisor yang sudah ada  & Sistem memperbarui nama dan \textit{keyword} supervisor yang ada (\textit{upsert}) dan menampilkan konfirmasi  & Pass  \\
     \hline
-    9 & Mengetikkan keyword yang sudah ada pada kolom “Add Keyword” (\textit{case-insensitive})  & Keyword duplikat  & Sistem mengabaikan token duplikat tanpa menambahkan chip baru  & Pass  \\
+    9 & Mengetikkan \textit{keyword} yang sudah ada pada kolom “Add \textit{Keyword}” (\textit{case-insensitive})  & \textit{Keyword} duplikat  & Sistem mengabaikan \textit{token} duplikat tanpa menambahkan \textit{chip} baru  & Pass  \\
     \hline
 \end{longtable}
 
 \subsection{Run Detail}
 
-Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendasi per run, mencakup metrik evaluasi, distribusi kapasitas per dosen, \textit{mismatch spotlight}, dan tabel rekomendasi dengan fitur filter server-side.
+Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendasi per run, mencakup metrik evaluasi, distribusi kapasitas per dosen, \textit{mismatch spotlight}, dan tabel rekomendasi dengan fitur filter \textit{server-side}.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
 \caption{\bi{Skenario Run Detail}}\label{table:tab4.10} \\
 \hline
@@ -623,15 +623,15 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendas
 \hline
 \endfoot
 \endlastfoot
-    1 & Membuka halaman Run Detail dengan ID yang valid   & ID run yang ada di database & Sistem menampilkan metrik evaluasi, kapasitas per supervisor, dan \textit{mismatch spotlight}  & Pass  \\
+    1 & Membuka halaman Run Detail dengan ID yang valid   & ID run yang ada di \textit{database} & Sistem menampilkan metrik evaluasi, kapasitas per supervisor, dan \textit{mismatch spotlight}  & Pass  \\
     \hline
     2 & Membuka halaman Run Detail dengan ID yang tidak valid   & ID run yang tidak ada  & Sistem mengembalikan halaman 404  & Pass  \\
     \hline
     3 & Mengisi filter teks pencarian pada tab Rekomendasi  & Nama mahasiswa atau topik  & Tabel hanya menampilkan baris yang cocok dengan kata kunci pencarian  & Pass  \\
     \hline
-    4 & Memilih supervisor pada dropdown filter  & Supervisor tertentu  & Tabel hanya menampilkan mahasiswa yang ditugaskan ke supervisor tersebut  & Pass  \\
+    4 & Memilih supervisor pada \textit{dropdown} filter  & Supervisor tertentu  & Tabel hanya menampilkan mahasiswa yang ditugaskan ke supervisor tersebut  & Pass  \\
     \hline
-    5 & Mengaktifkan toggle \textit{Mismatch Only}  & -  & Tabel hanya menampilkan baris dengan supervisor rekomendasi yang berbeda dari histori  & Pass  \\
+    5 & Mengaktifkan \textit{toggle} \textit{Mismatch Only}  & -  & Tabel hanya menampilkan baris dengan supervisor rekomendasi yang berbeda dari histori  & Pass  \\
     \hline
     6 & Klik tombol Export Standard  & -  & File \texttt{rekomendasi\_dosen\_run\_\{id\}.xlsx} (3 sheet) berhasil terunduh  & Pass  \\
     \hline
