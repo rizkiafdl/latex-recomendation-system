@@ -53,7 +53,7 @@ Outer wrapper: `\scalebox{0.65}{%  ... }` (not `\resizebox` — fixed scale to f
 - y = 0.0 for first, then **−1.5 per step**
 - 11 use cases: y range `[0, -15.0]`, vertical centre at `y = -7.5`
 
-### Current use case list (2026-06-13)
+### Current use case list (updated 2026-06-17)
 | # | Node id | Label | y |
 |---|---------|-------|---|
 | 1 | `uc1` | Register | 0.0 |
@@ -67,6 +67,9 @@ Outer wrapper: `\scalebox{0.65}{%  ... }` (not `\resizebox` — fixed scale to f
 | 9 | `uc9` | Lihat Hasil Rekomendasi | -12.0 |
 | 10 | `uc10` | Export Hasil ke Excel | -13.5 |
 | 11 | `uc11` | Logout | -15.0 |
+| 12 | `uc12` | Export Konfigurasi Supervisor | -16.5 |
+
+Actor centre shifted to `(-0.8, -8.25)` (12-UC vertical centre). Fan line origin: `(-0.28, -7.60)`. Boundary bottom: `-18.0`.
 
 ---
 

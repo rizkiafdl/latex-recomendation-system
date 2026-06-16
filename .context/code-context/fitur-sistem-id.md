@@ -31,13 +31,6 @@ Sistem ini adalah **aplikasi web berbasis Flask** yang merekomendasikan dosen pe
 - **`normalize_text(value)`**: lowercase + hapus non-alphanumeric + collapse spasi → teks kanonikal
 - **`student_document(student)`**: gabungkan track + position_topic + work_schema → teks dokumen mahasiswa
 - **`profile_document(profile)`**: gabungkan keywords + labels supervisor → teks dokumen dosen
-- **`detect_labels(text)`**: klasifikasi berdasarkan kamus `LABEL_TERMS` (19 label domain)
-- **19 Label Domain yang Terdeteksi:**
-  - `independent_study`, `internship`, `research`, `binus_bandung`, `binus_internal_internship`
-  - `network_cloud`, `entrepreneurship`, `iot_embedded`, `government_public`, `health_medical`
-  - `hospital_niche`, `game_interactive`, `finance_banking`, `apple_mobile`, `web_fullstack`
-  - `software_engineering`, `data_ai`, `cyber_security`, `education`
-- Label komposit: jika `"internship"` + kata kunci BINUS internal → tambah label `"binus_internal_internship"` dan `"binus_bandung"`
 
 ### Tahap 3 — Generasi Embedding & Similaritas (`app/embedding.py`)
 **Rantai Fallback 3 Tingkat:**

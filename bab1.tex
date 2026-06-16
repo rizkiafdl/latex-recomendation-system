@@ -24,7 +24,7 @@ Seiring dengan meningkatnya jumlah mahasiswa di XYZ University dari tahun ke tah
 
 Beberapa penelitian sebelumnya telah mengeksplorasi otomasi proses alokasi pembimbing akademik. Evangelista, Fan, dan Harb (\citeyear{fan2021automated}) menunjukkan bahwa pendekatan otomatis berbasis \textit{machine learning} memiliki potensi signifikan dalam mengatasi keterbatasan proses manual, khususnya pada institusi dengan jumlah mahasiswa yang besar. Dalam konteks yang lebih dekat, Rismanto, Syulistyo, dan Agusta (\citeyear{rismanto2020supervisor}) mengembangkan sistem rekomendasi dosen pembimbing tugas akhir berbasis pembobotan TF-IDF dan \textit{cosine similarity} yang mencapai akurasi rata-rata 75\% dibandingkan data aktual. Namun, pendekatan berbasis TF-IDF masih bergantung pada pencocokan kata kunci secara leksikal, sehingga belum mampu menangkap kemiripan makna secara kontekstual apabila mahasiswa dan dosen menggunakan terminologi yang berbeda untuk topik yang serupa. Oleh karena itu, penelitian ini mengusulkan pendekatan berbasis \textit{semantic similarity} menggunakan model \textit{embedding}, yang memungkinkan pengukuran kesesuaian antara profil mahasiswa dan bidang keahlian Faculty Supervisor berdasarkan makna teks secara lebih mendalam.
 
-Untuk memastikan kualitas rekomendasi yang dihasilkan, diperlukan evaluasi terhadap sistem dengan membandingkan hasil rekomendasi otomatis dengan \textit{ground truth}. Ground truth pada penelitian ini diperoleh berdasarkan hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas, serta didukung oleh dokumen pemetaan historis yang telah digunakan dalam periode sebelumnya. Pendekatan ini bertujuan untuk merepresentasikan praktik penentuan Faculty Supervisor yang telah diterapkan dan diterima secara institusional.
+Untuk memastikan kualitas rekomendasi yang dihasilkan, diperlukan evaluasi terhadap sistem dengan membandingkan hasil rekomendasi otomatis dengan \textit{ground truth}. Ground truth pada penelitian ini diperoleh dari data institusional penugasan \textit{faculty supervisor} batch 2026 Program Enrichment program studi Computer Science di XYZ University, yang disiapkan oleh Enrichment Program Coordinator (EPC) dan memuat atribut penugasan aktual (\texttt{current\_supervisor\_code}) sebagai hasil pemetaan manual yang telah diterapkan pada periode tersebut. Pendekatan ini bertujuan untuk merepresentasikan praktik penentuan Faculty Supervisor yang telah diterapkan dan diterima secara institusional.
 
 Sistem rekomendasi yang dikembangkan dalam penelitian ini berperan sebagai \textit{decision support system} yang memberikan rekomendasi kepada EPC, tanpa menggantikan keputusan akhir yang tetap berada pada EPC. Penelitian ini berfokus pada pengembangan sebuah prototipe sistem yang mencakup antarmuka pengguna dan \textit{backend} sederhana sebagai implementasi dari metode yang diusulkan. Dengan demikian, diharapkan sistem yang dikembangkan dapat membantu meningkatkan efisiensi, akurasi, serta transparansi dalam proses pemetaan Faculty Supervisor Program Enrichment di XYZ University.
 
@@ -53,7 +53,7 @@ Agar penelitian ini lebih terarah, ruang lingkup penelitian dibatasi pada:
 \item
   Sistem rekomendasi dikembangkan menggunakan pendekatan \textit{semantic similarity} berbasis data tekstual.
 \item
-  Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi dengan \textit{ground truth} yang diperoleh dari pencocokan manual dan data pemetaan historis.
+  Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi dengan \textit{ground truth} yang diperoleh dari data institusional penugasan \textit{faculty supervisor} Program Enrichment.
 \item
   Penelitian menghasilkan sebuah prototipe sistem yang mencakup antarmuka pengguna dan \textit{backend}.
 \item
@@ -102,7 +102,7 @@ Tahapan metode penelitian secara umum meliputi studi pustaka, pengumpulan data, 
 
 \subsection{Pengumpulan Data}\label{pengumpulan-data}
 
-Pengumpulan data dilakukan melalui studi dokumen dan data institusional yang digunakan dalam proses pemetaan Faculty Supervisor Program Enrichment. Data yang digunakan dalam penelitian ini meliputi data Faculty Supervisor, data mahasiswa peserta Program Enrichment, serta dokumen pemetaan historis Faculty Supervisor dan mahasiswa dalam rentang waktu satu tahun terakhir di XYZ University, khususnya XYZ. Selain itu, data \textit{ground truth} diperoleh dari hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas.
+Pengumpulan data dilakukan melalui studi dokumen dan data institusional yang digunakan dalam proses pemetaan Faculty Supervisor Program Enrichment. Data yang digunakan dalam penelitian ini meliputi data Faculty Supervisor, data mahasiswa peserta Program Enrichment, serta dokumen pemetaan historis Faculty Supervisor dan mahasiswa dalam rentang waktu satu tahun terakhir di XYZ University, khususnya XYZ. Data \textit{ground truth} diperoleh dari data institusional penugasan \textit{faculty supervisor} batch 2026 Program Enrichment program studi Computer Science di XYZ University, yang memuat atribut penugasan aktual (\texttt{current\_supervisor\_code}) hasil pemetaan manual EPC.
 
 \subsection{Praproses Data}\label{praproses-data}
 
@@ -120,7 +120,7 @@ Sebagai implementasi dari metode yang diusulkan, penelitian ini menghasilkan seb
 
 \subsection{Evaluasi Sistem}\label{evaluasi-sistem}
 
-Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan oleh sistem dengan \textit{ground truth} yang diperoleh dari pencocokan manual dan data pemetaan historis. Evaluasi ini bertujuan untuk menilai tingkat kesesuaian dan relevansi rekomendasi sistem terhadap keputusan manual yang telah diterapkan. Hasil evaluasi digunakan untuk menganalisis kinerja sistem serta potensi peningkatan efektivitas proses pemetaan Faculty Supervisor.
+Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan oleh sistem dengan \textit{ground truth} yang diperoleh dari data institusional penugasan \textit{faculty supervisor} Program Enrichment. Evaluasi ini bertujuan untuk menilai tingkat kesesuaian dan relevansi rekomendasi sistem terhadap keputusan manual yang telah diterapkan. Hasil evaluasi digunakan untuk menganalisis kinerja sistem serta potensi peningkatan efektivitas proses pemetaan Faculty Supervisor.
 
 \section{Sistematika Penulisan}\label{sistematika-penulisan}
 

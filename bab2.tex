@@ -326,19 +326,121 @@ Menurut \cite{dennis2020systems} Unified Modeling Language (UML) adalah alat dia
 
 Use-case merupakan salah satu elemen penting dalam Unified Modeling Language (UML) yang digunakan untuk memahami fungsi fungsi utama dari sistem secara umum. Use-case diagrams berperan penting dalam mengkomunikasikan secara sederhana kepada pengguna mengenai apa yang akan dilakukan oleh sistem, sehingga diagram ini umumnya dibuat pada tahap pengumpulan dan penentuan kebutuhan sistem. Dengan menyediakan representasi visual yang sederhana, Use-case diagram dapat mendorong pengguna untuk memberikan masukan tambahan terkait kebutuhan sistem pada tingkat yang lebih tinggi. Diagram ini menggambarkan fungsi utama dari sistem serta berbagai jenis pengguna yang akan berinteraksi dengan sistem tersebut \cite{dennis2020systems}.
 
+\begin{table}[H]
+\centering
+\caption{Simbol \textit{Use Case Diagram}}
+\label{tab:simbol-usecase}
+\begin{tabular}{|c|l|p{7cm}|}
+\hline
+\textbf{No} & \textbf{Simbol} & \textbf{Keterangan} \\
+\hline
+1 & Aktor & Entitas eksternal yang berinteraksi dengan sistem \\
+\hline
+2 & \textit{Use Case} & Fungsi atau layanan yang disediakan oleh sistem \\
+\hline
+3 & Batasan Sistem & Batas yang memisahkan elemen sistem dari lingkungan luar \\
+\hline
+4 & Asosiasi & Hubungan antara aktor dengan \textit{use case} \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsubsection{Activity Diagram}\label{activity-diagram}
 
 Activity diagram digunakan untuk merepresentasikan perilaku dalam proses bisnis yang tidak bergantung pada objek (independen). Activity diagram dapat digunakan untuk memodelkan segala sesuatu mulai dari alur kerja bisnis tingkat tinggi yang melibatkan banyak use case yang berbeda, hingga detail use case individual, hingga detail spesifik dari metode individual. Singkatnya, diagram aktivitas dapat digunakan untuk memodelkan semua jenis proses \cite{dennis2020systems}.
+
+\begin{table}[H]
+\centering
+\caption{Simbol \textit{Activity Diagram}}
+\label{tab:simbol-activity}
+\begin{tabular}{|c|l|p{7cm}|}
+\hline
+\textbf{No} & \textbf{Simbol} & \textbf{Keterangan} \\
+\hline
+1 & \textit{Initial Node} & Titik awal dari alur aktivitas \\
+\hline
+2 & \textit{Action} & Langkah atau aktivitas tunggal dalam proses \\
+\hline
+3 & \textit{Decision Node} & Titik percabangan dengan kondisi \textit{true}/\textit{false} \\
+\hline
+4 & \textit{Control Flow} & Panah yang menghubungkan alur kendali antar \textit{node} \\
+\hline
+5 & \textit{Final Node} & Titik akhir dari alur aktivitas \\
+\hline
+6 & \textit{Swimlane} & Partisi yang mengelompokkan aktivitas berdasarkan aktor atau sistem \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsubsection{Class Diagram}\label{class-diagram}
 
 Class diagram adalah salah satu jenis diagram pada UML yang merupakan model statis yang menunjukkan kelas-kelas dan hubungan antar kelas yang tetap konstan dalam sistem dari waktu ke waktu. Diagram ini menggambarkan kelas-kelas yang mencakup perilaku (\textit{behavior}) dan keadaan (\textit{state}), serta memperlihatkan hubungan di antara kelas-kelas tersebut. Diagram kelas digunakan untuk memodelkan struktur sistem secara konseptual dengan menekankan pada elemen-elemen yang saling terkait dalam suatu sistem perangkat lunak. Unsur-unsur dalam diagram kelas meliputi atribut, metode, dan relasi seperti asosiasi, pewarisan, serta agregasi \cite{dennis2020systems}.
 
+\begin{table}[H]
+\centering
+\caption{Simbol \textit{Class Diagram}}
+\label{tab:simbol-class}
+\begin{tabular}{|c|l|p{7cm}|}
+\hline
+\textbf{No} & \textbf{Simbol} & \textbf{Keterangan} \\
+\hline
+1 & Kelas & Representasi entitas dengan atribut dan metode \\
+\hline
+2 & \textit{Stereotype} & Label yang mengklasifikasikan peran kelas (contoh: \textit{«service»}, \textit{«dataclass»}) \\
+\hline
+3 & Asosiasi & Hubungan antar kelas disertai multiplisitas \\
+\hline
+4 & Asosiasi Berarah & Asosiasi dengan arah navigasi tertentu \\
+\hline
+5 & \textit{Dependency} & Hubungan ketergantungan antar kelas (garis putus-putus) \\
+\hline
+6 & Multiplisitas & Notasi jumlah \textit{instance} pada ujung relasi (1, N) \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsubsection{Entity Relationship Diagram}\label{entity-relationship-diagram}
 
 Entity Relationship Diagram (ERD) adalah representasi visual yang digunakan dalam analisis sistem untuk memodelkan informasi yang diciptakan, disimpan, dan digunakan oleh suatu sistem bisnis. Diagram ini membantu analis memahami berbagai komponen informasi serta hubungan antar komponen dalam sistem tersebut. Dalam ERD, data yang serupa dikelompokkan menjadi \textit{entities}, yang direpresentasikan dengan kotak-kotak. Hubungan antar \textit{entities} ditunjukkan dengan garis, dan simbol-simbol digunakan untuk menggambarkan aturan bisnis tingkat tinggi. Setiap \textit{entity} memiliki atribut yang menjelaskan informasi spesifik terkait dengannya, dan hubungan antar \textit{entities} digambarkan untuk menunjukkan bagaimana mereka saling berinteraksi atau saling tergantung satu sama lain. ERD sangat penting dalam mengorganisir data sistem tanpa menunjukkan urutan atau alur spesifik antara \textit{entities}.
 
+\begin{table}[H]
+\centering
+\caption{Simbol \textit{Entity Relationship Diagram}}
+\label{tab:simbol-erd}
+\begin{tabular}{|c|l|p{7cm}|}
+\hline
+\textbf{No} & \textbf{Simbol} & \textbf{Keterangan} \\
+\hline
+1 & Entitas & Objek atau konsep yang memiliki atribut tersimpan \\
+\hline
+2 & \textit{Primary Key} (PK) & Atribut yang secara unik mengidentifikasi setiap \textit{instance} entitas \\
+\hline
+3 & \textit{Foreign Key} (FK) & Atribut yang merujuk ke \textit{primary key} entitas lain \\
+\hline
+4 & Relasi & Garis yang menghubungkan dua entitas \\
+\hline
+5 & Kardinalitas & Notasi jumlah \textit{instance} pada setiap sisi relasi (1, N) \\
+\hline
+\end{tabular}
+\end{table}
 
+
+
+\subsection{Model Waterfall}\label{model-waterfall}
+
+Model \textit{waterfall} merupakan salah satu metodologi \textit{Software Development Life Cycle} (SDLC) yang bersifat sekuensial, di mana setiap fase pengembangan harus diselesaikan secara penuh sebelum fase berikutnya dapat dimulai \cite{pressman2010se}. Pendekatan ini dikenal sebagai model klasik atau tradisional dalam rekayasa perangkat lunak karena mengikuti alur yang terstruktur dan linier, mulai dari perumusan kebutuhan hingga pemeliharaan sistem. Pargaonkar (\citeyear{pargaonkar2023sdlc}) menyatakan bahwa model \textit{waterfall} memberikan kerangka kerja yang jelas dengan fase-fase yang terdefinisi secara eksplisit, sehingga memudahkan pengelolaan proyek yang memiliki ruang lingkup stabil dan kebutuhan yang telah terdefinisi sejak awal.
+
+Pressman mendefinisikan lima fase utama dalam model \textit{waterfall} sebagai berikut \cite{pressman2010se}:
+
+\begin{enumerate}
+    \item \textbf{Komunikasi} (\textit{Communication}): Fase awal yang mencakup inisiasi proyek dan pengumpulan kebutuhan dari seluruh \textit{stakeholder} yang terlibat dalam pengembangan sistem.
+    \item \textbf{Perencanaan} (\textit{Planning}): Fase yang meliputi estimasi sumber daya, penjadwalan aktivitas, dan analisis risiko untuk memandu keseluruhan proses pengembangan.
+    \item \textbf{Pemodelan} (\textit{Modeling}): Fase perancangan yang mencakup pembuatan model analisis dan desain arsitektur sistem sebagai cetak biru sebelum implementasi dimulai.
+    \item \textbf{Konstruksi} (\textit{Construction}): Fase implementasi kode program yang dilanjutkan dengan serangkaian pengujian untuk memastikan perangkat lunak berfungsi sesuai spesifikasi yang telah dirancang.
+    \item \textbf{Penyebaran} (\textit{Deployment}): Fase akhir yang meliputi pengiriman perangkat lunak kepada pengguna, evaluasi hasil, serta pemeliharaan sistem secara berkelanjutan.
+\end{enumerate}
+
+Model \textit{waterfall} dipilih sebagai metodologi pengembangan dalam penelitian ini karena karakteristiknya sesuai dengan konteks dan kebutuhan proyek. Penelitian ini bertujuan menghasilkan sebuah prototipe sistem rekomendasi \textit{faculty supervisor} dengan ruang lingkup yang telah terdefinisi secara jelas berdasarkan data yang bersumber dari pihak EPC. Kebutuhan sistem yang stabil dan tidak mengalami perubahan signifikan selama proses pengembangan menjadikan pendekatan sekuensial lebih efisien dibandingkan metodologi \textit{agile} \cite{saravanos2023waterfall}. Selain itu, terdapat ketergantungan sekuensial yang kuat antar tahapan: hasil analisis kebutuhan menjadi masukan bagi perancangan sistem, hasil perancangan menjadi acuan implementasi, dan implementasi harus selesai sebelum pengujian dapat dilakukan. Struktur dependensi ini secara alami sesuai dengan alur fase model \textit{waterfall} \cite{pargaonkar2023sdlc}.
 
 \section{Penelitian Terkait}\label{penelitian-terkait}
 
