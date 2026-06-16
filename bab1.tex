@@ -8,9 +8,9 @@ Program Enrichment merupakan salah satu komponen penting dalam kurikulum Univers
 
 Peran Faculty Supervisor dalam Program Enrichment sangat krusial karena kualitas pendampingan yang diberikan dapat memengaruhi capaian pembelajaran mahasiswa. Oleh karena itu, kesesuaian antara mahasiswa dan Faculty Supervisor, khususnya dari sisi bidang keahlian dan minat, menjadi faktor penting dalam menunjang keberhasilan program ini.
 
-Namun, berdasarkan hasil observasi dan wawancara terstruktur yang dilakukan kepada Enrichment Program Coordinator (EPC) dari dua fakultas di XYZ University, diketahui bahwa proses pemetaan mahasiswa ke Faculty Supervisor saat ini masih dilakukan secara manual menggunakan spreadsheet. Proses ini membutuhkan waktu satu hingga tiga minggu per batch dengan jumlah mahasiswa yang dapat mencapai ratusan orang, serta rentan terhadap kesalahan yang memerlukan revisi berulang hingga dua puluh kali per batch. Penentuan Faculty Supervisor umumnya dilakukan secara acak tanpa mempertimbangkan kesesuaian bidang keahlian, sehingga mahasiswa berpotensi mendapatkan pembimbing yang tidak relevan dengan topik atau minat program enrichment-nya.
+Namun, berdasarkan hasil observasi dan wawancara terstruktur yang dilakukan kepada Enrichment Program Coordinator (EPC) dari dua fakultas di XYZ University, diketahui bahwa proses pemetaan mahasiswa ke Faculty Supervisor saat ini masih dilakukan secara manual menggunakan \textit{spreadsheet}. Proses ini membutuhkan waktu satu hingga tiga minggu per \textit{batch} dengan jumlah mahasiswa yang dapat mencapai ratusan orang, serta rentan terhadap kesalahan yang memerlukan revisi berulang hingga dua puluh kali per \textit{batch}. Penentuan Faculty Supervisor umumnya dilakukan secara acak tanpa mempertimbangkan kesesuaian bidang keahlian, sehingga mahasiswa berpotensi mendapatkan pembimbing yang tidak relevan dengan topik atau minat program \textit{enrichment}-nya.
 
-Hasil survei menunjukkan bahwa proses pemetaan manual ini menimbulkan berbagai permasalahan, antara lain beban pembimbing antar dosen yang belum merata, mahasiswa mendapatkan Faculty Supervisor di luar bidang minat atau keahliannya, serta lamanya waktu yang dibutuhkan untuk menyelesaikan proses pemetaan satu batch mahasiswa yang dapat mencapai satu hingga tiga minggu. Selain itu, kesalahan dan revisi pemetaan masih sering terjadi, sehingga EPC perlu melakukan perbaikan data secara berulang melalui pengeditan manual. Kondisi tersebut meningkatkan beban kerja EPC dan berpotensi menurunkan efisiensi serta transparansi proses penentuan Faculty Supervisor.
+Hasil survei menunjukkan bahwa proses pemetaan manual ini menimbulkan berbagai permasalahan, antara lain beban pembimbing antar dosen yang belum merata, mahasiswa mendapatkan Faculty Supervisor di luar bidang minat atau keahliannya, serta lamanya waktu yang dibutuhkan untuk menyelesaikan proses pemetaan satu \textit{batch} mahasiswa yang dapat mencapai satu hingga tiga minggu. Selain itu, kesalahan dan revisi pemetaan masih sering terjadi, sehingga EPC perlu melakukan perbaikan data secara berulang melalui pengeditan manual. Kondisi tersebut meningkatkan beban kerja EPC dan berpotensi menurunkan efisiensi serta transparansi proses penentuan Faculty Supervisor.
 
 \begin{figure}[h]
 \centering
@@ -20,13 +20,13 @@ Hasil survei menunjukkan bahwa proses pemetaan manual ini menimbulkan berbagai p
 {\footnotesize Sumber: Diolah dari \cite{binusmaba2021}, \cite{binusmaba2022}, \cite{binusmaba2023}, \cite{binusmaba2024}, \cite{binusmaba2025}}
 \end{figure}
 
-Seiring dengan meningkatnya jumlah mahasiswa di XYZ University dari tahun ke tahun sebagaimana terlihat pada Gambar~\ref{fig:fig1.1}, serta meningkatnya jumlah mahasiswa yang mengikuti Program Enrichment dan kompleksitas data yang harus dipertimbangkan, pendekatan manual menjadi semakin tidak efektif. Oleh karena itu, diperlukan suatu sistem yang dapat membantu proses pemetaan Faculty Supervisor secara lebih efisien, objektif, dan terukur. Salah satu pendekatan yang dapat digunakan adalah sistem rekomendasi berbasis semantic similarity, yang memungkinkan pengukuran tingkat kesesuaian antara profil mahasiswa dan bidang keahlian dosen berdasarkan kemiripan makna dari data tekstual yang dimiliki.
+Seiring dengan meningkatnya jumlah mahasiswa di XYZ University dari tahun ke tahun sebagaimana terlihat pada Gambar~\ref{fig:fig1.1}, serta meningkatnya jumlah mahasiswa yang mengikuti Program Enrichment dan kompleksitas data yang harus dipertimbangkan, pendekatan manual menjadi semakin tidak efektif. Oleh karena itu, diperlukan suatu sistem yang dapat membantu proses pemetaan Faculty Supervisor secara lebih efisien, objektif, dan terukur. Salah satu pendekatan yang dapat digunakan adalah sistem rekomendasi berbasis \textit{semantic similarity}, yang memungkinkan pengukuran tingkat kesesuaian antara profil mahasiswa dan bidang keahlian dosen berdasarkan kemiripan makna dari data tekstual yang dimiliki.
 
-Beberapa penelitian sebelumnya telah mengeksplorasi otomasi proses alokasi pembimbing akademik. Fan et al. (\citeyear{fan2021automated}) menunjukkan bahwa pendekatan otomatis berbasis machine learning memiliki potensi signifikan dalam mengatasi keterbatasan proses manual, khususnya pada institusi dengan jumlah mahasiswa yang besar. Dalam konteks yang lebih dekat, Rismanto et al. (\citeyear{rismanto2020supervisor}) mengembangkan sistem rekomendasi dosen pembimbing tugas akhir berbasis pembobotan TF-IDF dan cosine similarity yang mencapai akurasi rata-rata 75\% dibandingkan data aktual. Namun, pendekatan berbasis TF-IDF masih bergantung pada pencocokan kata kunci secara leksikal, sehingga belum mampu menangkap kemiripan makna secara kontekstual apabila mahasiswa dan dosen menggunakan terminologi yang berbeda untuk topik yang serupa. Oleh karena itu, penelitian ini mengusulkan pendekatan berbasis semantic similarity menggunakan model embedding, yang memungkinkan pengukuran kesesuaian antara profil mahasiswa dan bidang keahlian Faculty Supervisor berdasarkan makna teks secara lebih mendalam.
+Beberapa penelitian sebelumnya telah mengeksplorasi otomasi proses alokasi pembimbing akademik. Fan et al. (\citeyear{fan2021automated}) menunjukkan bahwa pendekatan otomatis berbasis \textit{machine learning} memiliki potensi signifikan dalam mengatasi keterbatasan proses manual, khususnya pada institusi dengan jumlah mahasiswa yang besar. Dalam konteks yang lebih dekat, Rismanto et al. (\citeyear{rismanto2020supervisor}) mengembangkan sistem rekomendasi dosen pembimbing tugas akhir berbasis pembobotan TF-IDF dan \textit{cosine similarity} yang mencapai akurasi rata-rata 75\% dibandingkan data aktual. Namun, pendekatan berbasis TF-IDF masih bergantung pada pencocokan kata kunci secara leksikal, sehingga belum mampu menangkap kemiripan makna secara kontekstual apabila mahasiswa dan dosen menggunakan terminologi yang berbeda untuk topik yang serupa. Oleh karena itu, penelitian ini mengusulkan pendekatan berbasis \textit{semantic similarity} menggunakan model \textit{embedding}, yang memungkinkan pengukuran kesesuaian antara profil mahasiswa dan bidang keahlian Faculty Supervisor berdasarkan makna teks secara lebih mendalam.
 
-Untuk memastikan kualitas rekomendasi yang dihasilkan, diperlukan evaluasi terhadap sistem dengan membandingkan hasil rekomendasi otomatis dengan ground truth. Ground truth pada penelitian ini diperoleh berdasarkan hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas, serta didukung oleh dokumen pemetaan historis yang telah digunakan dalam periode sebelumnya. Pendekatan ini bertujuan untuk merepresentasikan praktik penentuan Faculty Supervisor yang telah diterapkan dan diterima secara institusional.
+Untuk memastikan kualitas rekomendasi yang dihasilkan, diperlukan evaluasi terhadap sistem dengan membandingkan hasil rekomendasi otomatis dengan \textit{ground truth}. Ground truth pada penelitian ini diperoleh berdasarkan hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas, serta didukung oleh dokumen pemetaan historis yang telah digunakan dalam periode sebelumnya. Pendekatan ini bertujuan untuk merepresentasikan praktik penentuan Faculty Supervisor yang telah diterapkan dan diterima secara institusional.
 
-Sistem rekomendasi yang dikembangkan dalam penelitian ini berperan sebagai decision support system yang memberikan rekomendasi kepada EPC, tanpa menggantikan keputusan akhir yang tetap berada pada EPC. Penelitian ini berfokus pada pengembangan sebuah prototipe sistem yang mencakup antarmuka pengguna dan backend sederhana sebagai implementasi dari metode yang diusulkan. Dengan demikian, diharapkan sistem yang dikembangkan dapat membantu meningkatkan efisiensi, akurasi, serta transparansi dalam proses pemetaan Faculty Supervisor Program Enrichment di XYZ University.
+Sistem rekomendasi yang dikembangkan dalam penelitian ini berperan sebagai \textit{decision support system} yang memberikan rekomendasi kepada EPC, tanpa menggantikan keputusan akhir yang tetap berada pada EPC. Penelitian ini berfokus pada pengembangan sebuah prototipe sistem yang mencakup antarmuka pengguna dan \textit{backend} sederhana sebagai implementasi dari metode yang diusulkan. Dengan demikian, diharapkan sistem yang dikembangkan dapat membantu meningkatkan efisiensi, akurasi, serta transparansi dalam proses pemetaan Faculty Supervisor Program Enrichment di XYZ University.
 
 \section{Rumusan Masalah}\label{rumusan-masalah}
 
@@ -35,9 +35,9 @@ Berdasarkan latar belakang yang telah diuraikan, rumusan masalah dalam penelitia
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Bagaimana merancang dan mengembangkan sistem rekomendasi Faculty Supervisor magang berbasis semantic similarity?
+  Bagaimana merancang dan mengembangkan sistem rekomendasi Faculty Supervisor magang berbasis \textit{semantic similarity}?
 \item
-  Seberapa tinggi tingkat kesesuaian hasil rekomendasi sistem dengan ground truth yang diperoleh dari pencocokan manual oleh EPC?
+  Seberapa tinggi tingkat kesesuaian hasil rekomendasi sistem dengan \textit{ground truth} yang diperoleh dari pencocokan manual oleh EPC?
 \item
   Bagaimana sistem rekomendasi yang dikembangkan dapat membantu meningkatkan efisiensi proses pemetaan Faculty Supervisor?
 \end{enumerate}
@@ -51,11 +51,11 @@ Agar penelitian ini lebih terarah, ruang lingkup penelitian dibatasi pada:
 \item
   Penelitian difokuskan pada pemetaan Faculty Supervisor magang dalam Program Enrichment di XYZ University kampus Bandung, khususnya pada program studi Computer Science.
 \item
-  Sistem rekomendasi dikembangkan menggunakan pendekatan semantic similarity berbasis data tekstual.
+  Sistem rekomendasi dikembangkan menggunakan pendekatan \textit{semantic similarity} berbasis data tekstual.
 \item
-  Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi dengan ground truth yang diperoleh dari pencocokan manual dan data pemetaan historis.
+  Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi dengan \textit{ground truth} yang diperoleh dari pencocokan manual dan data pemetaan historis.
 \item
-  Penelitian menghasilkan sebuah prototipe sistem yang mencakup antarmuka pengguna dan backend.
+  Penelitian menghasilkan sebuah prototipe sistem yang mencakup antarmuka pengguna dan \textit{backend}.
 \item
   Penelitian ini tidak membahas kebijakan akademik di luar proses pemetaan Faculty Supervisor.
 \end{enumerate}
@@ -71,9 +71,9 @@ Tujuan dari penelitian ini adalah sebagai berikut:
 \item
   Menganalisis permasalahan dalam proses pemetaan Faculty Supervisor Program Enrichment yang dilakukan secara manual.
 \item
-  Mengembangkan sistem rekomendasi Faculty Supervisor magang menggunakan pendekatan semantic similarity.
+  Mengembangkan sistem rekomendasi Faculty Supervisor magang menggunakan pendekatan \textit{semantic similarity}.
 \item
-  Melakukan evaluasi hasil rekomendasi sistem menggunakan ground truth berdasarkan pencocokan manual.
+  Melakukan evaluasi hasil rekomendasi sistem menggunakan \textit{ground truth} berdasarkan pencocokan manual.
 \item
   Menghasilkan prototipe sistem sebagai pendukung EPC dalam proses penentuan Faculty Supervisor secara lebih efektif dan terstruktur.
 \end{enumerate}
@@ -96,31 +96,31 @@ Adapun manfaat yang diharapkan dari pengembangan sistem ini adalah:
 
 \section{Metode Penelitian}\label{metode-penelitian}
 
-Metode penelitian yang digunakan dalam penelitian ini disusun untuk mendukung pengembangan sistem rekomendasi Faculty Supervisor magang pada Program Enrichment XYZ University. Penelitian ini menggunakan pendekatan rekayasa perangkat lunak dengan pemanfaatan metode semantic similarity sebagai dasar sistem rekomendasi, serta evaluasi hasil rekomendasi menggunakan ground truth berdasarkan pencocokan manual.
+Metode penelitian yang digunakan dalam penelitian ini disusun untuk mendukung pengembangan sistem rekomendasi Faculty Supervisor magang pada Program Enrichment XYZ University. Penelitian ini menggunakan pendekatan rekayasa perangkat lunak dengan pemanfaatan metode \textit{semantic similarity} sebagai dasar sistem rekomendasi, serta evaluasi hasil rekomendasi menggunakan \textit{ground truth} berdasarkan pencocokan manual.
 
 Tahapan metode penelitian secara umum meliputi studi pustaka, pengumpulan data, praproses data, pengembangan sistem rekomendasi, evaluasi sistem, serta pengembangan prototipe sistem.
 
 \subsection{Pengumpulan Data}\label{pengumpulan-data}
 
-Pengumpulan data dilakukan melalui studi dokumen dan data institusional yang digunakan dalam proses pemetaan Faculty Supervisor Program Enrichment. Data yang digunakan dalam penelitian ini meliputi data Faculty Supervisor, data mahasiswa peserta Program Enrichment, serta dokumen pemetaan historis Faculty Supervisor dan mahasiswa dalam rentang waktu satu tahun terakhir di XYZ University, khususnya XYZ. Selain itu, data ground truth diperoleh dari hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas.
+Pengumpulan data dilakukan melalui studi dokumen dan data institusional yang digunakan dalam proses pemetaan Faculty Supervisor Program Enrichment. Data yang digunakan dalam penelitian ini meliputi data Faculty Supervisor, data mahasiswa peserta Program Enrichment, serta dokumen pemetaan historis Faculty Supervisor dan mahasiswa dalam rentang waktu satu tahun terakhir di XYZ University, khususnya XYZ. Selain itu, data \textit{ground truth} diperoleh dari hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas.
 
 \subsection{Praproses Data}\label{praproses-data}
 
-Sebelum data digunakan dalam sistem rekomendasi, dilakukan tahapan praproses data untuk memastikan kualitas dan konsistensi data tekstual. Tahapan praproses meliputi pembersihan data dari informasi yang tidak relevan, normalisasi teks, tokenisasi, serta penghapusan kata-kata umum (stop words) yang tidak memiliki makna signifikan. Tahapan ini bertujuan untuk mempersiapkan data agar dapat diproses secara optimal dalam perhitungan kemiripan semantik.
+Sebelum data digunakan dalam sistem rekomendasi, dilakukan tahapan praproses data untuk memastikan kualitas dan konsistensi data tekstual. Tahapan praproses meliputi pembersihan data dari informasi yang tidak relevan, normalisasi teks, tokenisasi, serta penghapusan kata-kata umum (\textit{stop words}) yang tidak memiliki makna signifikan. Tahapan ini bertujuan untuk mempersiapkan data agar dapat diproses secara optimal dalam perhitungan kemiripan semantik.
 
 \subsection{Pengembangan Sistem Rekomendasi}\label{pengembangan-sistem-rekomendasi}
 
-Pada tahap ini dilakukan pengembangan sistem rekomendasi Faculty Supervisor menggunakan pendekatan semantic similarity. Sistem dirancang untuk menghitung tingkat kemiripan antara profil mahasiswa dan bidang keahlian dosen berdasarkan representasi data tekstual. Hasil perhitungan kemiripan digunakan untuk menghasilkan peringkat rekomendasi Faculty Supervisor bagi setiap mahasiswa.
+Pada tahap ini dilakukan pengembangan sistem rekomendasi Faculty Supervisor menggunakan pendekatan \textit{semantic similarity}. Sistem dirancang untuk menghitung tingkat kemiripan antara profil mahasiswa dan bidang keahlian dosen berdasarkan representasi data tekstual. Hasil perhitungan kemiripan digunakan untuk menghasilkan peringkat rekomendasi Faculty Supervisor bagi setiap mahasiswa.
 
-Selain perhitungan kemiripan semantik, sistem juga mendukung penerapan aturan pendukung, seperti batasan kuota Faculty Supervisor, untuk membantu pemerataan beban pembimbing. Sistem yang dikembangkan bersifat decision support system, di mana rekomendasi yang dihasilkan digunakan sebagai bahan pertimbangan oleh EPC, tanpa menggantikan keputusan akhir.
+Selain perhitungan kemiripan semantik, sistem juga mendukung penerapan aturan pendukung, seperti batasan kuota Faculty Supervisor, untuk membantu pemerataan beban pembimbing. Sistem yang dikembangkan bersifat \textit{decision support system}, di mana rekomendasi yang dihasilkan digunakan sebagai bahan pertimbangan oleh EPC, tanpa menggantikan keputusan akhir.
 
 \subsection{Pengembangan Prototipe Sistem}\label{pengembangan-prototipe-sistem}
 
-Sebagai implementasi dari metode yang diusulkan, penelitian ini menghasilkan sebuah prototipe sistem yang mencakup antarmuka pengguna dan backend sederhana. Prototipe dikembangkan untuk mendemonstrasikan alur kerja sistem rekomendasi mulai dari input data, proses perhitungan kemiripan, hingga penyajian hasil rekomendasi kepada pengguna. Pengembangan prototipe ini bertujuan untuk memvalidasi penerapan metode dalam bentuk sistem yang dapat digunakan secara operasional.
+Sebagai implementasi dari metode yang diusulkan, penelitian ini menghasilkan sebuah prototipe sistem yang mencakup antarmuka pengguna dan \textit{backend} sederhana. Prototipe dikembangkan untuk mendemonstrasikan alur kerja sistem rekomendasi mulai dari \textit{input} data, proses perhitungan kemiripan, hingga penyajian hasil rekomendasi kepada pengguna. Pengembangan prototipe ini bertujuan untuk memvalidasi penerapan metode dalam bentuk sistem yang dapat digunakan secara operasional.
 
 \subsection{Evaluasi Sistem}\label{evaluasi-sistem}
 
-Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan oleh sistem dengan ground truth yang diperoleh dari pencocokan manual dan data pemetaan historis. Evaluasi ini bertujuan untuk menilai tingkat kesesuaian dan relevansi rekomendasi sistem terhadap keputusan manual yang telah diterapkan. Hasil evaluasi digunakan untuk menganalisis kinerja sistem serta potensi peningkatan efektivitas proses pemetaan Faculty Supervisor.
+Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan oleh sistem dengan \textit{ground truth} yang diperoleh dari pencocokan manual dan data pemetaan historis. Evaluasi ini bertujuan untuk menilai tingkat kesesuaian dan relevansi rekomendasi sistem terhadap keputusan manual yang telah diterapkan. Hasil evaluasi digunakan untuk menganalisis kinerja sistem serta potensi peningkatan efektivitas proses pemetaan Faculty Supervisor.
 
 \section{Sistematika Penulisan}\label{sistematika-penulisan}
 
@@ -132,7 +132,7 @@ Bab ini membahas mengenai latar belakang permasalahan, hipotesis, ruang lingkup,
 
 \textbf{BAB 2 TINJAUAN PUSTAKA}
 
-Bab ini berfokus pada pembahasan teori-teori yang berkaitan dengan sistem rekomendasi, semantic similarity, natural language processing, serta penelitian terdahulu yang relevan sebagai dasar pengembangan sistem.
+Bab ini berfokus pada pembahasan teori-teori yang berkaitan dengan sistem rekomendasi, \textit{semantic similarity}, \textit{natural language processing}, serta penelitian terdahulu yang relevan sebagai dasar pengembangan sistem.
 
 \textbf{BAB 3 METODE PENELITIAN}
 
