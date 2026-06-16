@@ -75,6 +75,29 @@ Pengembangan sistem dilakukan melalui beberapa tahapan yang saling berurutan, di
 
 \section{Metodologi Penelitian}\label{metodologi-penelitian}
 
+Penelitian ini menggunakan model \textit{waterfall} sebagai metodologi \textit{Software Development Life Cycle} (SDLC) dalam proses pengembangan sistem, sebagaimana telah dijelaskan pada Subbab \ref{model-waterfall}. Pendekatan sekuensial ini dipilih karena ruang lingkup sistem telah terdefinisi dengan jelas sejak awal berdasarkan data dan kebutuhan dari pihak EPC, sehingga setiap fase dapat diselesaikan secara tuntas sebelum fase berikutnya dimulai. Tabel \ref{tab:waterfall-mapping} memetakan fase-fase model \textit{waterfall} terhadap cakupan subbab yang dibahas dalam BAB 3 ini.
+
+\begin{table}[H]
+\centering
+\caption{Pemetaan Fase Model \textit{Waterfall} terhadap Cakupan BAB 3}
+\label{tab:waterfall-mapping}
+\begin{tabular}{|p{4cm}|p{9cm}|}
+\hline
+\textbf{Fase \textit{Waterfall}} & \textbf{Cakupan dalam BAB 3} \\
+\hline
+Analisis Kebutuhan & Analisis Permasalahan, Analisis Aktor Sistem, Analisis Kebutuhan Sistem, Analisis Data \\
+\hline
+Perancangan & Perencanaan, Perancangan Model Rekomendasi, Kandidat Model, Perancangan UML \\
+\hline
+Implementasi & Tahapan Implementasi -- Implementasi dan \textit{Deployment} Sistem \\
+\hline
+Pengujian & Pengujian \textit{Black Box} (dilaksanakan pada BAB 4) \\
+\hline
+Pemeliharaan & Di luar cakupan penelitian prototipe \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Analisis}\label{analisis}
 
 \subsubsection{Analisis Permasalahan}\label{analisis-permasalahan}
@@ -344,6 +367,8 @@ Setelah kedua fase selesai, sistem melakukan validasi akhir untuk memastikan sel
 
 Strategi evaluasi pada penelitian ini dirancang untuk menilai efektivitas model rekomendasi berbasis \textit{semantic similarity} dalam menghasilkan pasangan mahasiswa dan faculty supervisor yang relevan. Evaluasi difokuskan pada dua aspek utama, yaitu kualitas hasil perangkingan rekomendasi dan dampak penerapan validasi slot bimbingan terhadap hasil akhir alokasi.
 
+Data \textit{ground truth} yang digunakan dalam evaluasi ini bersumber dari satu sumber institusional, yaitu data penugasan \textit{faculty supervisor} batch 2026 Program Enrichment program studi Computer Science di XYZ University. Data tersebut memuat atribut \texttt{current\_supervisor\_code} yang merupakan kode dosen pembimbing hasil pemetaan manual oleh EPC. Dataset ini mencakup 171 mahasiswa, dengan 168 di antaranya memiliki penugasan \textit{faculty supervisor} yang valid dan digunakan sebagai data evaluasi; 3 mahasiswa pada track \textit{Study Abroad} dikecualikan karena tidak memiliki penugasan \textit{faculty supervisor} dalam program studi Computer Science. Selain sebagai label evaluasi, data historis penugasan juga dimanfaatkan sebagai pengayaan profil \textit{faculty supervisor} ketika opsi \texttt{extra\_docs} diaktifkan.
+
 Evaluasi kualitas perangkingan dilakukan dengan membandingkan hasil rekomendasi yang dihasilkan sistem terhadap data \textit{ground truth} yang tersedia, berupa pasangan mahasiswa--\textit{faculty supervisor} dari data historis penugasan. Metrik evaluasi yang digunakan adalah metrik \textit{information retrieval} berbasis peringkat, yaitu:
 
 \begin{itemize}
@@ -377,7 +402,7 @@ Use Case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dal
 ]
 
 %% System boundary
-\draw[thick] (1.0, 1.0) rectangle (10.5, -16.2);
+\draw[thick] (1.0, 1.0) rectangle (10.5, -18.0);
 \node[font=\scriptsize\bfseries, above] at (5.75, 1.0)
   {Sistem Rekomendasi Faculty Supervisor};
 
@@ -394,21 +419,22 @@ Use Case Diagram memberikan ilustrasi tentang proses-proses yang berlangsung dal
 \node (uc9)  [uc] at (6.5, -12.0) {Lihat Hasil Rekomendasi};
 \node (uc10) [uc] at (6.5, -13.5) {Export Hasil ke Excel};
 \node (uc11) [uc] at (6.5, -15.0) {Logout};
+\node (uc12) [uc] at (6.5, -16.5) {Export Konfigurasi Supervisor};
 
-%% Fan lines from actor right arm-tip (-0.28, -6.85) to each \textit{use case}
-%% Actor centred at (-0.8, -7.5); arm at y = -7.5 + 0.65 = -6.85
-\foreach \uc in {uc1, uc2, uc3, uc4, uc5, uc6, uc7, uc8, uc9, uc10, uc11} {
-  \draw (-0.28, -6.85) -- (\uc.west);
+%% Fan lines from actor right arm-tip (-0.28, -7.60) to each \textit{use case}
+%% Actor centred at (-0.8, -8.25); arm at y = -8.25 + 0.65 = -7.60
+\foreach \uc in {uc1, uc2, uc3, uc4, uc5, uc6, uc7, uc8, uc9, uc10, uc11, uc12} {
+  \draw (-0.28, -7.60) -- (\uc.west);
 }
 
-%% Actor (EPC) — stick figure centred at x=-0.8, y=-7.5
-%% head: -5.95, neck: -6.27, arm: -6.85, hip: -7.35, feet: -8.15
-\draw[fill=white] (-0.8, -5.95) circle (0.32cm);  % head
-\draw (-0.8, -6.27) -- (-0.8, -7.35);             % body
-\draw (-1.32, -6.85) -- (-0.28, -6.85);           % arms
-\draw (-0.8,  -7.35) -- (-1.22, -8.15);           % left leg
-\draw (-0.8,  -7.35) -- (-0.38, -8.15);           % right leg
-\node[font=\scriptsize\bfseries, below=0.12cm] at (-0.8, -8.15) {EPC};
+%% Actor (EPC) — stick figure centred at x=-0.8, y=-8.25
+%% head: -6.70, neck: -7.02, arm: -7.60, hip: -8.10, feet: -8.90
+\draw[fill=white] (-0.8, -6.70) circle (0.32cm);  % head
+\draw (-0.8, -7.02) -- (-0.8, -8.10);             % body
+\draw (-1.32, -7.60) -- (-0.28, -7.60);           % arms
+\draw (-0.8,  -8.10) -- (-1.22, -8.90);           % left leg
+\draw (-0.8,  -8.10) -- (-0.38, -8.90);           % right leg
+\node[font=\scriptsize\bfseries, below=0.12cm] at (-0.8, -8.90) {EPC};
 
 \end{tikzpicture}%
 }
@@ -2106,9 +2132,7 @@ Entity Relationship Diagram (ERD) digunakan untuk memodelkan struktur data dan h
 \newpage
 \subsection{Tahapan Implementasi}\label{tahapan-implementasi}
 
-Tahapan implementasi merupakan tahap realisasi dari hasil analisis dan perancangan sistem yang telah dijelaskan pada sub-bab sebelumnya. Pada tahap ini, seluruh rancangan sistem yang telah dibuat diimplementasikan ke dalam bentuk sistem yang dapat dijalankan dan diuji secara fungsional. Proses implementasi dilakukan dengan mengacu pada metodologi \textit{waterfall}, di mana setiap tahap dilaksanakan secara berurutan dan sistematis.
-
-Implementasi pada penelitian ini mencakup implementasi pengolahan data, penerapan metode \textit{semantic similarity} dan aturan pendukung yang berlaku, serta pengembangan dan \textit{deployment} prototipe sistem rekomendasi faculty supervisor Program Enrichment.
+Tahapan implementasi merupakan fase Konstruksi dalam model \textit{waterfall} yang diterapkan pada penelitian ini, mengikuti fase Analisis Kebutuhan dan fase Perancangan yang telah diuraikan pada subbab-subbab sebelumnya. Pada fase ini, seluruh rancangan sistem yang telah dibuat diimplementasikan ke dalam bentuk sistem yang dapat dijalankan dan diuji secara fungsional, mengikuti alur sekuensial yang menjadi karakteristik model \textit{waterfall} \cite{pressman2010se}. Implementasi mencakup pengolahan data, penerapan metode \textit{semantic similarity} dan aturan pendukung yang berlaku, serta pengembangan dan \textit{deployment} prototipe sistem rekomendasi \textit{faculty supervisor} Program Enrichment. Rincian setiap langkah implementasi dijelaskan pada subbab berikut.
 
 \subsection{Implementasi Pengolahan Data}\label{implementasi-pengolahan-data}
 
