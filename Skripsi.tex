@@ -1,6 +1,6 @@
 % Tipe dokumen adalah report dengan satu kolom kertas A4 satu sisi.
 % Ukuran font 12pt
-\documentclass[12pt, a4paper, onecolumn, twoside, final]{report}
+\documentclass[12pt, a4paper, onecolumn, oneside, final]{report}
 
 % Load konfigurasi LaTeX untuk tipe laporan thesis
 \usepackage{ta}
@@ -79,6 +79,12 @@
 \usepackage{titlesec}
 \titlespacing*{\subsection}{0.5cm}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
 \titlespacing*{\subsubsection}{1.0cm}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\usepackage{titletoc}
+\titlecontents{chapter}[0em]
+  {\addvspace{1em}\bfseries}
+  {BAB \thecontentslabel\quad}
+  {}
+  {\hfill\contentspage}
 % Awal bagian penulisan laporan
 \begin{document}
 
