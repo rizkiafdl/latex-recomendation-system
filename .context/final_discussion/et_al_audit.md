@@ -4,6 +4,7 @@
 > Artinya: 1–5 pengarang → semua nama harus disebutkan; ≥6 pengarang → boleh `et al.`
 
 Tanggal audit: 2026-06-16
+**Status: ✅ SEMUA PELANGGARAN TELAH DIPERBAIKI (2026-06-16)**
 
 ---
 

@@ -92,7 +92,7 @@ Sehingga rumus TF-IDF dapat dituliskan sebagai berikut:
 
 \textit{Word embedding} merupakan pendekatan representasi teks yang memetakan kata ke dalam vektor numerik berdasarkan konteks kemunculannya dalam korpus teks. Pendekatan ini memungkinkan sistem untuk menangkap hubungan semantik antar kata dalam ruang vektor.
 
-Mikolov et al. (\citeyear{mikolov2013word2vec}) memperkenalkan Word2Vec yang mempelajari representasi kata berdasarkan konteks lokal, sedangkan Pennington et al. (\citeyear{pennington2014glove}) mengembangkan GloVe yang memanfaatkan statistik global ko-okurensi kata. FastText (Bojanowski et al., \citeyear{bojanowski2017fasttext}) kemudian memperluas pendekatan ini dengan mempertimbangkan \textit{subword}, sehingga lebih \textit{robust} terhadap variasi morfologi kata.
+Mikolov, Sutskever, Chen, Corrado, dan Dean (\citeyear{mikolov2013word2vec}) memperkenalkan Word2Vec yang mempelajari representasi kata berdasarkan konteks lokal, sedangkan Pennington, Socher, dan Manning (\citeyear{pennington2014glove}) mengembangkan GloVe yang memanfaatkan statistik global ko-okurensi kata. FastText (Bojanowski, Grave, Joulin, dan Mikolov, \citeyear{bojanowski2017fasttext}) kemudian memperluas pendekatan ini dengan mempertimbangkan \textit{subword}, sehingga lebih \textit{robust} terhadap variasi morfologi kata.
 
 Meskipun word \textit{embedding} mampu menangkap hubungan semantik antar kata, pendekatan ini bersifat statis, di mana satu kata memiliki satu representasi vektor tetap tanpa mempertimbangkan konteks kalimat. Keterbatasan ini menyebabkan word \textit{embedding} kurang optimal untuk merepresentasikan makna pada \textit{level} kalimat atau dokumen.
 
@@ -102,7 +102,7 @@ Dalam penelitian ini, word \textit{embedding} diposisikan sebagai tahap evolusi 
 
 Transformer-based \textit{embedding} merupakan pendekatan representasi teks modern yang memanfaatkan arsitektur transformer untuk menghasilkan \textit{embedding} yang bersifat kontekstual. Arsitektur transformer diperkenalkan oleh Vaswani et al. (\citeyear{vaswani2017attention}) dan menggunakan mekanisme self-attention untuk memodelkan hubungan antar kata dalam suatu teks secara menyeluruh.
 
-Devlin et al. (\citeyear{devlin2019bert}) menjelaskan bahwa model berbasis transformer mampu menghasilkan representasi teks kontekstual, di mana makna suatu kata dipengaruhi oleh keseluruhan konteks kalimat. Pendekatan ini memungkinkan sistem memahami hubungan semantik yang kompleks, termasuk sinonim dan konteks implisit.
+Devlin, Chang, Lee, dan Toutanova (\citeyear{devlin2019bert}) menjelaskan bahwa model berbasis transformer mampu menghasilkan representasi teks kontekstual, di mana makna suatu kata dipengaruhi oleh keseluruhan konteks kalimat. Pendekatan ini memungkinkan sistem memahami hubungan semantik yang kompleks, termasuk sinonim dan konteks implisit.
 
 Dalam penelitian ini, transformer-based \textit{embedding} digunakan karena kemampuannya dalam merepresentasikan dokumen teks akademik secara lebih akurat. Pendekatan ini sangat sesuai untuk membandingkan deskripsi minat mahasiswa dan bidang keahlian faculty supervisor yang memiliki variasi istilah dan gaya bahasa.
 
@@ -110,7 +110,7 @@ Dalam penelitian ini, transformer-based \textit{embedding} digunakan karena kema
 
 BERT (Bidirectional Encoder Representations from Transformers) merupakan model berbasis transformer yang menghasilkan representasi teks dua arah (bidirectional), sehingga setiap \textit{token} dipahami berdasarkan konteks sebelum dan sesudahnya.
 
-Menurut Devlin et al. (\citeyear{devlin2019bert}), BERT menghasilkan \textit{embedding} kontekstual yang lebih kaya dibandingkan model sebelumnya karena mempertimbangkan konteks secara menyeluruh. BERT menjadi tonggak penting dalam perkembangan NLP modern.
+Menurut Devlin, Chang, Lee, dan Toutanova (\citeyear{devlin2019bert}), BERT menghasilkan \textit{embedding} kontekstual yang lebih kaya dibandingkan model sebelumnya karena mempertimbangkan konteks secara menyeluruh. BERT menjadi tonggak penting dalam perkembangan NLP modern.
 
 Dalam penelitian ini, konsep BERT \textit{embedding} digunakan sebagai landasan teoritis bagi penggunaan model \textit{embedding} kontekstual modern. Meskipun penelitian ini tidak terbatas pada BERT saja, prinsip representasi kontekstual yang diperkenalkan BERT menjadi dasar bagi model \textit{embedding} lain yang digunakan.
 
@@ -118,7 +118,7 @@ Dalam penelitian ini, konsep BERT \textit{embedding} digunakan sebagai landasan 
 
 \textit{Semantic similarity} merupakan ukuran tingkat kesamaan makna antara dua teks atau konsep berdasarkan konteks dan arti, bukan sekadar kecocokan kata secara literal. Pendekatan ini memungkinkan sistem memahami kesamaan konsep meskipun menggunakan istilah yang berbeda.
 
-Menurut Mihalcea et al. (\citeyear{mihalcea2006semantic}), \textit{semantic similarity} bertujuan untuk mengukur sejauh mana dua unit teks memiliki makna yang serupa. Pendekatan ini banyak digunakan dalam sistem rekomendasi dan pencarian semantik modern. Dalam penelitian ini, \textit{semantic similarity} digunakan untuk mengukur tingkat kesesuaian antara profil mahasiswa dan bidang keahlian faculty supervisor, sehingga rekomendasi yang dihasilkan lebih relevan secara konseptual.
+Menurut Mihalcea, Corley, dan Strapparava (\citeyear{mihalcea2006semantic}), \textit{semantic similarity} bertujuan untuk mengukur sejauh mana dua unit teks memiliki makna yang serupa. Pendekatan ini banyak digunakan dalam sistem rekomendasi dan pencarian semantik modern. Dalam penelitian ini, \textit{semantic similarity} digunakan untuk mengukur tingkat kesesuaian antara profil mahasiswa dan bidang keahlian faculty supervisor, sehingga rekomendasi yang dihasilkan lebih relevan secara konseptual.
 
 \subsection{Cosine Similarity}\label{cosine-similarity}
 
@@ -192,7 +192,7 @@ nDCG@K merupakan metrik evaluasi yang mengukur kualitas peringkat rekomendasi de
 
 Recall@K merupakan metrik evaluasi yang mengukur proporsi item relevan yang berhasil muncul dalam K rekomendasi teratas. Metrik ini menilai kemampuan sistem dalam menemukan item yang relevan, bukan urutannya
 
-Herlocker et al. (\citeyear{herlocker2004recall}) menyatakan bahwa Recall@K sangat sesuai untuk sistem rekomendasi berbasis peringkat karena merepresentasikan kemampuan sistem dalam menemukan item relevan pada daftar rekomendasi teratas.
+Herlocker, Konstan, Terveen, dan Riedl (\citeyear{herlocker2004recall}) menyatakan bahwa Recall@K sangat sesuai untuk sistem rekomendasi berbasis peringkat karena merepresentasikan kemampuan sistem dalam menemukan item relevan pada daftar rekomendasi teratas.
 
 Dalam penelitian ini, Recall@K digunakan untuk mengukur sejauh mana faculty supervisor yang relevan berhasil direkomendasikan oleh sistem pada posisi teratas.
 
@@ -234,7 +234,7 @@ $RR_i$ adalah nilai reciprocal rank untuk data ke-i
 
 \textit{Cosine similarity score} merupakan ukuran kemiripan antara dua vektor berdasarkan sudut di antaranya. Nilai \textit{cosine similarity} berada pada rentang -1 hingga 1.
 
-Menurut Manning et al. (\citeyear{manning2008ir}), \textit{cosine similarity} banyak digunakan dalam model ruang vektor karena tidak dipengaruhi oleh panjang vektor. Dalam penelitian ini, \textit{cosine similarity} score digunakan sebagai dasar perhitungan kesesuaian semantik antara \textit{embedding} mahasiswa dan faculty supervisor.
+Menurut Manning, Raghavan, dan Schütze (\citeyear{manning2008ir}), \textit{cosine similarity} banyak digunakan dalam model ruang vektor karena tidak dipengaruhi oleh panjang vektor. Dalam penelitian ini, \textit{cosine similarity} score digunakan sebagai dasar perhitungan kesesuaian semantik antara \textit{embedding} mahasiswa dan faculty supervisor.
 
 \subsection{Assignment match rate}\label{assignment-match-rate}
 
@@ -359,17 +359,17 @@ Entity Relationship Diagram (ERD) adalah representasi visual yang digunakan dala
 \endlastfoot
 
 
-Zhang et al. (\citeyear{zhang2016supervisor}) & A Personality Matching-Aided Approach for Supervisor Recommendation & Mengusulkan pendekatan rekomendasi supervisor yang mempertimbangkan kesesuaian kepribadian antara mahasiswa dan supervisor & Data mahasiswa dan supervisor dari institusi pendidikan & Personality Matching, Recommendation Algorithm & Pendekatan berbasis kepribadian (personality matching) terbukti dapat memperkuat relevansi rekomendasi supervisor dibandingkan pendekatan berbasis topik penelitian semata, serta berhasil meningkatkan mutual satisfaction rate alokasi sebesar 12\%–15\%.  \\ \hline
+Zhang, Sun, Ma, Wu, dan Liu (\citeyear{zhang2016supervisor}) & A Personality Matching-Aided Approach for Supervisor Recommendation & Mengusulkan pendekatan rekomendasi supervisor yang mempertimbangkan kesesuaian kepribadian antara mahasiswa dan supervisor & Data mahasiswa dan supervisor dari institusi pendidikan & Personality Matching, Recommendation Algorithm & Pendekatan berbasis kepribadian (personality matching) terbukti dapat memperkuat relevansi rekomendasi supervisor dibandingkan pendekatan berbasis topik penelitian semata, serta berhasil meningkatkan mutual satisfaction rate alokasi sebesar 12\%–15\%.  \\ \hline
 
-Cohan et al. (\citeyear{cohan2020specter}) & SPECTER: Document - \textit{level} Representation Learning using Citation - informed Transformers & Mengembangkan representasi \textit{embedding} dokumen ilmiah berbasis transformer yang memanfaatkan grafik kutipan untuk meningkatkan kemiripan semantik antar makalah ilmiah & Data makalah ilmiah dari Semantic Scholar Open Research Corpus (S2ORC)& BERT \& CitationGraph (SPECTER) & SPECTER menghasilkan \textit{embedding} dokumen yang lebih unggul dari BERT standar, meraih skor Macro F1/Accuracy 81\%–84\% pada klasifikasi dan rekomendasi makalah ilmiah. \\ \hline
+Cohan, Feldman, Beltagy, Downey, dan Weld (\citeyear{cohan2020specter}) & SPECTER: Document - \textit{level} Representation Learning using Citation - informed Transformers & Mengembangkan representasi \textit{embedding} dokumen ilmiah berbasis transformer yang memanfaatkan grafik kutipan untuk meningkatkan kemiripan semantik antar makalah ilmiah & Data makalah ilmiah dari Semantic Scholar Open Research Corpus (S2ORC)& BERT \& CitationGraph (SPECTER) & SPECTER menghasilkan \textit{embedding} dokumen yang lebih unggul dari BERT standar, meraih skor Macro F1/Accuracy 81\%–84\% pada klasifikasi dan rekomendasi makalah ilmiah. \\ \hline
 
 Nagarajan et al. (\citeyear{nagarajan2025bert}) & A BERT Based Hybrid Recommendation System For Academic Collaboration & Membangun sistem rekomendasi kolaborasi akademik berbasis profil institusi menggunakan pendekatan hibrida TF-IDF dan BERT & Data profil akademik mahasiswa dan dosen di lingkungan universitas & TF-IDF, BERT, Hybrid + Affinity Propagation Clustering & Pendekatan hibrida BERT mengungguli TF-IDF dan BERT tunggal; klasterisasi meningkatkan akurasi dengan raihan Precision 99.14\%, Recall 92.48\%, dan F1-score 95.69\%. \\ \hline
 
-Wang et al. (\citeyear{wang2025avrd}) & Empowering College Students to Select Ideal Advisors: A Text-Based Recommendation Model & Membangun model rekomendasi pembimbing akademik berbasis teks untuk membantu mahasiswa memilih pembimbing yang sesuai dengan minat penelitian & Data rekam jejak pembimbing dan kuesioner dari 170 mahasiswa perguruan tinggi & Chinese BERT + SimCSE (unsupervised contrastive learning) & Model AVRD melampaui TF-IDF, Word2Vec, LSA, serta LLM (Qwen \& DeepSeek), berhasil membantu 70\% dari 170 mahasiswa perguruan tinggi menemukan pembimbing ideal. \\ \hline
+Wang, Zhou, Jian, Yin, dan Li (\citeyear{wang2025avrd}) & Empowering College Students to Select Ideal Advisors: A Text-Based Recommendation Model & Membangun model rekomendasi pembimbing akademik berbasis teks untuk membantu mahasiswa memilih pembimbing yang sesuai dengan minat penelitian & Data rekam jejak pembimbing dan kuesioner dari 170 mahasiswa perguruan tinggi & Chinese BERT + SimCSE (unsupervised contrastive learning) & Model AVRD melampaui TF-IDF, Word2Vec, LSA, serta LLM (Qwen \& DeepSeek), berhasil membantu 70\% dari 170 mahasiswa perguruan tinggi menemukan pembimbing ideal. \\ \hline
 
-Sabilillah et al. (\citeyear{sabilillah2024bert}) & Implementasi BERT dan Cosine Similarity untuk Rekomendasi Dosen Pembimbing berdasarkan Judul Tugas Akhir & Mengimplementasikan BERT dan \textit{cosine similarity} untuk merekomendasikan dosen pembimbing berdasarkan judul tugas akhir & Data judul tugas akhir mahasiswa dan profil dosen & BERT, Cosine Similarity & BERT + \textit{cosine similarity} lebih baik dalam mengukur kemiripan makna judul TA dan keahlian dosen, mencatat akurasi tuning 85.29\% dan akurasi akhir 89.99\%. \\ \hline
+Sabilillah, Winarno, dan Abiyyi (\citeyear{sabilillah2024bert}) & Implementasi BERT dan Cosine Similarity untuk Rekomendasi Dosen Pembimbing berdasarkan Judul Tugas Akhir & Mengimplementasikan BERT dan \textit{cosine similarity} untuk merekomendasikan dosen pembimbing berdasarkan judul tugas akhir & Data judul tugas akhir mahasiswa dan profil dosen & BERT, Cosine Similarity & BERT + \textit{cosine similarity} lebih baik dalam mengukur kemiripan makna judul TA dan keahlian dosen, mencatat akurasi tuning 85.29\% dan akurasi akhir 89.99\%. \\ \hline
 
-Dasri et al. (\citeyear{dasri2025twoway}) & Two-Way Thesis Supervisor Recommendation System Using MapReduce K-Skyband View Queries & Mengembangkan sistem rekomendasi pembimbing tugas akhir dua arah yang mempertimbangkan preferensi mahasiswa dan dosen secara bersamaan & Data historis mahasiswa dan supervisor di institusi pendidikan tinggi & MapReduce K-Skyband View Queries & Pendekatan MapReduce 8$\times$ lebih cepat dari algoritma Block Nested Loop standar pada dataset besar dengan kualitas rekomendasi yang terjaga \\ \hline
+Dasri, Annisa, dan Haryanto (\citeyear{dasri2025twoway}) & Two-Way Thesis Supervisor Recommendation System Using MapReduce K-Skyband View Queries & Mengembangkan sistem rekomendasi pembimbing tugas akhir dua arah yang mempertimbangkan preferensi mahasiswa dan dosen secara bersamaan & Data historis mahasiswa dan supervisor di institusi pendidikan tinggi & MapReduce K-Skyband View Queries & Pendekatan MapReduce 8$\times$ lebih cepat dari algoritma Block Nested Loop standar pada dataset besar dengan kualitas rekomendasi yang terjaga \\ \hline
 
 \end{longtable}
 \endgroup
