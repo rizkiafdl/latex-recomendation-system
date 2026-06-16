@@ -31,7 +31,6 @@ A **Flask-based web application** that recommends thesis supervisors to students
 - **`normalize_text(value)`**: lowercase + strip non-alphanumeric + collapse spaces → canonical text
 - **`student_document(student)`**: join track + position_topic + work_schema → student embedding document
 - **`profile_document(profile)`**: join supervisor keywords + labels → supervisor embedding document
-- **`detect_labels(text)`**: classify text against `LABEL_TERMS` dictionary (19 domain labels)
 - **19 Detected Domain Labels:**
   - `independent_study`, `internship`, `research`, `binus_bandung`, `binus_internal_internship`
   - `network_cloud`, `entrepreneurship`, `iot_embedded`, `government_public`, `health_medical`
