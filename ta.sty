@@ -70,7 +70,7 @@
 % 
 \usepackage{setspace}
   \onehalfspacing
-  \doublespacing
+%   \doublespacing
   %\singlespacing
   
 %
@@ -79,12 +79,12 @@
 % document. The package must be called in the preamble of the document and 
 % specified when called.
 % 
-\usepackage[paper=a4paper,headheight=0pt,left=4cm,top=3cm,right=3cm,bottom=3cm]{geometry}
+\usepackage[paper=a4paper,headheight=0pt,left=4cm,top=2.5cm,right=2.5cm,bottom=2.5cm]{geometry}
 
 % 
 % Digunakan untuk mengatur caption dalam dokumen. 
 % 
-\usepackage[font=footnotesize,format=plain,labelfont=bf,up,textfont=up,labelsep=period]{caption}
+\usepackage[font=normalsize,format=plain,labelfont=bf,up,textfont=up,labelsep=period]{caption}
 
 % 
 % Membantu penulisan notasi matematika terutama untuk dokumen dengan banyak 
@@ -309,17 +309,17 @@
 \renewcommand{\listtablename}{LIST OF TABLES}
 % 
 % 
-\renewcommand{\chaptername}{Chapter}
-\renewcommand{\thechapter}{\Roman{chapter}} %supaya roman di chapter  
+\renewcommand{\chaptername}{BAB}
+\renewcommand{\thechapter}{\arabic{chapter}}
 \renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
 % 
 % 
-\renewcommand{\figurename}{\bo{Figure}}
+\renewcommand{\figurename}{Gambar}
 \renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
 
 % 
 % 
-\renewcommand{\tablename}{\bo{Table}}
+\renewcommand{\tablename}{Tabel}
 \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
 % 
 % 
