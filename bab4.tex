@@ -10,7 +10,7 @@
 Dalam penelitian ini, penulis menggunakan bahasa pemrograman Python untuk membangun dan mengimplementasikan sistem rekomendasi Faculty Supervisor berbasis semantic similarity. Penulis juga menggunakan perangkat keras dan lunak tertentu untuk mengembangkan sistem tersebut. Berikut adalah daftar perangkat keras yang digunakan dalam penelitian ini.
 \begin{table}[H]
 \centering
-\caption{Spesifikasi Perangkat Keras}	\label{table:tab4.1}
+\caption{\bi{Spesifikasi Perangkat Keras}}	\label{table:tab4.1}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{10cm}|}
     \hline
     \textbf{Komponen} & \textbf{Spesifikasi} \\
@@ -31,7 +31,7 @@ Perangkat keras tersebut juga menggunakan beberapa perangkat lunak untuk proses 
 
 \begin{table}[H]
 \centering
-\caption{Spesifikasi Perangkat Lunak}
+\caption{\bi{Spesifikasi Perangkat Lunak}}
 \label{table:tab4.2}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{10cm}|}
     \hline
@@ -75,7 +75,7 @@ Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
 
 \begin{table}[h]
 \centering
-\caption{Perbandingan Metrik Evaluasi Antar Model}
+\caption{\bi{Perbandingan Metrik Evaluasi Antar Model}}
 \label{table:tab4.2.1}
 \begin{tabular}{|>{\fontsize{9}{12}\selectfont}p{3.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|}
     \hline
@@ -99,7 +99,7 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
 
 \begin{table}[h]
 \centering
-\caption{Rata-rata Skor Kemiripan Antar Model}
+\caption{\bi{Rata-rata Skor Kemiripan Antar Model}}
 \label{table:tab4.2.2}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{3.5cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|}
     \hline
@@ -137,7 +137,7 @@ Parameter \texttt{extra\_docs} menentukan apakah teks tambahan dari profil dosen
 
 \begin{table}[h]
 \centering
-\caption{Pengaruh Parameter \texttt{extra\_docs} terhadap \%Rank-1}
+\caption{\bi{Pengaruh Parameter \texttt{extra\_docs} terhadap \%Rank-1}}
 \label{table:tab4.2.3}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|}
     \hline
@@ -161,7 +161,7 @@ Parameter \texttt{group\_bonus} menambahkan skor tambahan bagi pasangan mahasisw
 
 \begin{table}[h]
 \centering
-\caption{Pengaruh Parameter \texttt{group\_bonus} terhadap \%Rank-1}
+\caption{\bi{Pengaruh Parameter \texttt{group\_bonus} terhadap \%Rank-1}}
 \label{table:tab4.2.4}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|}
     \hline
@@ -185,7 +185,7 @@ Berdasarkan hasil evaluasi terhadap 18 eksperimen, konfigurasi terbaik yang dipi
 
 \begin{table}[h]
 \centering
-\caption{Metrik Konfigurasi Terbaik (Run 26: bge-m3, extra\_docs=True, group\_bonus=False)}
+\caption{\bi{Metrik Konfigurasi Terbaik (Run 26: bge-m3, extra\_docs=True, group\_bonus=False)}}
 \label{table:tab4.2.5}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{5cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
     \hline
@@ -217,7 +217,7 @@ Hasil analisis menunjukkan bahwa seluruh 18 konfigurasi menghasilkan distribusi 
 
 \begin{table}[h]
 \centering
-\caption{Distribusi Beban Penugasan Pembimbing (identik pada seluruh 18 konfigurasi)}
+\caption{\bi{Distribusi Beban Penugasan Pembimbing (identik pada seluruh 18 konfigurasi)}}
 \label{table:tab4.2.6}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{7cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
     \hline
@@ -249,7 +249,7 @@ Untuk memahami kualitas alokasi dari perspektif kepuasan mahasiswa, dilakukan an
 
 \begin{table}[h]
 \centering
-\caption{Distribusi Peringkat Penugasan (\textit{Pooled}, 3.078 slot dari 18 konfigurasi)}
+\caption{\bi{Distribusi Peringkat Penugasan (\textit{Pooled}, 3.078 slot dari 18 konfigurasi)}}
     \label{table:tab4.2.7}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
     \hline
@@ -412,7 +412,7 @@ Pengujian Black Box dilakukan untuk memvalidasi fungsionalitas sistem dari sudut
 
 Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika mengisi kredensial dengan benar.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Login Page}\label{table:tab4.3.1} \\ 
+\caption{\bi{Skenario Login Page}}\label{table:tab4.3.1} \\ 
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -434,7 +434,7 @@ Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika
 
 Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama lengkap, password, dan konfirmasi password sebagai data pendaftaran.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Register Page}\label{table:tab4.4} \\
+\caption{\bi{Skenario Register Page}}\label{table:tab4.4} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -459,7 +459,7 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama 
 
 Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman Dashboard. Pengujian mencakup validasi tampilan data statistik, grafik tren, detail eksekusi terbaru, dan kontrol navigasi.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Dashboard}\label{table:tab4.5} \\
+\caption{\bi{Skenario Dashboard}}\label{table:tab4.5} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -494,7 +494,7 @@ Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman
 
 Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import data serta interaksi pipeline trigger. Halaman ini krusial karena bertindak sebagai penyedia data utama sebelum sistem menjalankan algoritma rekomendasi.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Data Center}\label{table:tab4.6} \\
+\caption{\bi{Skenario Data Center}}\label{table:tab4.6} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -523,7 +523,7 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import 
 
 Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna ingin melakukan run baru dengan memilih model dan rules boost yang akan diterapkan pada run tersebut.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Generate New Run}\label{table:tab4.7} \\ 
+\caption{\bi{Skenario Generate New Run}}\label{table:tab4.7} \\ 
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -554,7 +554,7 @@ Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna 
 
 Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwayat  run algoritma secara kronologis dan akurat. Fokus utama meliputi kebenaran metadata yang ditampilkan serta fungsionalitas button.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Run History}\label{table:tab4.8} \\
+\caption{\bi{Skenario Run History}}\label{table:tab4.8} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -581,7 +581,7 @@ Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwa
 
 Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan data dosen pembimbing beserta kata kunci semantik.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Supervisor Studio}\label{table:tab4.9} \\
+\caption{\bi{Skenario Supervisor Studio}}\label{table:tab4.9} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -614,7 +614,7 @@ Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan
 
 Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendasi per run, mencakup metrik evaluasi, distribusi kapasitas per dosen, \textit{mismatch spotlight}, dan tabel rekomendasi dengan fitur filter server-side.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Run Detail}\label{table:tab4.10} \\
+\caption{\bi{Skenario Run Detail}}\label{table:tab4.10} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -644,7 +644,7 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendas
 
 Pada halaman ini pengujian bertujuan untuk memastikan sesi pengguna dihapus dengan benar saat melakukan logout, sehingga akses ke halaman yang dilindungi tidak dapat dilakukan tanpa login ulang.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
-\caption{Skenario Logout}\label{table:tab4.11} \\
+\caption{\bi{Skenario Logout}}\label{table:tab4.11} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
