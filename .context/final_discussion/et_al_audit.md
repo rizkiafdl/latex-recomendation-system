@@ -78,33 +78,33 @@ File yang dicek: `bab1.tex`, `bab2.tex`, `bab3.tex`, `bab4.tex`, `bab5.tex`
 
 ### bab1.tex
 
-| Baris | Teks Saat Ini | Cite Key | # Pengarang | Status | Koreksi |
+| Baris | Sebelum | Cite Key | # Pengarang | Status | Sesudah |
 |---|---|---|---|---|---|
-| 25 | `Fan et al. (\citeyear{fan2021automated})` | `fan2021automated` | 3 | ❌ PELANGGARAN | `Evangelista, Fan, dan Harb (\citeyear{fan2021automated})` |
-| 25 | `Rismanto et al. (\citeyear{rismanto2020supervisor})` | `rismanto2020supervisor` | 3 | ❌ PELANGGARAN | `Rismanto, Syulistyo, dan Agusta (\citeyear{rismanto2020supervisor})` |
+| 25 | `Fan et al. (...)` | `fan2021automated` | 3 | ✅ FIXED | `Evangelista, Fan, dan Harb (...)` |
+| 25 | `Rismanto et al. (...)` | `rismanto2020supervisor` | 3 | ✅ FIXED | `Rismanto, Syulistyo, dan Agusta (...)` |
 
 ### bab2.tex
 
-| Baris | Teks Saat Ini | Cite Key | # Pengarang | Status | Koreksi |
+| Baris | Sebelum | Cite Key | # Pengarang | Status | Sesudah |
 |---|---|---|---|---|---|
-| 95 | `Mikolov et al. (\citeyear{mikolov2013word2vec})` | `mikolov2013word2vec` | 5 | ❌ PELANGGARAN | `Mikolov, Sutskever, Chen, Corrado, dan Dean (\citeyear{mikolov2013word2vec})` |
-| 95 | `Pennington et al. (\citeyear{pennington2014glove})` | `pennington2014glove` | 3 | ❌ PELANGGARAN | `Pennington, Socher, dan Manning (\citeyear{pennington2014glove})` |
-| 95 | `Bojanowski et al., \citeyear{bojanowski2017fasttext}` | `bojanowski2017fasttext` | 4 | ❌ PELANGGARAN | `Bojanowski, Grave, Joulin, dan Mikolov, \citeyear{bojanowski2017fasttext}` |
-| 103 | `Vaswani et al. (\citeyear{vaswani2017attention})` | `vaswani2017attention` | 8 | ✅ DIIZINKAN | — |
-| 105 | `Devlin et al. (\citeyear{devlin2019bert})` | `devlin2019bert` | 4 | ❌ PELANGGARAN | `Devlin, Chang, Lee, dan Toutanova (\citeyear{devlin2019bert})` |
-| 113 | `Menurut Devlin et al. (\citeyear{devlin2019bert})` | `devlin2019bert` | 4 | ❌ PELANGGARAN | `Menurut Devlin, Chang, Lee, dan Toutanova (\citeyear{devlin2019bert})` |
-| 121 | `Mihalcea et al. (\citeyear{mihalcea2006semantic})` | `mihalcea2006semantic` | 3 | ❌ PELANGGARAN | `Mihalcea, Corley, dan Strapparava (\citeyear{mihalcea2006semantic})` |
-| 151 | `Chen et al. (\citeyear{chen2024bgem3})` | `chen2024bgem3` | 6 | ✅ DIIZINKAN | — |
-| 163 | `Wang et al. (\citeyear{wang2024e5})` | `wang2024e5` | 6 | ✅ DIIZINKAN | — |
-| 195 | `Herlocker et al. (\citeyear{herlocker2004recall})` | `herlocker2004recall` | 4 | ❌ PELANGGARAN | `Herlocker, Konstan, Terveen, dan Riedl (\citeyear{herlocker2004recall})` |
-| 237 | `Manning et al. (\citeyear{manning2008ir})` | `manning2008ir` | 3 | ❌ PELANGGARAN | `Manning, Raghavan, dan Schütze (\citeyear{manning2008ir})` |
-| 277 | `Paszke et al. (\citeyear{paszke2019pytorch})` | `paszke2019pytorch` | 21 | ✅ DIIZINKAN | — |
-| 362 | `Zhang et al. (\citeyear{zhang2016supervisor})` | `zhang2016supervisor` | 5 | ❌ PELANGGARAN | `Zhang, Sun, Ma, Wu, dan Liu (\citeyear{zhang2016supervisor})` |
-| 364 | `Cohan et al. (\citeyear{cohan2020specter})` | `cohan2020specter` | 5 | ❌ PELANGGARAN | `Cohan, Feldman, Beltagy, Downey, dan Weld (\citeyear{cohan2020specter})` |
-| 366 | `Nagarajan et al. (\citeyear{nagarajan2025bert})` | `nagarajan2025bert` | 6 | ✅ DIIZINKAN | — |
-| 368 | `Wang et al. (\citeyear{wang2025avrd})` | `wang2025avrd` | 5 | ❌ PELANGGARAN | `Wang, Zhou, Jian, Yin, dan Li (\citeyear{wang2025avrd})` |
-| 370 | `Sabilillah et al. (\citeyear{sabilillah2024bert})` | `sabilillah2024bert` | 3 | ❌ PELANGGARAN | `Sabilillah, Winarno, dan Abiyyi (\citeyear{sabilillah2024bert})` |
-| 372 | `Dasri et al. (\citeyear{dasri2025twoway})` | `dasri2025twoway` | 3 | ❌ PELANGGARAN | `Dasri, Annisa, dan Haryanto (\citeyear{dasri2025twoway})` |
+| 95 | `Mikolov et al. (...)` | `mikolov2013word2vec` | 5 | ✅ FIXED | `Mikolov, Sutskever, Chen, Corrado, dan Dean (...)` |
+| 95 | `Pennington et al. (...)` | `pennington2014glove` | 3 | ✅ FIXED | `Pennington, Socher, dan Manning (...)` |
+| 95 | `Bojanowski et al., ...` | `bojanowski2017fasttext` | 4 | ✅ FIXED | `Bojanowski, Grave, Joulin, dan Mikolov, ...` |
+| 103 | `Vaswani et al. (...)` | `vaswani2017attention` | 8 | ✅ DIIZINKAN | — |
+| 105 | `Devlin et al. (...)` | `devlin2019bert` | 4 | ✅ FIXED | `Devlin, Chang, Lee, dan Toutanova (...)` |
+| 113 | `Menurut Devlin et al. (...)` | `devlin2019bert` | 4 | ✅ FIXED | `Menurut Devlin, Chang, Lee, dan Toutanova (...)` |
+| 121 | `Mihalcea et al. (...)` | `mihalcea2006semantic` | 3 | ✅ FIXED | `Mihalcea, Corley, dan Strapparava (...)` |
+| 151 | `Chen et al. (...)` | `chen2024bgem3` | 6 | ✅ DIIZINKAN | — |
+| 163 | `Wang et al. (...)` | `wang2024e5` | 6 | ✅ DIIZINKAN | — |
+| 195 | `Herlocker et al. (...)` | `herlocker2004recall` | 4 | ✅ FIXED | `Herlocker, Konstan, Terveen, dan Riedl (...)` |
+| 237 | `Manning et al. (...)` | `manning2008ir` | 3 | ✅ FIXED | `Manning, Raghavan, dan Schütze (...)` |
+| 277 | `Paszke et al. (...)` | `paszke2019pytorch` | 21 | ✅ DIIZINKAN | — |
+| 362 | `Zhang et al. (...)` | `zhang2016supervisor` | 5 | ✅ FIXED | `Zhang, Sun, Ma, Wu, dan Liu (...)` |
+| 364 | `Cohan et al. (...)` | `cohan2020specter` | 5 | ✅ FIXED | `Cohan, Feldman, Beltagy, Downey, dan Weld (...)` |
+| 366 | `Nagarajan et al. (...)` | `nagarajan2025bert` | 6 | ✅ DIIZINKAN | — |
+| 368 | `Wang et al. (...)` | `wang2025avrd` | 5 | ✅ FIXED | `Wang, Zhou, Jian, Yin, dan Li (...)` |
+| 370 | `Sabilillah et al. (...)` | `sabilillah2024bert` | 3 | ✅ FIXED | `Sabilillah, Winarno, dan Abiyyi (...)` |
+| 372 | `Dasri et al. (...)` | `dasri2025twoway` | 3 | ✅ FIXED | `Dasri, Annisa, dan Haryanto (...)` |
 
 ---
 
@@ -114,8 +114,8 @@ File yang dicek: `bab1.tex`, `bab2.tex`, `bab3.tex`, `bab4.tex`, `bab5.tex`
 |---|---|
 | Total kemunculan `et al.` di teks | **19** |
 | ✅ Diizinkan (>5 pengarang) | **5** (`vaswani`, `chen`, `wang2024e5`, `paszke`, `nagarajan`) |
-| ❌ Pelanggaran (≤5 pengarang) | **14** |
-| File bermasalah | `bab1.tex` (2), `bab2.tex` (12) |
+| ~~❌ Pelanggaran (≤5 pengarang)~~ | ~~**14**~~ → **✅ 14 FIXED** (2026-06-16) |
+| File diperbaiki | `bab1.tex` (2 fix), `bab2.tex` (12 fix) |
 
 ### Entry yang tepat 5 pengarang (perlu perhatian khusus)
 - `mikolov2013word2vec` (5) → ❌
