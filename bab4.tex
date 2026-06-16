@@ -10,6 +10,7 @@
 Dalam penelitian ini, penulis menggunakan bahasa pemrograman Python untuk membangun dan mengimplementasikan sistem rekomendasi Faculty Supervisor berbasis semantic similarity. Penulis juga menggunakan perangkat keras dan lunak tertentu untuk mengembangkan sistem tersebut. Berikut adalah daftar perangkat keras yang digunakan dalam penelitian ini.
 \begin{table}[H]
 \centering
+\caption{Spesifikasi Perangkat Keras}	\label{table:tab4.1}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{10cm}|}
     \hline
     \textbf{Komponen} & \textbf{Spesifikasi} \\
@@ -24,14 +25,14 @@ Dalam penelitian ini, penulis menggunakan bahasa pemrograman Python untuk memban
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-	\caption{Spesifikasi Perangkat Keras}
-	\label{table:tab4.1}
-\end{table}
+\end{table} 
 
 Perangkat keras tersebut juga menggunakan beberapa perangkat lunak untuk proses pengembangan sistem rekomendasi Faculty Supervisor. Spesifikasi perangkat lunak yang digunakan adalah sebagai berikut. 
 
 \begin{table}[H]
 \centering
+\caption{Spesifikasi Perangkat Lunak}
+\label{table:tab4.2}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{10cm}|}
     \hline
     \textbf{Komponen} & \textbf{Spesifikasi} \\
@@ -54,8 +55,6 @@ Perangkat keras tersebut juga menggunakan beberapa perangkat lunak untuk proses 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-	\caption{Spesifikasi Perangkat Lunak}
-	\label{table:tab4.2}
 \end{table}
 
 \section{Hasil}
@@ -76,6 +75,8 @@ Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
 
 \begin{table}[h]
 \centering
+\caption{Perbandingan Metrik Evaluasi Antar Model}
+\label{table:tab4.2.1}
 \begin{tabular}{|>{\fontsize{9}{12}\selectfont}p{3.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.2cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|>{\fontsize{9}{12}\selectfont}p{1.4cm}|}
     \hline
     \textbf{Model} & \textbf{MRR} & \textbf{Hit@1} & \textbf{Hit@5} & \textbf{NDCG@5} & \textbf{NDCG@10} & \textbf{Avg Rank} & \textbf{Match Rate} \\
@@ -90,8 +91,6 @@ Hasil evaluasi seluruh model kandidat disajikan pada Tabel~\ref{table:tab4.2.1}.
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Perbandingan Metrik Evaluasi Antar Model}
-    \label{table:tab4.2.1}
 \end{table}
 
 Secara deskriptif, BAAI/bge-m3 memperoleh MRR tertinggi sebesar 0,711 dengan dosen pembimbing sebenarnya berada pada peringkat rata-rata 2,17. intfloat/multilingual-e5-large-instruct memperoleh MRR 0,672 dengan rata-rata peringkat 2,43 dan memiliki \textit{Assignment Match Rate} tertinggi sebesar 0,583. Qwen/Qwen3-Embedding-0.6B memperoleh MRR 0,617 dengan rata-rata peringkat 2,95 dan \textit{match rate} 0,512. Seluruh model berada jauh di atas \textit{random baseline}, yang menunjukkan bahwa pendekatan kemiripan semantik memberikan sinyal pencocokan yang nyata.
@@ -100,6 +99,8 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
 
 \begin{table}[h]
 \centering
+\caption{Rata-rata Skor Kemiripan Antar Model}
+\label{table:tab4.2.2}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{3.5cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|}
     \hline
     \textbf{Model} & \textbf{Avg Similarity @1} & \textbf{Avg True Similarity} & \textbf{Selisih (sebaran)} \\
@@ -112,8 +113,6 @@ Untuk keperluan analisis lebih lanjut, nilai rata-rata skor kemiripan disajikan 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Rata-rata Skor Kemiripan Antar Model}
-    \label{table:tab4.2.2}
 \end{table}
 
 \subsection{Hasil Analisis Model dan Pemilihan Model Akhir}
@@ -138,6 +137,8 @@ Parameter \texttt{extra\_docs} menentukan apakah teks tambahan dari profil dosen
 
 \begin{table}[h]
 \centering
+\caption{Pengaruh Parameter \texttt{extra\_docs} terhadap \%Rank-1}
+\label{table:tab4.2.3}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|>{\fontsize{11}{14}\selectfont}p{2.2cm}|}
     \hline
     \textbf{Model} & \textbf{extra\_docs= True} & \textbf{extra\_docs= False} & \textbf{$\Delta$\%Rank-1} & \textbf{Rekomendasi} \\
@@ -150,8 +151,6 @@ Parameter \texttt{extra\_docs} menentukan apakah teks tambahan dari profil dosen
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Pengaruh Parameter \texttt{extra\_docs} terhadap \%Rank-1}
-    \label{table:tab4.2.3}
 \end{table}
 
 Pengaruh \texttt{extra\_docs} bersifat \textit{model-dependent}. Pada BAAI/bge-m3, dokumen tambahan memperkaya profil supervisor yang sebelumnya tipis sehingga meningkatkan kemampuan diskriminasi model sebesar 5,8 poin persentase. Sebaliknya, pada mE5-large-instruct, dokumen tambahan justru merusak ruang \textit{embedding} yang telah terkalibrasi, menyebabkan penurunan sebesar 6,4 poin persentase karena skor antar supervisor menjadi semakin seragam.
@@ -162,6 +161,8 @@ Parameter \texttt{group\_bonus} menambahkan skor tambahan bagi pasangan mahasisw
 
 \begin{table}[h]
 \centering
+\caption{Pengaruh Parameter \texttt{group\_bonus} terhadap \%Rank-1}
+\label{table:tab4.2.4}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|>{\fontsize{11}{14}\selectfont}p{2.5cm}|>{\fontsize{11}{14}\selectfont}p{2cm}|}
     \hline
     \textbf{Model} & \textbf{group\_bonus= False} & \textbf{group\_bonus= True} & \textbf{$\Delta$\%Rank-1} \\
@@ -174,8 +175,6 @@ Parameter \texttt{group\_bonus} menambahkan skor tambahan bagi pasangan mahasisw
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Pengaruh Parameter \texttt{group\_bonus} terhadap \%Rank-1}
-    \label{table:tab4.2.4}
 \end{table}
 
 Hasil evaluasi menunjukkan bahwa \texttt{group\_bonus} tidak memberikan pengaruh nyata terhadap metrik \textit{retrieval}. Ketika parameter \texttt{extra\_docs} dikontrol pada nilai yang sama, nilai \%Rank-1 identik antara kondisi \texttt{group\_bonus=True} dan \texttt{group\_bonus=False} pada ketiga model. Perbedaan yang tampak pada perbandingan antar batch eksperimen bersifat \textit{spurious} karena \texttt{group\_bonus=True} selalu disertai \texttt{extra\_docs=False} --- kedua variabel tidak pernah divariasikan secara independen. Meski demikian, parameter ini tetap memberikan kontribusi kecil pada nilai skor akhir (\textit{gap fin-sim} $\approx$ 0,008), yang membuktikan bahwa bonus diterapkan secara teknis namun tidak cukup besar untuk mengubah urutan peringkat mahasiswa.
@@ -186,6 +185,8 @@ Berdasarkan hasil evaluasi terhadap 18 eksperimen, konfigurasi terbaik yang dipi
 
 \begin{table}[h]
 \centering
+\caption{Metrik Konfigurasi Terbaik (Run 26: bge-m3, extra\_docs=True, group\_bonus=False)}
+\label{table:tab4.2.5}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{5cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
     \hline
     \textbf{Metrik} & \textbf{Nilai} \\
@@ -206,8 +207,6 @@ Berdasarkan hasil evaluasi terhadap 18 eksperimen, konfigurasi terbaik yang dipi
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Metrik Konfigurasi Terbaik (Run 26: bge-m3, extra\_docs=True, group\_bonus=False)}
-    \label{table:tab4.2.5}
 \end{table}
 
 \subsection{Distribusi Beban Pembimbing}
@@ -218,6 +217,8 @@ Hasil analisis menunjukkan bahwa seluruh 18 konfigurasi menghasilkan distribusi 
 
 \begin{table}[h]
 \centering
+\caption{Distribusi Beban Penugasan Pembimbing (identik pada seluruh 18 konfigurasi)}
+\label{table:tab4.2.6}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{7cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
     \hline
     \textbf{Statistik} & \textbf{Nilai} \\
@@ -238,8 +239,6 @@ Hasil analisis menunjukkan bahwa seluruh 18 konfigurasi menghasilkan distribusi 
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Distribusi Beban Penugasan Pembimbing (identik pada seluruh 18 konfigurasi)}
-    \label{table:tab4.2.6}
 \end{table}
 
 Nilai \textit{Gini Coefficient} sebesar 0,0138 mendekati nol, menandakan distribusi yang hampir sempurna merata. Seluruh dosen mendapatkan antara 12 hingga 13 mahasiswa, dengan hanya 3 dari 14 dosen yang menerima satu mahasiswa tambahan. Temuan ini menunjukkan bahwa mekanisme penegakan kapasitas (\textit{capacity enforcement}) mendominasi hasil alokasi, sehingga variasi model \textit{embedding} dan parameter konfigurasi tidak berpengaruh terhadap keseimbangan beban. Parameter \texttt{capacity\_priority\_codes} hanya menentukan dosen mana yang mendapat alokasi ekstra, namun tidak mengubah tingkat keseimbangan secara keseluruhan.
@@ -250,6 +249,8 @@ Untuk memahami kualitas alokasi dari perspektif kepuasan mahasiswa, dilakukan an
 
 \begin{table}[h]
 \centering
+\caption{Distribusi Peringkat Penugasan (\textit{Pooled}, 3.078 slot dari 18 konfigurasi)}
+    \label{table:tab4.2.7}
 \begin{tabular}{|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|}
     \hline
     \textbf{Peringkat Ditetapkan} & \textbf{Jumlah} & \textbf{Persentase} \\
@@ -268,8 +269,6 @@ Untuk memahami kualitas alokasi dari perspektif kepuasan mahasiswa, dilakukan an
     \hline
 \end{tabular}
 \renewcommand{\arraystretch}{1}
-    \caption{Distribusi Peringkat Penugasan (\textit{Pooled}, 3.078 slot dari 18 konfigurasi)}
-    \label{table:tab4.2.7}
 \end{table}
 
 Distribusi ini memperlihatkan bahwa sebagian besar mahasiswa memperoleh supervisor yang paling sesuai: 57,8\% ditetapkan pada peringkat 1, dan 81,4\% berada dalam tiga besar (peringkat 1--3). Sebanyak 11,4\% mahasiswa terpaksa ditetapkan di luar peringkat 5, bukan karena kegagalan model, melainkan akibat saturasi kapasitas ketika lima supervisor teratas sudah penuh, sistem harus beralih ke pilihan berikutnya. Pola ini merupakan konsekuensi matematis dari keterbatasan slot, bukan indikasi kualitas rekomendasi yang buruk.
@@ -413,6 +412,7 @@ Pengujian Black Box dilakukan untuk memvalidasi fungsionalitas sistem dari sudut
 
 Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika mengisi kredensial dengan benar.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Login Page}\label{table:tab4.3.1} \\ 
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -425,15 +425,16 @@ Pada halaman ini terdapat tombol “Login” yang akan mengarahkan pengguna jika
     \hline
     2 & Login dengan kata sandi salah   & Username benar, kata sandi salah  & Sistem menampilkan message “Kredential Salah” & Pass  \\
     \hline
-    3 & Login dengan username salah   & Username salah, kata sandi benar  & Sistem menampilkan message “Kredential Salah”  & Pass  \\
+    3 & Login dengan username     salah   & Username salah, kata sandi benar  & Sistem menampilkan message “Kredential Salah”  & Pass  \\
     \hline
-\caption{Skenario Login Page}\label{table:tab4.3.1}
+
 \end{longtable}
 
 \subsection{Register Page}
 
 Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama lengkap, password, dan konfirmasi password sebagai data pendaftaran.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Register Page}\label{table:tab4.4} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -452,13 +453,13 @@ Pada halaman ini pengguna dapat membuat akun dengan mengisi data username, nama 
     \hline
     5 & Mendaftarkan akun dengan password terlalu pendek  & Password kurang dari 6 karakter  & Sistem menampilkan pesan error dan menolak pendaftaran  & Pass  \\
     \hline
-\caption{Skenario Register Page}\label{table:tab4.4}
 \end{longtable}
 
 \subsection{Dashboard}
 
 Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman Dashboard. Pengujian mencakup validasi tampilan data statistik, grafik tren, detail eksekusi terbaru, dan kontrol navigasi.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Dashboard}\label{table:tab4.5} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -487,13 +488,13 @@ Pada halaman ini bertujuan pada fungsionalitas visual dan interaksi pada halaman
     \hline
     10 & Sistem menampikan Informasi Snapshot      & -  & Sistem menampilkan data dari run paling baru     & Pass  \\
     \hline
-\caption{Skenario Dashboard}\label{table:tab4.5}
 \end{longtable}
 
 \subsection{Data Center}
 
 Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import data serta interaksi pipeline trigger. Halaman ini krusial karena bertindak sebagai penyedia data utama sebelum sistem menjalankan algoritma rekomendasi.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Data Center}\label{table:tab4.6} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -516,13 +517,13 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi fungsi manajemen  import 
     \hline
     7 & Import data dari file default server  & -  & Sistem membaca file dari path \texttt{DEFAULT\_EXCEL\_PATH}, memproses upsert per baris, dan menampilkan ringkasan hasil import  & Pass  \\
     \hline
-\caption{Skenario Data Center}\label{table:tab4.6}
 \end{longtable}
 
 \subsection{Generate New Run}
 
 Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna ingin melakukan run baru dengan memilih model dan rules boost yang akan diterapkan pada run tersebut.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Generate New Run}\label{table:tab4.7} \\ 
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -547,13 +548,13 @@ Pada halaman ini pengujian berfungsi untuk melalukan pengecekan ketika pengguna 
     \hline
     8 & Eksekusi run saat tidak ada data mahasiswa di database  & Database mahasiswa kosong  & Sistem menampilkan pesan error dan membatalkan proses rekomendasi  & Pass  \\
     \hline
-\caption{Skenario Generate New Run}\label{table:tab4.7}
 \end{longtable}
 
 \subsection{Run History}
 
 Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwayat  run algoritma secara kronologis dan akurat. Fokus utama meliputi kebenaran metadata yang ditampilkan serta fungsionalitas button.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Run History}\label{table:tab4.8} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -572,7 +573,7 @@ Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwa
     \hline
     5 & Klik tombol “Generate New Run” pada page Run History  & -  & Sistem mengarahkan pengguna ke halaman pembuatan run baru  & Pass  \\
     \hline
-\caption{Skenario Run History}\label{table:tab4.8}
+
 \end{longtable}
 
 \pagebreak
@@ -580,6 +581,7 @@ Pada halaman ini  bertujuan untuk memastikan sistem mampu menyajikan daftar riwa
 
 Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan data dosen pembimbing beserta kata kunci semantik.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Supervisor Studio}\label{table:tab4.9} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -606,13 +608,13 @@ Pada halaman ini bertujuan untuk memastikan sistem memvalidasi fitur pengelolaan
     \hline
     9 & Mengetikkan keyword yang sudah ada pada kolom “Add Keyword” (\textit{case-insensitive})  & Keyword duplikat  & Sistem mengabaikan token duplikat tanpa menambahkan chip baru  & Pass  \\
     \hline
-\caption{Skenario Supervisor Studio}\label{table:tab4.9}
 \end{longtable}
 
 \subsection{Run Detail}
 
 Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendasi per run, mencakup metrik evaluasi, distribusi kapasitas per dosen, \textit{mismatch spotlight}, dan tabel rekomendasi dengan fitur filter server-side.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Run Detail}\label{table:tab4.10} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -635,13 +637,14 @@ Pada halaman ini pengujian bertujuan untuk memvalidasi tampilan hasil rekomendas
     \hline
     7 & Klik tombol Export Detailed  & -  & File \texttt{rekomendasi\_dosen\_run\_\{id\}\_detailed.xlsx} (4 sheet) berhasil terunduh  & Pass  \\
     \hline
-\caption{Skenario Run Detail}\label{table:tab4.10}
+
 \end{longtable}
 
 \subsection{Logout}
 
 Pada halaman ini pengujian bertujuan untuk memastikan sesi pengguna dihapus dengan benar saat melakukan logout, sehingga akses ke halaman yang dilindungi tidak dapat dilakukan tanpa login ulang.
 \begin{longtable}{|>{\fontsize{11}{14}\selectfont}p{0.5cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{3cm}|>{\fontsize{11}{14}\selectfont}p{4cm}|>{\fontsize{11}{14}\selectfont}p{1cm}|}
+\caption{Skenario Logout}\label{table:tab4.11} \\
 \hline
 \textbf{No} & \textbf{Skenario Pengujian} & \textbf{Data Uji} & \textbf{Hasil yang Diharapkan} & \textbf{Status }\\
 \hline
@@ -654,5 +657,4 @@ Pada halaman ini pengujian bertujuan untuk memastikan sesi pengguna dihapus deng
     \hline
     2 & Mengakses halaman yang dilindungi setelah logout  & URL halaman Dashboard, Data Center, Run History, atau Supervisor Studio  & Sistem mendeteksi tidak ada sesi aktif dan mengarahkan pengguna ke halaman Login  & Pass  \\
     \hline
-\caption{Skenario Logout}\label{table:tab4.11}
 \end{longtable}

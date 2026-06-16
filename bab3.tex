@@ -103,6 +103,7 @@ Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang ha
 
 \begin{longtable}[c]{|p{0.5cm}|p{12.5cm}|}
 
+\caption{Analisis Kebutuhan Fungsional} \label{table:kebutuhan_fungsional} \\
 \hline
 \textbf{No} & \textbf{Kebutuhan Fungsional} \\ \hline
 \endfirsthead
@@ -112,7 +113,6 @@ Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang ha
 \endhead
 
 \hline
-\caption{Analisis Kebutuhan Fungsional} \label{table:kebutuhan_fungsional} \\
 \endlastfoot
 
 1 & Sistem mampu mengelola data mahasiswa yang mencakup informasi posisi kerja dan perusahaan. \\ \hline
@@ -129,6 +129,7 @@ Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang ha
 
 \begin{longtable}[c]{|p{0.5cm}|p{12.5cm}|}
 
+\caption{Analisis Kebutuhan Non-Fungsional} \label{table:kebutuhan_non_fungsional} \\
 \hline
 \textbf{No} & \textbf{Kebutuhan Non - Fungsional} \\ \hline
 \endfirsthead
@@ -138,7 +139,6 @@ Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang ha
 \endhead
 
 \hline
-\caption{Analisis Kebutuhan Non-Fungsional} \label{table:kebutuhan_non_fungsional} \\
 \endlastfoot
 
 1 & Sistem berbasis website sehingga dapat diakses dengan mudah oleh EPC \\ \hline
@@ -190,6 +190,7 @@ Profil setiap faculty supervisor disimpan dalam tabel \texttt{supervisors} yang 
 
 \begin{longtable}[c]{|p{2.5cm}|p{2.5cm}|p{3.5cm}|p{5.5cm}|}
 
+\caption{Representasi Data Faculty Supervisor} \label{table:representasi_data_faculty_supervisor} \\
 \hline
 \textbf{Entitas} & \textbf{Atribut} & \textbf{Sumber} & \text{Deskripsi} \\ \hline
 \endfirsthead
@@ -199,7 +200,6 @@ Profil setiap faculty supervisor disimpan dalam tabel \texttt{supervisors} yang 
 \endhead
 
 \hline
-\caption{Representasi Data Faculty Supervisor} \label{table:representasi_data_faculty_supervisor} \\
 \endlastfoot
 
 Faculty supervisor & Informasi posisi magang & Data historis Enrichment & Informasi posisi magang mahasiswa yang pernah dibimbing \\ \hline
@@ -223,6 +223,7 @@ Teks input mahasiswa selanjutnya diproses menggunakan model text embedding yang 
 
 \begin{longtable}[c]{|p{2cm}|p{3cm}|p{2.5cm}|p{5.5cm}|}
 
+\caption{Pemrosesan Data Mahasiswa} \label{table:pemrosesan_data_mahasiswa} \\
 \hline
 \textbf{Entitas} & \textbf{Atribut} & \textbf{Digunakan sebagai Teks} & \textbf{Deskripsi} \\ \hline
 \endfirsthead
@@ -232,7 +233,6 @@ Teks input mahasiswa selanjutnya diproses menggunakan model text embedding yang 
 \endhead
 
 \hline
-\caption{Pemrosesan Data Mahasiswa} \label{table:pemrosesan_data_mahasiswa} \\
 \endlastfoot
 
 Mahasiswa & Identitas mahasiswa & Tidak & Digunakan sebagai identifikasi data. \\ \hline
@@ -304,6 +304,7 @@ Struktur tabel \texttt{supervisors} yang menjadi sumber data utama dalam pipelin
 
 \begin{longtable}[c]{|p{4.5cm}|p{9.5cm}|}
 
+\caption{Struktur Tabel \texttt{supervisors}} \label{table:struktur_tabel_supervisors} \\ 
 \hline
 \textbf{Kolom} & \textbf{Deskripsi} \\ \hline
 \endfirsthead
@@ -313,7 +314,6 @@ Struktur tabel \texttt{supervisors} yang menjadi sumber data utama dalam pipelin
 \endhead
 
 \hline
-\caption{Struktur Tabel \texttt{supervisors}} \label{table:struktur_tabel_supervisors} \\
 \endlastfoot
 
 \texttt{id} & Identitas unik \textit{faculty supervisor} (\textit{primary key}). \\ \hline
