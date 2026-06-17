@@ -106,7 +106,7 @@ metadata:
 | **Citations** | 38 (OpenAlex) — 94.5th percentile, FWCI 3.92 |
 | **Open Access** | ❌ Paywalled (ACM Digital Library only) |
 
-**Abstract:** The process of generating Unified Modeling Language (UML) Diagrams from Natural Language (NL) requirements is considered a complex and challenging task. Software requirements specification is often written in NL format, which causes potential problems. Requirement's analysts analyze and process natural language requirements manually to extract the UML elements. This paper proposes an approach to facilitate the NL requirements analysis process and UML diagrams extraction from NL textual requirements using natural language processing (NLP) techniques and heuristics rules. This approach focuses on generating use-case and activity diagrams.
+**Abstract:** The process of generating \textit{Unified Modeling Language} (UML) Diagrams from Natural Language (NL) requirements is considered a complex and challenging task. Software requirements specification is often written in NL format, which causes potential problems. Requirement's analysts analyze and process natural language requirements manually to extract the UML elements. This paper proposes an approach to facilitate the NL requirements analysis process and UML diagrams extraction from NL textual requirements using natural language processing (NLP) techniques and heuristics rules. This approach focuses on generating use-case and activity diagrams.
 
 **Relevance note:** Enumerates the core UML elements of use case diagrams (actors, use cases, relationships) and activity diagrams (actions, decisions, flows) in the context of NLP extraction — good complementary citation for both diagram type symbol tables.
 

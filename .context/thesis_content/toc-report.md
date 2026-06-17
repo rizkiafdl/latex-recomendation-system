@@ -64,7 +64,7 @@
 | 2.1.27.7 | Sentence-Transformers | 24 |
 | 2.1.28 | Post Forwarding | 24 |
 | 2.1.29 | On-Premises Deployment | 24 |
-| 2.1.30 | Unified Modeling Language | 25 |
+| 2.1.30 | \textit{Unified Modeling Language} | 25 |
 | 2.1.30.1 | Usecase Diagram | 25 |
 | 2.1.30.2 | Activity Diagram | 26 |
 | 2.1.30.3 | Class Diagram | 26 |

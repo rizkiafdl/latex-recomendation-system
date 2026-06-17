@@ -51,8 +51,8 @@ Replace in both EN and ID abstract:
 **Severity: KRITIS**
 
 ### What the text claims
-- `bab1.tex:27`: *"Ground truth pada penelitian ini diperoleh berdasarkan hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) **dari berbagai fakultas**..."*
-- `bab1.tex:105`: *"...data ground truth diperoleh dari hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) **dari berbagai fakultas**."*
+- `bab1.tex:27`: *"Ground truth pada penelitian ini diperoleh berdasarkan hasil pencocokan manual yang dilakukan oleh beberapa \textit{Enrichment Program Coordinator} (EPC) **dari berbagai fakultas**..."*
+- `bab1.tex:105`: *"...data ground truth diperoleh dari hasil pencocokan manual yang dilakukan oleh beberapa \textit{Enrichment Program Coordinator} (EPC) **dari berbagai fakultas**."*
 
 ### Contradiction within BAB 1 itself
 - `bab1.tex:11`: interviews were from **"dua fakultas"** (two faculties) — for problem *discovery* ✅
@@ -68,12 +68,12 @@ Saying "EPC dari berbagai fakultas" for the ground truth implies multi-faculty e
 
 ### Fix
 **`bab1.tex:27`:**
-- Current: `"...pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas, serta didukung oleh dokumen pemetaan historis..."`
-- Target: `"...pencocokan manual yang dilakukan oleh Enrichment Program Coordinator (EPC) pada program studi Computer Science, serta didukung oleh dokumen pemetaan historis..."`
+- Current: `"...pencocokan manual yang dilakukan oleh beberapa \textit{Enrichment Program Coordinator} (EPC) dari berbagai fakultas, serta didukung oleh dokumen pemetaan historis..."`
+- Target: `"...pencocokan manual yang dilakukan oleh \textit{Enrichment Program Coordinator} (EPC) pada program studi Computer Science, serta didukung oleh dokumen pemetaan historis..."`
 
 **`bab1.tex:105`:**
-- Current: `"...data ground truth diperoleh dari hasil pencocokan manual yang dilakukan oleh beberapa Enrichment Program Coordinator (EPC) dari berbagai fakultas."`
-- Target: `"...data ground truth diperoleh dari hasil pencocokan manual yang dilakukan oleh Enrichment Program Coordinator (EPC) pada program studi Computer Science di XYZ University."`
+- Current: `"...data ground truth diperoleh dari hasil pencocokan manual yang dilakukan oleh beberapa \textit{Enrichment Program Coordinator} (EPC) dari berbagai fakultas."`
+- Target: `"...data ground truth diperoleh dari hasil pencocokan manual yang dilakukan oleh \textit{Enrichment Program Coordinator} (EPC) pada program studi Computer Science di XYZ University."`
 
 **Status:** ✅ Fixed — 2026-06-17. bab1:27 rewritten to single-source (data institusional batch 2026 CS, kode dosen dari EPC, atribut current_supervisor_code). bab1:56 & 123 "dan data pemetaan historis" removed — now "data institusional penugasan faculty supervisor Program Enrichment". bab1:105 "beberapa EPC dari berbagai fakultas" replaced with single-source framing including current_supervisor_code.
 
@@ -318,6 +318,71 @@ Tidak perlu menggeser UC lain.
 
 ---
 
+## LT1 — `bab2.tex`: Tidak ada landasan teori untuk algoritma greedy (solver penugasan)
+
+**Severity: SEDANG**
+
+### Problem
+
+Stage 6 dari pipeline sistem (`_solve_assignment` di `recommender.py`) menggunakan **two-phase greedy algorithm** dengan capacity constraints sebagai solver penugasan mahasiswa ke faculty supervisor. Ini adalah komponen algoritmik utama yang berbeda dari NLP/embedding.
+
+Namun `bab2.tex` tidak memiliki subsection apapun yang melandasi greedy algorithm secara teoritis. Saat ini Landasan Teori hanya mencakup:
+- Representasi teks, embedding, similarity → ✅ ada
+- Evaluasi metrik → ✅ ada
+- Teknologi pendukung → ✅ ada
+- UML + Waterfall → ✅ ada (MC1 sudah fixed)
+
+**Yang belum ada:** teori algoritma greedy sebagai dasar solver Stage 6.
+
+Tanpa fondasi ini, examiner dapat mempertanyakan: *"Apa justifikasi teoritis untuk pendekatan greedy dalam penugasan kapasitas?"* — dan bab2 tidak memiliki jawaban.
+
+### Context: Apa yang diimplementasikan
+
+Solver bekerja dalam dua fase greedy:
+1. **Init:** tiap mahasiswa di-assign ke `argmax(score_matrix[i, :])` — pilihan lokal terbaik
+2. **Phase 1 — Reduce Overfull:** pindahkan mahasiswa dari supervisor over-capacity; pilih pemindahan dengan *minimum score penalty*
+3. **Phase 2 — Fill Underfull:** pindahkan dari donor (count > min) ke under-capacity target; pilih *minimum score penalty*
+
+Ini adalah **greedy heuristic**, bukan Dynamic Programming. Trade-off yang disengaja: kecepatan O(N×M×k) vs. optimasi global (Hungarian Algorithm O(n³) / ILP). Trade-off ini perlu diakui dan dijustifikasi di bab2.
+
+### Fix
+
+**`bab2.tex`: Tambah `\subsection{Algoritma Greedy}` sebelum `\section{Penelitian Terkait}`**
+
+Insert setelah `\subsection{Model Waterfall}` (bab2:429), sebelum `\section{Penelitian Terkait}` (bab2:445).
+
+Konten yang dibutuhkan (3–4 paragraf):
+1. **Definisi algoritma greedy** — membuat pilihan lokal optimal di setiap langkah dengan harapan mencapai solusi global yang baik; cite `\cite{duvignau2023greediness}` untuk theoretical bounds pada bipartite assignment
+2. **Assignment Problem context** — masalah penugasan N mahasiswa ke M supervisor dengan kapasitas adalah varian dari weighted bipartite matching; solusi eksak (Hungarian Algorithm) O(n³); cite `\cite{ramotsisi2022optimization}` untuk optimization framing
+3. **Greedy sebagai heuristic yang valid** — untuk skala kecil (N≈170, M=14) greedy two-phase cukup karena konvergen cepat dan hasil dapat diverifikasi deterministik; cite `\cite{maashi2020greedy}` sebagai precedent langsung (greedy linear heuristic untuk student-project assignment di universitas)
+4. **Kaitan ke sistem** — diimplementasikan sebagai solver Stage 6 dalam pipeline rekomendasi; objective score (sum of final_scores) memungkinkan perbandingan kualitas antar run
+
+**Citation yang direkomendasikan (semua verified via DOI):**
+
+| Priority | BibTeX key | Paper | DOI Status |
+|---|---|---|---|
+| PRIMARY | `maashi2020greedy` | Maashi (2020) — Greedy linear heuristic, student-project KSU | ✅ `10.21786/bbrc/13.3/27` |
+| PRIMARY | `duvignau2023greediness` | Duvignau et al. (2023) — Greedy bounds, bipartite assignment | ✅ `10.1016/j.procs.2023.08.212` Diamond OA |
+| SECONDARY | `ramotsisi2022optimization` | Ramotsisi et al. (2022) — Optimization model, student-to-supervisor | ✅ `10.1155/2022/9415210` Gold OA |
+| VERIFY FIRST | `simsek2021decision` | Şimşek (2021) — DSS for student-supervisor allocation | ⚠️ `10.1016/j.eswa.2021.116068` — title-search only, manual verify |
+
+> **Agent assignment note:** Full paper metadata, abstracts, OA status, and ready-to-paste BibTeX entries are in:
+> `.context/paper-research/greedy-assignment-algorithm-2026-06-17.md`
+>
+> That file contains:
+> - **5 enriched paper records** with DOI verification status
+> - **Recommended citation strategy** for `\subsection{Algoritma Greedy}`
+> - **BibTeX block** ready to paste into `ref.bib`: `maashi2020greedy`, `duvignau2023greediness`, `ramotsisi2022optimization`, `simsek2021decision`, `ayegba2025structural`
+> - **Exclusion note** for Joshi & Jadav (no DOI, year unknown)
+>
+> Do NOT use `cormen2009algorithms` — Cormen 2009 is a valid source but year is outside the BINUS 2020+ recency preference. The three verified papers above cover the same theoretical ground with recent, domain-specific examples.
+
+**Label subsection:** `\label{algoritma-greedy}` (konsisten dengan konvensi kebab-case bab2)
+
+**Status:** ✅ Fixed — 2026-06-17. `\subsection{Algoritma Greedy}\label{algoritma-greedy}` inserted in `bab2.tex` after `\subsection{Model Waterfall}`, before `\section{Penelitian Terkait}`. 4 paragraphs: (1) greedy paradigm + bipartite bounds `\cite{duvignau2023greediness}`; (2) assignment problem + O(n³) vs heuristic framing `\cite{ramotsisi2022optimization}`; (3) greedy validity at small scale `\cite{maashi2020greedy}`; (4) two-phase solver implementation in pipeline Stage 6. BibTeX entries `maashi2020greedy`, `duvignau2023greediness`, `ramotsisi2022optimization` added to `ref.bib`.
+
+---
+
 ## Summary Table
 
 | # | File | Line(s) | Issue | Severity | Status |
@@ -328,3 +393,4 @@ Tidak perlu menggeser UC lain.
 | MC1 | bab2.tex, bab3.tex, ref.bib | bab2:340, bab3:76, bab3:2109 | Waterfall claimed in bab3 with no bab2 definition and no SDLC framing in bab3 intro | KRITIS | ✅ Fixed |
 | SD1 | bab2.tex | 327, 331, 335, 339 | Tidak ada tabel simbol untuk Use Case, Activity, Class Diagram, ERD di Landasan Teori | SEDANG | ✅ Fixed |
 | SD2 | bab3.tex | fig3.2 (bab3:386–402) | UC "Export Konfigurasi Supervisor" (`/supervisors/export`) tidak ada di UC diagram — 11/12 route ter-cover | MINOR | ✅ Fixed |
+| LT1 | bab2.tex, ref.bib | bab2: setelah Model Waterfall, sebelum Penelitian Terkait | Tidak ada landasan teori algoritma greedy — solver Stage 6 (`_solve_assignment`) pakai two-phase greedy tapi tidak ada subsection di Landasan Teori | SEDANG | ✅ Fixed |
