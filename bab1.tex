@@ -52,14 +52,20 @@ Agar penelitian ini lebih terarah, ruang lingkup penelitian dibatasi pada:
   Penelitian difokuskan pada pemetaan Faculty Supervisor magang dalam Program Enrichment di XYZ University kampus Bandung, khususnya pada program studi Computer Science.
 \item
   Sistem rekomendasi dikembangkan menggunakan pendekatan \textit{semantic similarity} berbasis data tekstual.
+\item 
+  Data yang digunakan dalam penelitian ini dibatasi pada data enrichment batch 2026 yang memuat data mahasiswa peserta Program \textit{Enrichment}, data \textit{Faculty Supervisor}, serta data institusional penugasan \textit{faculty supervisor} sebagai \textit{ground truth}.
+\item 
+  Website memiliki fitur utama berupa halaman beranda, \textit{data center} untuk pengelolaan data mahasiswa , \textit{run history} untuk melihat hasil rekomendasi sebelumnya, serta halaman \textit{supervisor studio} untuk melihat profil dosen dan kata kunci yang diterapkan.
 \item
   Evaluasi sistem dilakukan dengan membandingkan hasil rekomendasi dengan \textit{ground truth} yang diperoleh dari data institusional penugasan \textit{faculty supervisor} Program Enrichment.
 \item
   Penelitian menghasilkan sebuah prototipe sistem yang mencakup antarmuka pengguna dan \textit{backend}.
 \item
   Penelitian ini tidak membahas kebijakan akademik di luar proses pemetaan Faculty Supervisor.
-\end{enumerate}
+\item 
+  Pengajuan sistem menggunakan metode \textit{black box}, untuk fungsionalitas yang dihasilkan, tanpa membahas detail implementasi teknis secara mendalam.
 
+\end{enumerate}
 \section{Tujuan dan Manfaat}\label{tujuan-dan-manfaat}
 
 \subsection{Tujuan}\label{tujuan}
@@ -103,6 +109,10 @@ Tahapan metode penelitian secara umum meliputi studi pustaka, pengumpulan data, 
 \subsection{Pengumpulan Data}\label{pengumpulan-data}
 
 Pengumpulan data dilakukan melalui studi dokumen dan data institusional yang digunakan dalam proses pemetaan Faculty Supervisor Program Enrichment. Data yang digunakan dalam penelitian ini meliputi data Faculty Supervisor, data mahasiswa peserta Program Enrichment, serta dokumen pemetaan historis Faculty Supervisor dan mahasiswa dalam rentang waktu satu tahun terakhir di XYZ University, khususnya XYZ. Data \textit{ground truth} diperoleh dari data institusional penugasan \textit{faculty supervisor} batch 2026 Program Enrichment program studi Computer Science di XYZ University, yang memuat atribut penugasan aktual (\texttt{current\_supervisor\_code}) hasil pemetaan manual EPC.
+
+\subsection{Metode Perancangan Sistem}
+
+Pada tahap ini dilakukan perancangan sistem menggunakan pendekatan \textit{System Development Life Cycle} (SDLC) dengan model \textit{Waterfall}. Proses ini dilakukan secara terstruktur dan sekuensial yang meliputi beberapa tahapan utama sesuai dengan jadwal kegiatan penelitian, yaitu analisis masalah dan kebutuhan sistem, perancangan sistem (menggunakan \textit{Unified Modeling Language} dan arsitektur sistem), pengembangan sistem atau implementasi kode, pengujian dan evaluasi sistem, serta diakhiri dengan tahap revisi dan finalisasi dokumen.
 
 \subsection{Praproses Data}\label{praproses-data}
 
