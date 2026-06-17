@@ -37,7 +37,7 @@
   \node (analisis)[process,  below=of mulai]   {Analisis permasalahan, kebutuhan\\ fungsional \& non-fungsional, dan data};
   \node (rencana) [process,  below=of analisis]{Perencanaan: ruang lingkup, pendekatan\\ \textit{semantic similarity}, dan strategi evaluasi};
   \node (model)   [process,  below=of rencana] {Perancangan model rekomendasi\\ berbasis \textit{semantic similarity}};
-  \node (eval)    [process,  below=of model]   {Evaluasi hasil rekomendasi\\ menggunakan metrik information retrieval};
+  \node (eval)    [process,  below=of model]   {Evaluasi hasil rekomendasi\\ menggunakan metrik \textit{information retrieval}};
   \node (decide)  [decision, below=of eval]    {Memenuhi\\ kriteria?};
   \node (uml)     [process,  below=of decide]  {Perancangan UML: Use Case Diagram,\\ Activity Diagram, Class Diagram};
   \node (impl)    [io,       below=of uml]     {Implementasi aplikasi web sebagai\\ \textit{decision support system} (DSS)};
@@ -67,11 +67,11 @@ Dalam upaya mengatasi keterbatasan tersebut, pendekatan pencocokan berbasis teks
 
 Permasalahan tersebut menuntut adanya sebuah sistem yang dapat membantu proses pemetaan antara faculty supervisor dan mahasiswa secara lebih objektif dan efisien. Berdasarkan kebutuhan tersebut, penelitian ini mengusulkan pengembangan sistem rekomendasi untuk mengotomatisasi proses pencocokan mahasiswa dengan faculty supervisor. Pendekatan \textit{scoring} yang digunakan menggabungkan dua komponen utama, yaitu \textit{semantic similarity} berbasis \textit{text embedding} untuk mengukur kesesuaian makna antara profil mahasiswa dan dosen, serta \textit{company group bonus} untuk mempertimbangkan pengelompokan mahasiswa berdasarkan perusahaan tempat kerja.
 
-Sistem yang dikembangkan memanfaatkan informasi tekstual yang bersumber dari profil faculty supervisor dan data mahasiswa. Informasi tersebut direpresentasikan dalam bentuk dokumen teks yang menggambarkan karakteristik akademik dan konteks profesional masing-masing entitas. Pendekatan \textit{semantic similarity} dipilih sebagai komponen utama karena mampu memahami makna dan konteks teks secara lebih mendalam dibandingkan metode pencocokan berbasis kata kunci. Company group bonus digunakan untuk mendorong konsistensi penempatan mahasiswa dari perusahaan yang sama pada faculty supervisor yang paling sesuai.
+Sistem yang dikembangkan memanfaatkan informasi tekstual yang bersumber dari profil faculty supervisor dan data mahasiswa. Informasi tersebut direpresentasikan dalam bentuk dokumen teks yang menggambarkan karakteristik akademik dan konteks profesional masing-masing entitas. Pendekatan \textit{semantic similarity} dipilih sebagai komponen utama karena mampu memahami makna dan konteks teks secara lebih mendalam dibandingkan metode pencocokan berbasis kata kunci. \textit{Company group bonus} digunakan untuk mendorong konsistensi penempatan mahasiswa dari perusahaan yang sama pada faculty supervisor yang paling sesuai.
 
 Berdasarkan skor \textit{hybrid} yang dihasilkan, sistem menggunakan \textit{greedy capacity-constrained solver} untuk mengalokasikan setiap mahasiswa ke satu faculty supervisor secara optimal dengan mempertimbangkan batasan kapasitas bimbingan minimum dan maksimum per faculty supervisor. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang telah memenuhi seluruh \textit{constraint} kapasitas.
 
-Pengembangan sistem dilakukan melalui beberapa tahapan yang saling berurutan, dimulai dari analisis permasalahan dan kebutuhan sistem, perencanaan proses pengembangan, perancangan model rekomendasi, hingga implementasi sistem dalam bentuk aplikasi berbasis website. Kerangka berpikir penelitian ini digambarkan dalam bentuk diagram alur pada Gambar 3.1, yang menunjukkan hubungan antara permasalahan, metode yang digunakan, dan keluaran sistem berupa rekomendasi faculty supervisor untuk mahasiswa.
+Pengembangan sistem dilakukan melalui beberapa tahapan yang saling berurutan, dimulai dari analisis permasalahan dan kebutuhan sistem, perencanaan proses pengembangan, perancangan model rekomendasi, hingga implementasi sistem dalam bentuk aplikasi berbasis \textit{website}. Kerangka berpikir penelitian ini digambarkan dalam bentuk diagram alur pada Gambar 3.1, yang menunjukkan hubungan antara permasalahan, metode yang digunakan, dan keluaran sistem berupa rekomendasi faculty supervisor untuk mahasiswa.
 
 \section{Metodologi Penelitian}\label{metodologi-penelitian}
 
@@ -289,7 +289,7 @@ Pipeline sistem terdiri dari delapan tahap berurutan, dimulai dari impor data Ex
 
 \subsection{Kandidat Model Text Embedding}\label{kandidat-model-text-embedding}
 
-Pada penelitian ini, vektor \textit{embedding} dibentuk menggunakan model \textit{text embedding} open-source tanpa proses pelatihan ulang fine-tuning. Pemilihan kandidat model mempertimbangkan kebutuhan sistem yang menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, serta karakteristik data yang berpotensi memuat istilah campuran Bahasa Indonesia--Inggris. Seluruh kandidat model akan digunakan dengan mekanisme yang konsisten: teks mahasiswa dan dokumen faculty supervisor diubah menjadi \textit{embedding} menggunakan model yang sama, kemudian dihitung kemiripannya menggunakan cosine similarity. \textit{Embedding} yang dihasilkan dinormalisasi L2 oleh modul \texttt{embedding.py} sehingga \textit{cosine similarity} dapat dihitung melalui perkalian titik (\textit{dot product}) antar vektor yang telah ternormalisasi. Sistem menghasilkan rekomendasi \textit{top-5} dosen berdasarkan skor kemiripan sebelum tahap alokasi slot bimbingan.
+Pada penelitian ini, vektor \textit{embedding} dibentuk menggunakan model \textit{text embedding} \textit{open-source} tanpa proses pelatihan ulang \textit{fine-tuning}. Pemilihan kandidat model mempertimbangkan kebutuhan sistem yang menggunakan representasi dosen dalam bentuk multi-dokumen per jenis sumber, serta karakteristik data yang berpotensi memuat istilah campuran Bahasa Indonesia--Inggris. Seluruh kandidat model akan digunakan dengan mekanisme yang konsisten: teks mahasiswa dan dokumen faculty supervisor diubah menjadi \textit{embedding} menggunakan model yang sama, kemudian dihitung kemiripannya menggunakan \textit{cosine similarity}. \textit{Embedding} yang dihasilkan dinormalisasi L2 oleh modul \texttt{embedding.py} sehingga \textit{cosine similarity} dapat dihitung melalui perkalian titik (\textit{dot product}) antar vektor yang telah ternormalisasi. Sistem menghasilkan rekomendasi \textit{top-5} dosen berdasarkan skor kemiripan sebelum tahap alokasi slot bimbingan.
 
 \subsection{Qwen3-Embedding-0.6B}\label{qwen3-embedding-0.6b-1}
 
@@ -305,15 +305,15 @@ Pada penelitian ini, BAAI/bge-m3 digunakan dalam mode \textit{dense retrieval}, 
 
 \subsection{intfloat/multilingual-e5-large-instruct}\label{multilingual-e5-large-instruct}
 
-intfloat/multilingual-e5-large-instruct merupakan model \textit{embedding} multibahasa berbasis arsitektur XLM-RoBERTa yang dikembangkan oleh Microsoft sebagai bagian dari seri E5 (\textit{Embeddings from bidirectional Encoder representations}). Model ini mendukung lebih dari 100 bahasa dengan dimensi \textit{embedding} 1.024 dan kapasitas konteks hingga 512 token.
+intfloat/multilingual-e5-large-instruct merupakan model \textit{embedding} multibahasa berbasis arsitektur XLM-RoBERTa yang dikembangkan oleh Microsoft sebagai bagian dari seri E5 (\textit{Embeddings from bidirectional Encoder representations}). Model ini mendukung lebih dari 100 bahasa dengan dimensi \textit{embedding} 1.024 dan kapasitas konteks hingga 512 \textit{token}.
 
 Keunggulan utama model ini terletak pada kemampuan \textit{instruction-following}, di mana teks \textit{query} dan \textit{passage} direpresentasikan dengan awalan instruksi yang berbeda untuk memisahkan konteks pencarian dari dokumen yang diindeks. Model ini ditetapkan sebagai model \textit{default} dalam sistem karena keseimbangan antara kualitas \textit{retrieval} multibahasa dan efisiensi komputasi pada perangkat tanpa GPU khusus.
 
 \subsection{Keterkaitan Kandidat Model dengan Mekanisme Rekomendasi}\label{keterkaitan-kandidat-model-dengan-mekanisme-rekomendasi}
 
-Ketiga kandidat model dipilih untuk dibandingkan pada \textit{pipeline} yang sama, sehingga perbedaan kinerja dapat dikaitkan dengan karakteristik masing-masing model, bukan perbedaan perlakuan data. Qwen3-\textit{Embedding}-0.6B menawarkan kapasitas konteks terpanjang (32K token) dengan ukuran parameter paling ringan, BAAI/bge-m3 menyediakan kapasitas konteks menengah (8K token) dengan arsitektur multi-retrieval, sedangkan intfloat/multilingual-e5-large-instruct memiliki kapasitas konteks lebih terbatas (512 token) namun dioptimalkan untuk tugas \textit{instruction-following retrieval}. Perbandingan ketiga model ini memungkinkan analisis terhadap pengaruh kapasitas konteks dan pendekatan \textit{fine-tuning} terhadap kualitas rekomendasi dalam konteks data campuran Bahasa Indonesia--Inggris.
+Ketiga kandidat model dipilih untuk dibandingkan pada \textit{pipeline} yang sama, sehingga perbedaan kinerja dapat dikaitkan dengan karakteristik masing-masing model, bukan perbedaan perlakuan data. Qwen3-\textit{Embedding}-0.6B menawarkan kapasitas konteks terpanjang (32K \textit{token}) dengan ukuran parameter paling ringan, BAAI/bge-m3 menyediakan kapasitas konteks menengah (8K \textit{token}) dengan arsitektur \textit{multi-retrieval}, sedangkan intfloat/multilingual-e5-large-instruct memiliki kapasitas konteks lebih terbatas (512 \textit{token}) namun dioptimalkan untuk tugas \textit{instruction-following retrieval}. Perbandingan ketiga model ini memungkinkan analisis terhadap pengaruh kapasitas konteks dan pendekatan \textit{fine-tuning} terhadap kualitas rekomendasi dalam konteks data campuran Bahasa Indonesia--Inggris.
 
-Sebagai transisi ke Subbab 3.2.3.7, penentuan model terbaik dilakukan melalui strategi evaluasi yang mengukur kualitas rekomendasi top-5 serta mempertimbangkan aspek efisiensi komputasi pada saat inferensi \textit{embedding}.
+Sebagai transisi ke Subbab 3.2.3.7, penentuan model terbaik dilakukan melalui strategi evaluasi yang mengukur kualitas rekomendasi \textit{top-5} serta mempertimbangkan aspek efisiensi komputasi pada saat inferensi \textit{embedding}.
 
 \subsection{Mekanisme Perhitungan dan Perangkingan Rekomendasi}\label{mekanisme-perhitungan-dan-perangkingan-rekomendasi}
 
@@ -361,7 +361,7 @@ Algoritma \textit{greedy} dua fase bekerja sebagai berikut:
     \item \textbf{Fase 2 — Pengisian \textit{Underfull}:} Sistem secara iteratif memindahkan mahasiswa dari supervisor yang berada di atas batas minimum (\textit{donor}) ke supervisor yang berada di bawah batas minimum, kembali dengan memilih pemindahan dengan \textit{penalty} terkecil.
 \end{enumerate}
 
-Setelah kedua fase selesai, sistem melakukan validasi akhir untuk memastikan seluruh constraint kapasitas terpenuhi. Apabila validasi gagal, sistem menghentikan proses dan menampilkan pesan kesalahan kepada EPC. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang memenuhi seluruh batasan kapasitas secara optimal.
+Setelah kedua fase selesai, sistem melakukan validasi akhir untuk memastikan seluruh \textit{constraint} kapasitas terpenuhi. Apabila validasi gagal, sistem menghentikan proses dan menampilkan pesan kesalahan kepada EPC. Hasil akhir berupa pasangan mahasiswa dan faculty supervisor yang memenuhi seluruh batasan kapasitas secara optimal.
 
 \subsubsection{Strategi evaluasi}\label{strategi-evaluasi}
 
@@ -634,7 +634,7 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
 Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \hline
- & Nama supervisor sudah digunakan oleh kode lain & Sistem menampilkan pesan konflik (UNIQUE constraint pada kolom name) \\
+ & Nama supervisor sudah digunakan oleh kode lain & Sistem menampilkan pesan konflik (UNIQUE \textit{constraint} pada kolom name) \\
 \hline
  & Kode supervisor atau nama kosong & Sistem menampilkan pesan validasi \\
 \hline
@@ -657,7 +657,7 @@ Scenario & \multicolumn{2}{p{\ucdeskcol}|}{EPC mengelola keyword kompetensi masi
 \hline
 Triggering Events & \multicolumn{2}{p{\ucdeskcol}|}{EPC memilih supervisor dan membuka Keywords Studio di halaman Supervisors} \\
 \hline
-Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses penambahan, pengeditan, dan penghapusan keyword kompetensi faculty supervisor menggunakan antarmuka chip berbasis token (Keywords Studio). Keyword yang tersimpan digunakan sebagai profil supervisor dalam pipeline rekomendasi.} \\
+Brief Description & \multicolumn{2}{p{\ucdeskcol}|}{Use case ini menjelaskan proses penambahan, pengeditan, dan penghapusan keyword kompetensi faculty supervisor menggunakan antarmuka chip berbasis \textit{token} (Keywords Studio). Keyword yang tersimpan digunakan sebagai profil supervisor dalam pipeline rekomendasi.} \\
 \hline
 Actor & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
@@ -673,9 +673,9 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & EPC membuka halaman Supervisors dan memilih supervisor dari dropdown & Sistem menampilkan chip keyword yang sudah tersimpan untuk supervisor tersebut \\
 \hline
- & EPC mengetik keyword baru di input field & \\
+ & EPC mengetik keyword baru di \textit{input field} & \\
 \hline
- & EPC menekan Enter, Comma, atau tombol Add & Sistem menormalisasi token (trim, collapse whitespace) dan melakukan pengecekan duplikasi (case-insensitive) \\
+ & EPC menekan Enter, Comma, atau tombol Add & Sistem menormalisasi \textit{token} (trim, collapse whitespace) dan melakukan pengecekan duplikasi (case-insensitive) \\
 \hline
  & & Jika bukan duplikat: Sistem menambahkan chip keyword baru ke tampilan \\
 \hline
@@ -687,7 +687,7 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
 Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \hline
- & Keyword yang ditambahkan sudah ada (duplikat, case-insensitive) & Sistem mengabaikan token duplikat dan tidak menambahkan chip baru \\
+ & Keyword yang ditambahkan sudah ada (duplikat, case-insensitive) & Sistem mengabaikan \textit{token} duplikat dan tidak menambahkan chip baru \\
 \hline
  & Supervisor tidak ditemukan saat simpan & Sistem menampilkan pesan kesalahan \\
 \hline
@@ -734,7 +734,7 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & & Sistem mengencode dokumen menggunakan model \textit{embedding} yang dipilih \\
 \hline
- & & Sistem menghitung cosine similarity matrix \\
+ & & Sistem menghitung \textit{cosine similarity matrix} \\
 \hline
  & & Jika parameter group bonus diaktifkan (\texttt{enable\_group\_bonus = true}), sistem menerapkan Company Group Bonus pada score matrix berdasarkan pengelompokan company partner mahasiswa \\
 \hline
@@ -742,9 +742,9 @@ Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
  & & Sistem menjalankan \textit{greedy solver} untuk alokasi optimal \\
 \hline
- & & Sistem menghitung metrik evaluasi (content-based dan hybrid) \\
+ & & Sistem menghitung metrik evaluasi (\textit{content-based} dan \textit{hybrid}) \\
 \hline
- & & Sistem membangun rankings JSON (top-5 kandidat per mahasiswa beserta skor) \\
+ & & Sistem membangun rankings JSON (\textit{top-5} kandidat per mahasiswa beserta skor) \\
 \hline
  & & Sistem menyimpan hasil run dan mengarahkan ke halaman detail run \\
 \hline
@@ -754,7 +754,7 @@ Exception Condition & \textbf{Condition} & \textbf{Handling} \\
 \hline
  & Data faculty supervisor tidak tersedia & Sistem menolak proses dan menampilkan notifikasi \\
 \hline
- & Greedy solver gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
+ & \textit{Greedy solver} gagal menemukan solusi & Sistem menampilkan pesan kesalahan \\
 \hline
  & Model SentenceTransformer tidak tersedia atau gagal dimuat & Sistem menggunakan fallback ke TF-IDF; jika TF-IDF juga gagal, sistem menggunakan Token Overlap (Jaccard coefficient) \\
 \hline
@@ -928,13 +928,13 @@ Stakeholder & \multicolumn{2}{p{\ucdeskcol}|}{EPC} \\
 \hline
 Pre-condition & \multicolumn{2}{p{\ucdeskcol}|}{EPC dalam kondisi telah login (memiliki sesi aktif)} \\
 \hline
-Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Sesi EPC dihapus dari server, EPC diarahkan ke halaman login} \\
+Post-condition & \multicolumn{2}{p{\ucdeskcol}|}{Sesi EPC dihapus dari \textit{server}, EPC diarahkan ke halaman login} \\
 \hline
 Flow Of Events & \textbf{Actor} & \textbf{System} \\
 \hline
- & EPC menekan tombol Logout pada navigasi & Sistem menerima request POST ke endpoint logout \\
+ & EPC menekan tombol Logout pada navigasi & Sistem menerima \textit{request} POST ke endpoint logout \\
 \hline
- & & Sistem menghapus user\_id dari session server \\
+ & & Sistem menghapus user\_id dari session \textit{server} \\
 \hline
  & & Sistem menampilkan flash message "Logout berhasil" \\
 \hline
@@ -2149,18 +2149,18 @@ Tahapan praproses data yang diimplementasikan meliputi:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Data cleansing, yaitu penghapusan data yang tidak relevan atau tidak diperlukan.
+  \textit{Data cleansing}, yaitu penghapusan data yang tidak relevan atau tidak diperlukan.
 \item
-  Case folding, untuk mengubah seluruh teks menjadi huruf kecil agar konsisten.
+  \textit{Case folding}, untuk mengubah seluruh teks menjadi huruf kecil agar konsisten.
 \item
   Tokenisasi, yaitu memecah teks menjadi unit kata.
 \item
-  Penghapusan stopwords, untuk menghilangkan kata-kata umum yang tidak memiliki kontribusi makna yang signifikan.
+  Penghapusan \textit{stopwords}, untuk menghilangkan kata-kata umum yang tidak memiliki kontribusi makna yang signifikan.
 \end{enumerate}
 
 Normalisasi teks, agar data siap digunakan pada tahap representasi teks.
 
-Tahapan ini bertujuan untuk mengurangi noise pada data dan meningkatkan akurasi sistem rekomendasi.
+Tahapan ini bertujuan untuk mengurangi \textit{noise} pada data dan meningkatkan akurasi sistem rekomendasi.
 
 \subsection{Implementasi Representasi Teks}\label{implementasi-representasi-teks}
 
@@ -2168,46 +2168,46 @@ Pada tahap ini, data tekstual yang telah melalui proses praproses diubah ke dala
 
 Representasi teks dilakukan dengan pendekatan \textit{semantic similarity}, di mana teks profil mahasiswa dan bidang keahlian dosen direpresentasikan dalam bentuk vektor. Representasi ini memungkinkan sistem untuk memahami konteks dan makna teks secara lebih mendalam dibandingkan pendekatan berbasis pencocokan kata kunci.
 
-Hasil dari tahap ini berupa vektor teks yang digunakan sebagai input utama pada proses perhitungan kemiripan semantik.
+Hasil dari tahap ini berupa vektor teks yang digunakan sebagai \textit{input} utama pada proses perhitungan kemiripan semantik.
 
 \subsection{Implementasi Perhitungan Semantic Similarity}\label{implementasi-perhitungan-semantic-similarity}
 
 Setelah representasi teks diperoleh, tahap selanjutnya adalah implementasi perhitungan \textit{semantic similarity}. Perhitungan dilakukan dengan membandingkan vektor representasi teks mahasiswa dengan vektor representasi teks faculty supervisor.
 
-Nilai similarity yang dihasilkan menunjukkan tingkat kesesuaian antara topik atau minat mahasiswa dengan bidang keahlian dosen pembimbing. Nilai ini berada dalam rentang tertentu, di mana nilai yang lebih tinggi menunjukkan tingkat kesesuaian yang lebih baik.
+Nilai \textit{similarity} yang dihasilkan menunjukkan tingkat kesesuaian antara topik atau minat mahasiswa dengan bidang keahlian dosen pembimbing. Nilai ini berada dalam rentang tertentu, di mana nilai yang lebih tinggi menunjukkan tingkat kesesuaian yang lebih baik.
 
-Proses perhitungan similarity dilakukan untuk setiap pasangan mahasiswa dan faculty supervisor, sehingga sistem mampu menghasilkan daftar faculty supervisor yang diurutkan berdasarkan tingkat kecocokan. Hasil perhitungan ini kemudian disimpan dan digunakan pada tahap rekomendasi.
+Proses perhitungan \textit{similarity} dilakukan untuk setiap pasangan mahasiswa dan faculty supervisor, sehingga sistem mampu menghasilkan daftar faculty supervisor yang diurutkan berdasarkan tingkat kecocokan. Hasil perhitungan ini kemudian disimpan dan digunakan pada tahap rekomendasi.
 
 \subsection{Implementasi Sistem Rekomendasi}\label{implementasi-sistem-rekomendasi}
 
-Pada tahap ini, seluruh komponen sistem yang telah diimplementasikan sebelumnya diintegrasikan menjadi satu sistem rekomendasi yang utuh. Sistem rekomendasi dirancang untuk menghasilkan daftar rekomendasi faculty supervisor bagi setiap mahasiswa berdasarkan hasil perhitungan similarity dan penerapan aturan yang berlaku.
+Pada tahap ini, seluruh komponen sistem yang telah diimplementasikan sebelumnya diintegrasikan menjadi satu sistem rekomendasi yang utuh. Sistem rekomendasi dirancang untuk menghasilkan daftar rekomendasi faculty supervisor bagi setiap mahasiswa berdasarkan hasil perhitungan \textit{similarity} dan penerapan aturan yang berlaku.
 
-Hasil rekomendasi ditampilkan dalam bentuk peringkat (ranking), di mana faculty supervisor dengan tingkat kesesuaian tertinggi berada pada urutan teratas. Sistem ini berfungsi sebagai \textit{decision support system}, sehingga rekomendasi yang dihasilkan digunakan sebagai bahan pertimbangan oleh Enrichment Program Coordinator (EPC) dalam menentukan dosen pembimbing yang paling sesuai.
+Hasil rekomendasi ditampilkan dalam bentuk peringkat (ranking), di mana faculty supervisor dengan tingkat kesesuaian tertinggi berada pada urutan teratas. Sistem ini berfungsi sebagai \textit{decision support system}, sehingga rekomendasi yang dihasilkan digunakan sebagai bahan pertimbangan oleh \textit{Enrichment Program Coordinator} (EPC) dalam menentukan dosen pembimbing yang paling sesuai.
 
 \subsection{Implementasi dan Deployment Sistem}\label{implementasi-dan-deployment-sistem}
 
 Tahap akhir dalam implementasi adalah pengembangan dan \textit{deployment} prototipe sistem. Prototipe sistem dikembangkan dalam bentuk aplikasi berbasis web yang terdiri dari antarmuka pengguna dan \textit{backend} untuk memproses data dan menghasilkan rekomendasi.
 
-Deployment sistem dilakukan pada infrastruktur Virtual Private Server (VPS) berbasis cloud dengan konfigurasi single-process untuk mendukung pengoperasian selama tahap penelitian. Arsitektur \textit{deployment} dirancang untuk menjamin ketersediaan layanan, efisiensi penggunaan sumber daya, serta kemudahan pengelolaan.
+\textit{Deployment} sistem dilakukan pada infrastruktur Virtual Private Server (VPS) berbasis \textit{cloud} dengan konfigurasi \textit{single-process} untuk mendukung pengoperasian selama tahap penelitian. Arsitektur \textit{deployment} dirancang untuk menjamin ketersediaan layanan, efisiensi penggunaan sumber daya, serta kemudahan pengelolaan.
 
 \subsubsection{Arsitektur Deployment}\label{arsitektur-deployment}
 
-Sistem rekomendasi di-deploy menggunakan tumpukan teknologi Flask, SQLite, dan sentence-transformers pada VPS Tencent Cloud dengan spesifikasi 2 vCPU, 8 GB RAM, dan 80 GB SSD. Komunikasi antara pengguna dan sistem dimediasi oleh nginx yang bertindak sebagai reverse proxy dengan dukungan SSL melalui Let's Encrypt, diteruskan ke server aplikasi gunicorn yang menjalankan Flask pada port 5001.
+Sistem rekomendasi \textit{di-deploy} menggunakan tumpukan teknologi Flask, SQLite, dan sentence-transformers pada VPS Tencent Cloud dengan spesifikasi 2 vCPU, 8 GB RAM, dan 80 GB SSD. Komunikasi antara pengguna dan sistem dimediasi oleh nginx yang bertindak sebagai \textit{reverse proxy} dengan dukungan SSL melalui Let's Encrypt, diteruskan ke \textit{server} aplikasi gunicorn yang menjalankan Flask pada port 5001.
 
 Komponen arsitektur \textit{deployment} adalah sebagai berikut:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textit{Nginx} berperan sebagai reverse proxy yang menerima permintaan dari internet melalui port 80 (HTTP) dan 443 (HTTPS), kemudian meneruskan ke server aplikasi internal.
+  \textit{Nginx} berperan sebagai \textit{reverse proxy} yang menerima permintaan dari internet melalui port 80 (HTTP) dan 443 (HTTPS), kemudian meneruskan ke server aplikasi internal.
 \item
-  \textit{Gunicorn} menjalankan Flask dengan satu worker process karena \textit{Embedding}Provider merupakan singleton per-proses; penggunaan lebih dari satu worker akan mengakibatkan duplikasi model dalam memori dan berisiko kehabisan RAM.
+  \textit{Gunicorn} menjalankan Flask dengan satu \textit{worker process} karena \textit{Embedding}Provider merupakan singleton per-proses; penggunaan lebih dari satu \textit{worker} akan mengakibatkan duplikasi model dalam memori dan berisiko kehabisan RAM.
 \item
   \textit{Flask Application} menangani logika bisnis, pengelolaan data, dan pemanggilan model \textit{embedding} untuk proses rekomendasi.
 \item
   \textit{SQLite} digunakan sebagai basis data utama karena skalanya sesuai dengan kebutuhan penelitian (sekitar 170 mahasiswa dan 14 faculty supervisor dengan pengguna konkuren yang terbatas).
 \item
-  \textit{Docker Volumes} digunakan untuk menyimpan basis data, file Excel data mahasiswa, dan cache model Hugging Face secara persisten di luar container sehingga data tidak hilang ketika container diperbarui.
+  \textit{Docker Volumes} digunakan untuk menyimpan basis data, file Excel data mahasiswa, dan cache model Hugging Face secara persisten di luar \textit{container} sehingga data tidak hilang ketika \textit{container} diperbarui.
 \end{enumerate}
 
 \subsubsection{Spesifikasi Infrastruktur}\label{spesifikasi-infrastruktur-deployment}
@@ -2232,14 +2232,14 @@ Swap & 4 GB (untuk menangani puncak penggunaan memori saat pemuatan model) \\ \h
 
 \subsubsection{Konfigurasi Lingkungan Produksi}\label{konfigurasi-lingkungan-produksi}
 
-Deployment sistem menggunakan Docker dan Docker Compose untuk memastikan konsistensi lingkungan antara pengembangan dan produksi. Konfigurasi utama terdiri dari tiga komponen:
+\textit{Deployment} sistem menggunakan Docker dan Docker Compose untuk memastikan konsistensi lingkungan antara pengembangan dan produksi. Konfigurasi utama terdiri dari tiga komponen:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textbf{Dockerfile} mendefinisikan image container berbasis \texttt{python:3.11-slim} dengan instalasi dependensi sistem dan Python, termasuk gunicorn sebagai WSGI server. Model \textit{embedding} tidak diunduh pada saat build image, melainkan diunduh sekali saat runtime dan disimpan dalam Docker volume yang persisten.
+  \textbf{Dockerfile} mendefinisikan \textit{image container} berbasis \texttt{python:3.11-slim} dengan instalasi dependensi sistem dan Python, termasuk gunicorn sebagai WSGI \textit{server}. Model \textit{embedding} tidak diunduh pada saat build image, melainkan diunduh sekali saat \textit{runtime} dan disimpan dalam Docker volume yang persisten.
 \item
-  \textbf{docker-compose.yml} mengonfigurasi service tunggal dengan parameter gunicorn \texttt{-{}-timeout 300} untuk mengakomodasi durasi proses rekomendasi yang membutuhkan waktu 2–4 menit pada perangkat CPU. Dua volume persisten dikonfigurasi: satu untuk basis data dan file Excel, serta satu untuk cache model Hugging Face.
+  \textbf{docker-compose.yml} mengonfigurasi \textit{service} tunggal dengan parameter gunicorn \texttt{-{}-timeout 300} untuk mengakomodasi durasi proses rekomendasi yang membutuhkan waktu 2–4 menit pada perangkat CPU. Dua volume persisten dikonfigurasi: satu untuk basis data dan file Excel, serta satu untuk cache model Hugging Face.
 \item
   \textbf{File konfigurasi lingkungan} (.env.prod) menyimpan variabel konfigurasi produksi termasuk kunci rahasia Flask, parameter model \textit{embedding}, dan pengaturan kapasitas faculty supervisor. File ini tidak disertakan dalam repositori kode sumber untuk menjaga keamanan.
 \end{enumerate}
@@ -2274,7 +2274,7 @@ SQLite dan Python heap & $\sim$200 MB \\ \hline
 
 \end{longtable}
 
-Swap file sebesar 4 GB dikonfigurasi untuk menangani puncak penggunaan memori sementara selama proses pemuatan model. Dengan konfigurasi dua model, penggunaan RAM pada VPS 8 GB berada dalam batas yang aman.
+\textit{Swap file} sebesar 4 GB dikonfigurasi untuk menangani puncak penggunaan memori sementara selama proses pemuatan model. Dengan konfigurasi dua model, penggunaan RAM pada VPS 8 GB berada dalam batas yang aman.
 
 \subsubsection{Tahapan Deployment}\label{tahapan-deployment}
 
@@ -2283,17 +2283,17 @@ Proses \textit{deployment} sistem dilakukan melalui enam tahapan yang dilaksanak
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textbf{Persiapan Pra-Deployment}: Meliputi perbaikan konfigurasi docker-compose untuk menghapus service yang tidak digunakan, pembuatan Dockerfile produksi dengan gunicorn, serta penyiapan file variabel lingkungan produksi yang menyimpan kunci rahasia dan parameter konfigurasi sistem.
+  \textbf{Persiapan Pra-Deployment}: Meliputi perbaikan konfigurasi docker-compose untuk menghapus \textit{service} yang tidak digunakan, pembuatan Dockerfile produksi dengan gunicorn, serta penyiapan file variabel lingkungan produksi yang menyimpan kunci rahasia dan parameter konfigurasi sistem.
 \item
-  \textbf{Konfigurasi Awal VPS}: Meliputi pembuatan pengguna non-root dengan hak akses sudo, pembaruan sistem, instalasi dependensi dasar, konfigurasi swap file 4 GB, dan konfigurasi firewall untuk membatasi akses hanya pada port SSH, HTTP (80), dan HTTPS (443).
+  \textbf{Konfigurasi Awal VPS}: Meliputi pembuatan pengguna non-root dengan hak akses sudo, pembaruan sistem, instalasi dependensi dasar, konfigurasi \textit{swap file} 4 GB, dan konfigurasi \textit{firewall} untuk membatasi akses hanya pada port SSH, HTTP (80), dan HTTPS (443).
 \item
-  \textbf{Instalasi Docker}: Instalasi Docker Engine dan Docker Compose pada VPS, serta penambahan pengguna ke grup docker untuk mengelola container tanpa hak akses root.
+  \textbf{Instalasi Docker}: Instalasi Docker Engine dan Docker Compose pada VPS, serta penambahan pengguna ke grup docker untuk mengelola \textit{container} tanpa hak akses root.
 \item
-  \textbf{Deployment Aplikasi}: Meliputi kloning repositori, penyalinan file konfigurasi produksi, pembangunan Docker image, pengunduhan awal model \textit{embedding} ke dalam volume persisten, serta inisialisasi basis data dan seeding data faculty supervisor.
+  \textbf{Deployment Aplikasi}: Meliputi kloning repositori, penyalinan file konfigurasi produksi, pembangunan Docker image, pengunduhan awal model \textit{embedding} ke dalam volume persisten, serta inisialisasi basis data dan \textit{seeding} data faculty supervisor.
 \item
-  \textbf{Konfigurasi Nginx dan SSL}: Instalasi dan konfigurasi nginx sebagai reverse proxy dengan parameter timeout yang disesuaikan (360 detik) untuk mengakomodasi durasi proses rekomendasi. Sertifikat SSL diperoleh melalui Let's Encrypt menggunakan certbot apabila nama domain tersedia.
+  \textbf{Konfigurasi Nginx dan SSL}: Instalasi dan konfigurasi nginx sebagai \textit{reverse proxy} dengan parameter \textit{timeout} yang disesuaikan (360 detik) untuk mengakomodasi durasi proses rekomendasi. Sertifikat SSL diperoleh melalui Let's Encrypt menggunakan \textit{certbot} apabila nama domain tersedia.
 \item
-  \textbf{Verifikasi End-to-End}: Pengujian fungsional sistem secara menyeluruh meliputi proses login, impor data mahasiswa, eksekusi rekomendasi, hingga ekspor hasil dalam format Excel.
+  \textbf{Verifikasi \textit{End-to-End}}: Pengujian fungsional sistem secara menyeluruh meliputi proses login, impor data mahasiswa, eksekusi rekomendasi, hingga ekspor hasil dalam format Excel.
 \end{enumerate}
 
 \subsubsection{Pertimbangan Teknis Deployment}\label{pertimbangan-teknis-deployment}
@@ -2314,12 +2314,12 @@ Beberapa pertimbangan teknis yang perlu diperhatikan dalam proses \textit{deploy
 \caption{Pertimbangan Teknis Deployment} \label{table:deployment_issues} \\
 \endlastfoot
 
-Pemuatan model \textit{embedding} pertama kali memicu pengunduhan sekitar 1,8 GB & Request timeout 10–20 menit & Model diunduh secara eksplisit ke volume persisten sebelum container pertama kali menerima request \\ \hline
-\textit{Embedding}Provider adalah singleton per-proses & Penggunaan lebih dari satu worker menyebabkan duplikasi model dalam RAM & Konfigurasi satu worker pada gunicorn (\texttt{-w 1}) \\ \hline
-Proses rekomendasi membutuhkan waktu 2–4 menit pada CPU & Request timeout pada nilai default (30 detik) & Timeout gunicorn diset 300 detik, timeout nginx 360 detik \\ \hline
-Basis data SQLite berada di dalam container & Data hilang jika container dihapus & Volume Docker menyimpan basis data di luar container secara persisten \\ \hline
+Pemuatan model \textit{embedding} pertama kali memicu pengunduhan sekitar 1,8 GB & \textit{Request} \textit{timeout} 10–20 menit & Model diunduh secara eksplisit ke volume persisten sebelum \textit{container} pertama kali menerima \textit{request} \\ \hline
+\textit{Embedding}Provider adalah singleton per-proses & Penggunaan lebih dari satu \textit{worker} menyebabkan duplikasi model dalam RAM & Konfigurasi satu \textit{worker} pada gunicorn (\texttt{-w 1}) \\ \hline
+Proses rekomendasi membutuhkan waktu 2–4 menit pada CPU & \textit{Request} \textit{timeout} pada nilai default (30 detik) & \textit{Timeout} gunicorn diset 300 detik, \textit{timeout} nginx 360 detik \\ \hline
+Basis data SQLite berada di dalam \textit{container} & Data hilang jika \textit{container} dihapus & Volume Docker menyimpan basis data di luar \textit{container} secara persisten \\ \hline
 
 \end{longtable}
 
-Deployment sistem pada VPS merupakan komponen penting dalam penelitian ini karena memungkinkan pengujian sistem secara operasional dalam kondisi yang mendekati lingkungan nyata, sekaligus memvalidasi kelayakan arsitektur yang dirancang untuk mendukung proses pemetaan faculty supervisor Program Enrichment di Universitas XYZ.
+\textit{Deployment} sistem pada VPS merupakan komponen penting dalam penelitian ini karena memungkinkan pengujian sistem secara operasional dalam kondisi yang mendekati lingkungan nyata, sekaligus memvalidasi kelayakan arsitektur yang dirancang untuk mendukung proses pemetaan faculty supervisor Program Enrichment di Universitas XYZ.
 

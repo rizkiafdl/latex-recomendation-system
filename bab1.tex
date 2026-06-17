@@ -8,7 +8,7 @@ Program Enrichment merupakan salah satu komponen penting dalam kurikulum Univers
 
 Peran Faculty Supervisor dalam Program Enrichment sangat krusial karena kualitas pendampingan yang diberikan dapat memengaruhi capaian pembelajaran mahasiswa. Oleh karena itu, kesesuaian antara mahasiswa dan Faculty Supervisor, khususnya dari sisi bidang keahlian dan minat, menjadi faktor penting dalam menunjang keberhasilan program ini.
 
-Namun, berdasarkan hasil observasi dan wawancara terstruktur yang dilakukan kepada Enrichment Program Coordinator (EPC) dari dua fakultas di XYZ University, diketahui bahwa proses pemetaan mahasiswa ke Faculty Supervisor saat ini masih dilakukan secara manual menggunakan \textit{spreadsheet}. Proses ini membutuhkan waktu satu hingga tiga minggu per \textit{batch} dengan jumlah mahasiswa yang dapat mencapai ratusan orang, serta rentan terhadap kesalahan yang memerlukan revisi berulang hingga dua puluh kali per \textit{batch}. Penentuan Faculty Supervisor umumnya dilakukan secara acak tanpa mempertimbangkan kesesuaian bidang keahlian, sehingga mahasiswa berpotensi mendapatkan pembimbing yang tidak relevan dengan topik atau minat program \textit{enrichment}-nya.
+Namun, berdasarkan hasil observasi dan wawancara terstruktur (\textit{Wawancara Dengan EPC} bersama Margareth Setiawan, Yulianto, dan Mila Andria Savitri pada 13 Desember 2025) yang dilakukan kepada \textit{Enrichment Program Coordinator} (EPC) dari tiga fakultas di XYZ University, diketahui bahwa proses pemetaan mahasiswa ke Faculty Supervisor saat ini masih dilakukan secara manual menggunakan \textit{spreadsheet}. Proses ini membutuhkan waktu satu hingga tiga minggu per \textit{batch} dengan jumlah mahasiswa yang dapat mencapai ratusan orang, serta rentan terhadap kesalahan yang memerlukan revisi berulang hingga dua puluh kali per \textit{batch}. Penentuan Faculty Supervisor umumnya dilakukan secara acak tanpa mempertimbangkan kesesuaian bidang keahlian, sehingga mahasiswa berpotensi mendapatkan pembimbing yang tidak relevan dengan topik atau minat program \textit{enrichment}-nya.
 
 Hasil survei menunjukkan bahwa proses pemetaan manual ini menimbulkan berbagai permasalahan, antara lain beban pembimbing antar dosen yang belum merata, mahasiswa mendapatkan Faculty Supervisor di luar bidang minat atau keahliannya, serta lamanya waktu yang dibutuhkan untuk menyelesaikan proses pemetaan satu \textit{batch} mahasiswa yang dapat mencapai satu hingga tiga minggu. Selain itu, kesalahan dan revisi pemetaan masih sering terjadi, sehingga EPC perlu melakukan perbaikan data secara berulang melalui pengeditan manual. Kondisi tersebut meningkatkan beban kerja EPC dan berpotensi menurunkan efisiensi serta transparansi proses penentuan Faculty Supervisor.
 
@@ -24,7 +24,7 @@ Seiring dengan meningkatnya jumlah mahasiswa di XYZ University dari tahun ke tah
 
 Beberapa penelitian sebelumnya telah mengeksplorasi otomasi proses alokasi pembimbing akademik. Evangelista, Fan, dan Harb (\citeyear{fan2021automated}) menunjukkan bahwa pendekatan otomatis berbasis \textit{machine learning} memiliki potensi signifikan dalam mengatasi keterbatasan proses manual, khususnya pada institusi dengan jumlah mahasiswa yang besar. Dalam konteks yang lebih dekat, Rismanto, Syulistyo, dan Agusta (\citeyear{rismanto2020supervisor}) mengembangkan sistem rekomendasi dosen pembimbing tugas akhir berbasis pembobotan TF-IDF dan \textit{cosine similarity} yang mencapai akurasi rata-rata 75\% dibandingkan data aktual. Namun, pendekatan berbasis TF-IDF masih bergantung pada pencocokan kata kunci secara leksikal, sehingga belum mampu menangkap kemiripan makna secara kontekstual apabila mahasiswa dan dosen menggunakan terminologi yang berbeda untuk topik yang serupa. Oleh karena itu, penelitian ini mengusulkan pendekatan berbasis \textit{semantic similarity} menggunakan model \textit{embedding}, yang memungkinkan pengukuran kesesuaian antara profil mahasiswa dan bidang keahlian Faculty Supervisor berdasarkan makna teks secara lebih mendalam.
 
-Untuk memastikan kualitas rekomendasi yang dihasilkan, diperlukan evaluasi terhadap sistem dengan membandingkan hasil rekomendasi otomatis dengan \textit{ground truth}. Ground truth pada penelitian ini diperoleh dari data institusional penugasan \textit{faculty supervisor} batch 2026 Program Enrichment program studi Computer Science di XYZ University, yang disiapkan oleh Enrichment Program Coordinator (EPC) dan memuat atribut penugasan aktual (\texttt{current\_supervisor\_code}) sebagai hasil pemetaan manual yang telah diterapkan pada periode tersebut. Pendekatan ini bertujuan untuk merepresentasikan praktik penentuan Faculty Supervisor yang telah diterapkan dan diterima secara institusional.
+Untuk memastikan kualitas rekomendasi yang dihasilkan, diperlukan evaluasi terhadap sistem dengan membandingkan hasil rekomendasi otomatis dengan \textit{ground truth}. \textit{Ground truth} pada penelitian ini diperoleh dari data institusional penugasan \textit{faculty supervisor} \textit{batch} 2026 Program Enrichment program studi Computer Science di XYZ University, yang disiapkan oleh \textit{Enrichment Program Coordinator} (EPC) dan memuat atribut penugasan aktual (\texttt{current\_supervisor\_code}) sebagai hasil pemetaan manual yang telah diterapkan pada periode tersebut. Pendekatan ini bertujuan untuk merepresentasikan praktik penentuan Faculty Supervisor yang telah diterapkan dan diterima secara institusional.
 
 Sistem rekomendasi yang dikembangkan dalam penelitian ini berperan sebagai \textit{decision support system} yang memberikan rekomendasi kepada EPC, tanpa menggantikan keputusan akhir yang tetap berada pada EPC. Penelitian ini berfokus pada pengembangan sebuah prototipe sistem yang mencakup antarmuka pengguna dan \textit{backend} sederhana sebagai implementasi dari metode yang diusulkan. Dengan demikian, diharapkan sistem yang dikembangkan dapat membantu meningkatkan efisiensi, akurasi, serta transparansi dalam proses pemetaan Faculty Supervisor Program Enrichment di XYZ University.
 
@@ -53,7 +53,7 @@ Agar penelitian ini lebih terarah, ruang lingkup penelitian dibatasi pada:
 \item
   Sistem rekomendasi dikembangkan menggunakan pendekatan \textit{semantic similarity} berbasis data tekstual.
 \item 
-  Data yang digunakan dalam penelitian ini dibatasi pada data enrichment batch 2026 yang memuat data mahasiswa peserta Program \textit{Enrichment}, data \textit{Faculty Supervisor}, serta data institusional penugasan \textit{faculty supervisor} sebagai \textit{ground truth}.
+  Data yang digunakan dalam penelitian ini dibatasi pada data \textit{enrichment} \textit{batch} 2026 yang memuat data mahasiswa peserta Program \textit{Enrichment}, data \textit{Faculty Supervisor}, serta data institusional penugasan \textit{faculty supervisor} sebagai \textit{ground truth}.
 \item 
   Website memiliki fitur utama berupa halaman beranda, \textit{data center} untuk pengelolaan data mahasiswa , \textit{run history} untuk melihat hasil rekomendasi sebelumnya, serta halaman \textit{supervisor studio} untuk melihat profil dosen dan kata kunci yang diterapkan.
 \item
@@ -63,7 +63,9 @@ Agar penelitian ini lebih terarah, ruang lingkup penelitian dibatasi pada:
 \item
   Penelitian ini tidak membahas kebijakan akademik di luar proses pemetaan Faculty Supervisor.
 \item 
-  Pengajuan sistem menggunakan metode \textit{black box}, untuk fungsionalitas yang dihasilkan, tanpa membahas detail implementasi teknis secara mendalam.
+  Pengujian sistem menggunakan metode \textit{black box}, untuk fungsionalitas yang dihasilkan, tanpa membahas detail implementasi teknis secara mendalam.
+\item
+  Penelitian ini tidak mencakup evaluasi usabilitas atau penerimaan pengguna oleh EPC; pengujian dilakukan terbatas pada validasi fungsionalitas sistem.
 
 \end{enumerate}
 \section{Tujuan dan Manfaat}\label{tujuan-dan-manfaat}
@@ -112,7 +114,7 @@ Pengumpulan data dilakukan melalui studi dokumen dan data institusional yang dig
 
 \subsection{Metode Perancangan Sistem}
 
-Pada tahap ini dilakukan perancangan sistem menggunakan pendekatan \textit{System Development Life Cycle} (SDLC) dengan model \textit{Waterfall}. Proses ini dilakukan secara terstruktur dan sekuensial yang meliputi beberapa tahapan utama sesuai dengan jadwal kegiatan penelitian, yaitu analisis masalah dan kebutuhan sistem, perancangan sistem (menggunakan \textit{Unified Modeling Language} dan arsitektur sistem), pengembangan sistem atau implementasi kode, pengujian dan evaluasi sistem, serta diakhiri dengan tahap revisi dan finalisasi dokumen.
+Pada tahap ini dilakukan perancangan sistem menggunakan pendekatan \textit{System Development Life Cycle} (SDLC) dengan model \textit{Waterfall}. Proses ini dilakukan secara terstruktur dan sekuensial yang meliputi beberapa tahapan utama sesuai dengan jadwal kegiatan penelitian, yaitu analisis masalah dan kebutuhan sistem, perancangan sistem (menggunakan \textit{\textit{Unified Modeling Language}} dan arsitektur sistem), pengembangan sistem atau implementasi kode, pengujian dan evaluasi sistem, serta diakhiri dengan tahap revisi dan finalisasi dokumen.
 
 \subsection{Praproses Data}\label{praproses-data}
 
