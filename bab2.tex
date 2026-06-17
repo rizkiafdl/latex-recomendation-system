@@ -14,7 +14,7 @@ Ricci, Rokach, dan Shapira (\citeyear{ricci2015recommender}) mendefinisikan sist
 
 \textit{Artificial Intelligence} (AI) merupakan bidang ilmu komputer yang berfokus pada pengembangan sistem yang mampu meniru kecerdasan manusia, seperti kemampuan berpikir, belajar, dan mengambil keputusan.
 
-Russell dan Norvig (\citeyear{russell2021ai}) mendefinisikan AI sebagai studi dan desain agen cerdas yang mampu merasakan lingkungan dan mengambil tindakan untuk mencapai tujuan tertentu. AI menjadi fondasi bagi berbagai aplikasi modern, termasuk sistem rekomendasi. Dalam penelitian ini, sistem rekomendasi faculty supervisor merupakan salah satu penerapan AI dalam bentuk sistem pendukung keputusan berbasis analisis data tekstual.
+Russell dan Norvig (\citeyear{russell2021ai}) mendefinisikan AI sebagai studi dan desain agen cerdas yang mampu merasakan lingkungan dan mengambil tindakan untuk mencapai tujuan tertentu. AI menjadi fondasi bagi berbagai aplikasi modern, termasuk sistem rekomendasi. Dalam penelitian ini, sistem rekomendasi \textit{faculty supervisor} merupakan salah satu penerapan AI dalam bentuk sistem pendukung keputusan berbasis analisis data tekstual.
 
 \subsection{Machine Learning}\label{machine-learning}
 
@@ -32,11 +32,11 @@ LeCun, Bengio, dan Hinton (\citeyear{lecun2015deep}) menjelaskan bahwa \textit{d
 
 \textit{Natural Language Processing} (NLP) merupakan cabang AI yang berfokus pada pemrosesan dan pemahaman bahasa alami manusia oleh komputer. NLP memungkinkan sistem mengekstraksi makna dari data teks.
 
-Jurafsky dan Martin (\citeyear{jurafsky2023slp}) menyatakan bahwa NLP mencakup berbagai teknik mulai dari pemrosesan dasar hingga analisis semantik tingkat lanjut. NLP menjadi komponen penting dalam sistem rekomendasi berbasis teks. Dalam penelitian ini, NLP digunakan untuk memproses deskripsi minat mahasiswa dan bidang keahlian faculty supervisor.
+Jurafsky dan Martin (\citeyear{jurafsky2023slp}) menyatakan bahwa NLP mencakup berbagai teknik mulai dari pemrosesan dasar hingga analisis semantik tingkat lanjut. NLP menjadi komponen penting dalam sistem rekomendasi berbasis teks. Dalam penelitian ini, NLP digunakan untuk memproses deskripsi minat mahasiswa dan bidang keahlian \textit{faculty supervisor}.
 
 \subsection{Text Mining}\label{text-mining}
 
-\textit{Text mining} merupakan proses ekstraksi informasi dan pola dari data teks. Teknik ini digunakan untuk menemukan pengetahuan baru dari dokumen teks. Dalam penelitian ini, \textit{text mining} digunakan untuk menganalisis dokumen akademik sebagai dasar rekomendasi faculty supervisor.
+\textit{Text mining} merupakan proses ekstraksi informasi dan pola dari data teks. Teknik ini digunakan untuk menemukan pengetahuan baru dari dokumen teks. Dalam penelitian ini, \textit{text mining} digunakan untuk menganalisis dokumen akademik sebagai dasar rekomendasi \textit{faculty supervisor}.
 
 \subsection{Text Preprocessing}\label{text-preprocessing}
 
@@ -56,7 +56,7 @@ Representasi teks merupakan proses mengubah data tekstual yang bersifat tidak te
 
 Menurut Manning, Raghavan, dan Schütze (\citeyear{manning2008ir}), representasi teks merupakan fondasi utama dalam sistem \textit{information retrieval} dan \textit{text mining}, karena kualitas representasi secara langsung memengaruhi performa proses pencarian, pengelompokan, dan pengukuran kemiripan dokumen. Representasi teks yang baik harus mampu menangkap informasi penting sekaligus mengurangi \textit{noise} yang tidak relevan.
 
-Dalam penelitian ini, representasi teks digunakan untuk merepresentasikan profil mahasiswa dan bidang keahlian faculty supervisor dalam bentuk vektor numerik. Representasi ini menjadi dasar dalam perhitungan \textit{semantic similarity} untuk menghasilkan rekomendasi faculty supervisor Program Enrichment.
+Dalam penelitian ini, representasi teks digunakan untuk merepresentasikan profil mahasiswa dan bidang keahlian \textit{faculty supervisor} dalam bentuk vektor numerik. Representasi ini menjadi dasar dalam perhitungan \textit{semantic similarity} untuk menghasilkan rekomendasi \textit{faculty supervisor} Program Enrichment.
 
 \subsection{TF-IDF}\label{tf-idf}
 
@@ -104,7 +104,7 @@ Dalam penelitian ini, \textit{word embedding} diposisikan sebagai tahap evolusi 
 
 Devlin, Chang, Lee, dan Toutanova (\citeyear{devlin2019bert}) menjelaskan bahwa model berbasis transformer mampu menghasilkan representasi teks kontekstual, di mana makna suatu kata dipengaruhi oleh keseluruhan konteks kalimat. Pendekatan ini memungkinkan sistem memahami hubungan semantik yang kompleks, termasuk sinonim dan konteks implisit.
 
-Dalam penelitian ini, \textit{transformer-based embedding} digunakan karena kemampuannya dalam merepresentasikan dokumen teks akademik secara lebih akurat. Pendekatan ini sangat sesuai untuk membandingkan deskripsi minat mahasiswa dan bidang keahlian faculty supervisor yang memiliki variasi istilah dan gaya bahasa.
+Dalam penelitian ini, \textit{transformer-based embedding} digunakan karena kemampuannya dalam merepresentasikan dokumen teks akademik secara lebih akurat. Pendekatan ini sangat sesuai untuk membandingkan deskripsi minat mahasiswa dan bidang keahlian \textit{faculty supervisor} yang memiliki variasi istilah dan gaya bahasa.
 
 \subsection{Bert Embedding}\label{bert-embedding}
 
@@ -118,7 +118,7 @@ Dalam penelitian ini, konsep BERT \textit{embedding} digunakan sebagai landasan 
 
 \textit{Semantic similarity} merupakan ukuran tingkat kesamaan makna antara dua teks atau konsep berdasarkan konteks dan arti, bukan sekadar kecocokan kata secara literal. Pendekatan ini memungkinkan sistem memahami kesamaan konsep meskipun menggunakan istilah yang berbeda.
 
-Menurut Mihalcea, Corley, dan Strapparava (\citeyear{mihalcea2006semantic}), \textit{semantic similarity} bertujuan untuk mengukur sejauh mana dua unit teks memiliki makna yang serupa. Pendekatan ini banyak digunakan dalam sistem rekomendasi dan pencarian semantik modern. Dalam penelitian ini, \textit{semantic similarity} digunakan untuk mengukur tingkat kesesuaian antara profil mahasiswa dan bidang keahlian faculty supervisor, sehingga rekomendasi yang dihasilkan lebih relevan secara konseptual.
+Menurut Mihalcea, Corley, dan Strapparava (\citeyear{mihalcea2006semantic}), \textit{semantic similarity} bertujuan untuk mengukur sejauh mana dua unit teks memiliki makna yang serupa. Pendekatan ini banyak digunakan dalam sistem rekomendasi dan pencarian semantik modern. Dalam penelitian ini, \textit{semantic similarity} digunakan untuk mengukur tingkat kesesuaian antara profil mahasiswa dan bidang keahlian \textit{faculty supervisor}, sehingga rekomendasi yang dihasilkan lebih relevan secara konseptual.
 
 \subsection{Cosine Similarity}\label{cosine-similarity}
 
@@ -126,7 +126,7 @@ Menurut Mihalcea, Corley, dan Strapparava (\citeyear{mihalcea2006semantic}), \te
 
 Menurut Han, Kamber, dan Pei (\citeyear{han2012datamining}), \textit{cosine similarity} efektif digunakan dalam pengukuran kemiripan dokumen karena tidak dipengaruhi oleh panjang vektor. Metode ini banyak digunakan dalam sistem berbasis \textit{embedding}.
 
-Dalam penelitian ini, \textit{cosine similarity} digunakan untuk menghitung tingkat kemiripan antara \textit{embedding} teks mahasiswa dan faculty supervisor sebagai dasar pemeringkatan rekomendasi.
+Dalam penelitian ini, \textit{cosine similarity} digunakan untuk menghitung tingkat kemiripan antara \textit{embedding} teks mahasiswa dan \textit{faculty supervisor} sebagai dasar pemeringkatan rekomendasi.
 
 Rumus Cosine Similarity adalah sebagai berikut:
 
@@ -148,7 +148,7 @@ A · B adalah hasil perkalian \textit{dot product} antara vektor A dan B
 
 BGE-M3 merupakan model \textit{embedding} multilingual yang dikembangkan oleh Beijing Academy of Artificial Intelligence (BAAI). Model ini dirancang untuk mendukung tiga fungsi sekaligus: \textit{dense retrieval}, \textit{sparse retrieval}, dan \textit{multi-vector retrieval}, sehingga dinamakan M3 (Multi-Functionality, Multi-Linguality, Multi-Granularity).
 
-Menurut Chen et al. (\citeyear{chen2024bgem3}), BGE-M3 mendukung lebih dari 100 bahasa dan mampu memproses teks hingga 8.192 \textit{token}. Model ini menunjukkan performa kompetitif pada berbagai \textit{benchmark} \textit{retrieval} lintas bahasa. Dalam penelitian ini, BGE-M3 digunakan sebagai salah satu kandidat model \textit{embedding} untuk mengevaluasi kualitas rekomendasi faculty supervisor.
+Menurut Chen et al. (\citeyear{chen2024bgem3}), BGE-M3 mendukung lebih dari 100 bahasa dan mampu memproses teks hingga 8.192 \textit{token}. Model ini menunjukkan performa kompetitif pada berbagai \textit{benchmark} \textit{retrieval} lintas bahasa. Dalam penelitian ini, BGE-M3 digunakan sebagai salah satu kandidat model \textit{embedding} untuk mengevaluasi kualitas rekomendasi \textit{faculty supervisor}.
 
 \subsection{Qwen3-Embedding-0.6B}\label{qwen3-embedding-0.6b}
 
@@ -194,7 +194,7 @@ Recall@K merupakan metrik evaluasi yang mengukur proporsi item relevan yang berh
 
 Herlocker, Konstan, Terveen, dan Riedl (\citeyear{herlocker2004recall}) menyatakan bahwa Recall@K sangat sesuai untuk sistem rekomendasi berbasis peringkat karena merepresentasikan kemampuan sistem dalam menemukan item relevan pada daftar rekomendasi teratas.
 
-Dalam penelitian ini, Recall@K digunakan untuk mengukur sejauh mana faculty supervisor yang relevan berhasil direkomendasikan oleh sistem pada posisi teratas.
+Dalam penelitian ini, Recall@K digunakan untuk mengukur sejauh mana \textit{faculty supervisor} yang relevan berhasil direkomendasikan oleh sistem pada posisi teratas.
 
 Rumus Recall@K dapat dituliskan sebagai berikut:
 
@@ -214,7 +214,7 @@ Mean Reciprocal Rank (MRR) merupakan metrik evaluasi yang mengukur posisi item r
 
 Menurut Voorhees (\citeyear{voorhees1999mrr}), MRR memberikan bobot lebih besar pada item relevan yang muncul di peringkat awal, sehingga cocok untuk sistem rekomendasi yang mengutamakan urutan hasil.
 
-Dalam penelitian ini, MRR digunakan untuk menilai seberapa cepat sistem menampilkan faculty supervisor yang sesuai dalam daftar rekomendasi.
+Dalam penelitian ini, MRR digunakan untuk menilai seberapa cepat sistem menampilkan \textit{faculty supervisor} yang sesuai dalam daftar rekomendasi.
 
 Rumus Reciprocal Rank (RR) adalah sebagai berikut:
 
@@ -234,7 +234,7 @@ $RR_i$ adalah nilai reciprocal rank untuk data ke-i
 
 \textit{Cosine similarity score} merupakan ukuran kemiripan antara dua vektor berdasarkan sudut di antaranya. Nilai \textit{cosine similarity} berada pada rentang -1 hingga 1.
 
-Menurut Manning, Raghavan, dan Schütze (\citeyear{manning2008ir}), \textit{cosine similarity} banyak digunakan dalam model ruang vektor karena tidak dipengaruhi oleh panjang vektor. Dalam penelitian ini, \textit{cosine similarity score} digunakan sebagai dasar perhitungan kesesuaian semantik antara \textit{embedding} mahasiswa dan faculty supervisor.
+Menurut Manning, Raghavan, dan Schütze (\citeyear{manning2008ir}), \textit{cosine similarity} banyak digunakan dalam model ruang vektor karena tidak dipengaruhi oleh panjang vektor. Dalam penelitian ini, \textit{cosine similarity score} digunakan sebagai dasar perhitungan kesesuaian semantik antara \textit{embedding} mahasiswa dan \textit{faculty supervisor}.
 
 \subsection{Assignment match rate}\label{assignment-match-rate}
 
@@ -252,7 +252,7 @@ Python merupakan bahasa pemrograman tingkat tinggi yang banyak digunakan dalam p
 
 Menurut Van Rossum dan Drake (\citeyear{vanrossum2009python}), Python dirancang untuk meningkatkan produktivitas pengembang melalui struktur sintaks yang ringkas dan dukungan paradigma pemrograman yang fleksibel. Dalam domain kecerdasan buatan dan \textit{machine learning}, Python menjadi bahasa \textit{de facto} karena dukungan pustaka seperti NumPy, PyTorch, dan Scikit-learn.
 
-Dalam penelitian ini, Python digunakan sebagai bahasa utama pada sisi \textit{backend} untuk mengembangkan sistem rekomendasi faculty supervisor. Python digunakan untuk mengelola alur pemrosesan data, integrasi model \textit{text embedding}, perhitungan \textit{semantic similarity}, serta evaluasi sistem rekomendasi.
+Dalam penelitian ini, Python digunakan sebagai bahasa utama pada sisi \textit{backend} untuk mengembangkan sistem rekomendasi \textit{faculty supervisor}. Python digunakan untuk mengelola alur pemrosesan data, integrasi model \textit{text embedding}, perhitungan \textit{semantic similarity}, serta evaluasi sistem rekomendasi.
 
 \subsubsection{JavaScript}\label{javascript}
 
@@ -260,7 +260,7 @@ JavaScript merupakan bahasa pemrograman yang digunakan secara luas dalam pengemb
 
 Menurut Flanagan (\citeyear{flanagan2020javascript}), JavaScript berperan penting dalam pengembangan aplikasi web modern karena mampu berjalan langsung di \textit{browser} dan mendukung komunikasi asinkron dengan \textit{backend} melalui HTTP.
 
-Dalam penelitian ini, JavaScript digunakan pada sisi \textit{frontend} untuk membangun antarmuka sistem rekomendasi faculty supervisor. JavaScript memungkinkan pengguna memasukkan data, memicu proses rekomendasi, dan menampilkan hasil rekomendasi secara interaktif.
+Dalam penelitian ini, JavaScript digunakan pada sisi \textit{frontend} untuk membangun antarmuka sistem rekomendasi \textit{faculty supervisor}. JavaScript memungkinkan pengguna memasukkan data, memicu proses rekomendasi, dan menampilkan hasil rekomendasi secara interaktif.
 
 \subsubsection{Flask + Jinja2}\label{flask-jinja2}
 
@@ -268,7 +268,7 @@ Flask merupakan \textit{micro web framework} berbasis Python yang digunakan untu
 
 Menurut Grinberg (\citeyear{grinberg2018flask}), Flask dirancang dengan filosofi "micro" yang berarti framework ini menyediakan fondasi dasar tanpa memaksakan struktur proyek tertentu, sehingga pengembang memiliki kebebasan dalam menentukan arsitektur aplikasi. Flask menggunakan Jinja2 sebagai \textit{template engine} untuk menghasilkan halaman HTML secara dinamis di sisi server (\textit{server-side rendering}).
 
-Dalam penelitian ini, Flask digunakan sebagai framework utama untuk membangun antarmuka web sistem rekomendasi faculty supervisor. Flask menangani seluruh alur \textit{request-response}, termasuk autentikasi pengguna, \textit{import} data, pemrosesan rekomendasi, dan penyajian hasil dalam bentuk halaman web interaktif. Pendekatan \textit{server-side rendering} dipilih karena kesederhanaan arsitektur dan kesesuaiannya dengan skala sistem yang bersifat \textit{single-user}.
+Dalam penelitian ini, Flask digunakan sebagai framework utama untuk membangun antarmuka web sistem rekomendasi \textit{faculty supervisor}. Flask menangani seluruh alur \textit{request-response}, termasuk autentikasi pengguna, \textit{import} data, pemrosesan rekomendasi, dan penyajian hasil dalam bentuk halaman web interaktif. Pendekatan \textit{server-side rendering} dipilih karena kesederhanaan arsitektur dan kesesuaiannya dengan skala sistem yang bersifat \textit{single-user}.
 
 \subsubsection{Pytorch}\label{pytorch}
 
@@ -300,7 +300,7 @@ Sentence-Transformers merupakan pustaka Python yang menyediakan antarmuka untuk 
 
 Menurut Reimers dan Gurevych (\citeyear{reimers2019sbert}), Sentence-BERT (SBERT) menggunakan arsitektur \textit{siamese network} untuk menghasilkan \textit{embedding} kalimat yang dapat dibandingkan secara langsung menggunakan \textit{cosine similarity}. Pendekatan ini secara signifikan lebih efisien dibandingkan melakukan \textit{cross-encoding} untuk setiap pasangan kalimat.
 
-Dalam penelitian ini, sentence-transformers digunakan sebagai mekanisme utama untuk menghasilkan \textit{embedding} teks mahasiswa dan faculty supervisor. Proses \textit{encoding} dilakukan secara \textit{batch} dengan normalisasi \textit{embedding}, sehingga \textit{cosine similarity} dapat dihitung melalui operasi \textit{dot product} sederhana. Pustaka ini mendukung eksekusi pada GPU (CUDA) maupun CPU, dengan deteksi perangkat secara otomatis.
+Dalam penelitian ini, sentence-transformers digunakan sebagai mekanisme utama untuk menghasilkan \textit{embedding} teks mahasiswa dan \textit{faculty supervisor}. Proses \textit{encoding} dilakukan secara \textit{batch} dengan normalisasi \textit{embedding}, sehingga \textit{cosine similarity} dapat dihitung melalui operasi \textit{dot product} sederhana. Pustaka ini mendukung eksekusi pada GPU (CUDA) maupun CPU, dengan deteksi perangkat secara otomatis.
 
 \subsection{Port Forwarding}\label{port-forwarding}
 
@@ -314,7 +314,7 @@ Dalam penelitian ini, \textit{port forwarding} digunakan untuk memungkinkan akse
 
 \textit{On-premises deployment} merupakan model penyebaran sistem di mana aplikasi dijalankan pada infrastruktur lokal, bukan pada layanan \textit{cloud} publik. Menurut Mell dan Grance (\citeyear{mell2011nist}), pendekatan \textit{on-premises} memberikan kontrol penuh terhadap data dan infrastruktur.
 
-Dalam penelitian ini, sistem rekomendasi faculty supervisor \textit{di-deploy} secara lokal menggunakan Docker \textit{container}. Arsitektur \textit{deployment} terdiri dari satu \textit{container} aplikasi Flask yang menjalankan seluruh komponen sistem, termasuk \textit{web server}, \textit{pipeline} rekomendasi, dan database SQLite. Model \textit{embedding} diunduh dan dijalankan secara lokal melalui pustaka sentence-transformers, tanpa memerlukan layanan API eksternal.
+Dalam penelitian ini, sistem rekomendasi \textit{faculty supervisor} \textit{di-deploy} secara lokal menggunakan Docker \textit{container}. Arsitektur \textit{deployment} terdiri dari satu \textit{container} aplikasi Flask yang menjalankan seluruh komponen sistem, termasuk \textit{web server}, \textit{pipeline} rekomendasi, dan database SQLite. Model \textit{embedding} diunduh dan dijalankan secara lokal melalui pustaka sentence-transformers, tanpa memerlukan layanan API eksternal.
 
 Pendekatan \textit{on-premises} dipilih untuk menjaga keamanan data akademik mahasiswa dan memenuhi kebijakan institusi pendidikan terkait pengelolaan data sensitif.
 
@@ -479,14 +479,14 @@ Nagarajan et al. (\citeyear{nagarajan2025bert}) & A BERT Based Hybrid Recommenda
 
 Wang, Zhou, Jian, Yin, dan Li (\citeyear{wang2025avrd}) & Empowering College Students to Select Ideal Advisors: A Text-Based Recommendation Model & Membangun model rekomendasi pembimbing akademik berbasis teks untuk membantu mahasiswa memilih pembimbing yang sesuai dengan minat penelitian & Data rekam jejak pembimbing dan kuesioner dari 170 mahasiswa perguruan tinggi & Chinese BERT + SimCSE (unsupervised contrastive learning) & Model AVRD melampaui TF-IDF, Word2Vec, LSA, serta LLM (Qwen \& DeepSeek), berhasil membantu 70\% dari 170 mahasiswa perguruan tinggi menemukan pembimbing ideal. \\ \hline
 
-Sabilillah, Winarno, dan Abiyyi (\citeyear{sabilillah2024bert}) & Implementasi BERT dan Cosine Similarity untuk Rekomendasi Dosen Pembimbing berdasarkan Judul Tugas Akhir & Mengimplementasikan BERT dan \textit{cosine similarity} untuk merekomendasikan dosen pembimbing berdasarkan judul tugas akhir & Data judul tugas akhir mahasiswa dan profil dosen & BERT, Cosine Similarity & BERT + \textit{cosine similarity} lebih baik dalam mengukur kemiripan makna judul TA dan keahlian dosen, mencatat akurasi tuning 85.29\% dan akurasi akhir 89.99\%. \\ \hline
+Sabilillah, Winarno, dan Abiyyi (\citeyear{sabilillah2024bert}) & Implementasi BERT dan Cosine Similarity untuk Rekomendasi Dosen Pembimbing berdasarkan Judul Tugas Akhir & Meng\-implemen\-tasikan BERT dan \textit{cosine similarity} untuk merekomendasikan dosen pembimbing berdasarkan judul tugas akhir & Data judul tugas akhir mahasiswa dan profil dosen & BERT, Cosine Similarity & BERT + \textit{cosine similarity} lebih baik dalam mengukur kemiripan makna judul TA dan keahlian dosen, mencatat akurasi tuning 85.29\% dan akurasi akhir 89.99\%. \\ \hline
 
 Dasri, Annisa, dan Haryanto (\citeyear{dasri2025twoway}) & Two-Way Thesis Supervisor Recommendation System Using MapReduce K-Skyband View Queries & Mengembangkan sistem rekomendasi pembimbing tugas akhir dua arah yang mempertimbangkan preferensi mahasiswa dan dosen secara bersamaan & Data historis mahasiswa dan supervisor di institusi pendidikan tinggi & MapReduce K-Skyband View Queries & Pendekatan MapReduce 8$\times$ lebih cepat dari algoritma Block Nested Loop standar pada dataset besar dengan kualitas rekomendasi yang terjaga \\ \hline
 
 \end{longtable}
 \endgroup
 
-Berdasarkan kajian terhadap penelitian-penelitian terkait, dapat disimpulkan bahwa sistem rekomendasi faculty supervisor umumnya dikembangkan menggunakan pendekatan Natural Language Processing untuk mengukur kesesuaian antara profil mahasiswa dan bidang keahlian dosen. Perkembangan metode menunjukkan pergeseran dari representasi teks tradisional seperti TF-IDF \cite{dasri2025twoway} menuju penggunaan \textit{transformer-based embedding} seperti BERT \cite{sabilillah2024bert,wang2025avrd} dan SPECTER \cite{cohan2020specter}, yang terbukti mampu meningkatkan kualitas rekomendasi berdasarkan berbagai metrik evaluasi, seperti akurasi, Recall@K, dan Mean Reciprocal Rank (MRR).
+Berdasarkan kajian terhadap penelitian-penelitian terkait, dapat disimpulkan bahwa sistem rekomendasi \textit{faculty supervisor} umumnya dikembangkan menggunakan pendekatan Natural Language Processing untuk mengukur kesesuaian antara profil mahasiswa dan bidang keahlian dosen. Perkembangan metode menunjukkan pergeseran dari representasi teks tradisional seperti TF-IDF \cite{dasri2025twoway} menuju penggunaan \textit{transformer-based embedding} seperti BERT \cite{sabilillah2024bert,wang2025avrd} dan SPECTER \cite{cohan2020specter}, yang terbukti mampu meningkatkan kualitas rekomendasi berdasarkan berbagai metrik evaluasi, seperti akurasi, Recall@K, dan Mean Reciprocal Rank (MRR).
 
-Meskipun demikian, terdapat kesenjangan yang belum ditangani oleh penelitian terdahulu. Penelitian yang menggunakan \textit{sentence embedding} untuk rekomendasi akademik, seperti rekomendasi jurnal ilmiah \cite{gundogan2023journal} dan pencocokan profil karier \cite{rosenberger2025careerbert}, umumnya masih mengandalkan model SBERT atau BERT yang di-\textit{fine-tune} pada domain tertentu dan bersifat \textit{monolingual}. Belum ada penelitian yang menerapkan model \textit{embedding} multilingual generasi terbaru --- yaitu BGE-M3 \cite{chen2024bgem3}, \textit{multilingual-e5-large-instruct} \cite{wang2024e5}, dan Qwen3-Embedding \cite{qwen3embedding} --- secara komparatif untuk sistem rekomendasi faculty supervisor dalam konteks akademik Indonesia yang bersifat dwibahasa. Selain itu, penelitian terdahulu juga belum mengintegrasikan sistem rekomendasi ke dalam \textit{decision support system} berbasis web yang mempertimbangkan batasan kuota dan pemerataan beban pembimbingan secara institusional. Oleh karena itu, penelitian ini mengusulkan sistem rekomendasi faculty supervisor Program Enrichment yang mengombinasikan tiga model \textit{zero-shot multilingual dense retrieval} dengan aturan pendukung institusional, serta melakukan evaluasi komparatif menggunakan Recall@K dan MRR untuk mengidentifikasi model terbaik dalam konteks tersebut.
+Meskipun demikian, terdapat kesenjangan yang belum ditangani oleh penelitian terdahulu. Penelitian yang menggunakan \textit{sentence embedding} untuk rekomendasi akademik, seperti rekomendasi jurnal ilmiah \cite{gundogan2023journal} dan pencocokan profil karier \cite{rosenberger2025careerbert}, umumnya masih mengandalkan model SBERT atau BERT yang di-\textit{fine-tune} pada domain tertentu dan bersifat \textit{monolingual}. Belum ada penelitian yang menerapkan model \textit{embedding} multilingual generasi terbaru --- yaitu BGE-M3 \cite{chen2024bgem3}, \textit{multilingual-e5-large-instruct} \cite{wang2024e5}, dan Qwen3-Embedding \cite{qwen3embedding} --- secara komparatif untuk sistem rekomendasi \textit{faculty supervisor} dalam konteks akademik Indonesia yang bersifat dwibahasa. Selain itu, penelitian terdahulu juga belum mengintegrasikan sistem rekomendasi ke dalam \textit{decision support system} berbasis web yang mempertimbangkan batasan kuota dan pemerataan beban pembimbingan secara institusional. Oleh karena itu, penelitian ini mengusulkan sistem rekomendasi \textit{faculty supervisor} Program Enrichment yang mengombinasikan tiga model \textit{zero-shot multilingual dense retrieval} dengan aturan pendukung institusional, serta melakukan evaluasi komparatif menggunakan Recall@K dan MRR untuk mengidentifikasi model terbaik dalam konteks tersebut.
 
