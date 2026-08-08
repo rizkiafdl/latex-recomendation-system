@@ -124,52 +124,38 @@ Dengan pemisahan peran tersebut, sistem difokuskan sebagai \textit{decision supp
 
 Berdasarkan analisis permasalahan dan aktor sistem, kebutuhan fungsional yang harus dipenuhi oleh sistem rekomendasi adalah sebagai berikut:
 
-\begin{longtable}[c]{|p{0.5cm}|p{12.5cm}|}
-
-\caption{Analisis Kebutuhan Fungsional} \label{table:kebutuhan_fungsional} \\
+\begin{table}[htbp]
+\centering
+\caption{Analisis Kebutuhan Fungsional}
+\label{tab:kebutuhan-fungsional}
+\begin{tabular}{|c|p{4.5cm}|p{7.5cm}|}
 \hline
-\textbf{No} & \textbf{Kebutuhan Fungsional} \\ \hline
-\endfirsthead
+\textbf{No} & \textbf{Kebutuhan Fungsional} & \textbf{Deskripsi / Keterangan} \\ \hline
+1 & Sistem mampu mengelola data mahasiswa yang mencakup informasi posisi kerja dan perusahaan. & Menyediakan fungsi pengelolaan (CRUD) data profil mahasiswa, rincian posisi magang, dan informasi perusahaan. \\ \hline
+2 & Sistem mampu mengelola data profil \textit{faculty supervisor}. & Mengelola data dosen pembimbing mencakup riwayat, bidang keahlian, dan batas kuota bimbingan. \\ \hline
+3 & Sistem mampu memproses data teks yang berasal dari mahasiswa dan \textit{faculty supervisor}. & Melakukan pra-pemrosesan teks dan ekstraksi fitur (\textit{embedding}) dari deskripsi posisi mahasiswa dan profil dosen. \\ \hline
+4 & Sistem mampu mengidentifikasi tingkat kesesuaian antara mahasiswa dan \textit{faculty supervisor} berdasarkan informasi yang tersedia. & Menghitung skor kemiripan (\textit{similarity score}) antara kebutuhan mahasiswa dan profil keahlian dosen. \\ \hline
+5 & Sistem mampu melakukan pengurutan (\textit{ranking}) \textit{faculty supervisor} berdasarkan tingkat kesesuaian. & Mengurutkan rekomendasi dosen pembimbing dari nilai kesesuaian tertinggi hingga terendah. \\ \hline
+6 & Sistem mampu mempertimbangkan ketersediaan slot bimbingan \textit{faculty supervisor} dalam menghasilkan rekomendasi. & Memastikan alokasi dosen tidak melebihi kapasitas maksimum kuota bimbingan yang tersedia. \\ \hline
+7 & Sistem mampu menampilkan hasil rekomendasi \textit{faculty supervisor} untuk setiap mahasiswa. & Menyajikan daftar rekomendasi beserta nilai kemiripannya pada antarmuka pengguna EPC. \\ \hline
+\end{tabular}
+\end{table}
 
+\subsubsection{Kebutuhan Non-Fungsional}
+
+\begin{table}[htbp]
+\centering
+\caption{Analisis Kebutuhan Non-Fungsional}
+\label{tab:kebutuhan-non-fungsional}
+\begin{tabular}{|c|p{4cm}|c|p{5.5cm}|}
 \hline
-\textbf{No} & \textbf{Kebutuhan Fungsional} \\ \hline
-\endhead
-
-\hline
-\endlastfoot
-
-1 & Sistem mampu mengelola data mahasiswa yang mencakup informasi posisi kerja dan perusahaan. \\ \hline
-2 & Sistem mampu mengelola data profil \textit{faculty supervisor}. \\ \hline
-3 & Sistem mampu memproses data teks yang berasal dari mahasiswa dan \textit{faculty supervisor}. \\ \hline
-4 & Sistem mampu mengidentifikasi tingkat kesesuaian antara mahasiswa dan \textit{faculty supervisor} berdasarkan informasi yang tersedia. \\ \hline
-5 & Sistem mampu melakukan pengurutan (\textit{ranking}) \textit{faculty supervisor} berdasarkan tingkat kesesuaian. \\ \hline
-6 & Sistem mampu mempertimbangkan ketersediaan slot bimbingan \textit{faculty supervisor} dalam menghasilkan rekomendasi. \\ \hline
-7 & Sistem mampu menampilkan hasil rekomendasi \textit{faculty supervisor} untuk setiap mahasiswa. \\ \hline
-
-\end{longtable}
-
-\subsubsection{Kebutuhan Non-Fungsional}\label{kebutuhan-non-fungsional}
-
-\begin{longtable}[c]{|p{0.5cm}|p{12.5cm}|}
-
-\caption{Analisis Kebutuhan Non-Fungsional} \label{table:kebutuhan_non_fungsional} \\
-\hline
-\textbf{No} & \textbf{Kebutuhan Non - Fungsional} \\ \hline
-\endfirsthead
-
-\hline
-\textbf{No} & \textbf{Kebutuhan Non - Fungsional} \\ \hline
-\endhead
-
-\hline
-\endlastfoot
-
-1 & Sistem berbasis website sehingga dapat diakses dengan mudah oleh EPC \\ \hline
-2 & Sistem memiliki antarmuka yang sederhana dan mudah digunakan \\ \hline
-3 & Sistem mampu menampilkan hasil rekomendasi secara transparan dan konsisten \\ \hline
-4 & Sistem mendukung pengelolaan data secara terstruktur \\ \hline
-
-\end{longtable}
+\textbf{No} & \textbf{Kebutuhan Non-Fungsional} & \textbf{Kategori} & \textbf{Deskripsi / Keterangan} \\ \hline
+1 & Sistem berbasis website sehingga dapat diakses dengan mudah oleh EPC. & \textit{Usability} & Aksesibilitas tinggi melalui peramban web tanpa memerlukan instalasi perangkat lunak khusus. \\ \hline
+2 & Sistem memiliki antarmuka yang sederhana dan mudah digunakan. & \textit{Usability} & Antarmuka dirancang intuitif untuk mempermudah navigasi dan operasional pengguna. \\ \hline
+3 & Sistem mampu menampilkan hasil rekomendasi secara transparan dan konsisten. & \textit{Reliability} & Menghasilkan perhitungan skor yang stabil, konsisten, dan dapat dijelaskan alasannya. \\ \hline
+4 & Sistem mendukung pengelolaan data secara terstruktur. & \textit{Maintainability} & Penyimpanan data dilakukan dalam basis data relasional untuk menjaga integritas data. \\ \hline
+\end{tabular}
+\end{table}
 
 \subsection{Analisis Data}\label{analisis-data}
 
