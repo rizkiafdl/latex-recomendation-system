@@ -7,14 +7,14 @@
 
 \section{Simpulan}
 
-Penelitian ini bertujuan untuk mengembangkan sistem rekomendasi \textit{Faculty Supervisor} berbasis \textit{semantic similarity} sebagai pendukung keputusan dalam proses pemetaan mahasiswa peserta Program Enrichment di XYZ University. Berdasarkan hasil analisis, perancangan, implementasi, dan evaluasi yang telah dilakukan, dapat ditarik simpulan sebagai berikut.
+Penelitian ini bertujuan untuk mengembangkan sistem rekomendasi \textit{Faculty Supervisor} berbasis \textit{semantic similarity} sebagai pendukung keputusan dalam proses pemetaan mahasiswa peserta Program Enrichment di XYZ University. Berdasarkan hasil analisis, perancangan, implementasi, dan evaluasi yang telah dilakukan, dapat ditarik simpulan yang disusun untuk menjawab ketiga rumusan masalah penelitian sebagai berikut.
 
 \begin{enumerate}
-    \item Sistem rekomendasi \textit{Faculty Supervisor} berbasis website telah berhasil dikembangkan menggunakan pendekatan semantic similarity dengan arsitektur Transformer (model BAAI/bge-m3). Sistem ini menggabungkan hasil semantik, aturan company group bonus, dan algoritma greedy capacity solver untuk memastikan kapasitas kuota pembimbingan dosen secara seimbang.
+    \item Menjawab rumusan masalah pertama, sistem rekomendasi \textit{Faculty Supervisor} magang berbasis website telah berhasil dirancang dan dikembangkan menggunakan pendekatan \textit{semantic similarity} dengan arsitektur \textit{Transformer} (model BAAI/bge-m3). Sistem ini menggabungkan skor kemiripan semantik, aturan \textit{company group bonus}, dan algoritma \textit{greedy capacity solver} untuk menjaga keseimbangan kuota pembimbingan setiap dosen.
 
-    \item Pengujian terhadap data historis penugasan institusional (ground truth) menunjukkan kinerja sistem yang tinggi dalam merekomendasikan pembimbing yang relevan secara konsisten, yang dibuktikan dengan hasil Mean Reciprocal Rank (MRR) sebesar 0,711, Hit@5 sebesar 0,929, dan Assignment Match Rate sebesar 0,530.
+    \item Menjawab rumusan masalah kedua, tingkat kesesuaian hasil rekomendasi sistem dengan \textit{ground truth} penugasan institusional tergolong tinggi. Pengujian menghasilkan \textit{Mean Reciprocal Rank} (MRR) sebesar 0,711, Hit@5 sebesar 0,929, dan \textit{Assignment Match Rate} sebesar 0,530, yang menunjukkan bahwa pembimbing relevan secara konsisten muncul pada peringkat teratas rekomendasi.
 
-    \item Sistem yang dikembangkan terbukti mampu menyelesaikan masalah lamanya proses pemetaan manual yang sebelumnya membutuhkan waktu 1 hingga 3 minggu per batch menjadi hitungan menit. Penentuan Faculty Supervisor kini dapat dilakukan secara terotomatisasi, transparan, objektif, dan menghasilkan sebaran beban pembimbingan yang sangat merata antar dosen, ditandai dengan nilai Gini Coefficient sebesar 0,0138..
+    \item Menjawab rumusan masalah ketiga, sistem yang dikembangkan terbukti meningkatkan efisiensi proses pemetaan \textit{Faculty Supervisor} magang oleh EPC. Waktu penentuan yang sebelumnya membutuhkan 1 hingga 3 minggu per \textit{batch} dapat dipersingkat menjadi hitungan menit, dengan proses yang lebih terotomatisasi, transparan, dan objektif, serta sebaran beban pembimbingan yang sangat merata antar dosen, ditandai dengan nilai \textit{Gini Coefficient} sebesar 0,0138.
 
 \end{enumerate}
 

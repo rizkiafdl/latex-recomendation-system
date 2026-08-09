@@ -104,7 +104,9 @@ Dalam penelitian ini, \textit{word embedding} diposisikan sebagai tahap evolusi 
 
 Devlin, Chang, Lee, dan Toutanova (\citeyear{devlin2019bert}) menjelaskan bahwa model berbasis transformer mampu menghasilkan representasi teks kontekstual, di mana makna suatu kata dipengaruhi oleh keseluruhan konteks kalimat. Pendekatan ini memungkinkan sistem memahami hubungan semantik yang kompleks, termasuk sinonim dan konteks implisit.
 
-Dalam penelitian ini, \textit{transformer-based embedding} digunakan karena kemampuannya dalam merepresentasikan dokumen teks akademik secara lebih akurat. Pendekatan ini sangat sesuai untuk membandingkan deskripsi minat mahasiswa dan bidang keahlian \textit{faculty supervisor} yang memiliki variasi istilah dan gaya bahasa.
+Keunggulan pendekatan berbasis transformer dibandingkan representasi berbasis frekuensi kata seperti TF-IDF juga telah dibuktikan secara empiris melalui sejumlah penelitian. Pradana et al. (\citeyear{pradana2026behavioral}) menemukan bahwa representasi berbasis transformer menghasilkan pemeringkatan kemiripan semantik yang berbeda secara signifikan dari TF-IDF yang dipadukan \textit{cosine similarity}, dengan pergeseran peringkat rata-rata mencapai 6,70 posisi dan korelasi yang lemah, sehingga kedua pendekatan tersebut menangkap dimensi kemiripan yang berbeda. Selaras dengan temuan tersebut, Sutriawan et al. (\citeyear{sutriawan2025performance}) pada korpus berbahasa Indonesia menunjukkan bahwa \textit{embedding} berbasis transformer seperti BERT dan GPT lebih unggul dalam menangani teks yang bermakna ambigu dibandingkan TF-IDF yang hanya mengandalkan frekuensi kemunculan kata.
+
+Dalam penelitian ini, \textit{transformer-based embedding} digunakan karena kemampuannya dalam merepresentasikan dokumen teks akademik secara lebih akurat. Pemilihan transformer sebagai \textit{encoder} didasari pertimbangan bahwa pencocokan deskripsi minat mahasiswa dengan bidang keahlian \textit{faculty supervisor} menuntut pemahaman makna secara kontekstual, bukan sekadar kecocokan kata secara literal, terlebih ketika data akademik memiliki variasi istilah dan gaya bahasa yang tinggi.
 
 \subsection{Bert Embedding}\label{bert-embedding}
 
@@ -128,9 +130,11 @@ Menurut Han, Kamber, dan Pei (\citeyear{han2012datamining}), \textit{cosine simi
 
 Dalam penelitian ini, \textit{cosine similarity} digunakan untuk menghitung tingkat kemiripan antara \textit{embedding} teks mahasiswa dan \textit{faculty supervisor} sebagai dasar pemeringkatan rekomendasi.
 
-Rumus Cosine Similarity adalah sebagai berikut:
+Menurut Manning, Raghavan, dan Schütze (\citeyear{manning2008ir}), \textit{cosine similarity} antara dua vektor dihitung sebagai hasil bagi \textit{dot product} kedua vektor dengan perkalian panjang (norma) masing-masing vektor, sebagaimana dinyatakan pada Persamaan~\ref{eq:cosine-similarity}.
 
-Cosine Similarity = \(\frac{(A\ .\ B)}{\ (\ ||A||\  \times \ ||B||\ )}\)
+\begin{equation}\label{eq:cosine-similarity}
+\text{Cosine Similarity}(A, B) = \frac{A \cdot B}{\lVert A \rVert \times \lVert B \rVert}
+\end{equation}
 
 Dengan catatan sebagai berikut :
 

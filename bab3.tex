@@ -9,69 +9,54 @@
 \centering
 \scalebox{0.75}{%
 \begin{tikzpicture}[
-  node distance=0.4cm,
+  node distance=0.55cm,
   terminal/.style={
     draw, rounded rectangle,
-    text width=2cm, align=center,
-    minimum height=0.6cm, font=\footnotesize
+    text width=9cm, align=center,
+    minimum height=0.6cm, inner sep=5pt, font=\footnotesize
   },
   process/.style={
     draw, rectangle,
-    text width=5.5cm, align=center,
+    text width=9.5cm, align=center,
     minimum height=0.75cm, inner sep=5pt, font=\footnotesize
   },
   io/.style={
     draw, trapezium,
     trapezium left angle=75, trapezium right angle=105,
-    text width=4.8cm, align=center,
-    minimum height=0.7cm, inner sep=4pt, font=\footnotesize
-  },
-  decision/.style={
-    draw, diamond, aspect=2.5,
-    text width=1.6cm, align=center,
-    inner sep=2pt, font=\footnotesize
+    text width=8.5cm, align=center,
+    minimum height=0.7cm, inner sep=5pt, font=\footnotesize
   },
   arrow/.style={->, >=stealth}
 ]
-  \node (mulai)   [terminal]                   {Mulai};
-  \node (analisis)[process,  below=of mulai]   {Analisis permasalahan, kebutuhan\\ fungsional \& non-fungsional, dan data};
-  \node (rencana) [process,  below=of analisis]{Perencanaan: ruang lingkup, pendekatan\\ \textit{semantic similarity}, dan strategi evaluasi};
-  \node (model)   [process,  below=of rencana] {Perancangan model rekomendasi\\ berbasis \textit{semantic similarity}};
-  \node (eval)    [process,  below=of model]   {Evaluasi hasil rekomendasi\\ menggunakan metrik \textit{information retrieval}};
-  \node (decide)  [decision, below=of eval]    {Memenuhi\\ kriteria?};
-  \node (uml)     [process,  below=of decide]  {Perancangan UML: Use Case Diagram,\\ Activity Diagram, Class Diagram};
-  \node (impl)    [io,       below=of uml]     {Implementasi aplikasi web sebagai\\ \textit{decision support system} (DSS)};
-  \node (selesai) [terminal, below=of impl]    {Selesai};
+  \node (masalah)    [terminal]                     {\textbf{Masalah}\\ Penentuan \textit{faculty supervisor} secara manual: lambat, subjektif dan bergantung individu, kurang transparan, serta tidak berbasis data};
+  \node (kesenjangan)[process, below=of masalah]    {\textbf{Kesenjangan}\\ Pencocokan berbasis kata kunci (\textit{lexical matching}) tidak menangkap kesamaan makna antar teks $\rightarrow$ dibutuhkan pendekatan \textit{semantic similarity}};
+  \node (masukan)    [io, below=of kesenjangan]     {\textbf{Masukan}\\ Profil \textit{faculty supervisor} (\textit{profile\_keywords}, \textit{extra\_docs}) dan data mahasiswa (\textit{track}, posisi/topik, skema kerja) sebagai dokumen teks};
+  \node (proses)     [process, below=of masukan]    {\textbf{Proses / Metode}\\ \textit{Text embedding} berbasis \textit{transformer} $\rightarrow$ \textit{cosine semantic similarity}, digabung dengan \textit{company group bonus}, lalu \textit{greedy capacity-constrained solver} untuk alokasi berkendala kapasitas};
+  \node (keluaran)   [io, below=of proses]          {\textbf{Keluaran}\\ Rekomendasi pasangan mahasiswa--\textit{faculty supervisor} melalui sistem berbasis \textit{website} (\textit{decision support system}; EPC sebagai pemegang keputusan akhir)};
+  \node (evaluasi)   [process, below=of keluaran]   {\textbf{Evaluasi}\\ Metrik \textit{information retrieval} (MRR, Hit@k) terhadap \textit{ground truth}};
 
-  \draw [arrow] (mulai)    -- (analisis);
-  \draw [arrow] (analisis) -- (rencana);
-  \draw [arrow] (rencana)  -- (model);
-  \draw [arrow] (model)    -- (eval);
-  \draw [arrow] (eval)     -- (decide);
-  \draw [arrow] (decide)   -- node[right, font=\footnotesize] {Ya}   (uml);
-  \draw [arrow] (uml)      -- (impl);
-  \draw [arrow] (impl)     -- (selesai);
-
-  \draw [arrow] (decide.east)
-    -- node[above, font=\footnotesize] {Tidak} ++(2.8,0)
-    |- (rencana.east);
+  \draw [arrow] (masalah)     -- (kesenjangan);
+  \draw [arrow] (kesenjangan) -- (masukan);
+  \draw [arrow] (masukan)     -- (proses);
+  \draw [arrow] (proses)      -- (keluaran);
+  \draw [arrow] (keluaran)    -- (evaluasi);
 \end{tikzpicture}%
 }
-\caption{Alur Kerangka Berpikir}
+\caption{Kerangka Berpikir Penelitian}
 \label{fig:fig3.1}
 \end{figure}
 
-Proses penentuan \textit{faculty supervisor} untuk mahasiswa saat ini dilakukan secara manual oleh pihak EPC. Namun, proses penentuan \textit{faculty supervisor} tersebut memiliki beberapa keterbatasan antara lain waktu yang relatif lama, bergantung pada pengetahuan individu tertentu, serta tidak sepenuhnya mempertimbangkan kesesuaian antara keahlian \textit{faculty supervisor} dan kepentingan atau posisi mahasiswa. Selain itu, proses manual ini kurang transparan karena tidak didukung mekanisme pencocokan yang terstruktur dan berbasis data.
+Kerangka berpikir penelitian ini disusun sebagai alur penalaran yang menghubungkan permasalahan, dasar pemilihan metode sesuai judul penelitian, hingga keluaran dan evaluasi sistem. Alur tersebut digambarkan pada Gambar \ref{fig:fig3.1} dan menjadi peta yang merangkum keterkaitan antar subbab pada BAB 3 ini.
 
-Dalam upaya mengatasi keterbatasan tersebut, pendekatan pencocokan berbasis teks sering digunakan sebagai solusi awal. Pendekatan pencocokan berbasis kata kunci merupakan metode umum dalam \textit{information retrieval} tradisional yang mengukur kesamaan dokumen berdasarkan kemunculan kata atau frekuensi istilah tertentu. Pendekatan ini memiliki keterbatasan dalam menangkap kesamaan makna antara teks yang menggunakan istilah berbeda namun memiliki konteks yang serupa.
+Titik awal kerangka berpikir adalah permasalahan penentuan \textit{faculty supervisor} yang selama ini dilakukan secara manual oleh pihak EPC. Proses manual tersebut cenderung lambat, bersifat subjektif karena bergantung pada pengetahuan individu tertentu, kurang transparan, serta belum sepenuhnya berbasis data. Uraian permasalahan dan aktor yang terlibat dibahas lebih lanjut pada Subbab \ref{analisis-permasalahan} dan Subbab \ref{analisis-aktor-sistem}.
 
-Permasalahan tersebut menuntut adanya sebuah sistem yang dapat membantu proses pemetaan antara \textit{faculty supervisor} dan mahasiswa secara lebih objektif dan efisien. Berdasarkan kebutuhan tersebut, penelitian ini mengusulkan pengembangan sistem rekomendasi untuk mengotomatisasi proses pencocokan mahasiswa dengan \textit{faculty supervisor}. Pendekatan \textit{scoring} yang digunakan menggabungkan dua komponen utama, yaitu \textit{semantic similarity} berbasis \textit{text embedding} untuk mengukur kesesuaian makna antara profil mahasiswa dan dosen, serta \textit{company group bonus} untuk mempertimbangkan pengelompokan mahasiswa berdasarkan perusahaan tempat kerja.
+Permasalahan tersebut menuntut pendekatan pencocokan yang tepat. Pencocokan berbasis kata kunci (\textit{lexical matching}) yang umum digunakan pada \textit{information retrieval} tradisional hanya mengukur kesamaan berdasarkan kemunculan istilah, sehingga tidak mampu menangkap kesamaan makna antara teks yang menggunakan kata berbeda namun berkonteks serupa. Kesenjangan inilah yang mendasari pemilihan pendekatan \textit{semantic similarity} sebagai inti metode penelitian, sejalan dengan judul penelitian.
 
-Sistem yang dikembangkan memanfaatkan informasi tekstual yang bersumber dari profil \textit{faculty supervisor} dan data mahasiswa. Informasi tersebut direpresentasikan dalam bentuk dokumen teks yang menggambarkan karakteristik akademik dan konteks profesional masing-masing entitas. Pendekatan \textit{semantic similarity} dipilih sebagai komponen utama karena mampu memahami makna dan konteks teks secara lebih mendalam dibandingkan metode pencocokan berbasis kata kunci. \textit{Company group bonus} digunakan untuk mendorong konsistensi penempatan mahasiswa dari perusahaan yang sama pada \textit{faculty supervisor} yang paling sesuai.
+Untuk menjalankan pendekatan tersebut, sistem menggunakan masukan berupa profil \textit{faculty supervisor} dan data mahasiswa. Profil \textit{faculty supervisor} mencakup informasi seperti \textit{profile\_keywords} dan \textit{extra\_docs}, sedangkan data mahasiswa meliputi \textit{track}, posisi atau topik, serta skema kerja. Seluruh informasi tersebut direpresentasikan sebagai dokumen teks, sebagaimana dirancang pada Subbab \ref{perancangan-model-rekomendasi-berbasis-semantic-similarity}.
 
-Berdasarkan skor \textit{hybrid} yang dihasilkan, sistem menggunakan \textit{greedy capacity-constrained solver} untuk mengalokasikan setiap mahasiswa ke satu \textit{faculty supervisor} secara optimal dengan mempertimbangkan batasan kapasitas bimbingan minimum dan maksimum per \textit{faculty supervisor}. Hasil akhir berupa pasangan mahasiswa dan \textit{faculty supervisor} yang telah memenuhi seluruh \textit{constraint} kapasitas.
+Pada tahap proses, dokumen teks diolah menggunakan \textit{text embedding} berbasis \textit{transformer} untuk menghasilkan representasi vektor, kemudian kesesuaiannya diukur melalui \textit{cosine semantic similarity}. Skor kesamaan makna tersebut digabungkan dengan \textit{company group bonus} untuk mempertimbangkan pengelompokan mahasiswa berdasarkan perusahaan tempat kerja, lalu \textit{greedy capacity-constrained solver} mengalokasikan setiap mahasiswa ke satu \textit{faculty supervisor} dengan memperhatikan batasan kapasitas bimbingan minimum dan maksimum. Perbandingan kandidat model \textit{embedding} dan rincian mekanisme perhitungan dibahas pada Subbab \ref{kandidat-model-text-embedding} dan Subbab \ref{mekanisme-perhitungan-dan-perangkingan-rekomendasi}.
 
-Pengembangan sistem dilakukan melalui beberapa tahapan yang saling berurutan, dimulai dari analisis permasalahan dan kebutuhan sistem, perencanaan proses pengembangan, perancangan model rekomendasi, hingga implementasi sistem dalam bentuk aplikasi berbasis \textit{website}. Kerangka berpikir penelitian ini digambarkan dalam bentuk diagram alur pada Gambar 3.1, yang menunjukkan hubungan antara permasalahan, metode yang digunakan, dan keluaran sistem berupa rekomendasi \textit{faculty supervisor} untuk mahasiswa.
+Keluaran sistem berupa rekomendasi pasangan mahasiswa dan \textit{faculty supervisor} yang disajikan melalui sistem berbasis \textit{website}. Sistem ini berperan sebagai \textit{decision support system}, sehingga keputusan akhir atas penetapan \textit{faculty supervisor} tetap berada pada pihak EPC. Rancangan dan implementasi sistem dibahas pada Subbab \ref{perancangan-uml} dan Subbab \ref{implementasi-dan-deployment-sistem}. Pada tahap akhir, kualitas rekomendasi dievaluasi menggunakan metrik \textit{information retrieval}, yaitu MRR dan Hit@k, terhadap \textit{ground truth}, sebagaimana dijelaskan pada Subbab \ref{strategi-evaluasi}.
 
 \section{Metodologi Penelitian}\label{metodologi-penelitian}
 
@@ -95,6 +80,40 @@ Pengujian & Pengujian \textit{Black Box} (dilaksanakan pada BAB 4) \\
 \hline
 Pemeliharaan & Di luar cakupan penelitian prototipe \\
 \hline
+\end{tabular}
+\end{table}
+
+\subsection{Jadwal Pelaksanaan Penelitian}\label{jadwal-pelaksanaan-penelitian}
+
+Penelitian ini dilaksanakan dalam rentang waktu September 2025 hingga Juni 2026, dengan rincian jadwal kegiatan sebagaimana disajikan pada Tabel \ref{tab:jadwal_kegiatan}.
+
+\begin{table}[H]
+\centering
+\caption{Jadwal Kegiatan Penelitian}
+\label{tab:jadwal_kegiatan}
+\vspace{0.3cm}
+
+\small
+\setlength{\tabcolsep}{4pt}
+
+\begin{tabular}{|p{4.8cm}|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Jenis Kegiatan} & \multicolumn{4}{c|}{\textbf{2025}} & \multicolumn{6}{c|}{\textbf{2026}} \\ \cline{2-11}
+ & \textbf{Sep} & \textbf{Okt} & \textbf{Nov} & \textbf{Des} & \textbf{Jan} & \textbf{Feb} & \textbf{Mar} & \textbf{Apr} & \textbf{Mei} & \textbf{Jun} \\ \hline
+
+Studi Literatur dan Tinjauan Pustaka & $\bullet$ & $\bullet$ & & & & & & & & \\ \hline
+Analisis Masalah dan Kebutuhan Sistem & & $\bullet$ & $\bullet$ & & & & & & & \\ \hline
+Pengumpulan Data Wawancara & & $\bullet$ & & & & & & & & \\ \hline
+Penyusunan Bab 1 (Pendahuluan) & & & $\bullet$ & & & & & & & \\ \hline
+Penyusunan Bab 2 (Tinjauan Pustaka) & & & $\bullet$ & $\bullet$ & & & & & & \\ \hline
+Perancangan Sistem (UML, Arsitektur) & & & $\bullet$ & $\bullet$ & & & & & & \\ \hline
+Penyusunan Bab 3 (Metode Penelitian) & & & $\bullet$ & $\bullet$ & & & & & & \\ \hline
+Pengembangan Sistem (Implementasi) & & & $\bullet$ & $\bullet$ & $\bullet$ & $\bullet$ & $\bullet$ & $\bullet$ & $\bullet$ & \\ \hline
+Pengujian dan Evaluasi Sistem & & & & & & & & $\bullet$ & $\bullet$ & \\ \hline
+Penyusunan Bab 4 (Hasil dan Pembahasan) & & & & & & & & $\bullet$ & $\bullet$ & $\bullet$ \\ \hline
+Penyusunan Bab 5 (Simpulan dan Saran) & & & & & & & & & $\bullet$ & $\bullet$ \\ \hline
+Revisi dan Finalisasi Dokumen & & & & & & & & & & $\bullet$ \\ \hline
+
 \end{tabular}
 \end{table}
 
@@ -211,18 +230,23 @@ Profil setiap \textit{faculty supervisor} disimpan dalam tabel \texttt{superviso
 \hline
 \endlastfoot
 
+Faculty supervisor & Kata kunci kompetensi {profile\_keywords} & Dikelola EPC (sumber dasar) & Kata kunci bidang keahlian \textit{faculty supervisor} yang menjadi dokumen dasar profil dan selalu tersedia \\ \hline
 Faculty supervisor & Informasi posisi magang & Data historis Enrichment & Informasi posisi magang mahasiswa yang pernah dibimbing \\ \hline
 Faculty supervisor & Perusahaan & Data historis Enrichment & Informasi perusahaan mahasiswa yang pernah dibimbing \\ \hline
 Faculty supervisor & Deskripsi pekerjaan mahasiswa & Data historis Enrichment & Deskripsi bagian pekerjaan mahasiswa yang pernah dibimbing \\ \hline
-Faculty supervisor & Topik skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Judul dan topik skripsi yang direkomendasi \\ \hline
-Faculty supervisor & Deskripsi skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Ringkasan deskripsi dan ruang lingkup penelitian \\ \hline
-Faculty supervisor & Rumusan masalah & Data Rekomendasi Skripsi Dari Faculty Supervisor & Fokus permasalahan penelitian \\ \hline
-Faculty supervisor & Luaran yang diharapkan & Data Rekomendasi Skripsi Dari Faculty Supervisor & Output akademik atau implementasi yang ditargetkan \\ \hline
-Faculty supervisor & Jenis skripsi & Data Rekomendasi Skripsi Dari Faculty Supervisor & Klasifikasi jenis skripsi \\ \hline
+Faculty supervisor & Topik skripsi & Data Rekomendasi Skripsi & Judul dan topik skripsi yang direkomendasi \\ \hline
+Faculty supervisor & Deskripsi skripsi & Data Rekomendasi Skripsi & Ringkasan deskripsi dan ruang lingkup penelitian \\ \hline
+Faculty supervisor & Rumusan masalah & Data Rekomendasi Skripsi & Fokus permasalahan penelitian \\ \hline
+Faculty supervisor & Luaran yang diharapkan & Data Rekomendasi Skripsi & Output akademik atau implementasi yang ditargetkan \\ \hline
+Faculty supervisor & Jenis skripsi & Data Rekomendasi Skripsi & Klasifikasi jenis skripsi \\ \hline
 
 \end{longtable}
 
 Dalam implementasinya, apabila seorang \textit{faculty supervisor} tidak memiliki data pada salah satu sumber, maka dokumen dari sumber tersebut tidak dibentuk. Dengan demikian, \textit{faculty supervisor} tersebut tetap dapat direpresentasikan menggunakan dokumen yang tersedia, sehingga jumlah dokumen per \textit{faculty supervisor} dapat berbeda-beda tergantung kelengkapan data.
+
+Pemilihan atribut pada Tabel~\ref{table:representasi_data_faculty_supervisor} didasarkan pada satu prinsip, yaitu hanya atribut yang bersifat tekstual atau naratif dan membawa sinyal makna mengenai kompetensi serta rekam jejak pembimbingan \textit{faculty supervisor} yang disertakan ke dalam dokumen teks. Prinsip ini digunakan karena hanya atribut demikian yang relevan ketika dokumen diubah menjadi \textit{embedding} dan dicocokkan dengan profil mahasiswa melalui \textit{semantic similarity}, sedangkan atribut yang tidak tersedia pada sumber data atau tidak mencerminkan bidang keahlian tidak diikutsertakan. Dengan kata lain, tabel tersebut tidak memuat seluruh data \textit{faculty supervisor}, melainkan subset yang secara khusus dipilih karena bernilai semantik.
+
+Sebaliknya, sejumlah atribut \textit{faculty supervisor} yang bersifat administratif atau numerik sengaja tidak dimasukkan ke dalam dokumen teks karena tidak membawa sinyal makna, melainkan memiliki peran fungsional lain di dalam \textit{pipeline}. Kuota atau kapasitas bimbingan (10--12 mahasiswa) tidak diikutkan sebagai teks karena merupakan batasan alokasi, bukan deskripsi keahlian; atribut ini digunakan pada tahap perencanaan kapasitas dan penugasan \textit{greedy} sebagaimana dijelaskan pada Subbab~\ref{mekanisme-perhitungan-dan-perangkingan-rekomendasi}. Demikian pula kode dan identitas \textit{faculty supervisor} tidak diikutkan sebagai teks karena hanya berfungsi sebagai penanda unik, yaitu untuk identifikasi data sekaligus sebagai \textit{ground truth} (\texttt{current\_supervisor\_code}) pada tahap evaluasi. Dengan pemisahan ini, representasi teks dijaga agar hanya berisi informasi yang berkontribusi langsung terhadap kualitas pencocokan makna, sementara atribut lain tetap dimanfaatkan sistem pada tahap yang sesuai dengan perannya masing-masing.
 
 \subsubsection{Pemrosesan Data Mahasiswa}\label{pemrosesan-data-mahasiswa}
 
@@ -332,6 +356,82 @@ Struktur tabel \texttt{supervisors} yang menjadi sumber data utama dalam pipelin
 \texttt{is\_active} & Status keaktifan \textit{faculty supervisor} dalam siklus rekomendasi. \\ \hline
 
 \end{longtable}
+
+\subsubsection{Ilustrasi Perhitungan Similaritas Mahasiswa--\textit{Faculty Supervisor}}\label{ilustrasi-perhitungan-similaritas}
+
+Untuk memperjelas bagaimana skor kemiripan diperoleh, berikut disajikan satu contoh terkerja (\textit{worked example}) mulai dari atribut masukan hingga skor \textit{cosine similarity}. Contoh menggunakan satu mahasiswa dan tiga \textit{faculty supervisor}. Perlu ditekankan bahwa nilai vektor pada ilustrasi ini disederhanakan menjadi lima dimensi agar dapat dihitung secara manual; pada implementasi sebenarnya setiap teks direpresentasikan sebagai vektor berdimensi 1.024 (untuk model \textit{default}), dan seluruh perhitungan dilakukan sekaligus dalam bentuk matriks berukuran $N \times M$.
+
+Proses diawali dengan menggabungkan ketiga \textit{field} teks mahasiswa menjadi satu dokumen masukan yang menjadi sumber Vektor $\mathbf{A}$, sebagaimana ditunjukkan pada Tabel~\ref{table:ilustrasi_input_mahasiswa}.
+
+\begin{center}
+\begin{tabular}{|p{3.4cm}|p{9.3cm}|}
+\hline
+\textbf{Atribut} & \textbf{Nilai} \\ \hline
+\textit{track} & Computer Science \\ \hline
+\textit{position\_topic} & Backend Developer, pengembangan REST API dan \textit{microservices} \\ \hline
+\textit{work\_schema} & WFH (\textit{work from home}) \\ \hline
+\end{tabular}
+\captionof{table}{Contoh Atribut dan Teks Gabungan Mahasiswa}
+\label{table:ilustrasi_input_mahasiswa}
+\end{center}
+
+\noindent Teks gabungan mahasiswa: \texttt{"Computer Science Backend Developer, pengembangan REST API dan microservices WFH"}.
+
+Pada sisi \textit{faculty supervisor}, setiap dosen direpresentasikan oleh dokumen teks yang menjadi sumber Vektor $\mathbf{B}$, dibentuk dari \texttt{profile\_keywords} dan diperkaya \textit{extra docs} bila tersedia, seperti pada Tabel~\ref{table:ilustrasi_dokumen_fs}.
+
+\begin{center}
+\begin{tabular}{|p{2.2cm}|p{10.5cm}|}
+\hline
+\textbf{Kode} & \textbf{Dokumen teks (ringkas)} \\ \hline
+D2211 & backend development, REST API, \textit{microservices}, cloud computing, distributed systems \\ \hline
+D0473 & data science, machine learning, data analytics, statistics, business intelligence \\ \hline
+D1185 & computer network, cybersecurity, network security, IoT, embedded systems \\ \hline
+\end{tabular}
+\captionof{table}{Contoh Dokumen Teks Tiga \textit{Faculty Supervisor}}
+\label{table:ilustrasi_dokumen_fs}
+\end{center}
+
+Setelah kedua teks terbentuk, masing-masing diubah menjadi vektor \textit{embedding} oleh model, kemudian dinormalisasi L2 sehingga panjangnya menjadi satu. Sebagai contoh, misalkan teks mahasiswa menghasilkan vektor mentah $\mathbf{v}_A = [\,0{,}60,\ 0{,}12,\ 0{,}55,\ 0{,}22,\ 0{,}30\,]$. Panjang vektor dihitung dengan
+\[
+\lVert \mathbf{v}_A \rVert = \sqrt{0{,}60^2 + 0{,}12^2 + 0{,}55^2 + 0{,}22^2 + 0{,}30^2} = \sqrt{0{,}8153} \approx 0{,}903,
+\]
+sehingga vektor mahasiswa setelah normalisasi menjadi
+\[
+\mathbf{A} = \frac{\mathbf{v}_A}{\lVert \mathbf{v}_A \rVert} = [\,0{,}664,\ 0{,}133,\ 0{,}609,\ 0{,}244,\ 0{,}332\,].
+\]
+Dengan prosedur yang sama, dokumen ketiga \textit{faculty supervisor} menghasilkan vektor ternormalisasi
+\[
+\begin{aligned}
+\mathbf{B}_{1} &= [\,0{,}556,\ 0{,}311,\ 0{,}445,\ 0{,}445,\ 0{,}445\,], \\
+\mathbf{B}_{2} &= [\,0{,}337,\ 0{,}472,\ 0{,}281,\ 0{,}618,\ 0{,}450\,], \\
+\mathbf{B}_{3} &= [\,0{,}100,\ 0{,}658,\ 0{,}080,\ 0{,}598,\ 0{,}439\,].
+\end{aligned}
+\]
+
+Kedua representasi vektor tersebut kemudian dibandingkan untuk memperoleh nilai kemiripan menggunakan persamaan
+\[
+\text{cosine}(\mathbf{A}, \mathbf{B}) = \frac{\mathbf{A} \cdot \mathbf{B}}{\lVert \mathbf{A} \rVert \, \lVert \mathbf{B} \rVert}.
+\]
+Karena kedua vektor telah dinormalisasi L2 ($\lVert \mathbf{A} \rVert = \lVert \mathbf{B} \rVert = 1$), perhitungan menyederhana menjadi perkalian titik (\textit{dot product}) antar vektor. Untuk pasangan mahasiswa dengan D2211:
+\begin{align*}
+\text{cosine}(\mathbf{A}, \mathbf{B}_{1}) &= (0{,}664 \times 0{,}556) + (0{,}133 \times 0{,}311) + (0{,}609 \times 0{,}445) \\
+&\quad + (0{,}244 \times 0{,}445) + (0{,}332 \times 0{,}445) \approx 0{,}938.
+\end{align*}
+Dengan cara yang sama diperoleh $\text{cosine}(\mathbf{A}, \mathbf{B}_{2}) \approx 0{,}758$ untuk D0473 dan $\text{cosine}(\mathbf{A}, \mathbf{B}_{3}) \approx 0{,}494$ untuk D1185.
+
+Pada akhirnya, ketiga skor disusun menjadi satu baris matriks kemiripan (Tabel~\ref{table:ilustrasi_matriks_similaritas}) lalu diurutkan menurun. Pada contoh ini urutan rekomendasi untuk mahasiswa tersebut adalah D2211 (0{,}938), D0473 (0{,}758), kemudian D1185 (0{,}494). Urutan tersebut sesuai dengan bidang keahlian tiap dosen: teks magang mahasiswa berada pada ranah \textit{backend}, yang berbagi lebih banyak istilah bermakna dengan dokumen D2211 dibandingkan dokumen D0473 (\textit{data science}) maupun D1185 (\textit{computer network}).
+
+\begin{center}
+\begin{tabular}{|p{3.2cm}|c|c|c|}
+\hline
+\textbf{Mahasiswa} & \textbf{D2211} & \textbf{D0473} & \textbf{D1185} \\ \hline
+Contoh mahasiswa & \textbf{0,938} & 0,758 & 0,494 \\ \hline
+\end{tabular}
+\captionof{table}{Satu Baris Matriks Kemiripan Hasil Ilustrasi}
+\label{table:ilustrasi_matriks_similaritas}
+\end{center}
+
+\noindent Pada sistem sebenarnya, langkah yang sama diterapkan untuk seluruh $N$ mahasiswa terhadap seluruh $M$ \textit{faculty supervisor} secara serentak melalui satu operasi perkalian matriks, menghasilkan matriks kemiripan lengkap yang menjadi dasar perangkingan \textit{top-5} dan tahap validasi slot bimbingan berikutnya.
 
 \subsubsection{Validasi Slot Bimbingan \textit{faculty supervisor}}\label{validasi-slot-bimbingan-faculty-supervisor}
 
@@ -2130,23 +2230,19 @@ Sebelum digunakan dalam sistem rekomendasi, data terlebih dahulu dipersiapkan ag
 
 Setelah data terkumpul, tahap selanjutnya adalah implementasi praproses data. Praproses data dilakukan untuk membersihkan dan menormalkan data tekstual sebelum dilakukan perhitungan kemiripan semantik.
 
-Tahapan praproses data yang diimplementasikan meliputi:
+Praproses data diimplementasikan melalui fungsi \texttt{normalize\_text()} yang diterapkan secara seragam pada seluruh dokumen teks, baik dokumen mahasiswa maupun profil \textit{faculty supervisor}. Fungsi ini memanfaatkan \textit{regular expression} untuk melakukan normalisasi minimalis yang terdiri atas tiga langkah berikut:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textit{Data cleansing}, yaitu penghapusan data yang tidak relevan atau tidak diperlukan.
+  \textit{Case folding}, mengubah seluruh teks menjadi huruf kecil agar konsisten.
 \item
-  \textit{Case folding}, untuk mengubah seluruh teks menjadi huruf kecil agar konsisten.
+  Pembersihan karakter non-alfanumerik, membuang tanda baca dan simbol sehingga hanya menyisakan huruf dan angka.
 \item
-  Tokenisasi, yaitu memecah teks menjadi unit kata.
-\item
-  Penghapusan \textit{stopwords}, untuk menghilangkan kata-kata umum yang tidak memiliki kontribusi makna yang signifikan.
+  \textit{Collapse whitespace}, merapatkan spasi berlebih menjadi satu spasi tunggal.
 \end{enumerate}
 
-Normalisasi teks, agar data siap digunakan pada tahap representasi teks.
-
-Tahapan ini bertujuan untuk mengurangi \textit{noise} pada data dan meningkatkan akurasi sistem rekomendasi.
+Sejalan dengan landasan teori pada Subbab~\ref{text-preprocessing}, tahapan lanjutan seperti tokenisasi eksplisit, \textit{stemming}, dan penghapusan \textit{stopwords} sengaja tidak diterapkan. Model \textit{embedding} berbasis \textit{Transformer} telah menangani pemecahan token secara internal melalui tokenisasi \textit{subword} (WordPiece/BPE), sehingga pembuangan kata umum justru berisiko menghilangkan sinyal kontekstual yang dibutuhkan untuk menghasilkan \textit{embedding} yang akurat. Dengan demikian, tahapan praproses ini cukup mengurangi \textit{noise} format tanpa mengorbankan makna kontekstual data.
 
 \subsection{Implementasi Representasi Teks}\label{implementasi-representasi-teks}
 
